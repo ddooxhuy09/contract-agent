@@ -1,0 +1,18 @@
+.env
+venv
+legal-agent/
+
+__pycache__/
+*.pyc
+.pytest_cache/
+
+data/
+
+*.log
+debug*.txt
+
+.claude/
+.mcp.json
+
+# Downloaded reference papers, not project source
+docs.pdf
