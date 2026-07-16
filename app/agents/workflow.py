@@ -32,9 +32,10 @@ class ClauseState(TypedDict):
 
 async def _extract_node(state: AnalysisState) -> dict:
     try:
-        analysis = await asyncio.to_thread(parse_contract, state["contract_text"], state["contract_id"])
+        analysis = await asyncio.to_thread(parse_contract, state["contract_text"], state["contract_id"], state["provider"])
+        logger.info(f"Extract done: contract_id={state['contract_id']} clause_count={len(analysis.clauses)}")
     except Exception as e:
-        logger.error(f"Rule-based parsing failed: {e}, falling back")
+        logger.error(f"Extract failed: contract_id={state['contract_id']} error={e}, falling back to empty analysis")
         analysis = ContractAnalysis(contract_id=state["contract_id"])
     return {"analysis": analysis}
 
@@ -42,7 +43,9 @@ async def _extract_node(state: AnalysisState) -> dict:
 def _fan_out_clauses(state: AnalysisState):
     clauses = state["analysis"].clauses
     if not clauses:
+        logger.info(f"No clauses to judge: contract_id={state['contract_id']}")
         return "aggregate"
+    logger.info(f"Judge fan-out: contract_id={state['contract_id']} clause_count={len(clauses)} max_concurrency={_MAX_CONCURRENT_CLAUSE_CHECKS}")
     return [
         Send("judge_clause", {"clause": c, "contract_id": state["contract_id"], "provider": state["provider"]})
         for c in clauses
@@ -51,11 +54,16 @@ def _fan_out_clauses(state: AnalysisState):
 
 async def _judge_clause_node(state: ClauseState) -> dict:
     clause = state["clause"]
+    logger.info(f"Judging clause: contract_id={state['contract_id']} clause_number={clause.clause_number}")
     try:
         risk = await asyncio.to_thread(evaluate_clause, clause, state["provider"])
+        if risk:
+            logger.info(f"Judge result: contract_id={state['contract_id']} clause_number={clause.clause_number} severity={risk.severity}")
+        else:
+            logger.info(f"Judge result: contract_id={state['contract_id']} clause_number={clause.clause_number} severity=ok (no issue)")
         return {"risks": [risk] if risk else []}
     except Exception as e:
-        logger.error(f"Risk evaluation failed for clause {clause.clause_number} in {state['contract_id']}: {e}")
+        logger.error(f"Judge failed: contract_id={state['contract_id']} clause_number={clause.clause_number} error={e}")
         return {"risks": []}
 
 

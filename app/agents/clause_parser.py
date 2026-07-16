@@ -3,6 +3,18 @@ import unicodedata
 from typing import List, Optional
 from app.schemas.contract import ContractAnalysis, Party, Clause
 from app.core.config import logger
+from app.core.prompts import EXTRACTION_PROMPT
+from app.agents.llm_client import chat_completion, DEFAULT_PROVIDER
+from app.agents.json_parsing import parse_json_object
+
+# Fields the LLM fallback is allowed to fill in when the rule-based regexes came up empty.
+# "parties" and "clauses" are handled separately (list-shaped, not simple None-checks).
+_LLM_FILLABLE_FIELDS = [
+    "contract_type", "execution_date", "start_date", "end_date", "duration",
+    "contract_value", "payment_terms", "payment_method", "termination_clause",
+    "penalty_clause", "indemnity", "force_majeure", "governing_law",
+    "dispute_resolution", "confidentiality", "severability", "amendments",
+]
 
 
 def _normalize(text: str) -> str:
@@ -388,7 +400,57 @@ def _extract_clauses(text: str) -> List[Clause]:
 # ============================================================
 
 
-def parse_contract(text: str, contract_id: str) -> ContractAnalysis:
+def _extract_with_llm(text: str, contract_id: str, provider: str) -> Optional[dict]:
+    """LLM fallback for whatever the regexes above missed. Runs once per upload (not
+    per-clause), so cost stays bounded even though it's a full-contract call.
+    """
+    prompt = EXTRACTION_PROMPT.format(contract_text=text[:12000])
+    raw = chat_completion(prompt, provider=provider)
+    result = parse_json_object(raw)
+    if result is None:
+        logger.error(f"Failed to parse LLM extraction output for contract {contract_id}, retrying once")
+        raw = chat_completion(prompt, provider=provider)
+        result = parse_json_object(raw)
+        if result is None:
+            logger.error(f"Contract {contract_id}: LLM extraction fallback unparsable after retry, skipping")
+    return result
+
+
+def _fill_gaps_with_llm(analysis: ContractAnalysis, text: str, contract_id: str, provider: str) -> ContractAnalysis:
+    try:
+        llm_result = _extract_with_llm(text, contract_id, provider)
+    except Exception as e:
+        logger.error(f"LLM extraction fallback failed for contract {contract_id}: {e}")
+        return analysis
+    if not llm_result:
+        return analysis
+
+    data = analysis.model_dump()
+    filled_fields = []
+
+    # Only fill fields the rule-based pass left empty — a regex that already matched is
+    # trusted over the LLM's guess, since it's a deterministic hit on the actual text.
+    for field in _LLM_FILLABLE_FIELDS:
+        if not data.get(field) and llm_result.get(field):
+            data[field] = llm_result[field]
+            filled_fields.append(field)
+
+    if not data.get("parties") and llm_result.get("parties"):
+        data["parties"] = llm_result["parties"]
+        filled_fields.append(f"parties(x{len(llm_result['parties'])})")
+    if not data.get("contract_type") and llm_result.get("contract_type"):
+        data["contract_type"] = llm_result["contract_type"]
+        filled_fields.append("contract_type")
+
+    if filled_fields:
+        logger.info(f"LLM extraction fallback filled gaps for contract {contract_id}: {', '.join(filled_fields)}")
+    else:
+        logger.info(f"LLM extraction fallback found nothing new for contract {contract_id} (rule-based already complete)")
+
+    return ContractAnalysis(**data)
+
+
+def parse_contract(text: str, contract_id: str, provider: str = DEFAULT_PROVIDER) -> ContractAnalysis:
     logger.info(f"Parsing contract {contract_id} with rule-based extractor")
     text = unicodedata.normalize("NFC", text)
 
@@ -396,7 +458,7 @@ def parse_contract(text: str, contract_id: str) -> ContractAnalysis:
     finance = _extract_finance(text)
     penalty = _extract_penalty(text)
 
-    return ContractAnalysis(
+    analysis = ContractAnalysis(
         contract_id=contract_id,
         contract_type=_extract_contract_type(text),
         parties=_extract_parties(text),
@@ -418,3 +480,5 @@ def parse_contract(text: str, contract_id: str) -> ContractAnalysis:
         amendments=_extract_amendments(text),
         clauses=_extract_clauses(text),
     )
+
+    return _fill_gaps_with_llm(analysis, text, contract_id, provider)

@@ -20,6 +20,7 @@ def evaluate_clause(clause: Clause, provider: str = DEFAULT_PROVIDER) -> Optiona
     if not legal_docs:
         # No relevant law found above the similarity threshold: don't let the LLM guess a
         # verdict with no grounding. Surface it as needing manual review instead.
+        logger.info(f"Insufficient legal grounding for clause {clause.clause_number}, skipping LLM call")
         return RiskItem(
             clause_ref=clause_ref,
             issue="Không tìm thấy căn cứ pháp luật đủ liên quan trong kho dữ liệu để đối chiếu điều khoản này.",

@@ -1,3 +1,41 @@
+EXTRACTION_PROMPT = """You are an information extraction tool for Vietnamese legal contracts.
+
+Extract structured information from the contract text below. ONLY use information explicitly present in the text — DO NOT infer, guess, or fabricate any value. If a field is not mentioned in the text, use null (or an empty list for "parties").
+
+Contract text:
+{contract_text}
+
+Return ONLY a single JSON object, in this exact format:
+{{
+  "contract_type": "type of contract, in Vietnamese (e.g. 'Hợp đồng lao động'), null if unclear",
+  "parties": [
+    {{
+      "name": "full legal name of the party",
+      "role": "their role/label in the contract, in Vietnamese (e.g. 'Người sử dụng lao động', 'Bên A', 'Người lao động')",
+      "address": "address if mentioned, null otherwise",
+      "tax_id": "tax ID or national ID number if mentioned, null otherwise",
+      "representative": "name of the legal representative if mentioned, null otherwise"
+    }}
+  ],
+  "execution_date": "date the contract was signed, as written in the source (e.g. '15/07/2026'), null if not mentioned",
+  "start_date": "contract start/effective date, null if not mentioned",
+  "end_date": "contract end date, null if not mentioned",
+  "duration": "contract duration described in words if start/end dates aren't explicit (e.g. '12 tháng'), null otherwise",
+  "contract_value": "total contract value or salary amount as written, null if not mentioned",
+  "payment_terms": "payment schedule/terms if mentioned, null otherwise",
+  "payment_method": "payment method if mentioned, null otherwise",
+  "termination_clause": "verbatim or closely paraphrased termination terms, in Vietnamese, null if not mentioned",
+  "penalty_clause": "verbatim or closely paraphrased penalty terms, in Vietnamese, null if not mentioned",
+  "indemnity": "verbatim or closely paraphrased indemnity/compensation terms, in Vietnamese, null if not mentioned",
+  "force_majeure": "force majeure terms, in Vietnamese, null if not mentioned",
+  "governing_law": "governing law referenced, in Vietnamese, null if not mentioned",
+  "dispute_resolution": "dispute resolution mechanism described, in Vietnamese, null if not mentioned",
+  "confidentiality": "confidentiality terms, in Vietnamese, null if not mentioned",
+  "severability": "severability terms, in Vietnamese, null if not mentioned",
+  "amendments": "amendment terms, in Vietnamese, null if not mentioned"
+}}
+"""
+
 OCR_PROMPT = """You are an OCR (text extraction) tool for scanned contract images.
 
 Read and transcribe the ENTIRE text content in the image VERBATIM, preserving the original line breaks and clause numbering structure (Điều 1, Điều 2, Khoản 1...) exactly as it appears in the source.

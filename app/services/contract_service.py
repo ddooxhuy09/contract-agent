@@ -37,6 +37,7 @@ async def upload_contract(file: UploadFile, user_id: str) -> UploadResponse:
     contract_id, file_path, file_ext = await save_upload(file)
     filename = file.filename or "unknown"
     status, message, chunk_count = "uploaded", f"File uploaded successfully: {filename}", 0
+    logger.info(f"Upload started: contract_id={contract_id} user_id={user_id} filename={filename!r} ext={file_ext}")
 
     try:
         text = parse_document(file_path, file_ext)
@@ -44,8 +45,9 @@ async def upload_contract(file: UploadFile, user_id: str) -> UploadResponse:
         get_contract_collection().add_documents(docs)
         chunk_count = len(docs)
         status, message = "parsed", f"{filename} parsed and indexed with {chunk_count} chunks"
+        logger.info(f"Upload parsed OK: contract_id={contract_id} chunk_count={chunk_count}")
     except Exception as e:
-        logger.error(f"Parse error: {e}")
+        logger.error(f"Upload parse failed: contract_id={contract_id} error={e}")
         message = f"File uploaded but parsing failed: {str(e)}"
 
     with get_db() as conn:
@@ -82,20 +84,25 @@ def _save_analysis_result(contract_id: str, analysis, risks: list):
 
 
 async def analyze_contract(contract_id: str, user_id: str, provider: str = DEFAULT_PROVIDER, force: bool = False) -> AnalyzeResponse:
+    logger.info(f"Analyze requested: contract_id={contract_id} user_id={user_id} provider={provider} force={force}")
     _assert_owns_contract(contract_id, user_id)
 
     if not force:
         cached = _load_cached_analysis(contract_id)
         if cached is not None:
+            logger.info(f"Analyze cache hit: contract_id={contract_id} risk_count={len(cached.risks)}")
             return cached
 
     all_docs = get_contract_collection().get(where={"contract_id": contract_id})
     if not all_docs or not all_docs.get("documents"):
+        logger.error(f"Analyze failed: contract_id={contract_id} has no indexed chunks")
         raise ValueError(f"No documents found for contract: {contract_id}")
     full_text = "\n".join(all_docs["documents"])
+    logger.info(f"Analyze cache miss, running pipeline: contract_id={contract_id} chunk_count={len(all_docs['documents'])}")
     analysis, risks = await run_analysis_workflow(full_text, contract_id, provider)
 
     _save_analysis_result(contract_id, analysis, risks)
+    logger.info(f"Analyze saved: contract_id={contract_id} risk_count={len(risks)}")
 
     return AnalyzeResponse(contract_id=contract_id, analysis=analysis.model_dump(), risks=[r.model_dump() for r in risks])
 
