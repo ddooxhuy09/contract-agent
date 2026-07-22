@@ -19,3 +19,4 @@ python-multipart
 python-docx
 psycopg2-binary
 httpx
+requests
