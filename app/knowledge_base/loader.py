@@ -1,58 +1,11 @@
-from app.core.config import logger, LEGAL_KB_BATCH_SIZE, LEGAL_KB_ACTIVE_ONLY
-from app.core.database import get_db
-from langchain_core.documents import Document
-from app.vectorstore.faiss_store import get_legal_collection
+"""Legal KB helpers — dump-based FAISS loader removed. Use IngestLegalDocument."""
 
-_QUERY = """
-    SELECT dc.chunk_ref, dc.doc_id, dc.chunk_index, dc.chunk_text, dc.section_type,
-           ld.title, ld.doc_number, ld.category
-    FROM document_chunks dc
-    JOIN legal_documents ld ON ld.doc_id = dc.doc_id
-    {where_clause}
-    ORDER BY dc.doc_id, dc.chunk_index
-"""
+from app.core.logging import logger
 
 
 def load_legal_documents() -> int:
-    """Rebuild the legal FAISS collection from the Supabase legal_documents/document_chunks tables."""
-    where_clause = "WHERE ld.status_flag = 1" if LEGAL_KB_ACTIVE_ONLY else ""
-    collection = get_legal_collection()
-    collection.reset()
-
-    total_chunks = 0
-    batch: list[Document] = []
-
-    with get_db() as conn:
-        with conn.cursor(name="legal_kb_cursor") as cur:
-            cur.itersize = LEGAL_KB_BATCH_SIZE
-            cur.execute(_QUERY.format(where_clause=where_clause))
-
-            for chunk_ref, doc_id, chunk_index, chunk_text, section_type, title, doc_number, category in cur:
-                if not chunk_text or not chunk_text.strip():
-                    continue
-                batch.append(Document(
-                    page_content=chunk_text,
-                    metadata={
-                        "chunk_ref": chunk_ref,
-                        "doc_id": doc_id,
-                        "chunk_index": chunk_index,
-                        "section_type": section_type,
-                        "title": title,
-                        "doc_number": doc_number,
-                        "category": category,
-                    },
-                ))
-
-                if len(batch) >= LEGAL_KB_BATCH_SIZE:
-                    collection.add_documents(batch, persist=False)
-                    total_chunks += len(batch)
-                    logger.info(f"Loaded {total_chunks} legal chunks so far...")
-                    batch = []
-
-    if batch:
-        collection.add_documents(batch, persist=False)
-        total_chunks += len(batch)
-
-    collection.save()
-    logger.info(f"Legal KB loaded from Supabase: {total_chunks} chunks indexed")
-    return total_chunks
+    logger.warning(
+        "load_legal_documents() is deprecated. "
+        "Ingest via app.application.use_cases.legal_ingest.IngestLegalDocument into Postgres/pgvector."
+    )
+    return 0

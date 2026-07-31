@@ -1,11 +1,15 @@
-import { supabase } from "./supabaseClient";
-
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+const STORAGE_KEY = "contractlens_auth";
 
 async function authHeaders() {
-  const { data } = await supabase.auth.getSession();
-  const token = data.session?.access_token;
-  return token ? { Authorization: `Bearer ${token}` } : {};
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const auth = raw ? JSON.parse(raw) : null;
+    const token = auth?.access_token;
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  } catch {
+    return {};
+  }
 }
 
 async function handleResponse(res) {
@@ -15,7 +19,7 @@ async function handleResponse(res) {
       const data = await res.json();
       detail = data.detail || detail;
     } catch {
-      // ignore parse errors, fall back to statusText
+      // ignore
     }
     throw new Error(detail);
   }

@@ -1,19 +1,59 @@
 from typing import List
-from app.core.config import TOP_K_RETRIEVAL, SIMILARITY_THRESHOLD
+
 from langchain_core.documents import Document
-from app.vectorstore.faiss_store import get_contract_collection, get_legal_collection
+
+from app.core.settings import get_settings
+from app.infrastructure.retrieval.context import get_contract_search, get_graph_rag, get_legal_search
 
 
-def retrieve_contract(query: str, contract_id: str, k: int = None) -> List[Document]:
-    # No min_score threshold here: this search is already scoped to a single contract's own
-    # chunks via `where`, so even a "weakly similar" top-k result is still guaranteed to be
-    # that contract's own text. Applying the same strict threshold used for the shared legal
-    # corpus caused broad questions (e.g. "hợp đồng này có vấn đề gì không?") to retrieve
-    # nothing and trigger a false "no context" refusal.
-    return get_contract_collection().similarity_search(
-        query, k=k or TOP_K_RETRIEVAL, where={"contract_id": contract_id}
+def retrieve_contract(query: str, contract_id: str, k: int | None = None) -> List[Document]:
+    settings = get_settings()
+    hits = get_contract_search().search(query, contract_id, k or settings.top_k_retrieval)
+    return [
+        Document(page_content=h.content, metadata=h.metadata)
+        for h in hits
+    ]
+
+
+def retrieve_legal(
+    query: str,
+    k: int = 3,
+    *,
+    title: str | None = None,
+    summary: str | None = None,
+    contract_type: str | None = None,
+) -> List[Document]:
+    """Hybrid PG + optional GraphRAG hydrate. Prefer title/summary for rewrite."""
+    rag = get_graph_rag()
+    if rag is not None:
+        hits = rag.retrieve_for_clause(
+            title or query,
+            summary or (None if title else query),
+            contract_type=contract_type,
+            k_seed=k,
+            max_total=max(k * 2, 8),
+        )
+        return [Document(page_content=h.content, metadata=h.metadata) for h in hits]
+
+    settings = get_settings()
+    hits = get_legal_search().search(
+        query,
+        k,
+        min_score=settings.similarity_threshold,
+        doc_type_hint=contract_type,
     )
+    return [Document(page_content=h.content, metadata=h.metadata) for h in hits]
 
 
-def retrieve_legal(query: str, k: int = 3) -> List[Document]:
-    return get_legal_collection().similarity_search(query, k=k, min_score=SIMILARITY_THRESHOLD)
+def format_legal_context(docs: List[Document], max_chars: int = 7000) -> str:
+    """Structured context when GraphRAG metadata roles are present."""
+    from app.domain.entities.search import RetrievedChunk
+    from app.infrastructure.retrieval.legal_graph_rag import LegalGraphRag
+
+    chunks = [
+        RetrievedChunk(content=d.page_content, score=None, metadata=dict(d.metadata or {}))
+        for d in docs
+    ]
+    if any(c.metadata.get("role") for c in chunks):
+        return LegalGraphRag.format_context(chunks, max_chars=max_chars)
+    return "\n\n".join(d.page_content for d in docs)[:max_chars]

@@ -2,7 +2,6 @@ fastapi
 uvicorn[standard]
 torch
 sentence-transformers
-faiss-cpu
 numpy
 langchain
 langchain-core
@@ -12,10 +11,17 @@ langchain-google-genai
 langgraph
 langgraph-checkpoint-postgres
 psycopg[binary]
-pdfplumber
+psycopg2-binary
+pgvector
+neo4j
+PyJWT
+passlib[bcrypt]
+bcrypt<4.1
 pydantic
+pydantic-settings
+email-validator
 python-dotenv
 python-multipart
 python-docx
-psycopg2-binary
+pdfplumber
 httpx

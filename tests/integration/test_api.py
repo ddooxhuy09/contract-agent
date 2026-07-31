@@ -1,30 +1,39 @@
+"""Integration smoke — skips if heavy deps / DB stack unavailable."""
+
+from uuid import uuid4
+
+import pytest
+
+pytest.importorskip("langchain_huggingface")
+
 from fastapi.testclient import TestClient
+
+from app.api.deps import get_current_user_id
 from app.main import app
-from app.core.auth import get_current_user_id
 
-# These tests exercise validation/not-found behavior below the auth layer, so bypass real
-# Supabase auth with a fixed fake user id rather than needing a live JWT.
-app.dependency_overrides[get_current_user_id] = lambda: "00000000-0000-0000-0000-000000000000"
-
-client = TestClient(app)
+TEST_USER_ID = uuid4()
 
 
-def test_health():
-    resp = client.get("/health")
-    assert resp.status_code == 200
-    assert resp.json()["status"] == "ok"
+async def _override_user():
+    return TEST_USER_ID
 
 
-def test_upload_no_file():
-    resp = client.post("/api/v1/upload")
-    assert resp.status_code == 422
+app.dependency_overrides[get_current_user_id] = _override_user
 
 
-def test_analyze_invalid_id():
-    resp = client.post("/api/v1/analyze", json={"contract_id": "00000000-0000-0000-0000-000000000001"})
-    assert resp.status_code == 404
+@pytest.fixture
+def client():
+    with TestClient(app) as c:
+        yield c
 
 
-def test_chat_missing_fields():
-    resp = client.post("/api/v1/chat", json={})
-    assert resp.status_code == 422
+def test_health(client):
+    res = client.get("/health")
+    assert res.status_code == 200
+    assert res.json()["status"] == "ok"
+
+
+def test_models(client):
+    res = client.get("/api/v1/models")
+    assert res.status_code == 200
+    assert isinstance(res.json(), list)

@@ -1,0 +1,242 @@
+from pathlib import Path
+from typing import Any
+
+from neo4j import GraphDatabase
+
+from app.core.logging import logger
+from app.core.settings import get_settings
+
+# luoc_do code → Neo4j relationship type
+RELATION_TYPE_MAP = {
+    "van_ban_bi_bai_bo": "REPEALS",
+    "thay_the": "SUPERSEDES",
+    "tam_ngung_hieu_luc": "SUSPENDS",
+    "dinh_chi_thi_hanh": "SUSPENDS",
+    "sua_doi_bo_sung": "AMENDS",
+    "bo_sung": "ADDS",
+    "can_cu_ban_hanh": "BASED_ON",
+    "quy_dinh_chi_tiet_huong_dan_thi_hanh": "DETAILS",
+    "huong_dan_ap_dung": "GUIDES",
+    "dinh_chinh": "CORRECTS",
+    "hop_nhat": "CONSOLIDATES",
+    "dan_chieu": "CITES",
+    "giai_thich": "EXPLAINS",
+    "cong_bo": "ANNOUNCES",
+    "ban_dich": "TRANSLATES",
+    "REPEALS": "REPEALS",
+    "SUPERSEDES": "SUPERSEDES",
+    "SUSPENDS": "SUSPENDS",
+    "AMENDS": "AMENDS",
+    "ADDS": "ADDS",
+    "BASED_ON": "BASED_ON",
+    "DETAILS": "DETAILS",
+    "GUIDES": "GUIDES",
+    "CORRECTS": "CORRECTS",
+    "CONSOLIDATES": "CONSOLIDATES",
+    "CITES": "CITES",
+    "EXPLAINS": "EXPLAINS",
+    "ANNOUNCES": "ANNOUNCES",
+    "TRANSLATES": "TRANSLATES",
+}
+
+
+class Neo4jGraphRepository:
+    def __init__(self):
+        settings = get_settings()
+        self._driver = GraphDatabase.driver(
+            settings.neo4j_uri,
+            auth=(settings.neo4j_user, settings.neo4j_password),
+        )
+
+    def close(self) -> None:
+        self._driver.close()
+
+    def ensure_schema(self) -> None:
+        path = Path(get_settings().schema_cypher_path)
+        if not path.is_file():
+            path = Path(__file__).resolve().parents[3] / "schema.cypher"
+        text = path.read_text(encoding="utf-8")
+        statements = []
+        for line in text.splitlines():
+            stripped = line.strip()
+            if not stripped or stripped.startswith("//"):
+                continue
+            statements.append(stripped)
+        # Group into CREATE CONSTRAINT / CREATE INDEX statements
+        buffer: list[str] = []
+        executable: list[str] = []
+        for stmt_line in statements:
+            buffer.append(stmt_line)
+            joined = " ".join(buffer)
+            if joined.rstrip().endswith(";"):
+                executable.append(joined.rstrip()[:-1])
+                buffer = []
+        try:
+            with self._driver.session() as session:
+                for cypher in executable:
+                    if cypher.upper().startswith("CREATE CONSTRAINT") or cypher.upper().startswith("CREATE INDEX"):
+                        session.run(cypher)
+            logger.info("Applied Neo4j schema constraints/indexes from %s", path)
+        except Exception as e:
+            logger.warning("Neo4j schema apply skipped/failed: %s", e)
+
+    def upsert_document_tree(
+        self,
+        doc_id: str,
+        doc_num: str,
+        doc_type: str,
+        nodes: list[dict[str, Any]],
+        chunks: list[dict[str, Any]],
+    ) -> None:
+        try:
+            with self._driver.session() as session:
+                session.run(
+                    """
+                    MERGE (d:Document {doc_id: $doc_id})
+                    SET d.doc_num = $doc_num, d.doc_type = $doc_type
+                    """,
+                    doc_id=doc_id,
+                    doc_num=doc_num,
+                    doc_type=doc_type,
+                )
+                for node in nodes:
+                    session.run(
+                        """
+                        MERGE (n:Node {doc_id: $doc_id, path: $path})
+                        SET n.level = $level, n.label = $label
+                        WITH n
+                        MATCH (d:Document {doc_id: $doc_id})
+                        MERGE (d)-[:HAS_NODE]->(n)
+                        """,
+                        doc_id=doc_id,
+                        path=node["path"],
+                        level=node.get("level", "Point"),
+                        label=node.get("label"),
+                    )
+                    parent = node.get("parent_path")
+                    if parent:
+                        session.run(
+                            """
+                            MATCH (p:Node {doc_id: $doc_id, path: $parent})
+                            MATCH (c:Node {doc_id: $doc_id, path: $path})
+                            MERGE (p)-[:PARENT_OF]->(c)
+                            """,
+                            doc_id=doc_id,
+                            parent=parent,
+                            path=node["path"],
+                        )
+                for ch in chunks:
+                    session.run(
+                        """
+                        MERGE (c:Chunk {chunk_ref: $chunk_ref})
+                        SET c.doc_id = $doc_id, c.chunk_type = $chunk_type
+                        WITH c
+                        MATCH (d:Document {doc_id: $doc_id})
+                        MERGE (c)-[:OF_DOC]->(d)
+                        WITH c
+                        MATCH (n:Node {doc_id: $doc_id, path: $chunk_ref})
+                        MERGE (c)-[:OF_NODE]->(n)
+                        """,
+                        chunk_ref=ch["chunk_ref"],
+                        doc_id=doc_id,
+                        chunk_type=ch.get("chunk_type", "body"),
+                    )
+        except Exception as e:
+            logger.warning("Neo4j upsert_document_tree failed: %s", e)
+
+    def upsert_doc_relations(self, relations: list[dict[str, str]]) -> None:
+        if not relations:
+            return
+        try:
+            with self._driver.session() as session:
+                for rel in relations:
+                    rel_type = RELATION_TYPE_MAP.get(rel["relation_type"], "CITES")
+                    session.run(
+                        f"""
+                        MERGE (a:Document {{doc_id: $from_id}})
+                        MERGE (b:Document {{doc_id: $to_id}})
+                        MERGE (a)-[r:{rel_type}]->(b)
+                        SET r.source_code = $source
+                        """,
+                        from_id=rel["from_doc_id"],
+                        to_id=rel["to_doc_id"],
+                        source=rel["relation_type"],
+                    )
+        except Exception as e:
+            logger.warning("Neo4j upsert_doc_relations failed: %s", e)
+
+    def upsert_chunk_relations(self, relations: list[dict[str, str]]) -> None:
+        if not relations:
+            return
+        try:
+            with self._driver.session() as session:
+                for rel in relations:
+                    session.run(
+                        """
+                        MERGE (a:Chunk {chunk_ref: $from_ref})
+                        MERGE (b:Chunk {chunk_ref: $to_ref})
+                        MERGE (a)-[r:REFERS_TO]->(b)
+                        SET r.relation_type = $rtype
+                        """,
+                        from_ref=rel["from_chunk_ref"],
+                        to_ref=rel["to_chunk_ref"],
+                        rtype=rel["relation_type"],
+                    )
+        except Exception as e:
+            logger.warning("Neo4j upsert_chunk_relations failed: %s", e)
+
+    def expand(self, chunk_refs: list[str], limit: int = 80) -> dict[str, Any]:
+        """Expand seeds: Clause-level siblings, ancestors, cite/amend related docs.
+
+        REPEALS/SUPERSEDES returned separately so callers can demote repealed sources.
+        """
+        empty = {
+            "seeds": [],
+            "sibling_paths": [],
+            "ancestor_paths": [],
+            "parent_clause_paths": [],
+            "related_docs": [],
+            "repealed_by_docs": [],
+        }
+        if not chunk_refs:
+            return empty
+        try:
+            with self._driver.session() as session:
+                result = session.run(
+                    """
+                    MATCH (c:Chunk) WHERE c.chunk_ref IN $refs
+                    OPTIONAL MATCH (c)-[:OF_NODE]->(leaf:Node)
+                    OPTIONAL MATCH (anc:Node)-[:PARENT_OF*1..4]->(leaf)
+                    // Sibling points under the same Clause (Khoản) parent only
+                    OPTIONAL MATCH (leaf)<-[:PARENT_OF]-(clause:Node)
+                      WHERE clause.level = 'Clause'
+                    OPTIONAL MATCH (clause)-[:PARENT_OF]->(sib:Node)
+                      WHERE sib.path <> leaf.path
+                    OPTIONAL MATCH (c)-[:OF_DOC]->(d:Document)
+                    OPTIONAL MATCH (d)-[:BASED_ON|CITES|AMENDS|DETAILS|GUIDES*1..2]-(rel:Document)
+                    OPTIONAL MATCH (other:Document)-[:REPEALS|SUPERSEDES]->(d)
+                    RETURN collect(DISTINCT c.chunk_ref) AS seeds,
+                           collect(DISTINCT sib.path) AS siblings,
+                           collect(DISTINCT anc.path) AS ancestors,
+                           collect(DISTINCT clause.path) AS parent_clauses,
+                           collect(DISTINCT rel.doc_id) AS related_docs,
+                           collect(DISTINCT other.doc_id) AS repealed_by
+                    LIMIT $limit
+                    """,
+                    refs=chunk_refs,
+                    limit=limit,
+                )
+                record = result.single()
+                if not record:
+                    return {**empty, "seeds": list(chunk_refs)}
+                return {
+                    "seeds": [x for x in (record["seeds"] or []) if x],
+                    "sibling_paths": [x for x in (record["siblings"] or []) if x][:24],
+                    "ancestor_paths": [x for x in (record["ancestors"] or []) if x][:16],
+                    "parent_clause_paths": [x for x in (record["parent_clauses"] or []) if x],
+                    "related_docs": [x for x in (record["related_docs"] or []) if x][:8],
+                    "repealed_by_docs": [x for x in (record["repealed_by"] or []) if x][:8],
+                }
+        except Exception as e:
+            logger.warning("Neo4j expand failed (continuing without graph): %s", e)
+            return {**empty, "seeds": list(chunk_refs)}

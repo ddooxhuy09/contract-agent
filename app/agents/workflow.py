@@ -28,6 +28,7 @@ class ClauseState(TypedDict):
     clause: Clause
     contract_id: str
     provider: str
+    contract_type: str | None
 
 
 async def _extract_node(state: AnalysisState) -> dict:
@@ -46,8 +47,17 @@ def _fan_out_clauses(state: AnalysisState):
         logger.info(f"No clauses to judge: contract_id={state['contract_id']}")
         return "aggregate"
     logger.info(f"Judge fan-out: contract_id={state['contract_id']} clause_count={len(clauses)} max_concurrency={_MAX_CONCURRENT_CLAUSE_CHECKS}")
+    contract_type = state["analysis"].contract_type
     return [
-        Send("judge_clause", {"clause": c, "contract_id": state["contract_id"], "provider": state["provider"]})
+        Send(
+            "judge_clause",
+            {
+                "clause": c,
+                "contract_id": state["contract_id"],
+                "provider": state["provider"],
+                "contract_type": contract_type,
+            },
+        )
         for c in clauses
     ]
 
@@ -56,7 +66,13 @@ async def _judge_clause_node(state: ClauseState) -> dict:
     clause = state["clause"]
     logger.info(f"Judging clause: contract_id={state['contract_id']} clause_number={clause.clause_number}")
     try:
-        risk = await asyncio.to_thread(evaluate_clause, clause, state["provider"])
+        risk = await asyncio.to_thread(
+            evaluate_clause,
+            clause,
+            state["provider"],
+            contract_id=state["contract_id"],
+            contract_type=state.get("contract_type"),
+        )
         if risk:
             logger.info(f"Judge result: contract_id={state['contract_id']} clause_number={clause.clause_number} severity={risk.severity}")
         else:

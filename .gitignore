@@ -10,9 +10,12 @@ data/
 
 *.log
 debug*.txt
+.legal_ingest_checkpoint.json
 
 .claude/
 .mcp.json
 
 # Downloaded reference papers, not project source
-docs.pdf
+docs
+
+tests

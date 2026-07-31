@@ -21,7 +21,7 @@ export default function LoginScreen() {
       if (authError) {
         setError(authError.message);
       } else if (mode === "signup") {
-        setInfo("Đăng ký thành công. Vui lòng kiểm tra email để xác nhận (nếu được yêu cầu).");
+        setInfo("Đăng ký thành công.");
       }
     } finally {
       setBusy(false);

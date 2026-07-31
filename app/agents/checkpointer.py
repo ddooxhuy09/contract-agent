@@ -20,11 +20,6 @@ async def init_checkpointer() -> None:
     _pool = AsyncConnectionPool(
         conninfo=DATABASE_URL,
         open=False,
-        # prepare_threshold=None disables server-side prepared statements. Supabase's
-        # connection pooler (Supavisor, transaction mode) can route each statement to a
-        # different backend connection, so a prepared statement from one backend may not
-        # exist (or may collide by name) on the next — psycopg's default eager preparing
-        # causes "DuplicatePreparedStatement" errors against pooled connections.
         kwargs={"autocommit": True, "prepare_threshold": None, "row_factory": dict_row},
     )
     await _pool.open()

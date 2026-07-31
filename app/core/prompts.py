@@ -50,6 +50,12 @@ Evaluate ONLY the clause below, comparing it against the relevant legal excerpts
 ONLY use information present in the clause and the provided legal excerpts. DO NOT fabricate legal provisions or figures.
 If the provided legal excerpts are NOT sufficiently relevant to reach a conclusion, return "severity": "warning" and clearly state in "issue" that manual review is needed due to insufficient grounding — DO NOT guess.
 
+The legal context is structured GraphRAG blocks:
+- "Điều luật seed" = primary retrieved provisions
+- "Cùng khoản / ngữ cảnh cây" = hydrated siblings/ancestors from the same article tree
+- "Văn bản liên quan" = related documents (BASED_ON/CITES/AMENDS…)
+Each excerpt is tagged with [doc_number | chunk_ref | role]. Your "legal_basis" MUST cite a doc_number and/or chunk_ref that appears in this context — never invent statute citations outside the context.
+
 Classification:
 - "critical": the clause violates a legal prohibition or a mandatory provision of current Vietnamese law.
 - "warning": not a direct legal violation, but disadvantageous, unbalanced, unclear, or carries meaningful dispute risk.
@@ -58,16 +64,20 @@ Classification:
 IMPORTANT: Write all text values ("issue", "legal_basis", "recommendation") in Vietnamese, since the output is shown to Vietnamese end users.
 
 Clause (Điều {clause_number}{clause_title_suffix}):
+Full text:
 {clause_text}
 
-Relevant legal excerpts (retrieved based on the semantics of this specific clause):
+Extract summary (auxiliary only):
+{clause_summary}
+
+Relevant legal excerpts (GraphRAG):
 {legal_context}
 
 Return ONLY a single JSON object (not an array), in this exact format:
 {{
   "issue": "detailed, professional description of the issue, in Vietnamese; empty if severity is ok",
   "severity": "critical | warning | ok",
-  "legal_basis": "specific legal basis, in Vietnamese (e.g. 'Khoản 1 Điều 25 Bộ luật Lao động 2019'), null if none",
+  "legal_basis": "specific legal basis matching a tag in context (doc_num/chunk_ref), in Vietnamese, null if none",
   "recommendation": "specific amendment recommendation, in Vietnamese, null if severity is ok"
 }}
 """
