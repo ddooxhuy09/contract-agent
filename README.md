@@ -1,63 +1,51 @@
 # ContractLens — AI rà soát hợp đồng tiếng Việt
 
-## Stack
-- FastAPI + Clean Architecture (`domain` / `application` / `infrastructure` / `api`)
-- Postgres + pgvector (`schema.sql`)
-- Neo4j GraphRAG (`schema.cypher`)
-- JWT local auth
-- Gemini + BAAI/bge-m3 embeddings (LangChain HuggingFaceEmbeddings)
-- Full local stack via Docker Compose (api + frontend + postgres + neo4j)
+Stack: FastAPI · Postgres/pgvector · Neo4j · Gemini · BAAI/bge-m3 · React (Vite)
 
-## Chạy trên máy mới (không cần cài Python/Node)
+## Chạy bằng Docker
 
-```bash
-cp .env.example .env
-# Điền GEMINI_API_KEY và JWT_SECRET (không để default)
+Cần [Docker Desktop](https://www.docker.com/products/docker-desktop/). Không cần cài Python/Node trên máy.
 
+```powershell
+# 1) Cấu hình
+copy .env.example .env
+# Điền GEMINI_API_KEY và JWT_SECRET (không để giá trị mặc định)
+
+# 2) Build & chạy toàn bộ stack
 docker compose up --build -d
 ```
 
-Mặc định:
-- Frontend: http://localhost:5173
-- API: http://localhost:8010/health
-- Postgres host port: `5433`
-- Neo4j Bolt host port: `7688`
+Mở:
 
-### Nạp database từ dump
+| Service  | URL |
+|----------|-----|
+| Frontend | http://localhost:5173 |
+| API      | http://localhost:8010/health |
 
-File `contractlens_backup.dump` (custom `pg_restore`) phải nằm ở root repo (đã mount sẵn vào postgres).
+Lần đầu API sẽ tải model embedding (`BAAI/bge-m3`) — có thể mất vài phút.
+
+### Nạp database từ dump (tuỳ chọn)
+
+Đặt file `contractlens_backup.dump` ở root repo, rồi:
 
 ```powershell
 docker compose up -d postgres
-# đợi healthy
-powershell -File scripts/restore_db.ps1
+# đợi postgres healthy
+powershell -File scripts\restore_db.ps1
 docker compose up -d
 ```
 
-## Dev workflow
+### Lệnh thường dùng
 
-| Việc | Lệnh |
-|------|------|
-| Sửa frontend/backend | Không rebuild — hot reload qua bind mount |
-| Thêm package Node | `docker compose exec frontend npm install <pkg>` |
-| Thêm package Python | Sửa `requirements.txt` → `docker compose build api && docker compose up -d api` |
-| Đổi Dockerfile | `docker compose build <service> && docker compose up -d <service>` |
-| Reset DB | `docker compose stop api; docker volume rm contractlens_pgdata; docker compose up -d` |
-| Cleanup | `docker compose down; docker image prune -f` |
+```powershell
+docker compose up --build -d    # build lại & chạy
+docker compose logs -f api      # xem log API
+docker compose down             # dừng stack
+```
 
 ## API chính
-- `POST /api/v1/auth/register` / `login`
+
+- `POST /api/v1/auth/register` · `login`
 - `POST /api/v1/upload` · `analyze` · `chat`
 - `GET /api/v1/contracts`
 - `GET /health`
-
-## Ingest luật mẫu (trong container api)
-
-```bash
-docker compose exec api python -m scripts.ingest_legal_sample
-```
-
-## Tài liệu
-- [docs/refactor-report.md](docs/refactor-report.md)
-- [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md)
-- [schema.sql](schema.sql) · [schema.cypher](schema.cypher)
