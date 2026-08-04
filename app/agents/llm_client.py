@@ -1,12 +1,21 @@
 from langchain_google_genai import ChatGoogleGenerativeAI
-from app.core.config import GEMINI_API_KEY, GEMINI_MODEL
 
-PROVIDERS = {
-    "gemini": {"label": "Gemini 2.5 Flash", "model": GEMINI_MODEL},
-}
+from app.core.settings import get_settings
+
 DEFAULT_PROVIDER = "gemini"
 
 _gemini_chat: ChatGoogleGenerativeAI | None = None
+
+
+def get_providers() -> dict[str, dict[str, str]]:
+    settings = get_settings()
+    return {
+        "gemini": {"label": "Gemini 2.5 Flash", "model": settings.gemini_model},
+    }
+
+
+# Kept for routes that iterate providers at import/list time.
+PROVIDERS = get_providers()
 
 
 def get_chat_model(provider: str = DEFAULT_PROVIDER) -> ChatGoogleGenerativeAI:
@@ -16,7 +25,12 @@ def get_chat_model(provider: str = DEFAULT_PROVIDER) -> ChatGoogleGenerativeAI:
     """
     global _gemini_chat
     if _gemini_chat is None:
-        _gemini_chat = ChatGoogleGenerativeAI(model=GEMINI_MODEL, google_api_key=GEMINI_API_KEY, temperature=0)
+        settings = get_settings()
+        _gemini_chat = ChatGoogleGenerativeAI(
+            model=settings.gemini_model,
+            google_api_key=settings.gemini_api_key,
+            temperature=0,
+        )
     return _gemini_chat
 
 

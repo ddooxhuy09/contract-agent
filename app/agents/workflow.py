@@ -6,7 +6,7 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.types import Send
 
 from app.schemas.contract import ContractAnalysis, Clause, RiskItem
-from app.core.config import logger
+from app.core.logging import logger
 from app.agents.clause_parser import parse_contract
 from app.agents.risk_flagger import evaluate_clause
 from app.agents.llm_client import DEFAULT_PROVIDER

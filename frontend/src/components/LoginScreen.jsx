@@ -29,21 +29,21 @@ export default function LoginScreen() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-on-surface flex items-center justify-center px-container-padding">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-section-gap">
-          <span className="font-display-lg text-display-lg text-primary">ContractLens</span>
-          <p className="font-body-md text-body-md text-on-surface-variant mt-2">
-            {mode === "signin" ? "Đăng nhập để rà soát hợp đồng của bạn" : "Tạo tài khoản mới"}
+    <div className="min-h-screen bg-paper text-ink flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-sm animate-fade-in">
+        <div className="mb-6">
+          <p className="text-[1.125rem] font-medium text-ink tracking-tight">ContractLens</p>
+          <p className="ui-text text-ink-muted mt-1">
+            {mode === "signin" ? "Đăng nhập để rà soát hợp đồng" : "Tạo tài khoản mới"}
           </p>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="bg-surface-container-lowest border border-border-subtle rounded-xl p-card-padding shadow-sm flex flex-col gap-4"
+          className="bg-paper-raised border border-rule rounded-md p-4 shadow-sm flex flex-col gap-3"
         >
           <div>
-            <label className="block font-label-bold text-label-bold text-on-surface-variant mb-1" htmlFor="email">
+            <label className="block text-[0.75rem] font-medium text-ink-muted mb-1" htmlFor="email">
               Email
             </label>
             <input
@@ -52,12 +52,12 @@ export default function LoginScreen() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-lg border border-border-subtle bg-surface-container-low text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary"
+              className="w-full px-3 py-2 rounded-md border border-rule bg-paper text-ink ui-text focus:outline-none focus:border-quiet"
               placeholder="ban@congty.com"
             />
           </div>
           <div>
-            <label className="block font-label-bold text-label-bold text-on-surface-variant mb-1" htmlFor="password">
+            <label className="block text-[0.75rem] font-medium text-ink-muted mb-1" htmlFor="password">
               Mật khẩu
             </label>
             <input
@@ -67,28 +67,28 @@ export default function LoginScreen() {
               minLength={6}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-lg border border-border-subtle bg-surface-container-low text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary"
+              className="w-full px-3 py-2 rounded-md border border-rule bg-paper text-ink ui-text focus:outline-none focus:border-quiet"
               placeholder="••••••••"
             />
           </div>
 
-          {error && <p className="text-error font-label-bold text-label-bold">{error}</p>}
-          {info && <p className="text-success-green font-label-bold text-label-bold">{info}</p>}
+          {error && <p className="text-stamp text-[0.75rem] font-medium">{error}</p>}
+          {info && <p className="text-ok text-[0.75rem] font-medium">{info}</p>}
 
           <button
             type="submit"
             disabled={busy}
-            className="mt-2 px-6 py-3 bg-primary text-on-primary font-label-bold text-label-bold rounded-lg hover:opacity-90 transition-all disabled:opacity-50"
+            className="mt-1 px-4 py-2 bg-ink text-paper-raised text-[0.75rem] font-medium rounded-md hover:bg-ink/90 transition-colors disabled:opacity-50"
           >
             {busy ? "Đang xử lý..." : mode === "signin" ? "Đăng nhập" : "Đăng ký"}
           </button>
         </form>
 
-        <p className="text-center mt-4 font-body-md text-body-md text-on-surface-variant">
+        <p className="mt-3 ui-text text-ink-muted">
           {mode === "signin" ? "Chưa có tài khoản?" : "Đã có tài khoản?"}{" "}
           <button
             type="button"
-            className="text-secondary font-label-bold hover:underline"
+            className="text-quiet font-medium hover:text-ink underline-offset-2 hover:underline"
             onClick={() => {
               setMode(mode === "signin" ? "signup" : "signin");
               setError(null);

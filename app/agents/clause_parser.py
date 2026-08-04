@@ -2,7 +2,7 @@ import re
 import unicodedata
 from typing import List, Optional
 from app.schemas.contract import ContractAnalysis, Party, Clause
-from app.core.config import logger
+from app.core.logging import logger
 from app.core.prompts import EXTRACTION_PROMPT
 from app.agents.llm_client import chat_completion, DEFAULT_PROVIDER
 from app.agents.json_parsing import parse_json_object

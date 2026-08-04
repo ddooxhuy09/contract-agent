@@ -1,0 +1,102 @@
+[
+  {
+    "key": "ch1",
+    "id": "ch1",
+    "title": "Chương I",
+    "ptype": 2,
+    "level": "Chapter",
+    "orderIndex": 1,
+    "isLeaf": false,
+    "children": [
+      {
+        "key": "d1",
+        "id": "d1",
+        "title": "Điều 1",
+        "ptype": 5,
+        "level": "Article",
+        "orderIndex": 2,
+        "isLeaf": false,
+        "children": [
+          {
+            "key": "d1k1",
+            "id": "d1k1",
+            "title": "Khoản 1",
+            "ptype": 6,
+            "level": "Clause",
+            "orderIndex": 3,
+            "isLeaf": false,
+            "children": [
+              {
+                "key": "d1k1a",
+                "id": "d1k1a",
+                "title": "Điểm a",
+                "ptype": 7,
+                "level": "Point",
+                "orderIndex": 4,
+                "isLeaf": true
+              },
+              {
+                "key": "d1k1b",
+                "id": "d1k1b",
+                "title": "Điểm b",
+                "ptype": 7,
+                "level": "Point",
+                "orderIndex": 5,
+                "isLeaf": true
+              }
+            ]
+          },
+          {
+            "key": "d1k2",
+            "id": "d1k2",
+            "title": "Khoản 2",
+            "ptype": 6,
+            "level": "Clause",
+            "orderIndex": 6,
+            "isLeaf": true
+          }
+        ]
+      },
+      {
+        "key": "d53",
+        "id": "d53",
+        "title": "Điều 53",
+        "ptype": 5,
+        "level": "Article",
+        "orderIndex": 7,
+        "isLeaf": false,
+        "children": [
+          {
+            "key": "d53k1",
+            "id": "d53k1",
+            "title": "Khoản 1",
+            "ptype": 6,
+            "level": "Clause",
+            "orderIndex": 8,
+            "isLeaf": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "key": "pl0",
+    "id": "pl0",
+    "title": "Phụ lục I",
+    "ptype": 8,
+    "level": "Appendix",
+    "orderIndex": 9,
+    "isLeaf": false,
+    "children": [
+      {
+        "key": "pl0n1",
+        "id": "pl0n1",
+        "title": "Nhóm 1",
+        "ptype": 9,
+        "level": "Group",
+        "orderIndex": 10,
+        "isLeaf": true
+      }
+    ]
+  }
+]

@@ -12,6 +12,8 @@ psycopg2.extras.register_uuid()
 
 def get_connection():
     conn = psycopg2.connect(get_settings().database_url)
+    # register_vector may issue SQL; toggling autocommit must be outside a transaction.
+    conn.autocommit = True
     register_vector(conn)
     conn.autocommit = False
     return conn

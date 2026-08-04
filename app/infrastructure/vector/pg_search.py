@@ -1,3 +1,4 @@
+from app.core.logging import logger
 from app.core.settings import get_settings
 from app.domain.entities.search import RetrievedChunk
 from app.domain.ports.services import Embedder
@@ -70,8 +71,24 @@ class PgLegalVectorSearch:
         settings = get_settings()
         threshold = settings.similarity_threshold if min_score is None else min_score
         fetch_n = max(k * 4, 12)
-        vector_hits = self._vector_search(query, fetch_n, doc_type_hint, doc_ids)
-        fts_hits = self._fts_search(query, fetch_n, doc_type_hint, doc_ids)
+        try:
+            vector_hits = self._vector_search(query, fetch_n, doc_type_hint, doc_ids)
+        except Exception as e:
+            # Typical: dump embeddings dim ≠ query dim (768 vs 1024) or embedder not ready.
+            logger.error("Legal vector search failed (falling back to FTS): %s", e)
+            vector_hits = []
+        try:
+            fts_hits = self._fts_search(query, fetch_n, doc_type_hint, doc_ids)
+        except Exception as e:
+            logger.error("Legal FTS search failed: %s", e)
+            fts_hits = []
+        if not vector_hits and not fts_hits:
+            logger.warning(
+                "Legal search empty: query=%r hint=%r doc_ids=%s",
+                (query or "")[:80],
+                doc_type_hint,
+                len(doc_ids or []),
+            )
 
         fused = rrf_fuse(
             [vector_hits, fts_hits],

@@ -1,0 +1,71 @@
+# --- Git / VCS / editors ---
+.git/
+.github/
+.cursor/
+.claude/
+.idea/
+.vscode/
+*.swp
+*~
+
+# --- Python envs & caches ---
+.venv/
+venv/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+.tox/
+.nox/
+
+# --- Secrets / local env ---
+.env
+.env.*
+!.env.example
+
+# --- Not needed in API image ---
+frontend/
+docs/
+tests/
+samples/
+data/
+*.md
+!README.md
+
+# Heavy / local-only scripts & checkpoints
+scripts/crawl_vbpl/
+.legal_ingest_checkpoint.json
+.mcp.json
+listing.json
+
+# Binaries, dumps, office samples
+*.dump
+*.xlsx
+*.xls
+*.docx
+*.pdf
+*.zip
+*.7z
+*.rar
+
+# Logs / temp / OS
+*.log
+debug*.txt
+*-temp.*
+LICENSE-temp.txt
+SKILL-temp.md
+PROGRESS_REPORT.md
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node (if present at root context)
+node_modules/
+frontend/node_modules/
+frontend/dist/

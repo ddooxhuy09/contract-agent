@@ -8,7 +8,7 @@ function isAccepted(file) {
   return ACCEPTED_EXTENSIONS.some((ext) => name.endsWith(ext));
 }
 
-export default function UploadScreen({ onSubmit, statusText, error, onSignOut, onBack }) {
+export default function UploadScreen({ onSubmit, statusText, error, mainClassName }) {
   const [dragActive, setDragActive] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [localError, setLocalError] = useState(null);
@@ -43,52 +43,22 @@ export default function UploadScreen({ onSubmit, statusText, error, onSignOut, o
       if (busy) return;
       pickFile(e.dataTransfer.files?.[0]);
     },
-    [busy, pickFile]
+    [busy, pickFile],
   );
 
   return (
-    <div className="min-h-screen bg-background text-on-surface">
-      <nav className="flex justify-between items-center px-container-padding h-16 w-full fixed top-0 z-50 bg-surface-container-lowest border-b border-border-subtle">
-        <div className="flex items-center gap-4">
-          {onBack && (
-            <button
-              className="flex items-center gap-1 font-label-bold text-label-bold text-on-surface-variant hover:text-primary transition-colors"
-              onClick={onBack}
-            >
-              <span className="material-symbols-outlined text-[20px]">arrow_back</span>
-              Danh sách hợp đồng
-            </button>
-          )}
-          <span className="font-display-lg text-display-lg text-primary">ContractLens</span>
-        </div>
-        <button
-          className="flex items-center gap-2 font-label-bold text-label-bold text-on-surface-variant hover:text-primary transition-colors"
-          onClick={onSignOut}
-        >
-          <span className="material-symbols-outlined text-[20px]">logout</span>
-          Đăng xuất
-        </button>
-      </nav>
-      <main className="pt-24 pb-16 max-w-[900px] mx-auto px-container-padding">
-        <div className="text-center mb-section-gap">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary-fixed text-on-primary-fixed rounded-full mb-4">
-            <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-              auto_awesome
-            </span>
-            <span className="font-label-sm text-label-sm">AI Legal Assistant</span>
-          </div>
-          <h1 className="font-display-lg text-display-lg text-primary leading-tight mb-3">
-            Hệ thống AI tự động <br />
-            <span className="text-secondary">rà soát rủi ro Hợp đồng</span>
-          </h1>
-          <p className="font-body-lg text-body-lg text-on-surface-variant max-w-xl mx-auto">
-            Tải hợp đồng lên để AI tự động trích xuất thông tin và phát hiện rủi ro pháp lý chỉ trong vài giây.
+    <main className={mainClassName}>
+      <div className="page-pad max-w-content mx-auto w-full animate-fade-in">
+        <div className="mb-4 max-w-xl">
+          <h1 className="page-title">Tải hợp đồng lên</h1>
+          <p className="ui-text text-ink-muted mt-1">
+            Trích xuất điều khoản và nhận ý kiến rủi ro pháp lý.
           </p>
         </div>
 
         <div
-          className={`upload-zone relative p-12 border-2 border-dashed rounded-xl flex flex-col items-center justify-center transition-all cursor-pointer group bg-surface-container-lowest ${
-            dragActive ? "border-secondary" : "border-outline-variant"
+          className={`upload-zone relative px-4 py-8 sm:p-10 border border-dashed rounded-md flex flex-col items-center justify-center transition-colors cursor-pointer bg-paper-raised max-w-xl ${
+            dragActive ? "border-quiet bg-quiet-soft/40" : "border-rule-strong"
           }`}
           onDragOver={(e) => {
             e.preventDefault();
@@ -105,85 +75,68 @@ export default function UploadScreen({ onSubmit, statusText, error, onSignOut, o
             className="hidden"
             onChange={(e) => pickFile(e.target.files?.[0])}
           />
-          <div className="glow-cloud w-20 h-20 bg-primary-fixed rounded-full flex items-center justify-center mb-6 transition-transform group-hover:scale-110">
-            <span className="material-symbols-outlined text-[40px] text-primary">cloud_upload</span>
-          </div>
+          <span className="material-symbols-outlined text-ink-faint !text-[1.75rem] mb-2">cloud_upload</span>
           {selectedFile ? (
             <>
-              <h2 className="font-headline-sm text-headline-sm text-primary mb-2">{selectedFile.name}</h2>
-              <p className="font-body-md text-body-md text-on-surface-variant mb-6">
-                Nhấn để chọn tệp khác, hoặc bấm "Phân tích ngay" để tiếp tục
-              </p>
+              <h2 className="ui-text font-medium text-ink mb-0.5 text-center break-all px-2">
+                {selectedFile.name}
+              </h2>
+              <p className="text-[0.75rem] text-ink-muted">Nhấn để chọn tệp khác</p>
             </>
           ) : (
             <>
-              <h2 className="font-headline-sm text-headline-sm text-primary mb-2">Tải hợp đồng của bạn lên</h2>
-              <p className="font-body-md text-body-md text-on-surface-variant mb-6">
-                Kéo và thả tệp hoặc nhấn để chọn từ máy tính
-              </p>
+              <h2 className="ui-text font-medium text-ink mb-0.5">Kéo thả hoặc chọn tệp</h2>
+              <p className="text-[0.75rem] text-ink-muted">DOCX, DOC, PDF hoặc ảnh (OCR)</p>
             </>
           )}
-          <div className="flex flex-wrap justify-center gap-3">
-            {[
-              { label: ".DOCX / .DOC", icon: "description" },
-              { label: ".PDF", icon: "picture_as_pdf" },
-              { label: "Ảnh chụp (OCR)", icon: "photo_camera" },
-            ].map((f) => (
-              <div key={f.label} className="flex items-center gap-2 px-4 py-2 bg-surface-container rounded-lg border border-border-subtle">
-                <span className="material-symbols-outlined text-secondary" style={{ fontVariationSettings: "'FILL' 1" }}>
-                  {f.icon}
-                </span>
-                <span className="font-label-bold text-label-bold text-on-surface">{f.label}</span>
-              </div>
-            ))}
-          </div>
 
           {busy && (
-            <div className="absolute inset-0 bg-white/90 backdrop-blur-sm flex flex-col items-center justify-center rounded-xl z-20">
-              <div className="w-64 h-2 bg-surface-container rounded-full overflow-hidden">
-                <div className="h-full w-1/3 bg-gradient-to-r from-secondary to-primary animate-progress-sweep" />
+            <div className="absolute inset-0 bg-paper-raised/95 rounded-md flex flex-col items-center justify-center z-20 px-4">
+              <div className="w-full max-w-[14rem] h-1 bg-rule overflow-hidden rounded-full">
+                <div className="h-full w-1/3 bg-quiet animate-progress-sweep" />
               </div>
-              <p className="mt-4 font-label-bold text-label-bold text-primary">{statusText}</p>
+              <p className="mt-3 text-[0.75rem] font-medium text-ink text-center">{statusText}</p>
             </div>
           )}
         </div>
 
         {(localError || error) && (
-          <p className="mt-4 text-center text-error font-label-bold text-label-bold">{localError || error}</p>
+          <p className="mt-3 text-stamp text-[0.75rem] font-medium">{localError || error}</p>
         )}
 
-        {models.length > 0 && (
-          <div className="mt-6 flex justify-center items-center gap-3">
-            <label className="font-label-bold text-label-bold text-on-surface-variant" htmlFor="model-select">
-              Model AI:
-            </label>
-            <select
-              id="model-select"
-              value={provider}
-              onChange={(e) => setProvider(e.target.value)}
-              disabled={busy}
-              className="px-3 py-2 rounded-lg border border-border-subtle bg-surface-container-lowest text-on-surface font-label-bold text-label-bold focus:outline-none focus:ring-2 focus:ring-secondary"
-            >
-              {models.map((m) => (
-                <option key={m.provider} value={m.provider}>
-                  {m.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
+        <div className="mt-4 flex flex-col xs:flex-row xs:flex-wrap xs:items-center gap-2.5 max-w-xl">
+          {models.length > 0 && (
+            <div className="flex items-center gap-2 min-w-0">
+              <label className="text-[0.75rem] font-medium text-ink-muted shrink-0" htmlFor="model-select">
+                Model
+              </label>
+              <select
+                id="model-select"
+                value={provider}
+                onChange={(e) => setProvider(e.target.value)}
+                disabled={busy}
+                className="px-2.5 py-1.5 rounded-md border border-rule bg-paper-raised text-ink text-[0.75rem] font-medium focus:outline-none focus:border-quiet min-w-0"
+              >
+                {models.map((m) => (
+                  <option key={m.provider} value={m.provider}>
+                    {m.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
-        <div className="mt-6 flex justify-center">
           <button
-            className="px-6 py-3 bg-primary text-on-primary font-label-bold text-label-bold rounded-lg hover:opacity-90 transition-all flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
+            type="button"
+            className="xs:ml-auto px-4 py-2 bg-ink text-paper-raised text-[0.75rem] font-medium rounded-md hover:bg-ink/90 transition-colors flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
             disabled={!selectedFile || busy}
             onClick={() => onSubmit(selectedFile, provider)}
           >
             Phân tích ngay
-            <span className="material-symbols-outlined">arrow_forward</span>
+            <span className="material-symbols-outlined !text-[1rem]">arrow_forward</span>
           </button>
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }

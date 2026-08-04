@@ -4,7 +4,7 @@ from typing import List
 
 from langchain_core.documents import Document
 
-from app.core.config import CHUNK_OVERLAP, MAX_CHUNK_SIZE
+from app.core.settings import get_settings
 
 _SEPARATORS = ["\n\n", "\n", ".", " ", ""]
 # Split on Điều only — Khoản stays inside the same Điều chunk unless over budget.
@@ -53,9 +53,12 @@ def _emit_article_parts(
     clause_number: str,
     chunk_text: str,
     chunk_index: int,
+    *,
+    max_chunk_size: int,
+    chunk_overlap: int,
 ) -> int:
     """Append one or more chunks for a Điều; keep clause_number stable across parts."""
-    if len(chunk_text) <= MAX_CHUNK_SIZE:
+    if len(chunk_text) <= max_chunk_size:
         chunk_index += 1
         documents.append(
             Document(
@@ -70,7 +73,7 @@ def _emit_article_parts(
         )
         return chunk_index
 
-    parts = _split_text(chunk_text, MAX_CHUNK_SIZE, CHUNK_OVERLAP)
+    parts = _split_text(chunk_text, max_chunk_size, chunk_overlap)
     for part_i, chunk in enumerate(parts, start=1):
         chunk_index += 1
         documents.append(
@@ -89,13 +92,17 @@ def _emit_article_parts(
 
 def chunk_by_clause(text: str, contract_id: str) -> List[Document]:
     """Chunk contract text by Điều (article). Khoản stays inside the Điều unit."""
+    settings = get_settings()
+    max_chunk_size = settings.max_chunk_size
+    chunk_overlap = settings.chunk_overlap
+
     text = unicodedata.normalize("NFC", text)
     documents: List[Document] = []
     chunk_index = 0
 
     matches = list(_ARTICLE_PATTERN.finditer(text))
     if not matches:
-        for idx, chunk in enumerate(_split_text(text, MAX_CHUNK_SIZE, CHUNK_OVERLAP)):
+        for idx, chunk in enumerate(_split_text(text, max_chunk_size, chunk_overlap)):
             if chunk.strip():
                 documents.append(
                     Document(
@@ -114,7 +121,13 @@ def chunk_by_clause(text: str, contract_id: str) -> List[Document]:
     preamble = text[: matches[0].start()].strip()
     if preamble:
         chunk_index = _emit_article_parts(
-            documents, contract_id, "Preamble", preamble, chunk_index
+            documents,
+            contract_id,
+            "Preamble",
+            preamble,
+            chunk_index,
+            max_chunk_size=max_chunk_size,
+            chunk_overlap=chunk_overlap,
         )
 
     for i, m in enumerate(matches):
@@ -125,7 +138,13 @@ def chunk_by_clause(text: str, contract_id: str) -> List[Document]:
             continue
         clause_number = m.group(1)
         chunk_index = _emit_article_parts(
-            documents, contract_id, clause_number, chunk_text, chunk_index
+            documents,
+            contract_id,
+            clause_number,
+            chunk_text,
+            chunk_index,
+            max_chunk_size=max_chunk_size,
+            chunk_overlap=chunk_overlap,
         )
 
     return documents

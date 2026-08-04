@@ -1,9 +1,10 @@
 import os
 import uuid
 from typing import Tuple
-from fastapi import UploadFile, HTTPException
-from app.core.config import UPLOAD_DIR
 
+from fastapi import HTTPException, UploadFile
+
+from app.core.settings import get_settings
 
 ALLOWED_EXTENSIONS = {".doc", ".docx", ".pdf", ".png", ".jpg", ".jpeg"}
 
@@ -22,7 +23,8 @@ async def save_upload(file: UploadFile) -> Tuple[str, str, str]:
     ext = validate_file(file)
     contract_id = str(uuid.uuid4())
     safe_filename = f"{contract_id}{ext}"
-    file_path = os.path.join(UPLOAD_DIR, safe_filename)
+    upload_dir = str(get_settings().upload_path)
+    file_path = os.path.join(upload_dir, safe_filename)
     content = await file.read()
     with open(file_path, "wb") as f:
         f.write(content)

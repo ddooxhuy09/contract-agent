@@ -36,12 +36,9 @@ def retrieve_legal(
         return [Document(page_content=h.content, metadata=h.metadata) for h in hits]
 
     settings = get_settings()
-    hits = get_legal_search().search(
-        query,
-        k,
-        min_score=settings.similarity_threshold,
-        doc_type_hint=contract_type,
-    )
+    hits = get_legal_search().search(query, k, min_score=settings.similarity_threshold)
+    if not hits:
+        hits = get_legal_search().search(query, k, min_score=0.0)
     return [Document(page_content=h.content, metadata=h.metadata) for h in hits]
 
 

@@ -13,15 +13,28 @@ from fastapi.staticfiles import StaticFiles
 from app.agents.checkpointer import close_checkpointer, init_checkpointer
 from app.api.routes import router
 from app.core.logging import logger
+from app.core.settings import get_settings
 from app.infrastructure.agents.pipelines import LangGraphAnalyzePipeline, LangGraphQaPipeline
 from app.infrastructure.container import build_container
 from app.infrastructure.db.schema_loader import apply_postgres_schema
 from app.infrastructure.retrieval.context import bind_retrieval
 
+_DEFAULT_JWT_SECRET = "change-me-in-production"
+
+
+def _validate_security_settings() -> None:
+    settings = get_settings()
+    if not settings.jwt_secret or settings.jwt_secret == _DEFAULT_JWT_SECRET:
+        raise RuntimeError(
+            "JWT_SECRET must be set to a non-default, non-empty value in the environment / .env. "
+            "Refusing to start with a forgeable JWT secret."
+        )
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Initializing ContractLens...")
+    _validate_security_settings()
     container = build_container()
     try:
         apply_postgres_schema()
@@ -45,6 +58,12 @@ async def lifespan(app: FastAPI):
         await init_checkpointer()
     except Exception as e:
         logger.warning("Checkpointer init failed: %s", e)
+    # Warm embeddings once at startup so upload/analyze don't race HF downloads.
+    try:
+        await asyncio.to_thread(container.embedder.embed_query, "warmup")
+        logger.info("Embeddings model warmed up")
+    except Exception as e:
+        logger.warning("Embeddings warmup failed (first request will retry): %s", e)
     logger.info("ContractLens ready")
     try:
         yield
@@ -69,10 +88,11 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+_settings = get_settings()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=[origin.strip() for origin in _settings.cors_origins.split(",") if origin.strip()],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )

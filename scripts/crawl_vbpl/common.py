@@ -18,11 +18,9 @@ import requests
 BASE_URL = "https://vbpl.vn"
 
 # Refresh from browser devtools when requests start failing (see module docstring).
-VBPL_COOKIE = os.environ.get(
-    "VBPL_COOKIE",
-    "cookiesession1=678A3E11E347BD2868B0D261D317A546; "
-    "37f22820b6fab4d41805184915a9b1ab=4718d75953f331f7c5c689fd12d14004",
-)
+# Must be provided via the VBPL_COOKIE env var — a hardcoded personal session
+# cookie must not live in the repository.
+VBPL_COOKIE = os.environ.get("VBPL_COOKIE", "")
 
 USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -41,6 +39,11 @@ _SEC_CH_UA_HEADERS = {
 
 
 def base_headers() -> dict:
+    if not VBPL_COOKIE:
+        raise RuntimeError(
+            "VBPL_COOKIE env var is required. Capture a fresh session cookie from the "
+            "browser's Network tab (DevTools) on vbpl.vn and export it as VBPL_COOKIE."
+        )
     return {
         "accept-language": "en-US,en;q=0.9",
         "cookie": VBPL_COOKIE,

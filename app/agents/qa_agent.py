@@ -8,7 +8,7 @@ from langgraph.graph.message import add_messages
 from app.agents.checkpointer import get_checkpointer
 from app.agents.json_parsing import parse_json_object
 from app.agents.llm_client import DEFAULT_PROVIDER, get_chat_model
-from app.core.config import logger
+from app.core.logging import logger
 from app.core.prompts import QA_HUMAN_TEMPLATE, QA_SYSTEM_PROMPT
 from app.schemas.contract import ChatHistoryItem, ChatResponse
 from app.vectorstore.retriever import retrieve_contract, retrieve_legal

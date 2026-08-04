@@ -1,8 +1,13 @@
-from typing import List, Optional
+from typing import Any, List, Optional
+import re
 
 from app.agents.json_parsing import parse_json_object
+from app.agents.legal_citations import (
+    citations_to_legal_basis_line,
+    resolve_legal_citations,
+)
 from app.agents.llm_client import DEFAULT_PROVIDER, chat_completion
-from app.core.config import logger
+from app.core.logging import logger
 from app.core.prompts import CLAUSE_RISK_PROMPT
 from app.infrastructure.retrieval.context import get_contract_chunks, get_graph_rag
 from app.schemas.contract import Clause, RiskItem
@@ -30,6 +35,44 @@ def _resolve_clause_text(
     return (clause.summary or "").strip()
 
 
+def _as_str_list(value: Any) -> list[str]:
+    if not value:
+        return []
+    if isinstance(value, str):
+        return [value.strip()] if value.strip() else []
+    if isinstance(value, list):
+        out = []
+        for item in value:
+            if isinstance(item, str) and item.strip():
+                out.append(item.strip())
+            elif isinstance(item, dict):
+                # tolerate {text: "..."} shapes
+                t = item.get("text") or item.get("point") or item.get("label")
+                if isinstance(t, str) and t.strip():
+                    out.append(t.strip())
+        return out
+    return []
+
+
+def _parse_confidence(value: Any) -> float | None:
+    if value is None:
+        return None
+    try:
+        n = float(value)
+    except (TypeError, ValueError):
+        return None
+    if n > 1:
+        n = n / 100.0
+    return max(0.0, min(1.0, n))
+
+
+def _build_recommendation_fallback(actions: list[str], revised: str | None) -> str | None:
+    parts = [f"- {a}" for a in actions]
+    if revised:
+        parts.append(f"«{revised}»")
+    return "\n".join(parts) if parts else None
+
+
 def evaluate_clause(
     clause: Clause,
     provider: str = DEFAULT_PROVIDER,
@@ -37,11 +80,7 @@ def evaluate_clause(
     contract_id: str | None = None,
     contract_type: str | None = None,
 ) -> Optional[RiskItem]:
-    """Retrieve law relevant to THIS clause specifically, then judge compliance against it.
-
-    Each clause gets its own targeted retrieval instead of one generic query for the whole
-    contract, so a clause about termination isn't judged against law retrieved for confidentiality.
-    """
+    """Retrieve law relevant to THIS clause specifically, then judge compliance against it."""
     clause_ref = f"Điều {clause.clause_number}"
     clause_text = _resolve_clause_text(clause, contract_id)
     summary_for_query = clause.summary or clause_text
@@ -72,24 +111,29 @@ def evaluate_clause(
         legal_context = format_legal_context(legal_docs, max_chars=7000)
 
     if not legal_docs:
-        # No relevant law found above the similarity threshold: don't let the LLM guess a
-        # verdict with no grounding. Surface it as needing manual review instead.
         logger.info(
             "Insufficient legal grounding for clause %s, skipping LLM call",
             clause.clause_number,
         )
         return RiskItem(
             clause_ref=clause_ref,
+            title="Thiếu căn cứ pháp luật để đối chiếu",
             issue="Không tìm thấy căn cứ pháp luật đủ liên quan trong kho dữ liệu để đối chiếu điều khoản này.",
             severity="warning",
+            summary_topics=["Thiếu căn cứ"],
+            reasons=["Kho luật truy hồi không có đoạn đủ liên quan trên ngưỡng tương đồng."],
+            impact=["Cần luật sư rà soát thủ công trước khi ký."],
+            actions=["Nhờ luật sư đối chiếu thủ công với Bộ luật / nghị định liên quan."],
             legal_basis=None,
             recommendation="Cần luật sư rà soát thủ công do thiếu dữ liệu pháp luật tham chiếu cho điều khoản này.",
+            original_clause=clause_text or None,
+            confidence=0.35,
         )
 
     prompt = CLAUSE_RISK_PROMPT.format(
         clause_number=clause.clause_number,
         clause_title_suffix=f" - {clause.title}" if clause.title else "",
-        clause_text=clause_text[:4000],
+        clause_text=clause_text[:6000],
         clause_summary=(clause.summary or "")[:800],
         legal_context=legal_context,
     )
@@ -113,14 +157,52 @@ def evaluate_clause(
     severity = result.get("severity", "ok")
     issue = (result.get("issue") or "").strip()
     if severity == "ok" and not issue:
-        return None  # clause is fine, don't clutter the report
+        return None
+
+    actions = _as_str_list(result.get("actions"))
+    revised = (result.get("revised_clause") or "").strip() or None
+    # Also accept draft inside « » from recommendation if revised_clause missing
+    if not revised:
+        rec = result.get("recommendation") or ""
+        m = re.search(r"«([^»]+)»", rec)
+        if m and len(m.group(1).strip()) > 40:
+            revised = m.group(1).strip()
+
+    recommendation = (result.get("recommendation") or "").strip() or None
+    if not recommendation:
+        recommendation = _build_recommendation_fallback(actions, revised)
+
+    legal_basis_raw = result.get("legal_basis")
+    if isinstance(legal_basis_raw, str):
+        legal_basis_raw = legal_basis_raw.strip() or None
+    else:
+        legal_basis_raw = None
+
+    citations = resolve_legal_citations(
+        result.get("legal_citations"),
+        legal_basis_raw,
+    )
+    legal_basis = citations_to_legal_basis_line(citations) or legal_basis_raw
+
+    # Build legacy issue text if model only returned structured reasons
+    reasons = _as_str_list(result.get("reasons"))
+    if not issue and reasons:
+        issue = "\n".join(["Kết luận: " + (result.get("title") or "Có vấn đề cần xử lý."), "Lý do:"] + [f"- {r}" for r in reasons])
 
     return RiskItem(
         clause_ref=clause_ref,
         issue=issue,
         severity=severity,
-        legal_basis=result.get("legal_basis"),
-        recommendation=result.get("recommendation"),
+        legal_basis=legal_basis,
+        recommendation=recommendation,
+        title=(result.get("title") or "").strip() or None,
+        summary_topics=_as_str_list(result.get("summary_topics")) or None,
+        impact=_as_str_list(result.get("impact")) or None,
+        legal_citations=citations or None,
+        actions=actions or None,
+        revised_clause=revised,
+        original_clause=clause_text or None,
+        confidence=_parse_confidence(result.get("confidence")),
     )
 
 

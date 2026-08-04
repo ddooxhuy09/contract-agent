@@ -2,7 +2,8 @@ from psycopg.rows import dict_row
 from psycopg_pool import AsyncConnectionPool
 from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
 
-from app.core.config import DATABASE_URL, logger
+from app.core.logging import logger
+from app.core.settings import get_settings
 
 _pool: AsyncConnectionPool | None = None
 _checkpointer: AsyncPostgresSaver | None = None
@@ -18,7 +19,7 @@ async def init_checkpointer() -> None:
     if _checkpointer is not None:
         return
     _pool = AsyncConnectionPool(
-        conninfo=DATABASE_URL,
+        conninfo=get_settings().database_url,
         open=False,
         kwargs={"autocommit": True, "prepare_threshold": None, "row_factory": dict_row},
     )

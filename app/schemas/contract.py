@@ -16,12 +16,44 @@ class Clause(BaseModel):
     summary: str
 
 
+class LegalCitation(BaseModel):
+    """One complete legal reference — title is an atomic doc entity (never split on /)."""
+
+    title: str
+    summary: str = ""
+
+    @classmethod
+    def from_any(cls, data: dict) -> "LegalCitation | None":
+        if not isinstance(data, dict):
+            return None
+        title = (data.get("title") or data.get("label") or data.get("name") or "").strip()
+        if not title:
+            return None
+        summary = data.get("summary")
+        if summary is None:
+            points = data.get("points") or data.get("bullets") or []
+            if isinstance(points, list):
+                summary = " ".join(str(p).strip() for p in points if str(p).strip())
+            else:
+                summary = ""
+        return cls(title=title, summary=str(summary or "").strip())
+
+
 class RiskItem(BaseModel):
     clause_ref: str
     issue: str
     severity: str = Field(..., pattern="^(critical|warning|ok)$")
     legal_basis: Optional[str] = None
     recommendation: Optional[str] = None
+    # Structured fields (optional — older analyses may only have issue/legal_basis/recommendation)
+    title: Optional[str] = None
+    summary_topics: Optional[List[str]] = None
+    impact: Optional[List[str]] = None
+    legal_citations: Optional[List[LegalCitation]] = None
+    actions: Optional[List[str]] = None
+    revised_clause: Optional[str] = None
+    original_clause: Optional[str] = None
+    confidence: Optional[float] = Field(default=None, ge=0, le=1)
 
 
 class ContractAnalysis(BaseModel):

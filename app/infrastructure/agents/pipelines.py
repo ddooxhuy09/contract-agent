@@ -15,7 +15,7 @@ class LangGraphAnalyzePipeline:
 
 class LangGraphQaPipeline:
     async def answer(self, contract_id: str, question: str, provider: str = DEFAULT_PROVIDER) -> dict[str, Any]:
-        result = await answer_question(contract_id, question, provider)
+        result = await answer_question(question, contract_id, provider)
         return {
             "answer": result.answer,
             "source_clauses": result.source_clauses,
@@ -25,4 +25,4 @@ class LangGraphQaPipeline:
 
     async def history(self, contract_id: str) -> list[dict[str, Any]]:
         hist = await get_conversation_history(contract_id)
-        return [m.model_dump() for m in hist.messages]
+        return [m.model_dump() for m in hist]

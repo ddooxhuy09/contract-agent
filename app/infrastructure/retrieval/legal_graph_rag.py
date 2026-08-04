@@ -30,12 +30,21 @@ class LegalGraphRag:
     ) -> list[RetrievedChunk]:
         settings = get_settings()
         query = rewrite_legal_query(title, summary, contract_type)
+        # Do NOT pass contract_type as SQL doc_type_hint — it filters legal rows by
+        # title/doc_type ILIKE and often zeros the corpus (e.g. "HĐLĐ" vs "Nghị định").
+        # contract_type is already folded into the query text by rewrite_legal_query.
         seeds = self._search.search(
             query,
             k=k_seed,
             min_score=settings.similarity_threshold,
-            doc_type_hint=contract_type,
         )
+        if not seeds:
+            logger.warning(
+                "LegalGraphRag: 0 seeds above threshold=%.2f; retrying without score floor query=%r",
+                settings.similarity_threshold,
+                query[:80],
+            )
+            seeds = self._search.search(query, k=k_seed, min_score=0.0)
         for s in seeds:
             s.metadata["role"] = "seed"
 

@@ -1,24 +1,74 @@
-.env
-venv
-legal-agent/
-
+# --- Python ---
+.venv/
+venv/
+env/
 __pycache__/
-*.pyc
+**/__pycache__/
+*.py[cod]
+*$py.class
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+.tox/
+.nox/
 
+# --- Env / secrets ---
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# --- Runtime data ---
 data/
-
+uploads/
 *.log
 debug*.txt
 .legal_ingest_checkpoint.json
 
+# --- Large samples / DB dumps / office files ---
+samples/
+*.dump
+*.xlsx
+*.xls
+*.docx
+*.pdf
+*.zip
+*.7z
+*.rar
+NguyenThiBichNguyen_*
+Sample_*
+sample_*
+listing.json
+contractlens_backup.dump
+
+# --- Frontend build artifacts (tracked source stays) ---
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+
+# --- Tooling / IDE / agents ---
+.cursor/
 .claude/
 .mcp.json
+.idea/
+.vscode/
+*.swp
+*~
 
-# Downloaded reference papers, not project source
-docs
+# --- Scratch / temp ---
+*-temp.*
+*-temp.md
+*-temp.txt
+LICENSE-temp.txt
+SKILL-temp.md
+PROGRESS_REPORT.md
 
-tests
-NguyenThiBichNguyen_E16_BCDK1.docx
-Sample_DB_E16.xlsx
-sample_du_lieu_database.xlsx
+# --- OS ---
+.DS_Store
+Thumbs.db
+desktop.ini

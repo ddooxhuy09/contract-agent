@@ -1,0 +1,34 @@
+{
+  "doc_id": "fixture-168",
+  "relations": {
+    "can_cu_ban_hanh": {
+      "count": 1,
+      "documents": [
+        {
+          "doc_id": "70821",
+          "doc_num": "76/2015/QH13",
+          "title": "Luật Tổ chức Chính phủ số 76/2015/QH13",
+          "issue_date": "2015-06-19T00:00:00",
+          "eff_from": "2016-01-01T00:00:00",
+          "eff_to": null,
+          "status": "Publish"
+        }
+      ]
+    },
+    "sua_doi_bo_sung": {
+      "count": 0,
+      "documents": []
+    }
+  },
+  "relations_incoming": {
+    "van_ban_bi_bai_bo": {
+      "count": 1,
+      "documents": [
+        {
+          "doc_id": "185666",
+          "title": "Nghị định số 336/2025/NĐ-CP"
+        }
+      ]
+    }
+  }
+}

@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS contract_chunks (
     chunk_index        INTEGER NOT NULL,
     clause_number      TEXT NOT NULL,
     content            TEXT NOT NULL,
-    embedding          vector(768),                -- vector cosine / HNSW (thay FAISS)
+    embedding          vector(1024),               -- BAAI/bge-m3 cosine / HNSW
     UNIQUE (contract_id, chunk_index)
 );
 
@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS legal_section_chunks (
                             'other'          -- đặc biệt khác
                         )),
     chunk_text          TEXT NOT NULL,             -- text đã cắt — embed + FTS + trả RAG
-    embedding           vector(768),
+    embedding           vector(1024),              -- BAAI/bge-m3
     is_effective        BOOLEAN NOT NULL DEFAULT TRUE,
     tsv                 tsvector GENERATED ALWAYS AS (
                             to_tsvector('simple', coalesce(chunk_text, ''))

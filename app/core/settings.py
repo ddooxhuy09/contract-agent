@@ -13,8 +13,14 @@ class Settings(BaseSettings):
 
     gemini_api_key: str = ""
     gemini_model: str = "gemini-2.5-flash"
-    embedding_model: str = "dangvantuan/vietnamese-embedding"
-    embedding_device: str = "auto"
+
+    # BAAI/bge-m3 via LangChain HuggingFaceEmbeddings
+    embedding_model: str = "BAAI/bge-m3"
+    embedding_dim: int = 1024
+    embedding_device: str = "auto"  # CUDA if available, else CPU
+    embedding_trust_remote_code: bool = True
+    embedding_normalize: bool = True
+    embedding_max_seq_length: int = 512
 
     database_url: str = "postgresql://contractlens:contractlens@localhost:5432/contractlens"
     neo4j_uri: str = "bolt://localhost:7687"
@@ -26,6 +32,9 @@ class Settings(BaseSettings):
     jwt_expire_minutes: int = 60 * 24 * 7
 
     upload_dir: str = "data/uploads"
+    # Comma-separated allowlist of frontend origins (no trailing slash). Local
+    # Vite dev server by default; extend for deployed frontend domains.
+    cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
     # ~300–400 Vietnamese words ≈ 1600–2200 chars; used for contract Điều splits
     max_chunk_size: int = 1800
     chunk_overlap: int = 120

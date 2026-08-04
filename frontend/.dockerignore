@@ -1,0 +1,28 @@
+# Keep FE image small — only source + lockfile needed
+node_modules
+dist
+dist-ssr
+.git
+.github
+.cursor
+.vscode
+.idea
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Logs / OS / temp
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+*-temp.*
+coverage
+.vite
+.npm
+
+# Docs / tests not needed for Vite dev image
+*.md
+!README.md
