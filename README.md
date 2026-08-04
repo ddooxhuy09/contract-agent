@@ -26,18 +26,39 @@ Lần đầu API sẽ tải model embedding (`BAAI/bge-m3`) — có thể mất 
 
 ### Nạp database từ dump (tuỳ chọn)
 
-Đặt file `contractlens_backup.dump` ở root repo, rồi:
+Đặt file dump ở root repo rồi chạy script tương ứng.
+
+**Windows (PowerShell):**
 
 ```powershell
+# Postgres (contractlens_backup.dump)
 docker compose up -d postgres
-# đợi postgres healthy
 powershell -File scripts\restore_db.ps1
+
+# Neo4j (neo4j.dump) — service sẽ bị stop/start trong lúc nạp
+powershell -File scripts\restore_neo4j.ps1
+
+docker compose up -d
+```
+
+**macOS / Linux:**
+
+```bash
+# Postgres (contractlens_backup.dump)
+docker compose up -d postgres
+sh scripts/restore_db.sh
+
+# Neo4j (neo4j.dump) — service sẽ bị stop/start trong lúc nạp
+chmod +x scripts/restore_neo4j.sh   # lần đầu
+./scripts/restore_neo4j.sh
+# hoặc: sh scripts/restore_neo4j.sh
+
 docker compose up -d
 ```
 
 ### Lệnh thường dùng
 
-```powershell
+```bash
 docker compose up --build -d    # build lại & chạy
 docker compose logs -f api      # xem log API
 docker compose down             # dừng stack
