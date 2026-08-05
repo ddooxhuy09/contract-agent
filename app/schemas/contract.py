@@ -94,6 +94,29 @@ class AnalyzeResponse(BaseModel):
     risks: List[Any]
 
 
+class AnalyzeReviewResponse(BaseModel):
+    contract_id: str
+    status: str
+    review_id: str
+    draft_analysis: Optional[Any] = None
+    draft_risks: List[Any] = []
+
+
+class ResumeAnalysisRequest(BaseModel):
+    contract_id: str
+    review_id: str
+    approved: bool = True
+    edits: Optional[List[Any]] = None
+
+
+class ResumeAnalysisResponse(BaseModel):
+    contract_id: str
+    status: str
+    approved: bool
+    analysis: Any
+    risks: List[Any]
+
+
 class ChatResponse(BaseModel):
     answer: str
     source_clauses: List[str]
@@ -112,6 +135,33 @@ class ChatHistoryItem(BaseModel):
 class ChatHistoryResponse(BaseModel):
     contract_id: str
     messages: List[ChatHistoryItem]
+
+
+class ChatStateItem(BaseModel):
+    checkpoint_id: Optional[str] = None
+    next: List[str] = []
+    message_count: int = 0
+    answer: str = ""
+    source_clauses: List[str] = []
+    needs_clarification: bool = False
+
+
+class ChatStatesResponse(BaseModel):
+    contract_id: str
+    states: List[ChatStateItem]
+
+
+class ChatRewindRequest(BaseModel):
+    checkpoint_id: str
+
+
+class ChatRewindResponse(BaseModel):
+    contract_id: str
+    checkpoint_id: Optional[str] = None
+    message_count: int = 0
+    answer: str = ""
+    source_clauses: List[str] = []
+    needs_clarification: bool = False
 
 
 class ContractSummary(BaseModel):

@@ -6,13 +6,22 @@ from app.core.settings import get_settings
 from app.infrastructure.retrieval.context import get_contract_search, get_graph_rag, get_legal_search
 
 
+def _as_documents(hits) -> List[Document]:
+    """Convert RetrievedChunk -> Document, preserving score in metadata so graph
+    nodes can rerank / decide whether retrieval is strong enough."""
+    docs = []
+    for h in hits:
+        meta = dict(h.metadata or {})
+        if getattr(h, "score", None) is not None:
+            meta["score"] = h.score
+        docs.append(Document(page_content=h.content, metadata=meta))
+    return docs
+
+
 def retrieve_contract(query: str, contract_id: str, k: int | None = None) -> List[Document]:
     settings = get_settings()
     hits = get_contract_search().search(query, contract_id, k or settings.top_k_retrieval)
-    return [
-        Document(page_content=h.content, metadata=h.metadata)
-        for h in hits
-    ]
+    return _as_documents(hits)
 
 
 def retrieve_legal(
@@ -33,13 +42,13 @@ def retrieve_legal(
             k_seed=k,
             max_total=max(k * 2, 8),
         )
-        return [Document(page_content=h.content, metadata=h.metadata) for h in hits]
+        return _as_documents(hits)
 
     settings = get_settings()
     hits = get_legal_search().search(query, k, min_score=settings.similarity_threshold)
     if not hits:
         hits = get_legal_search().search(query, k, min_score=0.0)
-    return [Document(page_content=h.content, metadata=h.metadata) for h in hits]
+    return _as_documents(hits)
 
 
 def format_legal_context(docs: List[Document], max_chars: int = 7000) -> str:

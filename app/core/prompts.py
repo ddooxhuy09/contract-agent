@@ -259,6 +259,32 @@ QA_HUMAN_TEMPLATE = """\
 ## Ngữ cảnh pháp luật
 {legal_context}
 
+## Ký ức dài hạn từ các phiên hỏi trước (cùng hợp đồng)
+{long_term_memory}
+
 ## Câu hỏi
 {question}
 """
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# QA QUERY REWRITE — Luồng tự sửa truy hồi khi kết quả yếu
+# ═══════════════════════════════════════════════════════════════════════════
+
+_QA_QUERY_REWRITE_TASK = """\
+Bạn là chuyên viên truy hồi văn bản pháp luật Việt Nam.
+Viết LẠI câu hỏi của người dùng thành **một chuỗi truy vấn ngắn** gồm các từ khóa pháp lý quan trọng nhất để tìm đúng văn bản luật / điều khoản liên quan.
+- Chỉ giữ từ khóa thực chất: tên chế định, hành vi, đối tượng điều chỉnh, các cụm mang tính pháp lý.
+- Bỏ từ nối, từ thừa, câu hỏi dạng "tôi muốn biết...", "hãy giải thích...", dấu câu.
+- Giữ nguyên ý và các con số / số Điều / số hiệu văn bản nếu có.
+- Không thêm giải thích, không thay đổi ý câu hỏi.
+
+Câu hỏi: {question}
+
+Chuỗi truy vấn:
+"""
+
+QA_QUERY_REWRITE_PROMPT = _compose(
+    "Bạn là công cụ viết lại truy vấn tìm kiếm — không trả lời câu hỏi.",
+    _QA_QUERY_REWRITE_TASK,
+)

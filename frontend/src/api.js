@@ -67,6 +67,46 @@ export async function chatWithContract(contractId, question, provider) {
   return handleResponse(res);
 }
 
+export async function streamChat(contractId, question, provider, onEvent) {
+  const res = await fetch(`${API_BASE}/api/v1/chat/stream`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...(await authHeaders()) },
+    body: JSON.stringify({ contract_id: contractId, question, provider }),
+  });
+  if (!res.ok) {
+    let detail = res.statusText;
+    try {
+      const data = await res.json();
+      detail = data.detail || detail;
+    } catch {
+      // ignore
+    }
+    throw new Error(detail);
+  }
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    let sep;
+    while ((sep = buffer.indexOf("\n\n")) !== -1) {
+      const frame = buffer.slice(0, sep);
+      buffer = buffer.slice(sep + 2);
+      const event = frame.match(/^event:\s*(\S+)/m)?.[1];
+      const dataLine = frame.match(/^data:\s*(.+)$/m)?.[1];
+      if (event && dataLine) {
+        try {
+          onEvent(event, JSON.parse(dataLine));
+        } catch {
+          // ignore malformed frame
+        }
+      }
+    }
+  }
+}
+
 export async function fetchChatHistory(contractId) {
   const res = await fetch(`${API_BASE}/api/v1/chat/${contractId}/history`, {
     headers: await authHeaders(),

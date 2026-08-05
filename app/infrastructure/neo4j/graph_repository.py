@@ -240,3 +240,37 @@ class Neo4jGraphRepository:
         except Exception as e:
             logger.warning("Neo4j expand failed (continuing without graph): %s", e)
             return {**empty, "seeds": list(chunk_refs)}
+
+    def sync_doc_status(self, doc_id: str, status_flag: int) -> None:
+        """Mirror status_flag from PG → Neo4j Document node."""
+        try:
+            with self._driver.session() as session:
+                session.run(
+                    """
+                    MERGE (d:Document {doc_id: $doc_id})
+                    SET d.status_flag = $status_flag, d.synced_at = timestamp()
+                    """,
+                    doc_id=doc_id,
+                    status_flag=status_flag,
+                )
+        except Exception as e:
+            logger.warning("Neo4j sync_doc_status(%s, %s) failed: %s", doc_id, status_flag, e)
+
+    def bulk_sync_doc_status(self, docs: list[dict]) -> int:
+        """Mirror status_flag for many docs at once from PG → Neo4j."""
+        if not docs:
+            return 0
+        try:
+            with self._driver.session() as session:
+                session.run(
+                    """
+                    UNWIND $docs AS row
+                    MERGE (d:Document {doc_id: row.doc_id})
+                    SET d.status_flag = row.status_flag, d.synced_at = timestamp()
+                    """,
+                    docs=[{"doc_id": d["doc_id"], "status_flag": d["status_flag"]} for d in docs],
+                )
+            return len(docs)
+        except Exception as e:
+            logger.warning("Neo4j bulk_sync_doc_status failed: %s", e)
+            return 0

@@ -199,7 +199,8 @@ class PgLegalChunkRepository:
             with conn.cursor() as cur:
                 cur.execute(
                     """
-                    SELECT c.chunk_ref, c.doc_id, c.chunk_type, d.doc_num, d.title
+                    SELECT c.chunk_ref, c.doc_id, c.chunk_type, d.doc_num, d.title,
+                           d.eff_from, d.eff_to, d.status_flag
                     FROM legal_section_chunks c
                     JOIN legal_documents d ON d.doc_id = c.doc_id
                     WHERE c.chunk_ref = ANY(%s)
@@ -212,6 +213,9 @@ class PgLegalChunkRepository:
                         "chunk_type": r[2],
                         "doc_number": r[3],
                         "title": r[4],
+                        "eff_from": str(r[5]) if r[5] else None,
+                        "eff_to": str(r[6]) if r[6] else None,
+                        "status_flag": r[7],
                     }
                     for r in cur.fetchall()
                 }

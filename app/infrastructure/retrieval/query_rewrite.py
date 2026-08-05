@@ -10,6 +10,28 @@ _FILLER = re.compile(
 )
 
 
+def rewrite_qa_query(question: str, max_chars: int = 400) -> str:
+    """Free, rule-based query expansion for ad-hoc QA questions.
+
+    Strips Vietnamese/English filler tokens and punctuation so the vector & FTS
+    queries hit exact legal/clause wording instead of diluted question text.
+    Returns the original question unchanged if stripping would leave nothing.
+    """
+    text = unicodedata.normalize("NFC", question or "")
+    text = re.sub(r"[!?.,;:()\"'«»–—]+", " ", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    tokens = []
+    for tok in text.split(" "):
+        t = tok.strip()
+        if not t or len(t) <= 1:
+            continue
+        if _FILLER.fullmatch(t):
+            continue
+        tokens.append(t)
+    rewritten = " ".join(tokens) if tokens else text
+    return rewritten[:max_chars]
+
+
 def rewrite_legal_query(
     title: str | None,
     summary: str | None,

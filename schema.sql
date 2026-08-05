@@ -189,3 +189,128 @@ COMMENT ON TABLE legal_chunk_relations IS
 CREATE INDEX IF NOT EXISTS idx_lcr_from ON legal_chunk_relations (from_chunk_ref);
 CREATE INDEX IF NOT EXISTS idx_lcr_to ON legal_chunk_relations (to_chunk_ref);
 CREATE INDEX IF NOT EXISTS idx_lcr_type ON legal_chunk_relations (relation_type);
+
+-- ═══════════════════════════════════════════════════════════════════════════
+-- Triggers — tự động cập nhật status_flag & cascade expiry
+-- ═══════════════════════════════════════════════════════════════════════════
+
+CREATE INDEX IF NOT EXISTS idx_ld_eff_from ON legal_documents (eff_from);
+CREATE INDEX IF NOT EXISTS idx_ld_eff_to ON legal_documents (eff_to);
+
+-- Helper: parse ngày về DATE từ các định dạng phổ biến
+CREATE OR REPLACE FUNCTION safe_cast_to_date(val text) RETURNS date AS $$
+BEGIN
+    IF val IS NULL OR val = '' THEN RETURN NULL; END IF;
+    IF val ~ '^\d{4}-\d{2}-\d{2}$' THEN RETURN to_date(val, 'YYYY-MM-DD'); END IF;
+    IF val ~ '^\d{1,2}/\d{1,2}/\d{4}$' THEN RETURN to_date(val, 'DD/MM/YYYY'); END IF;
+    IF val ~ '^\d{4}/\d{1,2}/\d{1,2}$' THEN RETURN to_date(val, 'YYYY/MM/DD'); END IF;
+    RETURN NULL;
+EXCEPTION WHEN OTHERS THEN RETURN NULL; END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- Trigger 1: auto-assign status_flag khi INSERT hoặc UPDATE eff_from
+CREATE OR REPLACE FUNCTION trg_legal_documents_status() RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at := CURRENT_TIMESTAMP;
+    IF NEW.status_flag IS NULL OR NEW.status_flag = 0 THEN
+        NEW.status_flag := CASE
+            WHEN NEW.eff_from IS NULL THEN 0
+            WHEN NEW.eff_from > CURRENT_DATE THEN 3
+            ELSE 1
+        END;
+    END IF;
+    RETURN NEW;
+END; $$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_docs_biu ON legal_documents;
+CREATE TRIGGER trg_docs_biu
+    BEFORE INSERT OR UPDATE OF eff_from ON legal_documents
+    FOR EACH ROW
+    WHEN (NEW.status_flag IS DISTINCT FROM 2)
+    EXECUTE FUNCTION trg_legal_documents_status();
+
+-- Trigger 2: cascade expire khi VB mới có hiệu lực (status_flag → 1)
+CREATE OR REPLACE FUNCTION trg_cascade_expire_fn() RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.status_flag = 1 AND OLD.status_flag IS DISTINCT FROM 1 THEN
+        -- VB bị thay thế/bãi bỏ → hết hiệu lực hoàn toàn
+        UPDATE legal_documents SET status_flag = 2, updated_at = CURRENT_TIMESTAMP
+        WHERE doc_id IN (
+            SELECT to_doc_id FROM legal_document_relations
+            WHERE from_doc_id = NEW.doc_id AND to_doc_id IS NOT NULL
+              AND relation_type IN ('van_ban_bi_bai_bo', 'thay_the')
+        ) AND status_flag != 2;
+
+        -- VB bị sửa đổi → hết hiệu lực một phần
+        UPDATE legal_documents SET status_flag = 4, updated_at = CURRENT_TIMESTAMP
+        WHERE doc_id IN (
+            SELECT to_doc_id FROM legal_document_relations
+            WHERE from_doc_id = NEW.doc_id AND to_doc_id IS NOT NULL
+              AND relation_type IN ('sua_doi_bo_sung')
+        ) AND status_flag NOT IN (2, 4);
+    END IF;
+    RETURN NULL;
+END; $$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_cascade_expire ON legal_documents;
+CREATE TRIGGER trg_cascade_expire
+    AFTER UPDATE OF status_flag ON legal_documents
+    FOR EACH ROW
+    WHEN (NEW.status_flag = 1 AND OLD.status_flag IS DISTINCT FROM 1)
+    EXECUTE FUNCTION trg_cascade_expire_fn();
+
+-- Maintenance function: refresh tất cả status_flag (chạy định kỳ hoặc sau bulk import)
+CREATE OR REPLACE FUNCTION refresh_status_flags() RETURNS TABLE(doc_id TEXT, old_flag INT, new_flag INT) AS $$
+DECLARE
+    _updated INT := 0;
+BEGIN
+    -- 1. Doc có eff_to <= hôm nay → status_flag = 2
+    UPDATE legal_documents
+    SET    status_flag = 2, updated_at = CURRENT_TIMESTAMP
+    WHERE  status_flag != 2 AND eff_to IS NOT NULL AND eff_to <= CURRENT_DATE;
+    GET DIAGNOSTICS _updated = ROW_COUNT;
+    RAISE NOTICE 'Step 1 (expiry): updated % row(s)', _updated;
+
+    -- 2. Doc có eff_from > hôm nay → 3 (sắp có hiệu lực)
+    UPDATE legal_documents
+    SET    status_flag = 3, updated_at = CURRENT_TIMESTAMP
+    WHERE  status_flag NOT IN (2, 4) AND eff_from IS NOT NULL AND eff_from > CURRENT_DATE;
+    GET DIAGNOSTICS _updated = ROW_COUNT;
+    RAISE NOTICE 'Step 2 (not yet effective): updated % row(s)', _updated;
+
+    -- 3. Doc còn lại có eff_from → 1 (còn hiệu lực)
+    UPDATE legal_documents
+    SET    status_flag = 1, updated_at = CURRENT_TIMESTAMP
+    WHERE  status_flag NOT IN (2, 3, 4) AND eff_from IS NOT NULL AND eff_from <= CURRENT_DATE;
+    GET DIAGNOSTICS _updated = ROW_COUNT;
+    RAISE NOTICE 'Step 3 (effective): updated % row(s)', _updated;
+
+    -- 4. Doc bị thay thế/bãi bỏ mà status chưa là 2 → set 2
+    UPDATE legal_documents ld
+    SET    status_flag = 2, updated_at = CURRENT_TIMESTAMP
+    FROM   legal_document_relations ldr
+           JOIN legal_documents new_doc ON new_doc.doc_id = ldr.from_doc_id
+    WHERE  ld.doc_id = ldr.to_doc_id
+      AND  ldr.relation_type IN ('van_ban_bi_bai_bo', 'thay_the')
+      AND  new_doc.status_flag = 1
+      AND  ld.status_flag NOT IN (2, 4);
+    GET DIAGNOSTICS _updated = ROW_COUNT;
+    RAISE NOTICE 'Step 4 (cascade expired): updated % row(s)', _updated;
+
+    -- 5. Doc bị sửa đổi mà status chưa là 4 → set 4
+    UPDATE legal_documents ld
+    SET    status_flag = 4, updated_at = CURRENT_TIMESTAMP
+    FROM   legal_document_relations ldr
+           JOIN legal_documents new_doc ON new_doc.doc_id = ldr.from_doc_id
+    WHERE  ld.doc_id = ldr.to_doc_id
+      AND  ldr.relation_type = 'sua_doi_bo_sung'
+      AND  new_doc.status_flag = 1
+      AND  ld.status_flag NOT IN (2, 4);
+    GET DIAGNOSTICS _updated = ROW_COUNT;
+    RAISE NOTICE 'Step 5 (cascade partial): updated % row(s)', _updated;
+
+    RETURN QUERY
+        SELECT ld.doc_id, CAST(0 AS INT), CAST(ld.status_flag AS INT)
+        FROM legal_documents ld
+        WHERE ld.status_flag != 0;
+END; $$ LANGUAGE plpgsql;

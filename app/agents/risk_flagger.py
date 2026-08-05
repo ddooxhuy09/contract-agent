@@ -79,6 +79,7 @@ def evaluate_clause(
     *,
     contract_id: str | None = None,
     contract_type: str | None = None,
+    as_of_date: str | None = None,
 ) -> Optional[RiskItem]:
     """Retrieve law relevant to THIS clause specifically, then judge compliance against it."""
     clause_ref = f"Điều {clause.clause_number}"
@@ -93,6 +94,7 @@ def evaluate_clause(
             contract_type=contract_type,
             k_seed=4,
             max_total=10,
+            as_of_date=as_of_date,
         )
         from langchain_core.documents import Document
 
@@ -100,6 +102,13 @@ def evaluate_clause(
             Document(page_content=h.content, metadata=h.metadata) for h in hits
         ]
         legal_context = rag.format_context(hits, max_chars=7000)
+        logger.info(
+            "Clause %s: legal=%s superseding=%s expired_seeds=%s assessing",
+            clause.clause_number,
+            len(hits),
+            sum(1 for h in hits if h.metadata.get("role") == "superseding"),
+            sum(1 for h in hits if h.metadata.get("note") == "source_doc_may_be_repealed"),
+        )
     else:
         legal_docs = retrieve_legal(
             f"{clause.title or ''} {summary_for_query}".strip(),

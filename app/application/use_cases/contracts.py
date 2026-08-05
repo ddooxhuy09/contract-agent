@@ -53,27 +53,42 @@ class UploadContract:
                 )
                 for i, d in enumerate(docs)
             ]
-            self._chunks.replace_for_contract(contract_id, entities)
             chunk_count = len(entities)
             status, message = "parsed", f"{filename} parsed and indexed with {chunk_count} chunks"
+            # FK: upsert the contract row BEFORE inserting chunks so
+            # contract_chunks_contract_id_fkey is satisfied.
+            self._contracts.upsert(
+                Contract(
+                    contract_id=contract_id,
+                    user_id=user_id,
+                    filename=filename or "unknown",
+                    file_type=ext,
+                    storage_key=storage_key,
+                    full_text=full_text,
+                    status=status,
+                    message=message,
+                    chunk_count=chunk_count,
+                )
+            )
+            self._chunks.replace_for_contract(contract_id, entities)
             logger.info("Upload parsed OK: contract_id=%s chunk_count=%s", contract_id, chunk_count)
         except Exception as e:
             logger.error("Upload parse failed: contract_id=%s error=%s", contract_id, e)
-            message = f"File uploaded but parsing failed: {e}"
-
-        self._contracts.upsert(
-            Contract(
-                contract_id=contract_id,
-                user_id=user_id,
-                filename=filename or "unknown",
-                file_type=ext,
-                storage_key=storage_key,
-                full_text=full_text,
-                status=status,
-                message=message,
-                chunk_count=chunk_count,
+            status, message, chunk_count = "uploaded", f"File uploaded but parsing failed: {e}", 0
+            self._contracts.upsert(
+                Contract(
+                    contract_id=contract_id,
+                    user_id=user_id,
+                    filename=filename or "unknown",
+                    file_type=ext,
+                    storage_key=storage_key,
+                    full_text=None,
+                    status=status,
+                    message=message,
+                    chunk_count=0,
+                )
             )
-        )
+
         return {
             "contract_id": contract_id,
             "filename": filename or "unknown",
@@ -95,12 +110,19 @@ class AnalyzeContract:
         self._chunks = chunks
         self._pipeline = pipeline
 
-    async def execute(self, contract_id: str, user_id: UUID, provider: str = "gemini", force: bool = False) -> dict:
+    async def execute(
+        self,
+        contract_id: str,
+        user_id: UUID,
+        provider: str = "gemini",
+        force: bool = False,
+        review_mode: bool = False,
+    ) -> dict:
         contract = self._contracts.get_owned(contract_id, user_id)
         if contract is None:
             raise NotFoundError(f"No documents found for contract: {contract_id}")
 
-        if not force and contract.analysis is not None:
+        if not force and contract.analysis is not None and not review_mode:
             return {
                 "contract_id": contract_id,
                 "analysis": contract.analysis,
@@ -114,15 +136,63 @@ class AnalyzeContract:
                 raise NotFoundError(f"No documents found for contract: {contract_id}")
             full_text = "\n".join(parts)
 
+        if review_mode:
+            # Human-in-the-loop: run analysis but pause before persisting anything.
+            draft = await self._pipeline.run_review(full_text, contract_id, provider)
+            return {
+                "contract_id": contract_id,
+                "status": "awaiting_review",
+                "review_id": draft["review_id"],
+                "draft_analysis": draft["draft_analysis"],
+                "draft_risks": draft["draft_risks"],
+            }
+
         analysis, risks = await self._pipeline.run(full_text, contract_id, provider)
-        # Ensure contract_id on analysis if pydantic model
-        if hasattr(analysis, "model_dump"):
-            analysis_data = analysis.model_dump()
-        else:
-            analysis_data = analysis
+        analysis_data = analysis.model_dump() if hasattr(analysis, "model_dump") else analysis
         risk_data = [r.model_dump() if hasattr(r, "model_dump") else r for r in risks]
         self._contracts.save_analysis(contract_id, analysis_data, risk_data)
         return {"contract_id": contract_id, "analysis": analysis_data, "risks": risk_data}
+
+
+class ResumeAnalysisReview:
+    def __init__(
+        self,
+        contracts: ContractRepository,
+        pipeline: AnalyzePipeline,
+    ):
+        self._contracts = contracts
+        self._pipeline = pipeline
+
+    async def execute(
+        self,
+        contract_id: str,
+        review_id: str,
+        user_id: UUID,
+        approved: bool,
+        edits: list | None = None,
+    ) -> dict:
+        if self._contracts.get_owned(contract_id, user_id) is None:
+            raise NotFoundError(f"No documents found for contract: {contract_id}")
+        result = await self._pipeline.resume_review(contract_id, review_id, approved, edits)
+        if not approved:
+            # Rejected: keep the draft available but do not persist as authoritative.
+            return {
+                "contract_id": contract_id,
+                "status": "review_rejected",
+                "approved": False,
+                "analysis": result["analysis"].model_dump() if hasattr(result["analysis"], "model_dump") else result["analysis"],
+                "risks": [r.model_dump() if hasattr(r, "model_dump") else r for r in result["risks"]],
+            }
+        analysis_data = result["analysis"].model_dump() if hasattr(result["analysis"], "model_dump") else result["analysis"]
+        risk_data = [r.model_dump() if hasattr(r, "model_dump") else r for r in result["risks"]]
+        self._contracts.save_analysis(contract_id, analysis_data, risk_data)
+        return {
+            "contract_id": contract_id,
+            "status": "approved",
+            "approved": True,
+            "analysis": analysis_data,
+            "risks": risk_data,
+        }
 
 
 class ListContracts:
@@ -150,10 +220,17 @@ class ChatWithContract:
         self._contracts = contracts
         self._qa = qa
 
-    async def execute(self, contract_id: str, question: str, user_id: UUID, provider: str = "gemini") -> dict:
+    async def execute(
+        self,
+        contract_id: str,
+        question: str,
+        user_id: UUID,
+        provider: str = "gemini",
+        checkpoint_id: str | None = None,
+    ) -> dict:
         if self._contracts.get_owned(contract_id, user_id) is None:
             raise NotFoundError(f"No documents found for contract: {contract_id}")
-        return await self._qa.answer(contract_id, question, provider)
+        return await self._qa.answer(contract_id, question, provider, checkpoint_id=checkpoint_id)
 
 
 class GetChatHistory:
@@ -166,3 +243,30 @@ class GetChatHistory:
             raise NotFoundError(f"No documents found for contract: {contract_id}")
         messages = await self._qa.history(contract_id)
         return {"contract_id": contract_id, "messages": messages}
+
+
+class GetChatStates:
+    """Time-travel debug: list every persisted checkpoint of the chat thread."""
+
+    def __init__(self, contracts: ContractRepository, qa: QaPipeline):
+        self._contracts = contracts
+        self._qa = qa
+
+    async def execute(self, contract_id: str, user_id: UUID) -> dict:
+        if self._contracts.get_owned(contract_id, user_id) is None:
+            raise NotFoundError(f"No documents found for contract: {contract_id}")
+        states = await self._qa.state_history(contract_id)
+        return {"contract_id": contract_id, "states": states}
+
+
+class RewindChat:
+    """Time-travel: validate a checkpoint of the chat thread and return its snapshot."""
+
+    def __init__(self, contracts: ContractRepository, qa: QaPipeline):
+        self._contracts = contracts
+        self._qa = qa
+
+    async def execute(self, contract_id: str, checkpoint_id: str, user_id: UUID) -> dict:
+        if self._contracts.get_owned(contract_id, user_id) is None:
+            raise NotFoundError(f"No documents found for contract: {contract_id}")
+        return await self._qa.rewind(contract_id, checkpoint_id)

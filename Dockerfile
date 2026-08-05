@@ -2,12 +2,25 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
+ENV PIP_DEFAULT_TIMEOUT=300 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_RETRIES=10
+
 RUN apt-get update \
     && apt-get install -y --no-install-recommends build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Torch first from the official CPU index (smaller/faster than default PyPI).
+# Longer timeout + retries: files.pythonhosted.org often stalls mid-download.
+RUN pip install --upgrade pip \
+    && pip install --no-cache-dir --timeout=300 --retries=10 \
+        --index-url https://download.pytorch.org/whl/cpu \
+        torch \
+    && grep -Ev '^(torch|#|$)' requirements.txt > /tmp/requirements-no-torch.txt \
+    && pip install --no-cache-dir --timeout=300 --retries=10 \
+        -r /tmp/requirements-no-torch.txt \
+    && rm /tmp/requirements-no-torch.txt
 
 COPY app ./app
 COPY schema.sql schema.cypher ./

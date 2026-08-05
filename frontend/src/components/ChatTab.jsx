@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { chatWithContract, fetchChatHistory } from "../api";
+import { fetchChatHistory, streamChat } from "../api";
 
 function historyToMessages(historyItems) {
   const messages = [];
@@ -73,6 +73,7 @@ export default function ChatTab({ contractId, provider }) {
   const [messages, setMessages] = useState([]);
   const [loadingHistory, setLoadingHistory] = useState(true);
   const [sending, setSending] = useState(false);
+  const [status, setStatus] = useState(null);
   const [input, setInput] = useState("");
   const [error, setError] = useState(null);
   const scrollRef = useRef(null);
@@ -107,22 +108,36 @@ export default function ChatTab({ contractId, provider }) {
     setInput("");
     setMessages((prev) => [...prev, { role: "user", text: question }]);
     setSending(true);
+    setStatus("Đang xử lý...");
+
+    let answer = "";
+    let sourceClauses = [];
+    let needsClarification = false;
 
     try {
-      const response = await chatWithContract(contractId, question, provider);
+      await streamChat(contractId, question, provider, (event, data) => {
+        if (event === "step") {
+          setStatus(data.label || "Đang xử lý...");
+        } else if (event === "done") {
+          answer = data.answer || "";
+          sourceClauses = data.source_clauses || [];
+          needsClarification = data.needs_clarification || false;
+        }
+      });
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          text: response.answer,
-          sourceClauses: response.source_clauses || [],
-          needsClarification: response.needs_clarification,
+          text: answer,
+          sourceClauses,
+          needsClarification,
         },
       ]);
     } catch (err) {
       setError(err.message || "Đã xảy ra lỗi khi gửi câu hỏi.");
     } finally {
       setSending(false);
+      setStatus(null);
     }
   };
 
@@ -158,10 +173,11 @@ export default function ChatTab({ contractId, provider }) {
 
         {sending && (
           <div className="flex justify-start">
-            <div className="bg-paper border border-rule rounded-md px-3 py-2 flex items-center gap-1.5">
+            <div className="bg-paper border border-rule rounded-md px-3 py-2 flex items-center gap-2 ui-text text-ink-muted">
               <span className="w-1 h-1 rounded-full bg-ink animate-pulse" />
               <span className="w-1 h-1 rounded-full bg-ink animate-pulse [animation-delay:150ms]" />
               <span className="w-1 h-1 rounded-full bg-ink animate-pulse [animation-delay:300ms]" />
+              {status && <span className="text-[0.75rem]">{status}</span>}
             </div>
           </div>
         )}

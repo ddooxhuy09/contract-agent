@@ -1,6 +1,8 @@
+from typing import Optional, Union
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, EmailStr, Field
 
 from app.agents.llm_client import DEFAULT_PROVIDER, PROVIDERS
@@ -10,16 +12,25 @@ from app.application.use_cases.contracts import (
     AnalyzeContract,
     ChatWithContract,
     GetChatHistory,
+    GetChatStates,
     ListContracts,
+    ResumeAnalysisReview,
+    RewindChat,
     UploadContract,
 )
 from app.domain.errors import AuthError, ConflictError, NotFoundError
 from app.infrastructure.container import AppContainer
 from app.schemas.contract import (
     AnalyzeResponse,
+    AnalyzeReviewResponse,
     ChatHistoryResponse,
     ChatResponse,
+    ChatRewindRequest,
+    ChatRewindResponse,
+    ChatStatesResponse,
     ContractListResponse,
+    ResumeAnalysisRequest,
+    ResumeAnalysisResponse,
     UploadResponse,
 )
 
@@ -30,12 +41,14 @@ class AnalyzeRequest(BaseModel):
     contract_id: str
     provider: str = DEFAULT_PROVIDER
     force: bool = False
+    review_mode: bool = False
 
 
 class ChatRequest(BaseModel):
     contract_id: str
     question: str
     provider: str = DEFAULT_PROVIDER
+    checkpoint_id: Optional[str] = None
 
 
 class AuthRequest(BaseModel):
@@ -91,7 +104,7 @@ async def upload(
         raise HTTPException(status_code=500, detail=str(e)) from e
 
 
-@router.post("/analyze", response_model=AnalyzeResponse)
+@router.post("/analyze", response_model=Union[AnalyzeResponse, AnalyzeReviewResponse])
 async def analyze(
     req: AnalyzeRequest,
     user_id: UUID = Depends(get_current_user_id),
@@ -103,8 +116,29 @@ async def analyze(
             container.contracts,
             container.contract_chunks,
             container.analyze_pipeline,
-        ).execute(req.contract_id, user_id, req.provider, req.force)
+        ).execute(req.contract_id, user_id, req.provider, req.force, req.review_mode)
+        if result.get("status") == "awaiting_review":
+            return AnalyzeReviewResponse(**result)
         return AnalyzeResponse(**result)
+    except NotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e)) from e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@router.post("/analyze/resume", response_model=ResumeAnalysisResponse)
+async def resume_analysis(
+    req: ResumeAnalysisRequest,
+    user_id: UUID = Depends(get_current_user_id),
+    container: AppContainer = Depends(get_container_dep),
+):
+    try:
+        assert container.analyze_pipeline is not None
+        result = await ResumeAnalysisReview(
+            container.contracts,
+            container.analyze_pipeline,
+        ).execute(req.contract_id, req.review_id, user_id, req.approved, req.edits)
+        return ResumeAnalysisResponse(**result)
     except NotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e)) from e
     except Exception as e:
@@ -131,9 +165,43 @@ async def chat(
     try:
         assert container.qa_pipeline is not None
         result = await ChatWithContract(container.contracts, container.qa_pipeline).execute(
-            req.contract_id, req.question, user_id, req.provider
+            req.contract_id, req.question, user_id, req.provider, req.checkpoint_id
         )
         return ChatResponse(**result)
+    except NotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e)) from e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@router.post("/chat/stream")
+async def chat_stream(
+    req: ChatRequest,
+    user_id: UUID = Depends(get_current_user_id),
+    container: AppContainer = Depends(get_container_dep),
+):
+    try:
+        assert container.qa_pipeline is not None
+        # Ownership check must happen before streaming starts so a 404 is a real
+        # HTTP error, not a broken SSE stream.
+        if container.contracts.get_owned(req.contract_id, user_id) is None:
+            raise NotFoundError(f"No documents found for contract: {req.contract_id}")
+
+        async def event_gen():
+            async for frame in container.qa_pipeline.stream(
+                req.contract_id, req.question, req.provider, req.checkpoint_id
+            ):
+                yield frame
+
+        return StreamingResponse(
+            event_gen(),
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+                "X-Accel-Buffering": "no",
+                "Connection": "keep-alive",
+            },
+        )
     except NotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e)) from e
     except Exception as e:
@@ -152,6 +220,43 @@ async def chat_history(
             contract_id, user_id
         )
         return ChatHistoryResponse(**result)
+    except NotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e)) from e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@router.get("/chat/{contract_id}/states", response_model=ChatStatesResponse)
+async def chat_states(
+    contract_id: str,
+    user_id: UUID = Depends(get_current_user_id),
+    container: AppContainer = Depends(get_container_dep),
+):
+    try:
+        assert container.qa_pipeline is not None
+        result = await GetChatStates(container.contracts, container.qa_pipeline).execute(
+            contract_id, user_id
+        )
+        return ChatStatesResponse(**result)
+    except NotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e)) from e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@router.post("/chat/{contract_id}/rewind", response_model=ChatRewindResponse)
+async def chat_rewind(
+    contract_id: str,
+    req: ChatRewindRequest,
+    user_id: UUID = Depends(get_current_user_id),
+    container: AppContainer = Depends(get_container_dep),
+):
+    try:
+        assert container.qa_pipeline is not None
+        result = await RewindChat(container.contracts, container.qa_pipeline).execute(
+            contract_id, req.checkpoint_id, user_id
+        )
+        return ChatRewindResponse(**result)
     except NotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e)) from e
     except Exception as e:

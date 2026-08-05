@@ -9,16 +9,23 @@ _EXCLUDE_TYPES = ("signature",)
 
 
 def _row_to_chunk(r, score: float | None = None) -> RetrievedChunk:
+    meta = {
+        "chunk_ref": r[1],
+        "doc_id": r[2],
+        "chunk_type": r[3],
+        "doc_number": r[4],
+        "title": r[5],
+    }
+    if len(r) > 7:
+        meta["eff_from"] = str(r[7]) if r[7] else None
+    if len(r) > 8:
+        meta["eff_to"] = str(r[8]) if r[8] else None
+    if len(r) > 9:
+        meta["status_flag"] = r[9]
     return RetrievedChunk(
         content=r[0],
         score=score if score is not None else (float(r[6]) if r[6] is not None else None),
-        metadata={
-            "chunk_ref": r[1],
-            "doc_id": r[2],
-            "chunk_type": r[3],
-            "doc_number": r[4],
-            "title": r[5],
-        },
+        metadata=meta,
     )
 
 
@@ -148,7 +155,8 @@ class PgLegalVectorSearch:
                 cur.execute(
                     f"""
                     SELECT c.chunk_text, c.chunk_ref, c.doc_id, c.chunk_type, d.doc_num, d.title,
-                           1 - (c.embedding <=> %s::vector) AS score
+                           1 - (c.embedding <=> %s::vector) AS score,
+                           d.eff_from, d.eff_to, d.status_flag
                     FROM legal_section_chunks c
                     JOIN legal_documents d ON d.doc_id = c.doc_id
                     WHERE {where_sql}
@@ -178,7 +186,8 @@ class PgLegalVectorSearch:
                 cur.execute(
                     f"""
                     SELECT c.chunk_text, c.chunk_ref, c.doc_id, c.chunk_type, d.doc_num, d.title,
-                           ts_rank_cd(c.tsv, plainto_tsquery('simple', %s)) AS score
+                           ts_rank_cd(c.tsv, plainto_tsquery('simple', %s)) AS score,
+                           d.eff_from, d.eff_to, d.status_flag
                     FROM legal_section_chunks c
                     JOIN legal_documents d ON d.doc_id = c.doc_id
                     WHERE {where_sql}

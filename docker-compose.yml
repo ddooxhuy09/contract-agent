@@ -65,6 +65,10 @@ services:
       TRANSFORMERS_CACHE: /cache/huggingface
       # Optional: higher HF rate limits / more reliable downloads
       HF_TOKEN: ${HF_TOKEN:-}
+      # Optional: LangSmith tracing (leave LANGCHAIN_API_KEY empty to disable)
+      LANGCHAIN_TRACING_V2: ${LANGCHAIN_TRACING_V2:-false}
+      LANGCHAIN_API_KEY: ${LANGCHAIN_API_KEY:-}
+      LANGCHAIN_PROJECT: ${LANGCHAIN_PROJECT:-contractlens}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}
       # Set DEV_RELOAD=1 only if Docker Desktop has plenty of RAM (8GB+).
       DEV_RELOAD: ${DEV_RELOAD:-0}

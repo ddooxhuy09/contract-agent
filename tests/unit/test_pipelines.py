@@ -15,10 +15,13 @@ from app.schemas.contract import ChatHistoryItem, ChatResponse
 def test_answer_passes_arguments_in_signature_order(monkeypatch):
     captured = {}
 
-    async def fake_answer_question(question: str, contract_id: str, provider: str = DEFAULT_PROVIDER):
+    async def fake_answer_question(
+        question: str, contract_id: str, provider: str = DEFAULT_PROVIDER, checkpoint_id: str | None = None
+    ):
         captured["question"] = question
         captured["contract_id"] = contract_id
         captured["provider"] = provider
+        captured["checkpoint_id"] = checkpoint_id
         return ChatResponse(
             answer="Câu trả lời",
             source_clauses=["Điều 5"],
@@ -34,6 +37,7 @@ def test_answer_passes_arguments_in_signature_order(monkeypatch):
         "question": "Bồi thường thế nào?",
         "contract_id": "contract-uuid",
         "provider": DEFAULT_PROVIDER,
+        "checkpoint_id": None,
     }
     assert result == {
         "answer": "Câu trả lời",
