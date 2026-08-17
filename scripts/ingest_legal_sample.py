@@ -18,11 +18,12 @@ def main() -> None:
             "doc_num": "168/2024/NĐ-CP",
             "title": "Nghị định mẫu (fixture)",
             "doc_type": "Nghị định",
+            "eff_flag": "Còn hiệu lực",
             "status_flag": 1,
         },
         chunks=[
             {
-                "chunk_ref": "C1.D1.K1.a",
+                "path": "sample_168.C1.D1.K1.a",
                 "chunk_type": "body",
                 "chunk_text": (
                     "Điều 1. Phạm vi điều chỉnh\n"
@@ -32,10 +33,10 @@ def main() -> None:
             }
         ],
         graph_nodes=[
-            {"path": "C1", "level": "Chapter", "label": "Chương I", "parent_path": None},
-            {"path": "C1.D1", "level": "Article", "label": "Điều 1", "parent_path": "C1"},
-            {"path": "C1.D1.K1", "level": "Clause", "label": "Khoản 1", "parent_path": "C1.D1"},
-            {"path": "C1.D1.K1.a", "level": "Point", "label": "Điểm a", "parent_path": "C1.D1.K1"},
+            {"path": "sample_168.C1", "level": "Chapter", "label": "Chương I", "parent_path": None},
+            {"path": "sample_168.C1.D1", "level": "Article", "label": "Điều 1", "parent_path": "sample_168.C1"},
+            {"path": "sample_168.C1.D1.K1", "level": "Clause", "label": "Khoản 1", "parent_path": "sample_168.C1.D1"},
+            {"path": "sample_168.C1.D1.K1.a", "level": "Point", "label": "Điểm a", "parent_path": "sample_168.C1.D1.K1"},
         ],
     )
     print(result)

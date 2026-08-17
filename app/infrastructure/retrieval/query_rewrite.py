@@ -38,12 +38,29 @@ def rewrite_legal_query(
     contract_type: str | None = None,
     max_chars: int = 400,
 ) -> str:
+    """Build retrieval query from clause context — no fixed số hiệu bias.
+
+    Ranking by Bộ luật/Luật → … → Thông tư happens later in GraphRAG ordering.
+    """
     parts = []
-    if contract_type:
-        parts.append(contract_type.strip())
+    ct = (contract_type or "").strip()
+    if ct:
+        # Collapse noisy headers like "Hợp đồng LAO ĐỘNG Số: 204/2026/HĐLĐ …"
+        if re.search(r"hợp\s*đồng\s*lao\s*động|\bHĐLĐ\b", ct, re.I):
+            parts.append("Hợp đồng lao động")
+        else:
+            # Drop contract serial numbers that dilute FTS/vector
+            ct = re.sub(r"Số\s*:\s*\S+", " ", ct, flags=re.I)
+            ct = re.sub(r"\b\d{1,4}/\d{4}/[A-ZĐ0-9.-]+\b", " ", ct)
+            parts.append(re.sub(r"\s+", " ", ct).strip()[:80])
     if title:
         parts.append(title.strip())
-    if summary:
+    # Guard: title and summary often carry the SAME text from callers that pass
+    # the question to both slots. Duplicating bloats the FTS query (ts_rank_cd is
+    # length-normalised) and drops retrieval quality.
+    if summary and summary.strip() != (title or "").strip():
+        # Prefer clause body; strip job_context noise already folded by caller
+        # but keep legal keywords (làm thêm, BHXH, kỷ luật, …).
         parts.append(summary.strip())
     text = " ".join(parts)
     text = unicodedata.normalize("NFC", text)

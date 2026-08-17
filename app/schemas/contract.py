@@ -21,6 +21,17 @@ class LegalCitation(BaseModel):
 
     title: str
     summary: str = ""
+    doc_number: Optional[str] = None
+    location: Optional[str] = None
+    article: Optional[str] = None
+    clause: Optional[str] = None
+    point: Optional[str] = None
+    quote: Optional[str] = None
+    source_url: Optional[str] = None
+    deep_link: Optional[str] = None
+    source_element_id: Optional[str] = None
+    evidence_path: Optional[str] = None
+    status: Optional[str] = None
 
     @classmethod
     def from_any(cls, data: dict) -> "LegalCitation | None":
@@ -36,7 +47,21 @@ class LegalCitation(BaseModel):
                 summary = " ".join(str(p).strip() for p in points if str(p).strip())
             else:
                 summary = ""
-        return cls(title=title, summary=str(summary or "").strip())
+        return cls(
+            title=title,
+            summary=str(summary or "").strip(),
+            doc_number=data.get("doc_number"),
+            location=data.get("location"),
+            article=data.get("article"),
+            clause=data.get("clause"),
+            point=data.get("point"),
+            quote=data.get("quote"),
+            source_url=data.get("source_url") or data.get("url"),
+            deep_link=data.get("deep_link"),
+            source_element_id=data.get("source_element_id"),
+            evidence_path=data.get("evidence_path") or data.get("path"),
+            status=data.get("status") or data.get("eff_flag"),
+        )
 
 
 class RiskItem(BaseModel):
@@ -48,6 +73,7 @@ class RiskItem(BaseModel):
     # Structured fields (optional — older analyses may only have issue/legal_basis/recommendation)
     title: Optional[str] = None
     summary_topics: Optional[List[str]] = None
+    reasons: Optional[List[str]] = None
     impact: Optional[List[str]] = None
     legal_citations: Optional[List[LegalCitation]] = None
     actions: Optional[List[str]] = None

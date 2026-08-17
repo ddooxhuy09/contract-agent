@@ -8,8 +8,11 @@
   "issue_date": "2024-12-26T00:00:00",
   "eff_from": "2025-01-01T00:00:00",
   "eff_to": null,
+  "eff_flag": "Còn hiệu lực",
   "eff_status": "Còn hiệu lực",
   "eff_status_code": "CHL",
   "agency": "Chính phủ",
+  "signer_name": "Trần Hồng Hà",
+  "signer_title": "Phó Thủ tướng",
   "signers": [{"name": "Trần Hồng Hà", "title": "Phó Thủ tướng"}]
 }

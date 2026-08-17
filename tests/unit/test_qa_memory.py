@@ -73,7 +73,7 @@ def test_qa_persists_pair_then_injects_it_next_turn(monkeypatch):
             '{"needs_clarification": false, "answer": "Trả lời lượt 2.", "cited_clauses": ["5"]}',
         ]
     )
-    monkeypatch.setattr(qa, "get_chat_model", lambda provider="gemini": fake)
+    monkeypatch.setattr(qa, "get_chat_model", lambda provider="gemini", **kwargs: fake)
 
     asyncio.run(qa.answer_question("bồi thường thế nào?", "c-x"))
     stored = asyncio.run(mem.load_qa_memory("c-x"))
@@ -90,7 +90,7 @@ def test_no_memory_saved_on_clarification(monkeypatch):
     fake = _RecordingModel(
         ['{"needs_clarification": true, "clarification_question": "Bạn hỏi khoản nào?", "answer": "", "cited_clauses": []}']
     )
-    monkeypatch.setattr(qa, "get_chat_model", lambda provider="gemini": fake)
+    monkeypatch.setattr(qa, "get_chat_model", lambda provider="gemini", **kwargs: fake)
 
     result = asyncio.run(qa.answer_question("hỏi mơ hồ", "c-y"))
     assert result.needs_clarification is True

@@ -11,7 +11,7 @@ export function cleanText(s) {
     .replace(/\*\*(.+?)\*\*/g, "$1")
     .replace(/__(.+?)__/g, "$1")
     .replace(/^[-•*]+\s+/, "")
-    .replace(/^\d+[\.)]\s+/, "")
+    .replace(/^\d+[.)]\s+/, "")
     .trim();
 }
 
@@ -128,7 +128,7 @@ export function parseRecommendation(recommendation) {
   };
 
   for (const line of lines) {
-    let raw = line.replace(/^[-•*]+\s+/, "").replace(/^\d+[\.)]\s+/, "").trim();
+    let raw = line.replace(/^[-•*]+\s+/, "").replace(/^\d+[.)]\s+/, "").trim();
     const cleaned = cleanText(raw);
     if (!cleaned || isDraftLabel(cleaned)) continue;
 
@@ -220,13 +220,42 @@ export function normalizeRiskView(risk, clauseFallback) {
         const summary =
           cleanText(c.summary || "") ||
           (Array.isArray(c.points) ? c.points.map(cleanText).filter(Boolean).join(" ") : "");
-        return title ? { title, summary } : null;
+        return title
+          ? {
+              title,
+              summary,
+              docNumber: cleanText(c.doc_number || "") || null,
+              location: cleanText(c.location || "") || null,
+              article: cleanText(c.article || "") || null,
+              clause: cleanText(c.clause || "") || null,
+              point: cleanText(c.point || "") || null,
+              quote: c.quote ? String(c.quote).trim() : null,
+              sourceUrl: c.source_url || c.url || null,
+              deepLink: c.deep_link || null,
+              sourceElementId: c.source_element_id || null,
+              status: cleanText(c.status || c.eff_flag || "") || null,
+              evidencePath: c.evidence_path || c.path || null,
+            }
+          : null;
       })
       .filter(Boolean);
   } else if (risk.legal_basis) {
     // Legacy blob: show as one intact block (no client-side doc-number parsing)
     const text = formatLegalBasis(risk.legal_basis);
-    if (text) citations = [{ title: "Căn cứ pháp lý", summary: text }];
+    if (text) {
+      citations = [
+        {
+          title: "Căn cứ pháp lý",
+          summary: text,
+          docNumber: null,
+          location: null,
+          quote: null,
+          sourceUrl: null,
+          deepLink: null,
+          status: null,
+        },
+      ];
+    }
   }
 
   const actionsFromStruct = Array.isArray(risk.actions)

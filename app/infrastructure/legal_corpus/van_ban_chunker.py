@@ -7,7 +7,8 @@ import unicodedata
 from dataclasses import dataclass
 from typing import Any
 
-from app.infrastructure.legal_corpus.muc_luc_paths import MucLucIndex, MucLucNode, prefixed_ref
+from app.infrastructure.legal_corpus.effectivity import is_effectivity_title
+from app.infrastructure.legal_corpus.muc_luc_paths import MucLucIndex, MucLucNode, to_ltree_path
 
 # IDs are usually UUID hex; allow alphanumeric for fixtures / alternate crawlers.
 _ARTICLE_ANCHOR = re.compile(
@@ -24,7 +25,6 @@ _POINT_SPLIT = re.compile(
     r"(?m)^(?:\*?([a-zđ])\)\*?\s+)",
     re.IGNORECASE,
 )
-_EFF_HINT = re.compile(r"hi[eệ]u\s*l[uự]c\s*thi\s*h[aà]nh", re.IGNORECASE)
 _SIGN_HINT = re.compile(
     r"(nơi\s*nhận|kt\.\s*thủ\s*tướng|tm\.\s*chính\s*phủ|ký\s*tên)",
     re.IGNORECASE,
@@ -177,7 +177,7 @@ def build_body_chunks(
     if preamble and len(preamble) > 40:
         chunks.append(
             {
-                "chunk_ref": prefixed_ref(doc_id, "PREAMBLE"),
+                "path": to_ltree_path(doc_id, "PREAMBLE"),
                 "chunk_type": "preamble",
                 "chunk_text": preamble[:12000],
                 "is_effective": True,
@@ -209,7 +209,7 @@ def build_body_chunks(
             if tail and _SIGN_HINT.search(tail) and len(tail) > 20:
                 chunks.append(
                     {
-                        "chunk_ref": prefixed_ref(doc_id, "SIGN"),
+                        "path": to_ltree_path(doc_id, "SIGN"),
                         "chunk_type": "signature",
                         "chunk_text": tail[:8000],
                         "is_effective": True,
@@ -273,12 +273,11 @@ def _chunk_for_point(
     parts.append(point_text)
     chunk_text = "\n".join(parts).strip()
 
-    chunk_type = "body"
-    if article and _EFF_HINT.search(rubric):
-        chunk_type = "effectivity"
+    chunk_type = "effectivity" if is_effectivity_title(rubric) else "body"
 
     return {
-        "chunk_ref": prefixed_ref(doc_id, leaf.path),
+        "path": to_ltree_path(doc_id, leaf.path),
+        "source_element_id": clause.id if clause else (article.id if article else None),
         "chunk_type": chunk_type,
         "chunk_text": chunk_text,
         "is_effective": True,
@@ -306,11 +305,10 @@ def _chunk_for_clause_leaf(
         clause_body = leaf.title
 
     chunk_text = f"{rubric}\n{clause_body}".strip()
-    chunk_type = "body"
-    if rubric and _EFF_HINT.search(rubric):
-        chunk_type = "effectivity"
+    chunk_type = "effectivity" if is_effectivity_title(rubric) else "body"
     return {
-        "chunk_ref": prefixed_ref(doc_id, leaf.path),
+        "path": to_ltree_path(doc_id, leaf.path),
+        "source_element_id": leaf.id or (article.id if article else None),
         "chunk_type": chunk_type,
         "chunk_text": chunk_text,
         "is_effective": True,
@@ -332,40 +330,42 @@ def _chunk_for_article_leaf(
         body = _ARTICLE_ANCHOR.sub("", body)
         body = _CLAUSE_ANCHOR.sub("", body).strip()
     chunk_text = f"{rubric}\n{body}".strip() if body else rubric
-    chunk_type = "effectivity" if _EFF_HINT.search(rubric) else "body"
+    chunk_type = "effectivity" if is_effectivity_title(rubric) else "body"
     return {
-        "chunk_ref": prefixed_ref(doc_id, leaf.path),
+        "path": to_ltree_path(doc_id, leaf.path),
+        "source_element_id": leaf.id or None,
         "chunk_type": chunk_type,
         "chunk_text": chunk_text,
         "is_effective": True,
     }
 
 
-def meta_graph_nodes(doc_id: str, chunk_refs: list[str]) -> list[dict[str, Any]]:
+def meta_graph_nodes(doc_id: str, paths: list[str]) -> list[dict[str, Any]]:
     nodes = []
-    for ref in chunk_refs:
-        if ref.endswith(":PREAMBLE"):
+    for path in paths:
+        leaf = (path or "").rsplit(".", 1)[-1]
+        if leaf == "PREAMBLE":
             nodes.append(
                 {
-                    "path": ref,
+                    "path": path,
                     "level": "Meta",
                     "label": "PREAMBLE",
                     "parent_path": None,
                 }
             )
-        elif ref.endswith(":SIGN"):
+        elif leaf == "SIGN":
             nodes.append(
                 {
-                    "path": ref,
+                    "path": path,
                     "level": "Meta",
                     "label": "SIGN",
                     "parent_path": None,
                 }
             )
-        elif ref.endswith(":EFF"):
+        elif leaf == "EFF":
             nodes.append(
                 {
-                    "path": ref,
+                    "path": path,
                     "level": "Meta",
                     "label": "EFF",
                     "parent_path": None,

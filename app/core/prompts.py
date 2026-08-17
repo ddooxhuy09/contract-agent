@@ -16,6 +16,13 @@ GLOBAL_GROUNDING = """\
 - Chỉ áp dụng pháp luật Việt Nam xuất hiện trong ngữ cảnh. Không dùng kiến thức ngoài ngữ cảnh.
 - Không suy diễn, không bịa số liệu, không bịa số hiệu văn bản, không bịa số Điều.
 - Thiếu căn cứ → nói rõ thiếu căn cứ / cần rà soát thêm. Không đoán để cho đủ câu trả lời.
+- Phạm vi áp dụng: nếu tiêu đề / phần đầu trích đoạn luật giới hạn ngành/nghề/địa bàn đặc thù
+  (vd. dầu khí / lọc dầu, quân đội, công an, hàng không, hàng hải) mà hợp đồng/điều khoản đang xét
+  không thuộc phạm vi đó → KHÔNG lấy làm căn cứ bắt buộc; bỏ qua đoạn đó hoặc chỉ nêu
+  “không áp dụng”.
+- Khi nhiều căn cứ cùng chủ đề: ưu tiên theo cấp VBQPPL còn hiệu lực
+  (Bộ luật/Luật → Nghị quyết → Pháp lệnh → Lệnh/Quyết định → Nghị định → Thông tư → Thông tư liên tịch),
+  không bám một số hiệu cố định.
 - Phân biệt rõ:
   - vi phạm pháp luật (trái quy định bắt buộc / điều cấm trong ngữ cảnh luật)
   - rủi ro hợp đồng (bất lợi, mơ hồ, mất cân bằng — chưa chắc đã trái luật)
@@ -36,7 +43,7 @@ GLOBAL_STYLE = """\
 GLOBAL_CITATION = """\
 ## Trích dẫn (bắt buộc khi có nguồn)
 - Hợp đồng: chỉ dẫn “Điều N” đúng nhãn có trong ngữ cảnh (vd. [Điều 5]).
-- Luật: chỉ dẫn theo `doc_number` có trong ngữ cảnh (vd. 45/2019/QH14). Không đưa `chunk_ref` / id nội bộ vào câu trả lời cho người dùng.
+- Luật: chỉ dẫn theo `doc_number` có trong ngữ cảnh (vd. 45/2019/QH14). Không đưa `path` / id nội bộ vào câu trả lời cho người dùng.
 - Không bịa số hiệu luật / số Điều ngoài ngữ cảnh.
 """
 
@@ -154,12 +161,14 @@ Ra kết luận tư vấn ngắn gọn, có thể hành động, cho người d�
 - "Điều luật seed" = căn cứ chính
 - "Cùng khoản / ngữ cảnh cây" = anh em / tổ tiên cùng cây Điều
 - "Văn bản liên quan" = văn bản liên quan (dẫn chiếu / sửa đổi…)
-Mỗi đoạn có nhãn [doc_number | chunk_ref | role].
+Mỗi đoạn có nhãn [doc_number | path | role].
 
 ## Quy tắc quyết định
 - Chỉ kết luận vi phạm (critical) khi có quy định bắt buộc/cấm rõ trong ngữ cảnh luật khớp vấn đề điều khoản.
+- Văn bản ngành hẹp (dầu khí, quân đội, công an,…) mà HĐ không thuộc ngành đó → không dùng làm căn cứ; nếu chỉ còn loại đó thì severity=warning + thiếu căn cứ phù hợp.
+- Nhiều đoạn cùng chủ đề → ưu tiên cấp VBQPPL cao hơn còn hiệu lực (Bộ luật/Luật trước Thông tư); không ưu tiên theo số hiệu cụ thể.
 - Thiếu luật liên quan hoặc không đủ để kết luận → severity=warning; issue nêu rõ thiếu căn cứ; không đoán.
-- legal_citations / legal_basis chỉ từ ngữ cảnh; không có thì null/[] — chỉ doc_number hoặc “Điều N + tên luật”, không chunk_ref.
+- legal_citations / legal_basis chỉ từ ngữ cảnh và phải khớp phạm vi áp dụng với HĐ; không có thì null/[] — chỉ doc_number hoặc “Điều N + tên luật”, không path nội bộ.
 - severity=ok → issue="" ; các field tư vấn = null/[].
 - severity≠ok → BẮT BUỘC có revised_clause = viết lại TOÀN BỘ điều khoản gốc cho đúng luật, đủ để copy thay thế nguyên văn (không chỉ một câu ngắn).
 
@@ -169,7 +178,8 @@ Mỗi đoạn có nhãn [doc_number | chunk_ref | role].
 - summary_topics: 2–5 cụm ngắn người dùng scan trong 3 giây (vd. "Làm thêm giờ", "Tiền lương OT", "Giới hạn OT").
 - reasons: 2–5 bullet vì sao sai — cụ thể, không sáo rỗng.
 - impact: 2–4 bullet hậu quả nếu giữ nguyên (xử phạt / tranh chấp / vô hiệu / thiệt hại…) — chỉ nêu khi có căn cứ hợp lý từ ngữ cảnh hoặc hệ quả pháp lý phổ biến rõ ràng; không bịa mức phạt cụ thể nếu ngữ cảnh không có.
-- legal_citations: mảng object {{"title": "Thông tư 20/2023/TT-BCT" hoặc "Điều 107 Bộ luật Lao động", "summary": "ý chính ngắn"}}. title phải là MỘT thực thể số hiệu/văn bản hoàn chỉnh — không tách theo / hoặc -.
+- legal_citations: mảng object {{"title": "Điều 107 Bộ luật Lao động" hoặc số hiệu đúng trong ngữ cảnh, "summary": "ý chính ngắn"}}. title phải là MỘT thực thể hoàn chỉnh — không tách theo / hoặc -.
+- evidence_paths: mảng path nội bộ đúng nguyên văn từ nhãn ngữ cảnh (ví dụ "100_2015_QH13.C1.D35.K1"). Chỉ chọn path thực sự là căn cứ cho kết luận; không tự tạo path. Backend sẽ dùng path này để lấy đoạn trích nguyên văn và link nguồn.
 - actions: 2–5 việc cần làm, bắt đầu bằng động từ cụ thể (Bổ sung… / Xóa… / Sửa…), mỗi dòng một việc.
 - revised_clause: toàn văn điều khoản đã chỉnh (giữ cấu trúc tương đương điều gốc nếu có thể).
 - confidence: số 0–1 (độ tin cậy kết luận dựa trên độ khớp ngữ cảnh luật).
@@ -195,7 +205,8 @@ Chỉ một JSON object:
   "summary_topics": ["..."] | [],
   "reasons": ["..."] | [],
   "impact": ["..."] | [],
-  "legal_citations": [{{"title": "Thông tư 20/2023/TT-BCT", "summary": "..."}}] | [],
+  "legal_citations": [{{"title": "Điều … Bộ luật / Luật …", "summary": "..."}}] | [],
+  "evidence_paths": ["path xuất hiện trong ngữ cảnh"] | [],
   "legal_basis": "chuỗi dự phòng | null",
   "actions": ["Bổ sung ...", "..."] | [],
   "revised_clause": "toàn văn điều khoản đã sửa | null nếu ok",

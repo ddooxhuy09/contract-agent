@@ -1,0 +1,259 @@
+@startuml contractlens-schema-v2.1
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+hide circle
+title ContractLens — Postgres schema v2.1 (legal + auth/contracts)
+
+entity "users" as users {
+  * id : UUID <<PK>>
+  --
+  * email : TEXT <<UK>>
+  * password_hash : TEXT
+  created_at : TIMESTAMPTZ
+}
+
+entity "uploaded_contracts" as uploaded_contracts {
+  * contract_id : TEXT <<PK>>
+  --
+  * user_id : UUID <<FK>>
+  * filename : TEXT
+  * file_type : TEXT
+  * storage_key : TEXT
+  full_text : TEXT
+  * status : TEXT <<pending>>
+  message : TEXT
+  chunk_count : INTEGER <<0>>
+  analysis : JSONB
+  risks : JSONB
+  created_at : TIMESTAMPTZ
+  updated_at : TIMESTAMPTZ
+}
+
+entity "contract_chunks" as contract_chunks {
+  * id : BIGSERIAL <<PK>>
+  --
+  * contract_id : TEXT <<FK>>
+  * chunk_index : INTEGER
+  * clause_number : TEXT
+  * content : TEXT
+  embedding : VECTOR(1024)
+  --
+  UNIQUE(contract_id, chunk_index)
+}
+
+entity "legal_documents" as legal_documents {
+  * doc_id : TEXT <<PK>>
+  --
+  * doc_num : TEXT
+  * title : TEXT
+  * doc_type : TEXT
+  majors : TEXT[]
+  fields : TEXT[]
+  issue_date : DATE
+  eff_from : DATE
+  eff_to : DATE
+  eff_flag : TEXT
+  * status_flag : SMALLINT <<0>>
+  agency : TEXT
+  signer_name : TEXT
+  signer_title : TEXT
+  source_url : TEXT
+  full_text : TEXT
+  path : LTREE
+  crawled_at : TIMESTAMPTZ
+  updated_at : TIMESTAMPTZ
+}
+
+entity "legal_parts" as legal_parts {
+  * id : BIGSERIAL <<PK>>
+  --
+  * doc_id : TEXT <<FK>>
+  * title : TEXT <<Không có>>
+  * content : TEXT <<Không có>>
+  * path : LTREE
+  parent_path : LTREE
+  eff_from : DATE
+  eff_to : DATE
+  eff_flag : TEXT
+  * status_flag : SMALLINT <<0>>
+  created_at : TIMESTAMPTZ
+  --
+  UNIQUE(doc_id, path)
+}
+
+entity "legal_chapters" as legal_chapters {
+  * id : BIGSERIAL <<PK>>
+  --
+  * part_id : BIGINT <<FK>>
+  * title : TEXT <<Không có>>
+  * content : TEXT <<Không có>>
+  * path : LTREE <<UK>>
+  parent_path : LTREE
+  eff_from : DATE
+  eff_to : DATE
+  eff_flag : TEXT
+  * status_flag : SMALLINT <<0>>
+  created_at : TIMESTAMPTZ
+}
+
+entity "legal_sections" as legal_sections {
+  * id : BIGSERIAL <<PK>>
+  --
+  * chapter_id : BIGINT <<FK>>
+  * title : TEXT <<Không có>>
+  * content : TEXT <<Không có>>
+  * path : LTREE <<UK>>
+  parent_path : LTREE
+  eff_from : DATE
+  eff_to : DATE
+  eff_flag : TEXT
+  * status_flag : SMALLINT <<0>>
+  created_at : TIMESTAMPTZ
+}
+
+entity "legal_sub_sections" as legal_sub_sections {
+  * id : BIGSERIAL <<PK>>
+  --
+  * section_id : BIGINT <<FK>>
+  * title : TEXT <<Không có>>
+  * content : TEXT <<Không có>>
+  * path : LTREE <<UK>>
+  parent_path : LTREE
+  eff_from : DATE
+  eff_to : DATE
+  eff_flag : TEXT
+  * status_flag : SMALLINT <<0>>
+  created_at : TIMESTAMPTZ
+}
+
+entity "legal_articles" as legal_articles {
+  * id : BIGSERIAL <<PK>>
+  --
+  * sub_section_id : BIGINT <<FK>>
+  * title : TEXT
+  * content : TEXT <<Không có>>
+  * path : LTREE <<UK>>
+  parent_path : LTREE
+  eff_from : DATE
+  eff_to : DATE
+  eff_flag : TEXT
+  * status_flag : SMALLINT <<0>>
+  created_at : TIMESTAMPTZ
+}
+
+entity "legal_clauses" as legal_clauses {
+  * id : BIGSERIAL <<PK>>
+  --
+  * article_id : BIGINT <<FK>>
+  * title : TEXT
+  * content : TEXT <<Không có>>
+  * path : LTREE <<UK>>
+  parent_path : LTREE
+  eff_from : DATE
+  eff_to : DATE
+  eff_flag : TEXT
+  * status_flag : SMALLINT <<0>>
+  created_at : TIMESTAMPTZ
+}
+
+entity "legal_points" as legal_points {
+  * id : BIGSERIAL <<PK>>
+  --
+  * clause_id : BIGINT <<FK>>
+  * symbol : VARCHAR(10)
+  * title : TEXT <<Không có>>
+  * content : TEXT <<Không có>>
+  * path : LTREE <<UK>>
+  parent_path : LTREE
+  eff_from : DATE
+  eff_to : DATE
+  eff_flag : TEXT
+  * status_flag : SMALLINT <<0>>
+  created_at : TIMESTAMPTZ
+}
+
+entity "legal_embeddings" as legal_embeddings {
+  * id : BIGSERIAL <<PK>>
+  --
+  * doc_id : TEXT <<FK>>
+  * chunk_type : TEXT <<body>>
+  * chunk_text : TEXT
+  embedding : VECTOR(1024)
+  * is_effective : BOOLEAN <<cache>>
+  tsv : TSVECTOR <<GENERATED>>
+  * path : LTREE <<UK>>
+  root_path : LTREE
+  created_at : TIMESTAMPTZ
+}
+
+entity "legal_document_relations" as legal_document_relations {
+  * id : BIGSERIAL <<PK>>
+  --
+  * from_doc_id : TEXT <<FK>>
+  * to_doc_id : TEXT <<FK>>
+  * relation_type : TEXT
+  created_at : TIMESTAMPTZ
+  --
+  UNIQUE(from_doc_id, to_doc_id, relation_type)
+}
+
+entity "legal_path_relations" as legal_path_relations {
+  * id : BIGSERIAL <<PK>>
+  --
+  * source_path : LTREE
+  * target_path : LTREE
+  * ref_type : VARCHAR(50) <<dan_chieu>>
+  created_at : TIMESTAMPTZ
+  --
+  UNIQUE(source_path, target_path, ref_type)
+}
+
+' --- Auth / contracts ---
+users ||--o{ uploaded_contracts : user_id
+uploaded_contracts ||--o{ contract_chunks : contract_id
+
+' --- Doc hub (only parts + embeddings link doc_id) ---
+legal_documents ||--o{ legal_parts : doc_id
+legal_documents ||--o{ legal_embeddings : doc_id
+legal_documents ||--o{ legal_document_relations : from_doc_id
+legal_documents ||--o{ legal_document_relations : to_doc_id
+
+' --- Full FK chain (missing level = Không có scaffold) ---
+legal_parts ||--o{ legal_chapters : part_id
+legal_chapters ||--o{ legal_sections : chapter_id
+legal_sections ||--o{ legal_sub_sections : section_id
+legal_sub_sections ||--o{ legal_articles : sub_section_id
+legal_articles ||--o{ legal_clauses : article_id
+legal_clauses ||--o{ legal_points : clause_id
+
+note right of legal_parts
+  Scaffold paths: ._P ._C ._M ._TM
+  RAG ltree stays sparse (no fake P0/M0
+  on real article paths).
+  Effectiveness SoT: eff_from/eff_to/
+  eff_flag/status_flag on all 7 levels.
+  Parent status=2 cascades to children.
+  embeddings.is_effective = RAG cache
+  (status IN 1,5).
+end note
+
+note right of legal_path_relations
+  No hard FK.
+  source_path / target_path match
+  any hierarchy.path or embeddings.path
+  via ltree (GIST).
+end note
+
+note bottom of legal_embeddings
+  path = leaf chunk ltree
+  root_path = nearest Article (D*) prefix
+  (denorm for RAG filter/index)
+end note
+
+note top of legal_document_relations
+  doc↔doc (luoc_do):
+  van_ban_bi_bai_bo | thay_the |
+  sua_doi_bo_sung | can_cu_ban_hanh | …
+end note
+
+@enduml

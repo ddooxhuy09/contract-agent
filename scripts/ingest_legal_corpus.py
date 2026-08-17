@@ -146,11 +146,14 @@ def main(argv: list[str] | None = None) -> int:
             artifacts = load_document_folder(folder)
             n_chunks = len(artifacts["chunks"])
             n_rels = len(artifacts["relations"])
+            n_path = len(artifacts.get("path_relations") or [])
             if args.dry_run:
                 body = sum(1 for c in artifacts["chunks"] if c.get("chunk_type") == "body")
+                eff = sum(1 for c in artifacts["chunks"] if c.get("chunk_type") == "effectivity")
                 _safe_print(
                     f"[dry-run] doc_id={doc_id} chunks={n_chunks} "
-                    f"(body={body}) relations={n_rels}"
+                    f"(body={body} effectivity={eff}) relations={n_rels} "
+                    f"path_relations={n_path}"
                 )
                 ok += 1
                 ingested_this_run += 1
@@ -162,6 +165,8 @@ def main(argv: list[str] | None = None) -> int:
                 relations=artifacts["relations"],
                 graph_nodes=artifacts["graph_nodes"],
                 stub_docs=artifacts.get("stub_docs"),
+                legal_nodes=artifacts.get("legal_nodes"),
+                path_relations=artifacts.get("path_relations"),
             )
             mark_completed(
                 ck_path,
@@ -173,7 +178,8 @@ def main(argv: list[str] | None = None) -> int:
             done_ids.add(result["doc_id"])
             _safe_print(
                 f"[ok] doc_id={result['doc_id']} chunks={result['chunk_count']} "
-                f"relations={result['relation_count']}"
+                f"relations={result['relation_count']} "
+                f"path_relations={result.get('path_relation_count', 0)}"
             )
             ok += 1
             ingested_this_run += 1

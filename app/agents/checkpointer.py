@@ -20,10 +20,29 @@ async def init_checkpointer() -> None:
     global _pool, _checkpointer
     if _checkpointer is not None:
         return
+    settings = get_settings()
     _pool = AsyncConnectionPool(
-        conninfo=get_settings().database_url,
+        conninfo=settings.database_url,
         open=False,
-        kwargs={"autocommit": True, "prepare_threshold": None, "row_factory": dict_row},
+        min_size=settings.db_pool_min_size,
+        max_size=settings.db_pool_max_size,
+        timeout=settings.db_pool_timeout,
+        # Recycle idle/old connections so a restarted Postgres cannot leave
+        # zombies in the pool, and validate every connection on checkout.
+        max_idle=300,
+        max_lifetime=1800,
+        reconnect_timeout=60,
+        check=AsyncConnectionPool.check_connection,
+        kwargs={
+            "autocommit": True,
+            "prepare_threshold": None,
+            "row_factory": dict_row,
+            "connect_timeout": 10,
+            "keepalives": 1,
+            "keepalives_idle": 30,
+            "keepalives_interval": 10,
+            "keepalives_count": 5,
+        },
     )
     await _pool.open()
     _checkpointer = AsyncPostgresSaver(conn=_pool)

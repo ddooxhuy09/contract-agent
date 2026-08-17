@@ -197,6 +197,27 @@ export default function IssueCard({ risk, open, onToggle, cardId, clauseFallback
                     {c.summary ? (
                       <p className="mt-1.5 text-[0.75rem] text-ink-muted pl-5">{c.summary}</p>
                     ) : null}
+                    {(c.docNumber || c.location || c.status) && (
+                      <p className="mt-2 pl-5 text-[0.6875rem] text-ink-faint">
+                        {[c.docNumber, c.location, c.status].filter(Boolean).join(" · ")}
+                      </p>
+                    )}
+                    {c.quote ? (
+                      <blockquote className="mt-2 pl-5 border-l-2 border-quiet/30 text-[0.75rem] leading-relaxed text-ink whitespace-pre-wrap">
+                        {c.quote}
+                      </blockquote>
+                    ) : null}
+                    {c.deepLink || c.sourceUrl ? (
+                      <a
+                        href={c.deepLink || c.sourceUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="mt-2 pl-5 inline-flex items-center gap-1 text-[0.6875rem] font-medium text-quiet hover:text-ink"
+                      >
+                        <span className="material-symbols-outlined !text-[0.875rem]">open_in_new</span>
+                        {c.deepLink ? "Mở đúng vị trí trên VBPL" : "Mở văn bản nguồn"}
+                      </a>
+                    ) : null}
                   </li>
                 ))}
               </ul>

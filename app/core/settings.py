@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     embedding_max_seq_length: int = 512
 
     database_url: str = "postgresql://contractlens:contractlens@localhost:5432/contractlens"
+    db_pool_min_size: int = 2
+    db_pool_max_size: int = 10
+    db_pool_timeout: float = 10.0
     neo4j_uri: str = "bolt://localhost:7687"
     neo4j_user: str = "neo4j"
     neo4j_password: str = "contractlens"
@@ -43,6 +46,9 @@ class Settings(BaseSettings):
 
     schema_sql_path: str = "schema.sql"
     schema_cypher_path: str = "schema.cypher"
+
+    # GraphRAG hierarchy expand: neo4j | postgres | both (merge, prefer neo4j then fill gaps)
+    legal_expand_backend: str = "neo4j"
 
     @property
     def upload_path(self) -> Path:

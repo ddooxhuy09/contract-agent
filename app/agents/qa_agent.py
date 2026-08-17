@@ -39,7 +39,7 @@ _MAX_HISTORY_TOKENS = 2000
 # weak first-pass retrieval can recover instead of producing a grounded-sounding guess.
 _MAX_RETRIEVAL_ATTEMPTS = 2
 # Graph-level retry budget for parsing the LLM answer as JSON (moved out of inline code).
-_MAX_GENERATE_RETRIES = 1
+_MAX_GENERATE_RETRIES = 2
 
 
 class QAState(TypedDict):
@@ -90,10 +90,27 @@ def _best_score(docs) -> float | None:
     return max(scores) if scores else None
 
 
+def _augment_query(question: str, history: List[BaseMessage]) -> str:
+    """Resolve deictic references in follow-ups using conversation history.
+
+    LangGraph already persists the whole thread into ``state["messages"]`` (via the
+    ``add_messages`` reducer), so callers pass ``state["messages"][:-1]`` here — no
+    duplicate state bookkeeping needed. The most recent prior Q&A is joined onto the
+    current question so anaphora like "điều khoản này" carries its antecedent terms
+    ("chấm dứt", "mang thai", "bồi thường đào tạo"...) into the legal/contract search.
+    Returns the question unchanged when there is no prior turn.
+    """
+    prior = [m.content for m in history[-2:] if getattr(m, "content", None)]
+    if not prior:
+        return question
+    return " ".join([*prior, question])
+
+
 async def _retrieve_node(state: QAState) -> dict:
-    query = state.get("query") or state["messages"][-1].content
-    contract_docs = retrieve_contract(query, state["contract_id"])
-    legal_docs = retrieve_legal(query, k=3)
+    question = state.get("query") or state["messages"][-1].content
+    history = state["messages"][:-1]
+    contract_docs = retrieve_contract(question, state["contract_id"])
+    legal_docs = retrieve_legal(_augment_query(question, history), k=3)
     memory = await load_qa_memory(state["contract_id"])
 
     if not contract_docs and not legal_docs:
@@ -105,7 +122,7 @@ async def _retrieve_node(state: QAState) -> dict:
         "_has_context": True,
         "_max_score": _best_score(contract_docs + legal_docs),
         "_contract_context": _format_contract_context(contract_docs)[:8000],
-        "_legal_context": _format_legal_context(legal_docs)[:3000],
+        "_legal_context": _format_legal_context(legal_docs)[:6000],
         "_valid_clause_numbers": [d.metadata.get("clause_number") for d in contract_docs],
         "_long_term_memory": memory,
     }
@@ -168,7 +185,7 @@ async def _rewrite_query_node(state: QAState) -> dict:
 def _route_after_generate(state: QAState) -> str:
     if state.get("_parse_ok"):
         return "remember"
-    if state.get("generate_attempts", 0) <= _MAX_GENERATE_RETRIES:
+    if state.get("generate_attempts", 0) < _MAX_GENERATE_RETRIES:
         return "generate"
     return "finalize"
 
@@ -195,8 +212,12 @@ async def _generate_node(state: QAState) -> dict:
     )
     prompt_messages = [SystemMessage(content=QA_SYSTEM_PROMPT), *history, HumanMessage(content=human_content)]
 
-    chat_model = get_chat_model(state.get("provider", DEFAULT_PROVIDER))
-    raw = (await chat_model.ainvoke(prompt_messages)).content
+    chat_model = get_chat_model(state.get("provider", DEFAULT_PROVIDER), json_mode=True)
+    try:
+        raw = (await chat_model.ainvoke(prompt_messages)).content
+    except Exception as exc:
+        logger.error("LLM invoke failed for contract %s, attempt %s: %s", state["contract_id"], attempts, exc)
+        return {"generate_attempts": attempts, "_parse_ok": False}
     result = parse_json_object(raw)
     if result is None:
         # Graph-level retry loop handles the retry; do NOT append a message yet so the
@@ -411,6 +432,9 @@ async def stream_answer_events(
             }
             break
     yield f"event: done\ndata: {json.dumps(final, ensure_ascii=False)}\n\n"
+
+    if final["answer"] == _GENERATION_FAILED_ANSWER:
+        yield f"event: error\ndata: {json.dumps({'message': _GENERATION_FAILED_ANSWER, 'recoverable': True}, ensure_ascii=False)}\n\n"
 
 
 async def get_state_history(contract_id: str) -> List[dict]:

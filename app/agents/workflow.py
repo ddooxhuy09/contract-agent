@@ -47,6 +47,7 @@ class ClauseState(TypedDict):
     provider: str
     contract_type: str | None
     as_of_date: str | None
+    job_context: str | None
 
 
 # Output schemas for the nested subgraphs. Limiting what each subgraph writes back
@@ -95,6 +96,7 @@ async def _judge_clause_node(state: ClauseState) -> dict:
                 contract_id=state["contract_id"],
                 contract_type=state.get("contract_type"),
                 as_of_date=state.get("as_of_date"),
+                job_context=state.get("job_context"),
             )
             if risk:
                 logger.info("Judge result: contract_id=%s clause=%s severity=%s issue=%s",
@@ -112,7 +114,24 @@ async def _judge_clause_node(state: ClauseState) -> dict:
 
 
 def _aggregate_node(state: AnalysisState) -> dict:
-    return {}
+    """After per-clause judging: HĐLĐ red-flags + completeness + preamble «Căn cứ»."""
+    from app.agents.labor_completeness import check_labor_completeness
+    from app.agents.labor_red_flags import check_labor_red_flags
+    from app.agents.preamble_citations import check_preamble_citations
+
+    analysis = state.get("analysis")
+    text = state.get("contract_text") or ""
+    if analysis is None and not text:
+        return {}
+    eff = None
+    if analysis is not None:
+        eff = analysis.execution_date or analysis.start_date
+    as_of = str(eff) if eff else None
+    extra: list = []
+    extra.extend(check_labor_red_flags(text, analysis, as_of_date=as_of))
+    extra.extend(check_labor_completeness(text, analysis, as_of_date=as_of))
+    extra.extend(check_preamble_citations(text, as_of_date=as_of))
+    return {"risks": extra} if extra else {}
 
 
 async def _review_node(state: AnalysisState) -> dict:
@@ -187,11 +206,14 @@ def _build_extract_subgraph():
 def _build_evaluate_subgraph():
     """Subgraph: per-clause risk evaluation (map-reduce via Send)."""
     def _fan_out(state: AnalysisState):
+        from app.agents.labor_completeness import extract_job_context
+
         clauses = (state.get("analysis").clauses if state.get("analysis") is not None else []) or []
         contract_type = state.get("analysis").contract_type if state.get("analysis") is not None else None
         analysis = state.get("analysis")
         eff_date = analysis.execution_date or analysis.start_date if analysis is not None else None
         as_of = str(eff_date) if eff_date else None
+        job_ctx = extract_job_context(state.get("contract_text") or "", analysis)
         return [
             Send(
                 "judge_clause",
@@ -201,6 +223,7 @@ def _build_evaluate_subgraph():
                     "provider": state["provider"],
                     "contract_type": contract_type,
                     "as_of_date": as_of,
+                    "job_context": job_ctx,
                 },
             )
             for c in clauses

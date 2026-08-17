@@ -6,7 +6,7 @@ import re
 import unicodedata
 from typing import Any
 
-from app.infrastructure.legal_corpus.muc_luc_paths import MucLucIndex, MucLucNode, prefixed_ref
+from app.infrastructure.legal_corpus.muc_luc_paths import MucLucIndex, MucLucNode, to_ltree_path
 
 _PL_HEADING = re.compile(
     r"^(?:#{1,3}\s*)?\**\s*(Phụ\s*lục|PHỤ\s*LỤC)\s*([A-Z0-9IVX]+)?\s*\**\s*(.*)$",
@@ -82,7 +82,7 @@ def build_appendix_chunks(
         if not tables:
             chunks.append(
                 {
-                    "chunk_ref": prefixed_ref(doc_id, structural),
+                    "path": to_ltree_path(doc_id, structural),
                     "chunk_type": "appendix",
                     "chunk_text": block[:8000],
                     "is_effective": True,
@@ -95,7 +95,7 @@ def build_appendix_chunks(
                 body = f"{title_line}\n{header}\n{row}"
                 chunks.append(
                     {
-                        "chunk_ref": prefixed_ref(doc_id, path),
+                        "path": to_ltree_path(doc_id, path),
                         "chunk_type": "appendix",
                         "chunk_text": body,
                         "is_effective": True,
@@ -136,7 +136,7 @@ def _chunks_for_appendix_node(
                 path = f"{root.path}.N1.R{r_i}"
             chunks.append(
                 {
-                    "chunk_ref": prefixed_ref(doc_id, path),
+                    "path": to_ltree_path(doc_id, path),
                     "chunk_type": "appendix",
                     "chunk_text": f"{title}\n{header}\n{row}",
                     "is_effective": True,
@@ -149,7 +149,7 @@ def _chunks_for_appendix_node(
         for g in groups:
             chunks.append(
                 {
-                    "chunk_ref": prefixed_ref(doc_id, g.path),
+                    "path": to_ltree_path(doc_id, g.path),
                     "chunk_type": "appendix",
                     "chunk_text": f"{title}\n{g.title}",
                     "is_effective": True,
@@ -158,7 +158,7 @@ def _chunks_for_appendix_node(
     else:
         chunks.append(
             {
-                "chunk_ref": prefixed_ref(doc_id, root.path),
+                "path": to_ltree_path(doc_id, root.path),
                 "chunk_type": "appendix",
                 "chunk_text": block[:8000] if block else title,
                 "is_effective": True,
@@ -168,18 +168,23 @@ def _chunks_for_appendix_node(
 
 
 def appendix_graph_nodes(chunks: list[dict[str, Any]], doc_id: str) -> list[dict[str, Any]]:
-    """Ensure Neo4j nodes exist for appendix chunk_refs not already in muc_luc."""
+    """Ensure Neo4j nodes exist for appendix paths not already in muc_luc."""
+    from app.infrastructure.legal_corpus.muc_luc_paths import sanitize_doc_id_for_ltree
+
     nodes: list[dict[str, Any]] = []
     seen: set[str] = set()
+    root = sanitize_doc_id_for_ltree(doc_id)
     for ch in chunks:
-        ref = ch["chunk_ref"]
-        if not ref.startswith(f"{doc_id}:"):
+        full = ch.get("path") or ""
+        if not full.startswith(root + ".") and full != root:
             continue
-        structural = ref[len(doc_id) + 1 :]
+        structural = full[len(root) + 1 :] if full.startswith(root + ".") else ""
+        if not structural:
+            continue
         parts = structural.split(".")
         for i in range(len(parts)):
-            path = f"{doc_id}:{'.'.join(parts[: i + 1])}"
-            if path in seen:
+            path = to_ltree_path(doc_id, ".".join(parts[: i + 1]))
+            if not path or path in seen:
                 continue
             seen.add(path)
             seg = parts[i]
@@ -191,7 +196,9 @@ def appendix_graph_nodes(chunks: list[dict[str, Any]], doc_id: str) -> list[dict
                 level = "Group"
             else:
                 level = "Group"
-            parent = f"{doc_id}:{'.'.join(parts[:i])}" if i else None
+            parent = (
+                to_ltree_path(doc_id, ".".join(parts[:i])) if i else to_ltree_path(doc_id, None)
+            )
             nodes.append(
                 {
                     "path": path,

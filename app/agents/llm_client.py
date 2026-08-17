@@ -5,6 +5,7 @@ from app.core.settings import get_settings
 DEFAULT_PROVIDER = "gemini"
 
 _gemini_chat: ChatGoogleGenerativeAI | None = None
+_gemini_chat_json: ChatGoogleGenerativeAI | None = None
 
 
 def get_providers() -> dict[str, dict[str, str]]:
@@ -18,18 +19,36 @@ def get_providers() -> dict[str, dict[str, str]]:
 PROVIDERS = get_providers()
 
 
-def get_chat_model(provider: str = DEFAULT_PROVIDER) -> ChatGoogleGenerativeAI:
+def get_chat_model(provider: str = DEFAULT_PROVIDER, *, json_mode: bool = False) -> ChatGoogleGenerativeAI:
     """Return the underlying LangChain chat model, for callers that need message-list
     invocation (e.g. a LangGraph node building its own SystemMessage/HumanMessage prompt)
     rather than the flattened single-string helper below.
+
+    json_mode=True pins ``response_mime_type=="application/json"`` so the model emits a
+    strict JSON envelope (no fences, no prose) for the structured-answer nodes; the
+    plain-text instance is kept apart because other callers (query rewrite) need prose.
     """
-    global _gemini_chat
+    global _gemini_chat, _gemini_chat_json
+    if json_mode:
+        if _gemini_chat_json is None:
+            settings = get_settings()
+            _gemini_chat_json = ChatGoogleGenerativeAI(
+                model=settings.gemini_model,
+                google_api_key=settings.gemini_api_key,
+                temperature=0,
+                timeout=120,
+                max_retries=2,
+                response_mime_type="application/json",
+            )
+        return _gemini_chat_json
     if _gemini_chat is None:
         settings = get_settings()
         _gemini_chat = ChatGoogleGenerativeAI(
             model=settings.gemini_model,
             google_api_key=settings.gemini_api_key,
             temperature=0,
+            timeout=120,
+            max_retries=2,
         )
     return _gemini_chat
 

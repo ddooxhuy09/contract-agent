@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import re
+from datetime import date
 from typing import Any
+from urllib.parse import parse_qsl, quote, urlencode, urlsplit, urlunsplit
 
 from app.schemas.contract import LegalCitation
 
@@ -76,7 +78,14 @@ def citations_from_llm(value: Any) -> list[LegalCitation]:
             points = _as_str_list(item.get("points") or item.get("bullets") or [])
             summary = " ".join(points)
         summary = strip_internal_refs(str(summary or "")).strip()
-        out.append(LegalCitation(title=title, summary=summary))
+        out.append(
+            LegalCitation(
+                title=title,
+                summary=summary,
+                doc_number=str(item.get("doc_number") or "").strip() or None,
+                location=str(item.get("location") or "").strip() or None,
+            )
+        )
     return out
 
 
@@ -130,3 +139,266 @@ def citations_to_legal_basis_line(citations: list[LegalCitation]) -> str | None:
         else:
             parts.append(c.title)
     return "; ".join(parts) or None
+
+
+_PATH_TOKEN = re.compile(r"^(C|M|TM|D|K)(\d+)$", re.IGNORECASE)
+_POINT_TOKEN = re.compile(r"^[a-zđ]+$", re.IGNORECASE)
+
+
+def format_path_location(path: str | None) -> dict[str, str | None]:
+    """Turn the persisted ltree path into human-readable legal coordinates."""
+    parts = (path or "").split(".")
+    values: dict[str, str | None] = {
+        "chapter": None,
+        "section": None,
+        "article": None,
+        "clause": None,
+        "point": None,
+    }
+    labels: list[str] = []
+    for token in parts:
+        match = _PATH_TOKEN.match(token)
+        if match:
+            prefix, number = match.groups()
+            prefix = prefix.upper()
+            if prefix == "C":
+                values["chapter"] = f"Chương {number}"
+                labels.append(values["chapter"])
+            elif prefix == "M":
+                values["section"] = f"Mục {number}"
+                labels.append(values["section"])
+            elif prefix == "TM":
+                values["section"] = f"Tiểu mục {number}"
+                labels.append(values["section"])
+            elif prefix == "D":
+                values["article"] = f"Điều {number}"
+                labels.append(values["article"])
+            elif prefix == "K":
+                values["clause"] = f"Khoản {number}"
+                labels.append(values["clause"])
+        elif values["clause"] and _POINT_TOKEN.match(token):
+            values["point"] = f"Điểm {token}"
+            labels.append(values["point"])
+    values["location"] = " > ".join(labels) or None
+    return values
+
+
+def _clean_quote(text: str) -> str:
+    """Remove corpus-only Markdown markers while keeping the legal wording."""
+    cleaned = re.sub(r"<!--.*?-->", " ", text or "", flags=re.DOTALL)
+    cleaned = cleaned.replace("**", "").replace("__", "").replace("*", "")
+    return re.sub(r"\s+", " ", cleaned).strip()
+
+
+def extract_article_title(text: str | None) -> str | None:
+    """Return the visible Điều heading used by VBPL's table of contents."""
+    cleaned = re.sub(r"<!--.*?-->", " ", text or "", flags=re.DOTALL)
+    cleaned = cleaned.replace("**", "").replace("__", "").replace("*", "")
+    for line in cleaned.splitlines():
+        line = re.sub(r"^\s*#+\s*", "", line).strip()
+        if re.match(r"^Điều\s+\d+\s*[.:)]\s*\S", line, re.IGNORECASE):
+            return re.sub(r"\s+", " ", line).strip()
+    return None
+
+
+def _fragment_quote(text: str, max_chars: int = 180) -> str:
+    """Choose a short exact visible prefix so links stay within browser URL limits."""
+    cleaned = _clean_quote(text)
+    if len(cleaned) <= max_chars:
+        return cleaned
+    cut = cleaned[:max_chars]
+    boundary = max(cut.rfind("."), cut.rfind(";"), cut.rfind(" "))
+    return cut[: boundary if boundary >= 60 else max_chars].strip()
+
+
+def build_text_fragment_url(source_url: str | None, quote_text: str | None) -> str | None:
+    """Build a standards-based Scroll-to-Text Fragment URL."""
+    if not source_url or not quote_text:
+        return None
+    parsed = urlsplit(source_url.strip())
+    if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+        return None
+    query = _toan_van_query(parsed.query)
+    fragment_quote = _fragment_quote(quote_text)
+    if not fragment_quote:
+        return None
+    return urlunsplit(
+        (parsed.scheme, parsed.netloc, parsed.path, query, f":~:text={quote(fragment_quote, safe='')}" )
+    )
+
+
+def _toan_van_query(query: str) -> str:
+    """Always open the rendered full-text tab before applying an anchor."""
+    values = [(key, value) for key, value in parse_qsl(query, keep_blank_values=True) if key != "tabs"]
+    values.append(("tabs", "toan-van"))
+    return urlencode(values)
+
+
+def build_source_deep_link(
+    source_url: str | None,
+    source_element_id: str | None,
+    quote_text: str | None,
+) -> str | None:
+    """Prefer VBPL's real DOM anchor; text fragments are the fallback."""
+    if source_url and source_element_id:
+        parsed = urlsplit(source_url.strip())
+        if parsed.scheme in {"http", "https"} and parsed.netloc:
+            return urlunsplit(
+                (
+                    parsed.scheme,
+                    parsed.netloc,
+                    parsed.path,
+                    _toan_van_query(parsed.query),
+                    quote(str(source_element_id).strip(), safe="-._~"),
+                )
+            )
+    return build_text_fragment_url(source_url, quote_text)
+
+
+def _doc_meta(doc: Any) -> tuple[dict, str]:
+    if isinstance(doc, dict):
+        meta = dict(doc.get("metadata") or doc)
+        content = doc.get("content") or doc.get("page_content") or ""
+        return meta, str(content)
+    return dict(getattr(doc, "metadata", {}) or {}), str(getattr(doc, "page_content", "") or "")
+
+
+def _citation_status(meta: dict, as_of: str | date | None = None) -> str | None:
+    """Prefer as_of + dates over stale VBPL ``eff_flag`` cache."""
+    from app.agents.labor_code_resolver import _parse_as_of
+
+    ref = _parse_as_of(as_of)
+    try:
+        sf = int(meta.get("status_flag")) if meta.get("status_flag") is not None else None
+    except (TypeError, ValueError):
+        sf = None
+    eff_to_raw = meta.get("eff_to")
+    eff_from_raw = meta.get("eff_from")
+    try:
+        to_d = _parse_as_of(str(eff_to_raw)[:10]) if eff_to_raw else None
+    except Exception:
+        to_d = None
+    try:
+        from_d = _parse_as_of(str(eff_from_raw)[:10]) if eff_from_raw else None
+    except Exception:
+        from_d = None
+    if sf == 2 or (to_d and to_d <= ref):
+        return "Hết hiệu lực"
+    if sf == 3 or (from_d and from_d > ref):
+        return "Chưa có hiệu lực"
+    if sf == 4:
+        return "Hết hiệu lực một phần"
+    if sf == 5:
+        return "Còn hiệu lực một phần"
+    cached = str(meta.get("eff_flag") or "").strip()
+    if cached:
+        return cached
+    if sf == 1:
+        return "Còn hiệu lực"
+    return None
+
+
+def _article_key(meta: dict, location: dict) -> str:
+    doc = str(meta.get("doc_number") or meta.get("title") or "").strip().lower()
+    article = str(location.get("article") or "").strip().lower()
+    return f"{doc}|{article}"
+
+
+def ground_citations(
+    llm_citations: Any,
+    evidence_paths: Any,
+    docs: list[Any],
+    *,
+    contract_text: str | None = None,
+    as_of_date: str | None = None,
+    max_citations: int = 4,
+) -> list[LegalCitation]:
+    """Attach citations only to retrieved documents, preserving legacy fallback.
+
+    Drops sector-mismatched docs, recomputes status vs ``as_of_date``, and
+    dedupes to one citation per (doc, article) so sibling điểm floods don't
+    dominate the UI.
+    """
+    from app.infrastructure.retrieval.scope_match import (
+        doc_scope_text,
+        is_sector_mismatch,
+    )
+
+    parsed = citations_from_llm(llm_citations)
+    by_path: dict[str, tuple[dict, str]] = {}
+    for doc in docs:
+        meta, content = _doc_meta(doc)
+        if contract_text and is_sector_mismatch(doc_scope_text(meta, content), contract_text):
+            continue
+        path = str(meta.get("path") or "").strip()
+        if path:
+            by_path[path] = (meta, content)
+
+    requested = [str(p).strip() for p in (evidence_paths or []) if str(p).strip()]
+    selected: list[tuple[dict, str, LegalCitation | None]] = []
+    for path in requested:
+        item = by_path.get(path)
+        if item:
+            selected.append((item[0], item[1], None))
+
+    if not selected and parsed:
+        for citation in parsed:
+            needle = (citation.doc_number or citation.title).lower()
+            for meta, content in by_path.values():
+                doc_number = str(meta.get("doc_number") or "").lower()
+                title = str(meta.get("title") or "").lower()
+                if (doc_number and doc_number in needle) or (needle and needle in title):
+                    selected.append((meta, content, citation))
+                    break
+
+    if not selected:
+        # Still filter parsed LLM cites that name sector-mismatched instruments.
+        if contract_text and parsed:
+            filtered = []
+            for c in parsed:
+                blob = f"{c.title or ''} {c.doc_number or ''} {c.summary or ''}"
+                if not is_sector_mismatch(blob, contract_text):
+                    filtered.append(c)
+            return filtered
+        return parsed
+
+    grounded: list[LegalCitation] = []
+    seen_articles: set[str] = set()
+    for meta, content, matched in selected:
+        path = str(meta.get("path") or "")
+        location = format_path_location(path)
+        quote_text = _clean_quote(content)
+        if not quote_text:
+            continue
+        key = _article_key(meta, location)
+        if key in seen_articles:
+            continue
+        seen_articles.add(key)
+        title = str(meta.get("title") or (matched.title if matched else "Căn cứ pháp lý"))
+        summary = matched.summary if matched else ""
+        doc_number = str(meta.get("doc_number") or "").strip() or None
+        source_url = str(meta.get("source_url") or "").strip() or None
+        grounded.append(
+            LegalCitation(
+                title=title,
+                summary=summary,
+                doc_number=doc_number,
+                location=location["location"],
+                article=location["article"],
+                clause=location["clause"],
+                point=location["point"],
+                quote=quote_text,
+                source_url=source_url,
+                deep_link=build_source_deep_link(
+                    source_url,
+                    str(meta.get("source_element_id") or "").strip() or None,
+                    extract_article_title(content) or location["article"] or quote_text,
+                ),
+                source_element_id=str(meta.get("source_element_id") or "").strip() or None,
+                evidence_path=path or None,
+                status=_citation_status(meta, as_of_date),
+            )
+        )
+        if len(grounded) >= max_citations:
+            break
+    return grounded or parsed

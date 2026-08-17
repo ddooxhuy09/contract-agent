@@ -45,7 +45,12 @@ Sample_*
 sample_*
 listing.json
 contractlens_backup.dump
+neo4j.dump
 
+# --- Local corpus / demo contracts (keep on disk, do not push) ---
+*_SAI.md
+CÔNG TY CỔ PHẦN CÔNG NGHỆ TƯƠNG LAI_SAI.md
+Bộ luật Hình sự*/
 # --- Frontend build artifacts (tracked source stays) ---
 frontend/node_modules/
 frontend/dist/

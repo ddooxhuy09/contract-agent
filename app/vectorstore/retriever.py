@@ -37,7 +37,7 @@ def retrieve_legal(
     if rag is not None:
         hits = rag.retrieve_for_clause(
             title or query,
-            summary or (None if title else query),
+            summary,
             contract_type=contract_type,
             k_seed=k,
             max_total=max(k * 2, 8),

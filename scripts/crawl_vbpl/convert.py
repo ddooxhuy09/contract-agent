@@ -157,13 +157,14 @@ def html_to_markdown(html: str) -> str:
     return "\n".join(lines).strip() + "\n"
 
 
-def build_thuoc_tinh(attributes: dict) -> dict:
+def build_thuoc_tinh(attributes: dict, source_url: str | None = None) -> dict:
     doc_type = attributes.get("docType") or {}
     eff_status = attributes.get("effStatus") or {}
     agency = attributes.get("agencyName")
     majors = [m.get("name") for m in (attributes.get("documentMajors") or [])]
     fields = [f.get("name") for f in (attributes.get("documentFields") or [])]
     issues = attributes.get("documentIssues") or []
+    first = issues[0] if issues else {}
 
     return {
         "doc_id": attributes.get("id"),
@@ -175,13 +176,14 @@ def build_thuoc_tinh(attributes: dict) -> dict:
         "issue_date": attributes.get("issueDate"),
         "eff_from": attributes.get("effFrom"),
         "eff_to": attributes.get("effTo"),
+        # Keep crawl name/code so thuoc_tinh_mapper can normalize → eff_flag + status_flag
         "eff_status": eff_status.get("name"),
         "eff_status_code": eff_status.get("code"),
+        "eff_flag": eff_status.get("name"),
         "agency": agency,
-        "signers": [
-            {"name": i.get("personName"), "title": i.get("jobTitleName")}
-            for i in issues
-        ],
+        "signer_name": first.get("personName"),
+        "signer_title": first.get("jobTitleName"),
+        "source_url": source_url,
     }
 
 

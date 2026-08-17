@@ -8,9 +8,17 @@ from app.infrastructure.vector.rrf import rrf_fuse
 _EXCLUDE_TYPES = ("signature",)
 
 
+def _chunk_key(meta: dict) -> str:
+    """Stable retrieval key: ltree path."""
+    return meta.get("path") or ""
+
+
 def _row_to_chunk(r, score: float | None = None) -> RetrievedChunk:
+    # row: text, path, doc_id, chunk_type, doc_num, title, score,
+    #      eff_from, eff_to, status_flag, eff_flag, root_path, doc_type, issue_date,
+    #      source_element_id, source_url
     meta = {
-        "chunk_ref": r[1],
+        "path": r[1],
         "doc_id": r[2],
         "chunk_type": r[3],
         "doc_number": r[4],
@@ -22,6 +30,18 @@ def _row_to_chunk(r, score: float | None = None) -> RetrievedChunk:
         meta["eff_to"] = str(r[8]) if r[8] else None
     if len(r) > 9:
         meta["status_flag"] = r[9]
+    if len(r) > 10:
+        meta["eff_flag"] = r[10]
+    if len(r) > 11 and r[11]:
+        meta["root_path"] = str(r[11])
+    if len(r) > 12:
+        meta["doc_type"] = r[12]
+    if len(r) > 13:
+        meta["issue_date"] = str(r[13]) if r[13] else None
+    if len(r) > 14:
+        meta["source_element_id"] = r[14]
+    if len(r) > 15:
+        meta["source_url"] = r[15]
     return RetrievedChunk(
         content=r[0],
         score=score if score is not None else (float(r[6]) if r[6] is not None else None),
@@ -99,17 +119,15 @@ class PgLegalVectorSearch:
 
         fused = rrf_fuse(
             [vector_hits, fts_hits],
-            key_fn=lambda c: c.metadata.get("chunk_ref") or c.content[:80],
+            key_fn=lambda c: _chunk_key(c.metadata) or c.content[:80],
         )
         results: list[RetrievedChunk] = []
         for chunk, rrf_score in fused:
             vec_score = chunk.score
             # Keep if strong vector score OR appeared in FTS (rrf from fts-only)
             if vec_score is not None and vec_score < threshold:
-                # allow if also in FTS list (lexical match)
-                in_fts = any(
-                    h.metadata.get("chunk_ref") == chunk.metadata.get("chunk_ref") for h in fts_hits
-                )
+                key = _chunk_key(chunk.metadata)
+                in_fts = any(_chunk_key(h.metadata) == key for h in fts_hits)
                 if not in_fts:
                     continue
             chunk.score = rrf_score if vec_score is None else max(vec_score, rrf_score)
@@ -126,10 +144,12 @@ class PgLegalVectorSearch:
         return self.search(query, k=k, min_score=0.0, doc_ids=doc_ids)
 
     def _base_where(self, doc_type_hint: str | None, doc_ids: list[str] | None) -> tuple[str, list]:
+        # Chunk still effective (hierarchy cache) + document not fully expired.
         clauses = [
             "c.is_effective",
             "c.embedding IS NOT NULL",
             "c.chunk_type <> ALL(%s)",
+            "(d.status_flag IS NULL OR d.status_flag IS DISTINCT FROM 2)",
         ]
         params: list = [list(_EXCLUDE_TYPES)]
         if doc_ids:
@@ -154,10 +174,12 @@ class PgLegalVectorSearch:
             with conn.cursor() as cur:
                 cur.execute(
                     f"""
-                    SELECT c.chunk_text, c.chunk_ref, c.doc_id, c.chunk_type, d.doc_num, d.title,
+                    SELECT c.chunk_text, c.path::text, c.doc_id, c.chunk_type, d.doc_num, d.title,
                            1 - (c.embedding <=> %s::vector) AS score,
-                           d.eff_from, d.eff_to, d.status_flag
-                    FROM legal_section_chunks c
+                           d.eff_from, d.eff_to, d.status_flag, d.eff_flag,
+                            c.root_path::text,
+                            d.doc_type, d.issue_date, c.source_element_id, d.source_url
+                    FROM legal_embeddings c
                     JOIN legal_documents d ON d.doc_id = c.doc_id
                     WHERE {where_sql}
                     ORDER BY c.embedding <=> %s::vector
@@ -185,10 +207,12 @@ class PgLegalVectorSearch:
             with conn.cursor() as cur:
                 cur.execute(
                     f"""
-                    SELECT c.chunk_text, c.chunk_ref, c.doc_id, c.chunk_type, d.doc_num, d.title,
+                    SELECT c.chunk_text, c.path::text, c.doc_id, c.chunk_type, d.doc_num, d.title,
                            ts_rank_cd(c.tsv, plainto_tsquery('simple', %s)) AS score,
-                           d.eff_from, d.eff_to, d.status_flag
-                    FROM legal_section_chunks c
+                           d.eff_from, d.eff_to, d.status_flag, d.eff_flag,
+                            c.root_path::text,
+                            d.doc_type, d.issue_date, c.source_element_id, d.source_url
+                    FROM legal_embeddings c
                     JOIN legal_documents d ON d.doc_id = c.doc_id
                     WHERE {where_sql}
                       AND c.tsv @@ plainto_tsquery('simple', %s)

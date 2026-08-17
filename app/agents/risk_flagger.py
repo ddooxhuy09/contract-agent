@@ -4,6 +4,7 @@ import re
 from app.agents.json_parsing import parse_json_object
 from app.agents.legal_citations import (
     citations_to_legal_basis_line,
+    ground_citations,
     resolve_legal_citations,
 )
 from app.agents.llm_client import DEFAULT_PROVIDER, chat_completion
@@ -80,17 +81,22 @@ def evaluate_clause(
     contract_id: str | None = None,
     contract_type: str | None = None,
     as_of_date: str | None = None,
+    job_context: str | None = None,
 ) -> Optional[RiskItem]:
     """Retrieve law relevant to THIS clause specifically, then judge compliance against it."""
     clause_ref = f"Điều {clause.clause_number}"
     clause_text = _resolve_clause_text(clause, contract_id)
     summary_for_query = clause.summary or clause_text
+    # Fold job/workplace text so sector filters see "AI / công nghệ" vs "dầu khí".
+    scope_summary = " ".join(
+        p for p in (summary_for_query, job_context) if p and str(p).strip()
+    ).strip() or summary_for_query
 
     rag = get_graph_rag()
     if rag is not None:
         hits = rag.retrieve_for_clause(
             clause.title,
-            summary_for_query,
+            scope_summary,
             contract_type=contract_type,
             k_seed=4,
             max_total=10,
@@ -111,10 +117,10 @@ def evaluate_clause(
         )
     else:
         legal_docs = retrieve_legal(
-            f"{clause.title or ''} {summary_for_query}".strip(),
+            f"{clause.title or ''} {scope_summary}".strip(),
             k=4,
             title=clause.title,
-            summary=summary_for_query,
+            summary=scope_summary,
             contract_type=contract_type,
         )
         legal_context = format_legal_context(legal_docs, max_chars=7000)
@@ -187,10 +193,15 @@ def evaluate_clause(
     else:
         legal_basis_raw = None
 
-    citations = resolve_legal_citations(
+    citations = ground_citations(
         result.get("legal_citations"),
-        legal_basis_raw,
+        result.get("evidence_paths"),
+        legal_docs,
+        contract_text=scope_summary,
+        as_of_date=as_of_date,
     )
+    if not citations:
+        citations = resolve_legal_citations(result.get("legal_citations"), legal_basis_raw)
     legal_basis = citations_to_legal_basis_line(citations) or legal_basis_raw
 
     # Build legacy issue text if model only returned structured reasons

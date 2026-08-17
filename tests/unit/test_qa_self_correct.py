@@ -31,15 +31,16 @@ class _FakeChatModel:
 
     def __init__(self, responses):
         self._responses = list(responses)
+        self._last = responses[-1] if responses else ""
 
     async def ainvoke(self, messages):
-        item = self._responses.pop(0) if self._responses else self._responses[-1:]
+        item = self._responses.pop(0) if self._responses else self._last
         return type("Resp", (), {"content": item})
 
 
 def _install_model(monkeypatch, responses):
     fake = _FakeChatModel(responses)
-    monkeypatch.setattr(qa, "get_chat_model", lambda provider="gemini": fake)
+    monkeypatch.setattr(qa, "get_chat_model", lambda provider="gemini", **kwargs: fake)
     return fake
 
 
@@ -170,7 +171,7 @@ def test_generate_gives_up_after_budget(monkeypatch):
 
     monkeypatch.setattr(qa, "retrieve_contract", fake_contract)
     monkeypatch.setattr(qa, "retrieve_legal", lambda query, k=3: [])
-    _install_model(monkeypatch, ["không phải json", "cũng không phải json"])
+    _install_model(monkeypatch, ["không phải json", "cũng không phải json", "vẫn không phải json"])
 
     result = asyncio.run(qa.answer_question("hỏi", "c-6"))
     assert result.answer == qa._GENERATION_FAILED_ANSWER

@@ -20,9 +20,13 @@ class FakeLegalDocs:
 class FakeLegalChunks:
     def __init__(self):
         self.chunks = []
+        self.nodes = []
 
     def upsert_many(self, chunks):
         self.chunks.extend(chunks)
+
+    def upsert_nodes(self, nodes):
+        self.nodes.extend(nodes)
 
     def upsert_relations(self, relations):
         pass
@@ -32,6 +36,21 @@ class FakeLegalChunks:
 
     def get_meta_by_refs(self, chunk_refs):
         return {}
+
+    def get_texts_by_paths(self, paths):
+        return {}
+
+    def get_meta_by_paths(self, paths):
+        return {}
+
+    def expand_paths(self, seed_keys, limit=80):
+        return {
+            "sibling_paths": [],
+            "ancestor_paths": [],
+            "parent_clause_paths": [],
+            "related_docs": [],
+            "repealed_by_docs": [],
+        }
 
     def count_for_doc(self, doc_id):
         return sum(1 for c in self.chunks if getattr(c, "doc_id", None) == doc_id)
@@ -78,11 +97,29 @@ def test_ingest_legal_document_skeleton():
             "doc_type": "Nghị định",
             "status_flag": 1,
         },
-        chunks=[{"chunk_ref": "C1.D1.K1.a", "chunk_text": "Điều 1 khoản 1 điểm a", "chunk_type": "body"}],
+        chunks=[
+            {
+                "path": "d1.C1.D1.K1.a",
+                "chunk_text": "Điều 1 khoản 1 điểm a",
+                "chunk_type": "body",
+            }
+        ],
+        legal_nodes=[
+            {
+                "doc_id": "d1",
+                "level": "Article",
+                "path": "d1.C1.D1",
+                "label": "Điều 1",
+                "parent_path": "d1.C1",
+            }
+        ],
     )
     assert result["doc_id"] == "d1"
     assert result["chunk_count"] == 1
+    assert result["node_count"] == 1
     assert "d1" in docs.docs
     assert len(chunks.chunks) == 1
     assert chunks.chunks[0].embedding is not None
+    assert chunks.chunks[0].path == "d1.C1.D1.K1.a"
+    assert len(chunks.nodes) == 1
     assert graph.calls

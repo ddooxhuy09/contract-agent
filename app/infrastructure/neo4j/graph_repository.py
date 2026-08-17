@@ -126,18 +126,21 @@ class Neo4jGraphRepository:
                             path=node["path"],
                         )
                 for ch in chunks:
+                    path = ch.get("path")
+                    if not path:
+                        continue
                     session.run(
                         """
-                        MERGE (c:Chunk {chunk_ref: $chunk_ref})
+                        MERGE (c:Chunk {path: $path})
                         SET c.doc_id = $doc_id, c.chunk_type = $chunk_type
                         WITH c
                         MATCH (d:Document {doc_id: $doc_id})
                         MERGE (c)-[:OF_DOC]->(d)
                         WITH c
-                        MATCH (n:Node {doc_id: $doc_id, path: $chunk_ref})
+                        MATCH (n:Node {doc_id: $doc_id, path: $path})
                         MERGE (c)-[:OF_NODE]->(n)
                         """,
-                        chunk_ref=ch["chunk_ref"],
+                        path=path,
                         doc_id=doc_id,
                         chunk_type=ch.get("chunk_type", "body"),
                     )
@@ -173,23 +176,20 @@ class Neo4jGraphRepository:
                 for rel in relations:
                     session.run(
                         """
-                        MERGE (a:Chunk {chunk_ref: $from_ref})
-                        MERGE (b:Chunk {chunk_ref: $to_ref})
+                        MERGE (a:Chunk {path: $from_path})
+                        MERGE (b:Chunk {path: $to_path})
                         MERGE (a)-[r:REFERS_TO]->(b)
                         SET r.relation_type = $rtype
                         """,
-                        from_ref=rel["from_chunk_ref"],
-                        to_ref=rel["to_chunk_ref"],
+                        from_path=rel.get("from_path"),
+                        to_path=rel.get("to_path"),
                         rtype=rel["relation_type"],
                     )
         except Exception as e:
             logger.warning("Neo4j upsert_chunk_relations failed: %s", e)
 
     def expand(self, chunk_refs: list[str], limit: int = 80) -> dict[str, Any]:
-        """Expand seeds: Clause-level siblings, ancestors, cite/amend related docs.
-
-        REPEALS/SUPERSEDES returned separately so callers can demote repealed sources.
-        """
+        """Expand seeds by ltree path (param name kept for Protocol compat)."""
         empty = {
             "seeds": [],
             "sibling_paths": [],
@@ -204,10 +204,9 @@ class Neo4jGraphRepository:
             with self._driver.session() as session:
                 result = session.run(
                     """
-                    MATCH (c:Chunk) WHERE c.chunk_ref IN $refs
+                    MATCH (c:Chunk) WHERE c.path IN $refs
                     OPTIONAL MATCH (c)-[:OF_NODE]->(leaf:Node)
                     OPTIONAL MATCH (anc:Node)-[:PARENT_OF*1..4]->(leaf)
-                    // Sibling points under the same Clause (Khoản) parent only
                     OPTIONAL MATCH (leaf)<-[:PARENT_OF]-(clause:Node)
                       WHERE clause.level = 'Clause'
                     OPTIONAL MATCH (clause)-[:PARENT_OF]->(sib:Node)
@@ -215,7 +214,7 @@ class Neo4jGraphRepository:
                     OPTIONAL MATCH (c)-[:OF_DOC]->(d:Document)
                     OPTIONAL MATCH (d)-[:BASED_ON|CITES|AMENDS|DETAILS|GUIDES*1..2]-(rel:Document)
                     OPTIONAL MATCH (other:Document)-[:REPEALS|SUPERSEDES]->(d)
-                    RETURN collect(DISTINCT c.chunk_ref) AS seeds,
+                    RETURN collect(DISTINCT c.path) AS seeds,
                            collect(DISTINCT sib.path) AS siblings,
                            collect(DISTINCT anc.path) AS ancestors,
                            collect(DISTINCT clause.path) AS parent_clauses,

@@ -1,6 +1,8 @@
 from typing import Optional, Union
 from uuid import UUID
 
+import psycopg
+import psycopg2
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, EmailStr, Field
@@ -18,6 +20,7 @@ from app.application.use_cases.contracts import (
     RewindChat,
     UploadContract,
 )
+from app.core.logging import logger
 from app.domain.errors import AuthError, ConflictError, NotFoundError
 from app.infrastructure.container import AppContainer
 from app.schemas.contract import (
@@ -35,6 +38,30 @@ from app.schemas.contract import (
 )
 
 router = APIRouter(prefix="/api/v1")
+
+_DB_UNAVAILABLE_ERRORS = (
+    psycopg.OperationalError,
+    psycopg.InterfaceError,
+    psycopg2.OperationalError,
+    psycopg2.InterfaceError,
+)
+
+
+def _http_error(e: Exception) -> HTTPException:
+    """Map an unhandled exception to a client-safe HTTPException.
+
+    Never echo ``str(e)`` back: a driver error carries the failing SQL, column
+    names and the database host. A dropped/recycled Postgres connection is a
+    transient condition, so it maps to 503 (retryable) rather than 500.
+    """
+    if isinstance(e, _DB_UNAVAILABLE_ERRORS):
+        logger.exception("Database unavailable")
+        return HTTPException(
+            status_code=503,
+            detail="Dịch vụ tạm thời không khả dụng, vui lòng thử lại.",
+        )
+    logger.exception("Unhandled error")
+    return HTTPException(status_code=500, detail="Đã xảy ra lỗi nội bộ.")
 
 
 class AnalyzeRequest(BaseModel):
@@ -101,7 +128,7 @@ async def upload(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e)) from e
+        raise _http_error(e) from e
 
 
 @router.post("/analyze", response_model=Union[AnalyzeResponse, AnalyzeReviewResponse])
@@ -123,7 +150,7 @@ async def analyze(
     except NotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e)) from e
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e)) from e
+        raise _http_error(e) from e
 
 
 @router.post("/analyze/resume", response_model=ResumeAnalysisResponse)
@@ -142,7 +169,7 @@ async def resume_analysis(
     except NotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e)) from e
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e)) from e
+        raise _http_error(e) from e
 
 
 @router.get("/contracts", response_model=ContractListResponse)
@@ -153,7 +180,7 @@ async def contracts(
     try:
         return ContractListResponse(**ListContracts(container.contracts).execute(user_id))
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e)) from e
+        raise _http_error(e) from e
 
 
 @router.post("/chat", response_model=ChatResponse)
@@ -171,7 +198,7 @@ async def chat(
     except NotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e)) from e
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e)) from e
+        raise _http_error(e) from e
 
 
 @router.post("/chat/stream")
@@ -205,7 +232,7 @@ async def chat_stream(
     except NotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e)) from e
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e)) from e
+        raise _http_error(e) from e
 
 
 @router.get("/chat/{contract_id}/history", response_model=ChatHistoryResponse)
@@ -223,7 +250,7 @@ async def chat_history(
     except NotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e)) from e
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e)) from e
+        raise _http_error(e) from e
 
 
 @router.get("/chat/{contract_id}/states", response_model=ChatStatesResponse)
@@ -241,7 +268,7 @@ async def chat_states(
     except NotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e)) from e
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e)) from e
+        raise _http_error(e) from e
 
 
 @router.post("/chat/{contract_id}/rewind", response_model=ChatRewindResponse)
@@ -260,4 +287,4 @@ async def chat_rewind(
     except NotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e)) from e
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e)) from e
+        raise _http_error(e) from e

@@ -16,7 +16,7 @@ from pathlib import Path
 if sys.stdout.encoding is None or sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8")
 
-from scripts.crawl_vbpl.common import fetch_document_detail
+from scripts.crawl_vbpl.common import detail_url, fetch_document_detail
 from scripts.crawl_vbpl.convert import build_luoc_do, build_thuoc_tinh, html_to_markdown, safe_folder_name
 from scripts.crawl_vbpl.fetch_list import DOC_TYPE_IDS, crawl_all as list_all_types, slugify_title
 
@@ -49,7 +49,12 @@ def crawl_document(doc_type_name: str, item: dict) -> bool:
     folder.mkdir(parents=True, exist_ok=True)
     (folder / "van_ban.md").write_text(html_to_markdown(detail["html"]), encoding="utf-8")
     (folder / "thuoc_tinh.json").write_text(
-        json.dumps(build_thuoc_tinh(attributes), ensure_ascii=False, indent=2), encoding="utf-8"
+        json.dumps(
+            build_thuoc_tinh(attributes, source_url=detail_url(slug, tabs="toan-van")),
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
     )
     (folder / "luoc_do.json").write_text(
         json.dumps(build_luoc_do(attributes), ensure_ascii=False, indent=2), encoding="utf-8"
