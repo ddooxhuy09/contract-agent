@@ -233,7 +233,7 @@ export function normalizeRiskView(risk, clauseFallback) {
               sourceUrl: c.source_url || c.url || null,
               deepLink: c.deep_link || null,
               sourceElementId: c.source_element_id || null,
-              status: cleanText(c.status || c.eff_flag || "") || null,
+              status: formatCitationStatus(c.status || c.eff_flag || "") || null,
               evidencePath: c.evidence_path || c.path || null,
             }
           : null;
@@ -360,6 +360,77 @@ export function sortRisks(risks) {
     const nb = parseInt(String(b.clause_ref || "").replace(/\D/g, ""), 10) || 0;
     return na - nb;
   });
+}
+
+/** Status labels from effectivity check — keep verified wording; soften legacy VBPL. */
+export function formatCitationStatus(raw) {
+  const s = cleanText(raw);
+  if (!s) return null;
+  const low = s.toLowerCase();
+  // Already verified by backend — pass through
+  if (low.includes("đã đối chiếu") || low.includes("chưa đối chiếu")) {
+    return s;
+  }
+  if (low.includes("hết hiệu lực") && !low.includes("một phần") && !low.includes("áp dụng")) {
+    return "Hết hiệu lực";
+  }
+  if (low.includes("chưa có hiệu lực") || low.includes("chưa hiệu lực")) {
+    return "Chưa có hiệu lực";
+  }
+  if (
+    low.includes("còn hiệu lực") ||
+    low.includes("còn áp dụng") ||
+    low.includes("một phần") ||
+    low.includes("đang có hiệu lực")
+  ) {
+    return "Còn hiệu lực";
+  }
+  return s.length > 80 ? s.slice(0, 77) + "…" : s;
+}
+
+/** Pick one body for a cite — never render summary and quote when they're the same. */
+export function citationBody(cite) {
+  const quote = (cite?.quote || "").trim();
+  const summary = (cite?.summary || "").trim();
+  if (quote && summary) {
+    const norm = (t) => t.replace(/\s+/g, " ").trim().toLowerCase();
+    if (
+      norm(quote) === norm(summary) ||
+      norm(quote).includes(norm(summary)) ||
+      norm(summary).includes(norm(quote))
+    ) {
+      return { text: quote, kind: cite?.evidencePath ? "verbatim" : "gist" };
+    }
+    return { text: quote, kind: "verbatim", gist: summary };
+  }
+  if (quote) return { text: quote, kind: cite?.evidencePath ? "verbatim" : "gist" };
+  if (summary) return { text: summary, kind: "gist" };
+  return { text: null, kind: null };
+}
+
+/**
+ * Drop duplicate cards. Prefer one card per Điều when both are critical
+ * (backend already merges red-flags); otherwise same clause + topic.
+ */
+export function dedupeRisks(risks) {
+  const seen = new Set();
+  const out = [];
+  for (const r of sortRisks(risks)) {
+    const clause = String(r.clause_ref || "").replace(/\s+/g, " ").trim().toLowerCase();
+    // Prefer keeping the richer card (more reasons / revised_clause)
+    const topic =
+      (Array.isArray(r.summary_topics) && r.summary_topics[0]) ||
+      r.title ||
+      (r.issue || "").slice(0, 48);
+    const key =
+      r.severity === "critical" && clause
+        ? `clause-critical::${clause}`
+        : `${clause}::${String(topic).trim().toLowerCase()}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(r);
+  }
+  return out;
 }
 
 export function riskKey(risk, idx) {

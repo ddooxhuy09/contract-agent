@@ -82,8 +82,13 @@ def evaluate_clause(
     contract_type: str | None = None,
     as_of_date: str | None = None,
     job_context: str | None = None,
+    skip_topics: list[str] | None = None,
 ) -> Optional[RiskItem]:
-    """Retrieve law relevant to THIS clause specifically, then judge compliance against it."""
+    """Retrieve law relevant to THIS clause specifically, then judge compliance against it.
+
+    ``skip_topics``: topic keys already covered by deterministic red-flags (prompt hint
+    only — callers that fully skip the clause never invoke this).
+    """
     clause_ref = f"Điều {clause.clause_number}"
     clause_text = _resolve_clause_text(clause, contract_id)
     summary_for_query = clause.summary or clause_text
@@ -145,12 +150,20 @@ def evaluate_clause(
             confidence=0.35,
         )
 
+    skip_note = ""
+    if skip_topics:
+        skip_note = (
+            "\n\nĐã có phân tích deterministic cho các chủ đề: "
+            + ", ".join(skip_topics)
+            + ". Chỉ nêu rủi ro *khác* các chủ đề đó; không lặp lại.\n"
+        )
+
     prompt = CLAUSE_RISK_PROMPT.format(
         clause_number=clause.clause_number,
         clause_title_suffix=f" - {clause.title}" if clause.title else "",
         clause_text=clause_text[:6000],
         clause_summary=(clause.summary or "")[:800],
-        legal_context=legal_context,
+        legal_context=legal_context + skip_note,
     )
 
     raw = chat_completion(prompt, provider=provider)

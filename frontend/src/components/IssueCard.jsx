@@ -1,12 +1,14 @@
 import { useMemo, useState } from "react";
 import {
+  citationBody,
   highlightKeywords,
   markChangedTokens,
   normalizeRiskView,
   severityLabel,
 } from "../lib/riskDisplay";
 
-function Section({ icon, tone, title, hint, children }) {
+function Section({ icon, tone, title, hint, children, defaultOpen = true }) {
+  const [open, setOpen] = useState(defaultOpen);
   const tones = {
     stamp: "border-stamp/20 bg-stamp-soft/30 text-stamp",
     caution: "border-caution/25 bg-caution-soft/40 text-caution",
@@ -18,14 +20,22 @@ function Section({ icon, tone, title, hint, children }) {
 
   return (
     <div className="rounded-md border border-rule overflow-hidden">
-      <div className={`flex items-center gap-2 px-3 py-2 border-b border-rule ${t}`}>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className={`w-full flex items-center gap-2 px-3 py-2 border-b border-rule text-left ${t}`}
+        aria-expanded={open}
+      >
         <span className="material-symbols-outlined !text-[1rem]">{icon}</span>
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <p className="text-[0.6875rem] font-medium uppercase tracking-wide text-ink">{title}</p>
           {hint && <p className="text-[0.625rem] text-ink-muted leading-snug">{hint}</p>}
         </div>
-      </div>
-      <div className="px-3 py-2.5 bg-paper-raised">{children}</div>
+        <span className="material-symbols-outlined !text-[1rem] text-ink-faint">
+          {open ? "expand_less" : "expand_more"}
+        </span>
+      </button>
+      {open && <div className="px-3 py-2.5 bg-paper-raised">{children}</div>}
     </div>
   );
 }
@@ -54,22 +64,72 @@ function MarkedText({ parts }) {
   );
 }
 
+function CiteBlock({ cite }) {
+  const body = citationBody(cite);
+  if (!cite) return null;
+  const heading =
+    cite.article && cite.docNumber
+      ? `${cite.article} · ${cite.docNumber}`
+      : cite.title;
+  return (
+    <div className="rounded-md border border-quiet/30 bg-quiet-soft/30 p-2.5">
+      <div className="flex items-start gap-2 mb-1.5">
+        <span className="material-symbols-outlined text-quiet !text-[1rem] shrink-0 mt-0.5">
+          menu_book
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="text-[0.75rem] font-medium text-ink leading-snug">{heading}</p>
+          <p className="text-[0.625rem] text-ink-faint mt-0.5">
+            {[cite.title?.includes("—") ? cite.title.split("—").slice(1).join("—").trim() : null, cite.status]
+              .filter(Boolean)
+              .join(" · ") || "Còn hiệu lực"}
+          </p>
+        </div>
+      </div>
+      {body.gist && (
+        <p className="text-[0.6875rem] text-ink-muted leading-relaxed mb-1.5 pl-6">
+          {body.gist}
+        </p>
+      )}
+      {body.text ? (
+        <>
+          <p className="meta-text text-ink-faint uppercase mb-1 pl-6">
+            {body.kind === "verbatim" ? "Nguyên văn" : "Ý chính điều luật"}
+          </p>
+          <blockquote className="border-l-2 border-quiet/40 pl-2.5 ml-1 text-[0.75rem] leading-relaxed text-ink whitespace-pre-wrap">
+            {body.text}
+          </blockquote>
+        </>
+      ) : (
+        <p className="ui-text text-ink-faint italic pl-6">Chưa lấy được nội dung điều luật.</p>
+      )}
+      {(cite.deepLink || cite.sourceUrl) && (
+        <a
+          href={cite.deepLink || cite.sourceUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-2 ml-6 inline-flex items-center gap-1 text-[0.6875rem] font-medium text-quiet hover:text-ink"
+        >
+          <span className="material-symbols-outlined !text-[0.875rem]">open_in_new</span>
+          {cite.deepLink ? "Mở đúng vị trí trên VBPL" : "Mở văn bản nguồn"}
+        </a>
+      )}
+    </div>
+  );
+}
+
 export default function IssueCard({ risk, open, onToggle, cardId, clauseFallback }) {
   const view = useMemo(
     () => normalizeRiskView(risk, clauseFallback),
     [risk, clauseFallback],
   );
   const [copied, setCopied] = useState(false);
-  const [reasonsExpanded, setReasonsExpanded] = useState(false);
 
   const isCritical = risk.severity === "critical";
   const rail = isCritical ? "border-l-stamp" : "border-l-caution";
   const badge = isCritical
     ? "bg-stamp text-paper-raised"
     : "bg-caution text-paper-raised";
-
-  const visibleReasons = reasonsExpanded ? view.reasons : view.reasons.slice(0, 2);
-  const hasMoreReasons = view.reasons.length > 2;
 
   const revisedParts = useMemo(
     () => markChangedTokens(view.originalClause, view.revisedClause),
@@ -116,7 +176,21 @@ export default function IssueCard({ risk, open, onToggle, cardId, clauseFallback
           </div>
           <div className="min-w-0">
             <p className="text-[0.875rem] font-medium text-ink leading-snug">{view.title}</p>
-            {view.description && view.description !== view.title && (
+            {view.summaryTopics.length > 0 && (
+              <div className="mt-1.5 flex flex-wrap gap-1">
+                {view.summaryTopics.map((t) => (
+                  <span
+                    key={t}
+                    className="inline-flex items-center px-1.5 py-0.5 rounded-sm bg-paper border border-rule text-[0.625rem] font-medium text-ink-muted"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            )}
+            {view.description &&
+              view.description !== view.title &&
+              !view.summaryTopics.length && (
               <p className="mt-1 text-[0.75rem] text-ink-muted leading-relaxed line-clamp-2">
                 {view.description}
               </p>
@@ -130,94 +204,54 @@ export default function IssueCard({ risk, open, onToggle, cardId, clauseFallback
 
       {open && (
         <div className="px-3 sm:px-4 pb-4 sm:pl-[calc(7rem+1rem+1rem)] space-y-3 border-t border-rule pt-3">
-          {view.summaryTopics.length > 0 && (
-            <Section icon="bolt" tone={isCritical ? "stamp" : "caution"} title="Tóm tắt" hint="Scan trong vài giây">
-              <p className="text-[0.75rem] text-ink-muted mb-2">Điều khoản này liên quan / vi phạm về:</p>
-              <div className="flex flex-wrap gap-1.5">
-                {view.summaryTopics.map((t) => (
-                  <span
-                    key={t}
-                    className="inline-flex items-center px-2 py-1 rounded-sm bg-paper border border-rule text-[0.6875rem] font-medium text-ink"
-                  >
-                    {t}
-                  </span>
-                ))}
+          {(view.originalClause || view.citations.length > 0) && (
+            <Section
+              icon="compare_arrows"
+              tone={isCritical ? "stamp" : "caution"}
+              title="Đối chiếu"
+              hint="Đoạn hợp đồng ↔ căn cứ pháp luật"
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-2.5">
+                <div className="rounded-md border border-rule bg-paper p-2.5">
+                  <p className="meta-text text-ink-faint uppercase mb-1.5">Trong hợp đồng</p>
+                  {view.originalClause ? (
+                    <p className="ui-text text-ink whitespace-pre-wrap">{view.originalClause}</p>
+                  ) : (
+                    <p className="ui-text text-ink-faint italic">Chưa gắn được đoạn điều khoản.</p>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <p className="meta-text text-quiet uppercase px-0.5">Căn cứ pháp luật</p>
+                  {view.citations.length > 0 ? (
+                    view.citations.map((c, i) => <CiteBlock key={i} cite={c} />)
+                  ) : (
+                    <p className="ui-text text-ink-faint italic px-0.5">Chưa có căn cứ đã gắn.</p>
+                  )}
+                </div>
               </div>
             </Section>
           )}
 
           {view.reasons.length > 0 && (
-            <Section icon="help" tone="ink" title="Vì sao sai" hint="Lý do chính">
-              <ul className="space-y-2 ui-text text-ink-muted">
-                {visibleReasons.map((r, i) => (
-                  <li key={i} className="flex gap-2">
-                    <span className="shrink-0 mt-1.5 w-1 h-1 rounded-full bg-rule-strong" />
-                    <span>
+            <Section
+              icon="label"
+              tone="ink"
+              title="Chủ đề vi phạm"
+              hint="Tóm tắt từng lỗi trên Điều này"
+            >
+              <ul className="space-y-2.5">
+                {view.reasons.map((r, i) => (
+                  <li key={i} className="flex gap-2.5 items-start">
+                    {view.summaryTopics[i] ? (
+                      <span className="shrink-0 mt-0.5 inline-flex items-center px-1.5 py-0.5 rounded-sm bg-paper border border-rule text-[0.625rem] font-medium text-ink max-w-[9.5rem] leading-snug">
+                        {view.summaryTopics[i]}
+                      </span>
+                    ) : (
+                      <span className="shrink-0 mt-1.5 w-1 h-1 rounded-full bg-rule-strong" />
+                    )}
+                    <span className="ui-text text-ink-muted leading-relaxed">
                       <MarkedText parts={highlightKeywords(r, view.summaryTopics)} />
                     </span>
-                  </li>
-                ))}
-              </ul>
-              {hasMoreReasons && (
-                <button
-                  type="button"
-                  className="mt-2 text-[0.6875rem] font-medium text-quiet hover:text-ink"
-                  onClick={() => setReasonsExpanded((v) => !v)}
-                >
-                  {reasonsExpanded ? "Thu gọn" : `Xem thêm (${view.reasons.length - 2})`}
-                </button>
-              )}
-            </Section>
-          )}
-
-          {view.impact.length > 0 && (
-            <Section icon="gavel" tone="stamp" title="Ảnh hưởng" hint="Nếu giữ nguyên điều khoản này">
-              <ul className="space-y-2 ui-text text-ink">
-                {view.impact.map((item, i) => (
-                  <li key={i} className="flex gap-2">
-                    <span className="material-symbols-outlined text-stamp !text-[0.875rem] shrink-0 mt-0.5">
-                      report
-                    </span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </Section>
-          )}
-
-          {view.citations.length > 0 && (
-            <Section icon="menu_book" tone="quiet" title="Căn cứ pháp luật" hint="Nguồn đối chiếu">
-              <ul className="space-y-2.5">
-                {view.citations.map((c, i) => (
-                  <li key={i} className="rounded-md border border-rule bg-paper px-2.5 py-2">
-                    <p className="text-[0.75rem] font-medium text-quiet flex items-start gap-1.5">
-                      <span className="material-symbols-outlined !text-[0.875rem] mt-0.5">book_2</span>
-                      <span>{c.title}</span>
-                    </p>
-                    {c.summary ? (
-                      <p className="mt-1.5 text-[0.75rem] text-ink-muted pl-5">{c.summary}</p>
-                    ) : null}
-                    {(c.docNumber || c.location || c.status) && (
-                      <p className="mt-2 pl-5 text-[0.6875rem] text-ink-faint">
-                        {[c.docNumber, c.location, c.status].filter(Boolean).join(" · ")}
-                      </p>
-                    )}
-                    {c.quote ? (
-                      <blockquote className="mt-2 pl-5 border-l-2 border-quiet/30 text-[0.75rem] leading-relaxed text-ink whitespace-pre-wrap">
-                        {c.quote}
-                      </blockquote>
-                    ) : null}
-                    {c.deepLink || c.sourceUrl ? (
-                      <a
-                        href={c.deepLink || c.sourceUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="mt-2 pl-5 inline-flex items-center gap-1 text-[0.6875rem] font-medium text-quiet hover:text-ink"
-                      >
-                        <span className="material-symbols-outlined !text-[0.875rem]">open_in_new</span>
-                        {c.deepLink ? "Mở đúng vị trí trên VBPL" : "Mở văn bản nguồn"}
-                      </a>
-                    ) : null}
                   </li>
                 ))}
               </ul>
@@ -239,12 +273,12 @@ export default function IssueCard({ risk, open, onToggle, cardId, clauseFallback
             </Section>
           )}
 
-          {(view.originalClause || view.revisedClause) && (
+          {view.revisedClause && (
             <Section
               icon="edit_note"
               tone="ok"
-              title="AI đã sửa điều khoản"
-              hint="So sánh gốc ↔ bản chỉnh; có thể copy bản mới"
+              title="Điều khoản sau chỉnh sửa"
+              hint="Một bản sửa gộp mọi lỗi trên Điều này"
             >
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-2.5">
                 {view.originalClause && (
@@ -253,25 +287,42 @@ export default function IssueCard({ risk, open, onToggle, cardId, clauseFallback
                     <p className="ui-text text-ink-muted whitespace-pre-wrap">{view.originalClause}</p>
                   </div>
                 )}
-                {view.revisedClause && (
-                  <div className="rounded-md border border-ok/30 bg-ok-soft/40 p-2.5">
-                    <p className="meta-text text-ok uppercase mb-1.5">Điều khoản sau chỉnh sửa</p>
-                    <p className="ui-text text-ink whitespace-pre-wrap">
-                      <MarkedText parts={revisedParts} />
-                    </p>
-                  </div>
-                )}
+                <div className="rounded-md border border-ok/30 bg-ok-soft/40 p-2.5">
+                  <p className="meta-text text-ok uppercase mb-1.5">Điều khoản sau chỉnh sửa</p>
+                  <p className="ui-text text-ink whitespace-pre-wrap">
+                    <MarkedText parts={revisedParts} />
+                  </p>
+                </div>
               </div>
-              {view.revisedClause && (
-                <button
-                  type="button"
-                  onClick={copyRevised}
-                  className="mt-2.5 inline-flex items-center gap-1.5 px-3 py-2 rounded-md bg-ink text-paper-raised text-[0.75rem] font-medium hover:bg-ink/90 transition-colors"
-                >
-                  <span className="material-symbols-outlined !text-[1rem]">content_copy</span>
-                  {copied ? "Đã sao chép điều khoản đã sửa" : "Sao chép điều khoản đã sửa"}
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={copyRevised}
+                className="mt-2.5 inline-flex items-center gap-1.5 px-3 py-2 rounded-md bg-ink text-paper-raised text-[0.75rem] font-medium hover:bg-ink/90 transition-colors"
+              >
+                <span className="material-symbols-outlined !text-[1rem]">content_copy</span>
+                {copied ? "Đã sao chép điều khoản đã sửa" : "Sao chép điều khoản đã sửa"}
+              </button>
+            </Section>
+          )}
+
+          {view.impact.length > 0 && (
+            <Section
+              icon="report"
+              tone="stamp"
+              title="Hệ quả nếu giữ nguyên"
+              hint="Rủi ro pháp lý / thực tế"
+              defaultOpen={false}
+            >
+              <ul className="space-y-2 ui-text text-ink">
+                {view.impact.map((item, i) => (
+                  <li key={i} className="flex gap-2">
+                    <span className="material-symbols-outlined text-stamp !text-[0.875rem] shrink-0 mt-0.5">
+                      report
+                    </span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </Section>
           )}
         </div>

@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import IssueCard from "./IssueCard";
-import { sortRisks } from "../lib/riskDisplay";
+import { dedupeRisks, sortRisks } from "../lib/riskDisplay";
 
 const FILTERS = [
   { key: "all", label: "Tất cả" },
@@ -12,7 +12,7 @@ export default function IssueList({ risks, openKey, onOpenKeyChange, clausesByNu
   const [filter, setFilter] = useState("all");
 
   const filtered = useMemo(() => {
-    const list = sortRisks(risks);
+    const list = dedupeRisks(sortRisks(risks));
     if (filter === "all") return list;
     return list.filter((r) => r.severity === filter);
   }, [risks, filter]);

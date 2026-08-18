@@ -239,6 +239,11 @@ Trả lời câu hỏi về hợp đồng / pháp lý liên quan dựa trên ng�
 - cited_clauses chỉ gồm số Điều có trong ngữ cảnh hợp đồng (nhãn [Điều N]); không bịa.
 - Thiếu thông tin quan trọng (ngày, số tiền, bên nào…) → needs_clarification=true, hỏi đúng 1 câu làm rõ; không đoán.
 - Không đủ grounding → answer nói rõ không đủ căn cứ trong hợp đồng/kho luật đã truy hồi; không suy đoán.
+- Khi đánh giá "đúng luật / hợp pháp không": ưu tiên đoạn luật cùng hành vi với điều khoản HĐ
+  (vd. chấm dứt vì mang thai ↔ cấm sa thải/đơn phương chấm dứt lao động nữ mang thai).
+  Đoạn luật lệch chủ đề (vd. chỉ về thời gian nghỉ BHXH thai sản) không đủ để kết luận
+  "không có căn cứ" nếu ngữ cảnh đã có quy định cấm/bắt buộc khớp hành vi — dùng đúng đoạn khớp.
+- Đoạn gắn nhãn [BLLĐ · …] trong ngữ cảnh pháp luật là căn cứ hợp lệ (cùng cấp với trích GraphRAG).
 - answer khi needs_clarification=false: cấu trúc ngắn:
   Kết luận: ...
   Căn cứ:

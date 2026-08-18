@@ -16,15 +16,6 @@ from app.agents.labor_code_resolver import (
 )
 from app.schemas.contract import ContractAnalysis, LegalCitation, RiskItem
 
-_STATUS_LABEL = {
-    0: "Chưa xác định",
-    1: "Còn hiệu lực",
-    2: "Hết hiệu lực toàn bộ",
-    3: "Chưa có hiệu lực",
-    4: "Hết hiệu lực một phần",
-    5: "Có hiệu lực một phần",
-}
-
 
 @dataclass(frozen=True, slots=True)
 class MandatoryField:
@@ -55,11 +46,27 @@ _MANDATORY: tuple[MandatoryField, ...] = (
     ),
     MandatoryField(
         "employee_identity",
-        "Thông tin NLĐ (họ tên, ngày sinh, giới tính, nơi cư trú, CCCD/CMND/hộ chiếu)",
+        "Thông tin NLĐ (họ tên, ngày sinh, CCCD/CMND/hộ chiếu)",
         (
             _pat(r"người\s*lao\s*động", r"\bNLĐ\b"),
             _pat(r"ngày\s*sinh|sinh\s*ngày"),
             _pat(r"CCCD|CMND|căn\s*cước|hộ\s*chiếu"),
+        ),
+    ),
+    MandatoryField(
+        "employee_residence",
+        "Nơi cư trú / địa chỉ hiện tại của NLĐ",
+        (
+            # Không dùng bare "địa chỉ" — sẽ khớp địa chỉ NSDLĐ trên cùng văn bản.
+            _pat(
+                r"nơi\s*cư\s*trú",
+                r"địa\s*chỉ\s*hiện\s*tại",
+                r"địa\s*chỉ\s*thường\s*trú",
+                r"địa\s*chỉ\s*tạm\s*trú",
+                r"chỗ\s*ở\s*(?:hiện\s*tại|thường\s*trú)",
+                r"thường\s*trú\s*:",
+                r"tạm\s*trú\s*:",
+            ),
         ),
     ),
     MandatoryField(
@@ -191,45 +198,72 @@ def check_labor_completeness(
     snippet = fetch_article_21_snippet(labor["doc_id"]) if labor else None
     doc_num = (labor or {}).get("doc_num") or "45/2019/QH14"
     doc_title = (labor or {}).get("title") or "Bộ luật Lao động"
-    sf = int((labor or {}).get("status_flag") or 1)
-    status_label = (labor or {}).get("eff_flag") or _STATUS_LABEL.get(sf, "Chưa xác định")
 
-    citations = [
-        LegalCitation(
-            title=f"Điều 21 {doc_title}",
-            summary=(snippet or "Nội dung chủ yếu bắt buộc của hợp đồng lao động.")[:500],
-            doc_number=str(doc_num),
-            article="Điều 21",
-            quote=(snippet or "")[:280] or None,
-            source_url=(labor or {}).get("source_url"),
-            status=status_label,
-        )
-    ]
+    from app.agents.effectivity import citation_status_for_labor
+
+    eff = citation_status_for_labor(labor, as_of_date)
+    citations: list[LegalCitation] = []
+    if not labor or eff.ok_to_cite:
+        citations = [
+            LegalCitation(
+                title=f"Điều 21 {doc_title}",
+                summary=(snippet or eff.detail or "Nội dung chủ yếu bắt buộc của hợp đồng lao động.")[
+                    :500
+                ],
+                doc_number=str(doc_num),
+                article="Điều 21",
+                quote=(snippet or "")[:280] or None,
+                source_url=(labor or {}).get("source_url") if labor else None,
+                status=eff.status_label if labor else "Chưa đối chiếu kho — chưa xác nhận hiệu lực",
+            )
+        ]
 
     labels = [f.label for f in missing]
     bullets = [f"- {f.label}" for f in missing]
+    # Put residence / address first in topics so the list card surfaces it
+    topic_labels = [f.label.split("(")[0].strip() for f in missing]
+    if any(f.key == "employee_residence" for f in missing):
+        topic_labels = [
+            "Thiếu địa chỉ / nơi cư trú NLĐ",
+            *[t for t in topic_labels if "cư trú" not in t.lower() and "địa chỉ" not in t.lower()],
+        ]
     return [
         RiskItem(
             clause_ref="Hợp đồng (toàn văn)",
-            title="Thiếu nội dung chủ yếu bắt buộc của HĐLĐ",
+            title=(
+                "Thiếu địa chỉ / nơi cư trú NLĐ và nội dung bắt buộc khác"
+                if any(f.key == "employee_residence" for f in missing)
+                else "Thiếu nội dung chủ yếu bắt buộc của HĐLĐ"
+            ),
             issue=(
                 "Hợp đồng lao động chưa thể hiện đủ các nội dung chủ yếu theo Điều 21 Bộ luật Lao động "
-                f"({len(missing)} mục thiếu). Các mục sau không tìm thấy hoặc không đủ rõ trong văn bản."
+                f"({len(missing)} mục thiếu). "
+                + (
+                    "Đặc biệt: chưa ghi nơi cư trú / địa chỉ hiện tại của NLĐ. "
+                    if any(f.key == "employee_residence" for f in missing)
+                    else ""
+                )
+                + "Các mục sau không tìm thấy hoặc không đủ rõ trong văn bản."
             ),
             severity="warning",
-            summary_topics=["Thiếu nội dung bắt buộc", "Điều 21 BLLĐ", "HĐLĐ"],
+            summary_topics=[
+                "Thiếu nội dung bắt buộc",
+                "Điều 21 BLLĐ",
+                *topic_labels[:4],
+            ],
             reasons=labels,
             impact=[
                 "Hợp đồng có nguy cơ bị coi là không đầy đủ nội dung chủ yếu theo pháp luật lao động.",
                 "Rủi ro khi thanh tra / tranh chấp về quyền lợi NLĐ chưa được thỏa thuận rõ.",
             ],
             actions=[
+                "Bổ sung nơi cư trú / địa chỉ hiện tại của NLĐ (nếu đang thiếu).",
                 "Bổ sung từng mục còn thiếu theo Điều 21 khoản 1 Bộ luật Lao động.",
                 "Đối chiếu Thông tư hướng dẫn nội dung HĐLĐ (nếu áp dụng) để ghi đủ thông tin định danh và chế độ.",
             ],
-            legal_basis=f"Điều 21 Bộ luật Lao động ({doc_num}) — {status_label}",
-            legal_citations=citations,
+            legal_basis=f"Điều 21 Bộ luật Lao động ({doc_num}) — {eff.status_label}",
+            legal_citations=citations or None,
             recommendation="\n".join(bullets),
-            confidence=0.75 if labor else 0.55,
+            confidence=0.75 if labor and eff.verified else 0.55,
         )
     ]

@@ -20,7 +20,7 @@ def _isolated_graph(monkeypatch):
     qa._compiled_graph = None
     monkeypatch.setattr(qa, "get_checkpointer", lambda: MemorySaver())
     monkeypatch.setattr(qa, "retrieve_contract", lambda query, contract_id, k=None: [])
-    monkeypatch.setattr(qa, "retrieve_legal", lambda query, k=3: [])
+    monkeypatch.setattr(qa, "retrieve_legal", lambda query, k=3, **kwargs: [])
     monkeypatch.setattr(qa, "chat_completion", lambda prompt, provider="gemini": "truy vấn pháp lý")
     yield
     qa._compiled_graph = None
@@ -59,7 +59,7 @@ def test_no_context_uses_two_rewrite_attempts(monkeypatch):
         return []
 
     monkeypatch.setattr(qa, "retrieve_contract", counting_contract)
-    monkeypatch.setattr(qa, "retrieve_legal", lambda query, k=3: [])
+    monkeypatch.setattr(qa, "retrieve_legal", lambda query, k=3, **kwargs: [])
 
     result = asyncio.run(qa.answer_question("hỏi gì đó", "c-2"))
     assert result.answer == qa._NO_CONTEXT_ANSWER
@@ -86,7 +86,7 @@ def test_weak_context_triggers_rewrite_then_recovers(monkeypatch):
             )()
         ]
 
-    def fake_legal(query, k=3):
+    def fake_legal(query, k=3, **kwargs):
         return []
 
     monkeypatch.setattr(qa, "retrieve_contract", fake_contract)
@@ -117,7 +117,7 @@ def test_strong_context_generates_directly(monkeypatch):
         ]
 
     monkeypatch.setattr(qa, "retrieve_contract", fake_contract)
-    monkeypatch.setattr(qa, "retrieve_legal", lambda query, k=3: [])
+    monkeypatch.setattr(qa, "retrieve_legal", lambda query, k=3, **kwargs: [])
     _install_model(
         monkeypatch,
         ['{"needs_clarification": false, "answer": "Kết luận: hợp lệ.", "cited_clauses": ["1"]}'],
@@ -142,7 +142,7 @@ def test_generate_retries_once_on_parse_failure(monkeypatch):
         ]
 
     monkeypatch.setattr(qa, "retrieve_contract", fake_contract)
-    monkeypatch.setattr(qa, "retrieve_legal", lambda query, k=3: [])
+    monkeypatch.setattr(qa, "retrieve_legal", lambda query, k=3, **kwargs: [])
     _install_model(
         monkeypatch,
         [
@@ -170,7 +170,7 @@ def test_generate_gives_up_after_budget(monkeypatch):
         ]
 
     monkeypatch.setattr(qa, "retrieve_contract", fake_contract)
-    monkeypatch.setattr(qa, "retrieve_legal", lambda query, k=3: [])
+    monkeypatch.setattr(qa, "retrieve_legal", lambda query, k=3, **kwargs: [])
     _install_model(monkeypatch, ["không phải json", "cũng không phải json", "vẫn không phải json"])
 
     result = asyncio.run(qa.answer_question("hỏi", "c-6"))
@@ -183,7 +183,7 @@ def test_history_excludes_failed_attempts(monkeypatch):
     monkeypatch.setattr(
         qa, "retrieve_contract", lambda query, contract_id, k=None: []
     )
-    monkeypatch.setattr(qa, "retrieve_legal", lambda query, k=3: [])
+    monkeypatch.setattr(qa, "retrieve_legal", lambda query, k=3, **kwargs: [])
 
     asyncio.run(qa.answer_question("hỏi", "c-7"))
     items = asyncio.run(qa.get_conversation_history("c-7"))
@@ -197,7 +197,7 @@ def test_settings_threshold_used_for_weak_detection():
 
 def test_state_history_and_rewind(monkeypatch):
     monkeypatch.setattr(qa, "retrieve_contract", lambda query, contract_id, k=None: [])
-    monkeypatch.setattr(qa, "retrieve_legal", lambda query, k=3: [])
+    monkeypatch.setattr(qa, "retrieve_legal", lambda query, k=3, **kwargs: [])
 
     asyncio.run(qa.answer_question("hỏi một", "c-8"))
     asyncio.run(qa.answer_question("hỏi hai", "c-8"))
@@ -233,7 +233,7 @@ def test_stream_answer_emits_steps_then_done(monkeypatch):
         ]
 
     monkeypatch.setattr(qa, "retrieve_contract", fake_contract)
-    monkeypatch.setattr(qa, "retrieve_legal", lambda query, k=3: [])
+    monkeypatch.setattr(qa, "retrieve_legal", lambda query, k=3, **kwargs: [])
     _install_model(
         monkeypatch,
         ['{"needs_clarification": false, "answer": "Trả lời stream.", "cited_clauses": ["4"]}'],

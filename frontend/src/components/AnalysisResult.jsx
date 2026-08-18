@@ -4,7 +4,7 @@ import IssueList from "./IssueList";
 import ContractProfile from "./ContractProfile";
 import ClauseIndex from "./ClauseIndex";
 import ChatTab from "./ChatTab";
-import { parseIssue, normalizeRiskView, riskKey, sortRisks } from "../lib/riskDisplay";
+import { parseIssue, normalizeRiskView, riskKey, sortRisks, dedupeRisks } from "../lib/riskDisplay";
 
 export default function AnalysisResult({
   contractId,
@@ -20,7 +20,10 @@ export default function AnalysisResult({
   const [openKey, setOpenKey] = useState(null);
 
   const actionable = useMemo(
-    () => sortRisks((risks || []).filter((r) => r.severity === "critical" || r.severity === "warning")),
+    () =>
+      dedupeRisks(
+        sortRisks((risks || []).filter((r) => r.severity === "critical" || r.severity === "warning")),
+      ),
     [risks],
   );
 

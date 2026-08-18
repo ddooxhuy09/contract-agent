@@ -108,7 +108,59 @@ def resolve_labor_code_document(as_of: str | date | None = None) -> dict[str, An
 
 
 def fetch_article_21_snippet(doc_id: str | None) -> str | None:
-    if not doc_id:
+    return fetch_article_snippet(doc_id, [21])
+
+
+def fetch_article_snippet(
+    doc_id: str | None,
+    article_nums: list[int] | tuple[int, ...],
+    *,
+    limit: int = 3,
+) -> str | None:
+    """Load embedding chunk text for Điều N (path leaf ``.DN``) — no vector search."""
+    if not doc_id or not article_nums:
+        return None
+    nums = [int(n) for n in article_nums if int(n) > 0]
+    if not nums:
+        return None
+    # Match .D98 or .D98.K1 but not .D980
+    alt = "|".join(rf"\.D{n}(\.|$)" for n in nums)
+    try:
+        from app.infrastructure.db.connection import get_db
+    except Exception:
+        return None
+    try:
+        with get_db() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
+                    SELECT chunk_text, path::text
+                    FROM legal_embeddings
+                    WHERE doc_id = %s
+                      AND is_effective
+                      AND path::text ~ %s
+                    ORDER BY nlevel(path) ASC, path
+                    LIMIT %s
+                    """,
+                    (doc_id, alt, limit),
+                )
+                rows = cur.fetchall()
+        if not rows:
+            return None
+        return "\n".join(r[0] for r in rows if r and r[0])
+    except Exception as e:
+        logger.warning("fetch_article_snippet failed: %s", e)
+        return None
+
+
+def fetch_article_meta(
+    doc_id: str | None,
+    article_num: int,
+    *,
+    limit: int = 4,
+) -> dict[str, Any] | None:
+    """Return concatenated chunk text + primary path for one Điều (citation hydrate)."""
+    if not doc_id or article_num <= 0:
         return None
     try:
         from app.infrastructure.db.connection import get_db
@@ -119,20 +171,24 @@ def fetch_article_21_snippet(doc_id: str | None) -> str | None:
             with conn.cursor() as cur:
                 cur.execute(
                     """
-                    SELECT chunk_text
+                    SELECT chunk_text, path::text
                     FROM legal_embeddings
                     WHERE doc_id = %s
                       AND is_effective
                       AND path::text ~ %s
                     ORDER BY nlevel(path) ASC, path
-                    LIMIT 3
+                    LIMIT %s
                     """,
-                    (doc_id, r"\.D21(\.|$)"),
+                    (doc_id, rf"\.D{article_num}(\.|$)", limit),
                 )
                 rows = cur.fetchall()
         if not rows:
             return None
-        return "\n".join(r[0] for r in rows if r and r[0])
+        quotes = [r[0].strip() for r in rows if r and r[0] and str(r[0]).strip()]
+        return {
+            "quote": "\n".join(quotes),
+            "path": rows[0][1],
+        }
     except Exception as e:
-        logger.warning("fetch_article_21_snippet failed: %s", e)
+        logger.warning("fetch_article_meta failed: %s", e)
         return None

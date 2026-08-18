@@ -28,14 +28,32 @@ def test_sample_is_labor_contract():
 def test_sample_missing_mandatory_fields():
     text = SAMPLE.read_text(encoding="utf-8")
     missing_keys = {f.key for f in missing_mandatory_fields(text)}
-    # Present-ish: employer, employee, job, term, wage (salary), social insurance, hours
+    # Present-ish: employer, employee id core, job, term, hours
     assert "employer_identity" not in missing_keys
-    assert "employee_identity" not in missing_keys
+    assert "employee_identity" not in missing_keys  # has name + DOB + CCCD
     assert "job_and_workplace" not in missing_keys
     assert "term" not in missing_keys
-    # Clearly absent on this crafted "SAI" contract
+    # SAI: NLĐ thiếu nơi cư trú / địa chỉ hiện tại
+    assert "employee_residence" in missing_keys
     assert "pay_raise" in missing_keys
     assert "ppe" in missing_keys
+
+
+def test_employee_residence_not_satisfied_by_employer_address():
+    """Bare 'Địa chỉ:' của công ty không được tính là nơi cư trú NLĐ."""
+    from app.agents.labor_completeness import _MANDATORY
+
+    res = next(f for f in _MANDATORY if f.key == "employee_residence")
+    text = (
+        "Hợp đồng lao động. Người sử dụng lao động: Công ty A. "
+        "Địa chỉ: 1 Nguyễn Huệ, Q1. Người lao động: Nguyễn Văn B. "
+        "Ngày sinh: 01/01/1990. Số CCCD: 001."
+    )
+    assert not field_is_covered(text, res)
+    text_ok = text + " Nơi cư trú: 2 Lê Lợi, Q1, TP.HCM."
+    assert field_is_covered(text_ok, res)
+    text_ok2 = text + " Địa chỉ hiện tại: 3 Hai Bà Trưng, Q1."
+    assert field_is_covered(text_ok2, res)
 
 
 def test_sample_job_context_is_tech_not_oil():
@@ -57,7 +75,9 @@ def test_completeness_emits_risk_item():
     assert risks[0].severity == "warning"
     assert "Điều 21" in (risks[0].legal_basis or "")
     assert risks[0].reasons
-    assert any("nâng" in r.lower() or "bảo hộ" in r.lower() for r in (risks[0].reasons or []))
+    assert any("cư trú" in r.lower() or "địa chỉ" in r.lower() for r in (risks[0].reasons or []))
+    assert "địa chỉ" in (risks[0].title or "").lower() or "cư trú" in (risks[0].title or "").lower()
+    assert any("địa chỉ" in t.lower() or "cư trú" in t.lower() for t in (risks[0].summary_topics or []))
 
 
 def test_wage_requires_payment_form_or_schedule():

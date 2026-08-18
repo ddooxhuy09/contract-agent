@@ -12,18 +12,10 @@ from dataclasses import dataclass
 from datetime import date, datetime
 from typing import Any
 
+from app.agents.effectivity import Effectivity, evaluate_document_effectivity
 from app.agents.labor_code_resolver import _parse_as_of
 from app.core.logging import logger
 from app.schemas.contract import LegalCitation, RiskItem
-
-_STATUS_LABEL = {
-    0: "Chưa xác định",
-    1: "Còn hiệu lực",
-    2: "Hết hiệu lực toàn bộ",
-    3: "Chưa có hiệu lực",
-    4: "Hết hiệu lực một phần",
-    5: "Có hiệu lực một phần",
-}
 
 _DOC_NUM = re.compile(
     r"(?<!\d)(\d{1,4}/\d{4}/[A-ZĐ0-9.\-]+)",
@@ -190,26 +182,8 @@ def _as_date(value: Any) -> date | None:
         return None
 
 
-def _effective_on(row: dict[str, Any], as_of: date) -> tuple[bool, str]:
-    """Return (ok_to_cite, human reason) using status_flag + date window."""
-    sf = int(row.get("status_flag") or 0)
-    label = row.get("eff_flag") or _STATUS_LABEL.get(sf, "Chưa xác định")
-    eff_from = _as_date(row.get("eff_from"))
-    eff_to = _as_date(row.get("eff_to"))
-
-    if sf == 2:
-        return False, f"hết hiệu lực toàn bộ ({label})"
-    if sf == 3 or (eff_from and eff_from > as_of):
-        return False, f"chưa có hiệu lực tại ngày phân tích ({label})"
-    if eff_to and eff_to <= as_of:
-        return False, f"đã hết hiệu lực theo eff_to={eff_to.isoformat()} ({label})"
-    if sf == 4:
-        return True, f"còn hiệu lực một phần / hết một phần — cần đối chiếu chi tiết ({label})"
-    if sf in (1, 5):
-        return True, label
-    if sf == 0:
-        return True, f"trạng thái chưa xác định trong kho ({label})"
-    return False, label
+def _effective_on(row: dict[str, Any], as_of: date) -> Effectivity:
+    return evaluate_document_effectivity(row, as_of)
 
 
 def _dates_match(cited: date | None, issue: date | None) -> bool:
@@ -231,6 +205,7 @@ def check_preamble_citations(
     problems: list[str] = []
     citations: list[LegalCitation] = []
     severity = "warning"
+    soft_notes: list[str] = []
 
     for cite in cites:
         if not cite.doc_num:
@@ -247,25 +222,28 @@ def check_preamble_citations(
             severity = "warning"
             continue
 
-        ok, reason = _effective_on(row, as_of)
-        status_label = row.get("eff_flag") or _STATUS_LABEL.get(int(row["status_flag"]), "")
+        eff = _effective_on(row, as_of)
         citations.append(
             LegalCitation(
                 title=str(row.get("title") or cite.raw),
-                summary=reason,
+                summary=eff.detail,
                 doc_number=str(row.get("doc_num") or cite.doc_num),
                 source_url=row.get("source_url"),
-                status=status_label,
+                status=eff.status_label,
             )
         )
 
-        if not ok:
+        if not eff.ok_to_cite:
             problems.append(
-                f"{cite.doc_num} — {row.get('title') or ''}: {reason}. "
-                f"Không nên nêu làm căn cứ còn hiệu lực tại {as_of.isoformat()}."
+                f"{cite.doc_num} — {row.get('title') or ''}: {eff.detail} "
+                f"Không nên nêu làm căn cứ còn hiệu lực khi soạn / ký hợp đồng tại {as_of.isoformat()}."
             )
-            if int(row["status_flag"]) == 2 or "hết hiệu lực" in reason.lower():
+            if eff.status_flag == 2 or "hết hiệu lực" in eff.detail.lower():
                 severity = "critical"
+        elif eff.status_flag == 4:
+            soft_notes.append(eff.detail)
+        elif "chưa rõ" in eff.status_label.lower():
+            soft_notes.append(eff.detail)
 
         issue = _as_date(row.get("issue_date"))
         if cite.cited_date and issue and not _dates_match(cite.cited_date, issue):
@@ -278,7 +256,6 @@ def check_preamble_citations(
         if cite.name_hint and row.get("title"):
             hint = cite.name_hint.lower()
             title = str(row["title"]).lower()
-            # Require at least one meaningful token from hint in title
             tokens = [t for t in re.split(r"\s+", hint) if len(t) > 3]
             if tokens and not any(t in title for t in tokens[:3]):
                 problems.append(
@@ -286,8 +263,15 @@ def check_preamble_citations(
                     f"không khớp tiêu đề trong kho («{row['title'][:80]}»)."
                 )
 
+    # Partial-effect instruments are still citable but must be called out for drafters
+    problems.extend(soft_notes)
+
     if not problems:
         return []
+
+    # Soft-only notes (status 4) stay warning; hard expire stays critical if set
+    if soft_notes and not any("Không nên nêu" in p or "không tìm thấy" in p.lower() for p in problems):
+        severity = "warning"
 
     return [
         RiskItem(
@@ -295,7 +279,8 @@ def check_preamble_citations(
             title="Căn cứ pháp lý đầu HĐ cần rà soát",
             issue=(
                 "Các văn bản nêu tại mục «Căn cứ…» đã được đối chiếu với kho pháp điển "
-                f"tại ngày {as_of.isoformat()}. Phát hiện vấn đề về hiệu lực / số hiệu / ngày ban hành."
+                f"tại ngày {as_of.isoformat()}. Phát hiện vấn đề về hiệu lực / số hiệu / ngày ban hành "
+                "— cần xác nhận trước khi dùng làm căn cứ soạn hợp đồng."
             ),
             severity=severity,
             summary_topics=["Căn cứ pháp lý", "Hiệu lực văn bản", "Preamble"],
@@ -307,6 +292,7 @@ def check_preamble_citations(
             actions=[
                 "Tra cứu lại từng số hiệu trong mục Căn cứ và cập nhật bản còn hiệu lực.",
                 "Sửa ngày ban hành / tên văn bản cho khớp văn bản chính thức.",
+                "Với VB hết hiệu lực một phần: chỉ nêu điều còn áp dụng hoặc dẫn bản sửa đổi.",
             ],
             legal_basis="; ".join(
                 f"{c.doc_number or c.title}: {c.status or c.summary}" for c in citations

@@ -265,37 +265,12 @@ def _doc_meta(doc: Any) -> tuple[dict, str]:
 
 def _citation_status(meta: dict, as_of: str | date | None = None) -> str | None:
     """Prefer as_of + dates over stale VBPL ``eff_flag`` cache."""
-    from app.agents.labor_code_resolver import _parse_as_of
+    from app.agents.effectivity import evaluate_document_effectivity
 
-    ref = _parse_as_of(as_of)
-    try:
-        sf = int(meta.get("status_flag")) if meta.get("status_flag") is not None else None
-    except (TypeError, ValueError):
-        sf = None
-    eff_to_raw = meta.get("eff_to")
-    eff_from_raw = meta.get("eff_from")
-    try:
-        to_d = _parse_as_of(str(eff_to_raw)[:10]) if eff_to_raw else None
-    except Exception:
-        to_d = None
-    try:
-        from_d = _parse_as_of(str(eff_from_raw)[:10]) if eff_from_raw else None
-    except Exception:
-        from_d = None
-    if sf == 2 or (to_d and to_d <= ref):
-        return "Hết hiệu lực"
-    if sf == 3 or (from_d and from_d > ref):
-        return "Chưa có hiệu lực"
-    if sf == 4:
-        return "Hết hiệu lực một phần"
-    if sf == 5:
-        return "Còn hiệu lực một phần"
-    cached = str(meta.get("eff_flag") or "").strip()
-    if cached:
-        return cached
-    if sf == 1:
-        return "Còn hiệu lực"
-    return None
+    eff = evaluate_document_effectivity(meta, as_of)
+    if not eff.ok_to_cite:
+        return eff.status_label
+    return eff.status_label
 
 
 def _article_key(meta: dict, location: dict) -> str:
@@ -365,6 +340,12 @@ def ground_citations(
     grounded: list[LegalCitation] = []
     seen_articles: set[str] = set()
     for meta, content, matched in selected:
+        from app.agents.effectivity import evaluate_document_effectivity
+
+        eff = evaluate_document_effectivity(meta, as_of_date)
+        if not eff.ok_to_cite:
+            # Never ground an answer on an expired / not-yet-effective instrument.
+            continue
         path = str(meta.get("path") or "")
         location = format_path_location(path)
         quote_text = _clean_quote(content)
@@ -396,7 +377,7 @@ def ground_citations(
                 ),
                 source_element_id=str(meta.get("source_element_id") or "").strip() or None,
                 evidence_path=path or None,
-                status=_citation_status(meta, as_of_date),
+                status=eff.status_label,
             )
         )
         if len(grounded) >= max_citations:

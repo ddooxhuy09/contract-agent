@@ -19,7 +19,12 @@ from app.core.prompts import (
 )
 from app.core.settings import get_settings
 from app.domain.errors import NotFoundError
-from app.infrastructure.retrieval.query_rewrite import rewrite_qa_query
+from app.agents.labor_red_flags import matching_law_blurbs
+from app.infrastructure.retrieval.query_rewrite import (
+    augment_qa_retrieval_query,
+    expand_legal_topic_query,
+    rewrite_qa_query,
+)
 from app.schemas.contract import ChatHistoryItem, ChatResponse
 from app.vectorstore.retriever import retrieve_contract, retrieve_legal
 
@@ -90,30 +95,30 @@ def _best_score(docs) -> float | None:
     return max(scores) if scores else None
 
 
-def _augment_query(question: str, history: List[BaseMessage]) -> str:
-    """Resolve deictic references in follow-ups using conversation history.
-
-    LangGraph already persists the whole thread into ``state["messages"]`` (via the
-    ``add_messages`` reducer), so callers pass ``state["messages"][:-1]`` here — no
-    duplicate state bookkeeping needed. The most recent prior Q&A is joined onto the
-    current question so anaphora like "điều khoản này" carries its antecedent terms
-    ("chấm dứt", "mang thai", "bồi thường đào tạo"...) into the legal/contract search.
-    Returns the question unchanged when there is no prior turn.
-    """
-    prior = [m.content for m in history[-2:] if getattr(m, "content", None)]
-    if not prior:
-        return question
-    return " ".join([*prior, question])
-
-
 async def _retrieve_node(state: QAState) -> dict:
     question = state.get("query") or state["messages"][-1].content
     history = state["messages"][:-1]
+    # Follow-ups like "đúng luật không?" must carry topics (mang thai + chấm dứt),
+    # not the prior AI conclusion about "nghỉ thai sản" — that poisoned BHXH retrieval.
+    legal_query = augment_qa_retrieval_query(question, history)
     contract_docs = retrieve_contract(question, state["contract_id"])
-    legal_docs = retrieve_legal(_augment_query(question, history), k=3)
+    legal_docs = retrieve_legal(
+        legal_query,
+        k=5,
+        title=legal_query,
+        contract_type="Hợp đồng lao động",
+    )
     memory = await load_qa_memory(state["contract_id"])
 
-    if not contract_docs and not legal_docs:
+    contract_ctx = _format_contract_context(contract_docs)[:8000]
+    legal_ctx = _format_legal_context(legal_docs)[:6000]
+    # Deterministic BLLĐ blurbs when contract/Q match known illegal labor patterns
+    # (pregnancy fire, keep CCCD, …) so wrong vector seeds can't blank the answer.
+    blurbs = matching_law_blurbs(f"{question}\n{legal_query}\n{contract_ctx}")
+    if blurbs:
+        legal_ctx = ("\n\n".join(blurbs) + "\n\n" + legal_ctx).strip()[:6000]
+
+    if not contract_docs and not legal_docs and not blurbs:
         # Nothing above the similarity threshold in either source: route straight to
         # the self-correct cycle (rewrite) or refusal, never let the LLM guess.
         return {"_has_context": False, "_max_score": None, "_long_term_memory": memory}
@@ -121,8 +126,8 @@ async def _retrieve_node(state: QAState) -> dict:
     return {
         "_has_context": True,
         "_max_score": _best_score(contract_docs + legal_docs),
-        "_contract_context": _format_contract_context(contract_docs)[:8000],
-        "_legal_context": _format_legal_context(legal_docs)[:6000],
+        "_contract_context": contract_ctx,
+        "_legal_context": legal_ctx or "Không có dữ liệu pháp luật liên quan.",
         "_valid_clause_numbers": [d.metadata.get("clause_number") for d in contract_docs],
         "_long_term_memory": memory,
     }
@@ -158,13 +163,19 @@ def _llm_rewrite_query(question: str, provider: str) -> Optional[str]:
 
 async def _rewrite_query_node(state: QAState) -> dict:
     question = state["messages"][-1].content
+    history = state["messages"][:-1]
     attempts = state.get("attempts", 0) + 1
 
-    rewritten = rewrite_qa_query(question)
+    rewritten = augment_qa_retrieval_query(question, history)
+    rewritten = expand_legal_topic_query(rewrite_qa_query(rewritten) or rewritten)
     if attempts >= _MAX_RETRIEVAL_ATTEMPTS:
-        llm_q = await asyncio.to_thread(_llm_rewrite_query, question, state.get("provider", DEFAULT_PROVIDER))
+        llm_q = await asyncio.to_thread(
+            _llm_rewrite_query,
+            rewritten or question,
+            state.get("provider", DEFAULT_PROVIDER),
+        )
         if llm_q:
-            rewritten = llm_q
+            rewritten = expand_legal_topic_query(llm_q)
 
     logger.info(
         "QA self-correct rewrite: contract_id=%s attempt=%s query=%r",

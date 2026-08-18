@@ -1,16 +1,23 @@
 #!/usr/bin/env sh
 # Restore contractlens_backup.dump into the running postgres service.
-# Usage (from repo root, Docker up):
-#   docker compose exec postgres sh /backup/../..   # prefer:
-#   sh scripts/restore_db.sh
+# Place dump at repo root, then: sh scripts/restore_db.sh
 set -eu
 
 ROOT="$(CDPATH= cd -- "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
-DUMP="${DUMP_PATH:-/backup/contractlens_backup.dump}"
+HOST_DUMP="${ROOT}/contractlens_backup.dump"
+CONTAINER_DUMP="/tmp/contractlens_backup.dump"
 USER_NAME="${POSTGRES_USER:-contractlens}"
 DB_NAME="${POSTGRES_DB:-contractlens}"
+
+if [ ! -f "$HOST_DUMP" ]; then
+  echo "Missing dump file at repo root: $HOST_DUMP" >&2
+  exit 1
+fi
+
+echo "Copying dump into postgres container..."
+docker compose cp "$HOST_DUMP" "postgres:${CONTAINER_DUMP}"
 
 echo "Terminating connections to ${DB_NAME}..."
 docker compose exec -T postgres psql -U "$USER_NAME" -d postgres -v ON_ERROR_STOP=1 \
@@ -21,14 +28,14 @@ docker compose exec -T postgres psql -U "$USER_NAME" -d postgres -v ON_ERROR_STO
   -c "DROP DATABASE IF EXISTS ${DB_NAME};" \
   -c "CREATE DATABASE ${DB_NAME} OWNER ${USER_NAME};"
 
-echo "Restoring ${DUMP} (this can take several minutes for multi-GB dumps)..."
+echo "Restoring ${CONTAINER_DUMP} (this can take several minutes for multi-GB dumps)..."
 docker compose exec -T postgres pg_restore \
   -U "$USER_NAME" \
   -d "$DB_NAME" \
   --no-owner \
   --no-acl \
   --verbose \
-  "$DUMP"
+  "$CONTAINER_DUMP"
 
 echo "Done. Sample table check:"
 docker compose exec -T postgres psql -U "$USER_NAME" -d "$DB_NAME" -c "\dt"

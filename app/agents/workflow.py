@@ -13,8 +13,8 @@ from app.agents.risk_flagger import evaluate_clause
 from app.agents.llm_client import DEFAULT_PROVIDER
 
 # Caps concurrent LLM calls per analysis run so a large contract doesn't fan out
-# dozens of simultaneous requests and hit provider rate limits.
-_MAX_CONCURRENT_CLAUSE_CHECKS = 4
+# dozens of simultaneous requests and hit provider rate limits (free tier ~5 RPM).
+_MAX_CONCURRENT_CLAUSE_CHECKS = 2
 # Graph-level retry budgets. `extract` loops back onto itself on *exception*
 # (transient network / rate-limit errors the inline code does not retry), then gives
 # up gracefully. judge_clause retries internally because Send-spawned branches lose
@@ -39,6 +39,8 @@ class AnalysisState(TypedDict):
     _plan: str
     _extract_started: bool
     _evaluated: bool
+    # Deterministic pre-pass: clause numbers (str) that already have critical red-flags.
+    skip_llm_clauses: list[str]
 
 
 class ClauseState(TypedDict):
@@ -48,7 +50,7 @@ class ClauseState(TypedDict):
     contract_type: str | None
     as_of_date: str | None
     job_context: str | None
-
+    skip_topics: list[str]
 
 # Output schemas for the nested subgraphs. Limiting what each subgraph writes back
 # to the parent state is REQUIRED: without it, a subgraph echoes every channel it
@@ -97,6 +99,7 @@ async def _judge_clause_node(state: ClauseState) -> dict:
                 contract_type=state.get("contract_type"),
                 as_of_date=state.get("as_of_date"),
                 job_context=state.get("job_context"),
+                skip_topics=state.get("skip_topics") or [],
             )
             if risk:
                 logger.info("Judge result: contract_id=%s clause=%s severity=%s issue=%s",
@@ -113,25 +116,43 @@ async def _judge_clause_node(state: ClauseState) -> dict:
     return {"risks": []}
 
 
-def _aggregate_node(state: AnalysisState) -> dict:
-    """After per-clause judging: HĐLĐ red-flags + completeness + preamble «Căn cứ»."""
+def _deterministic_node(state: AnalysisState) -> dict:
+    """Cheap pre-pass: red-flags (+ hydrated quotes) + completeness + preamble.
+
+    Sets ``skip_llm_clauses`` so fan-out can skip Gemini/RAG for those Điều.
+    """
     from app.agents.labor_completeness import check_labor_completeness
-    from app.agents.labor_red_flags import check_labor_red_flags
+    from app.agents.labor_red_flags import check_labor_red_flags, skip_llm_clause_numbers
     from app.agents.preamble_citations import check_preamble_citations
 
     analysis = state.get("analysis")
     text = state.get("contract_text") or ""
     if analysis is None and not text:
-        return {}
+        return {"skip_llm_clauses": []}
     eff = None
     if analysis is not None:
         eff = analysis.execution_date or analysis.start_date
     as_of = str(eff) if eff else None
-    extra: list = []
-    extra.extend(check_labor_red_flags(text, analysis, as_of_date=as_of))
-    extra.extend(check_labor_completeness(text, analysis, as_of_date=as_of))
-    extra.extend(check_preamble_citations(text, as_of_date=as_of))
-    return {"risks": extra} if extra else {}
+    cid = state.get("contract_id")
+    risks: list[RiskItem] = []
+    risks.extend(
+        check_labor_red_flags(text, analysis, as_of_date=as_of, contract_id=cid)
+    )
+    risks.extend(check_labor_completeness(text, analysis, as_of_date=as_of))
+    risks.extend(check_preamble_citations(text, as_of_date=as_of))
+    skip = skip_llm_clause_numbers(risks)
+    logger.info(
+        "Deterministic pre-pass: contract_id=%s risks=%s skip_llm_clauses=%s",
+        state.get("contract_id"),
+        len(risks),
+        skip,
+    )
+    return {"risks": risks, "skip_llm_clauses": skip}
+
+
+def _aggregate_node(state: AnalysisState) -> dict:
+    """No-op placeholder after judges — deterministic work already ran pre-fan-out."""
+    return {}
 
 
 async def _review_node(state: AnalysisState) -> dict:
@@ -204,7 +225,8 @@ def _build_extract_subgraph():
 
 
 def _build_evaluate_subgraph():
-    """Subgraph: per-clause risk evaluation (map-reduce via Send)."""
+    """Subgraph: deterministic risks first, then LLM only for uncovered Điều."""
+
     def _fan_out(state: AnalysisState):
         from app.agents.labor_completeness import extract_job_context
 
@@ -214,6 +236,18 @@ def _build_evaluate_subgraph():
         eff_date = analysis.execution_date or analysis.start_date if analysis is not None else None
         as_of = str(eff_date) if eff_date else None
         job_ctx = extract_job_context(state.get("contract_text") or "", analysis)
+        skip = {str(x) for x in (state.get("skip_llm_clauses") or [])}
+        to_judge = [c for c in clauses if str(c.clause_number) not in skip]
+        logger.info(
+            "LLM judge fan-out: contract_id=%s total_clauses=%s skip=%s to_judge=%s",
+            state["contract_id"],
+            len(clauses),
+            sorted(skip),
+            [c.clause_number for c in to_judge],
+        )
+        if not to_judge:
+            # Empty Send list can stall the graph — jump straight to aggregate.
+            return [Send("aggregate", state)]
         return [
             Send(
                 "judge_clause",
@@ -224,15 +258,18 @@ def _build_evaluate_subgraph():
                     "contract_type": contract_type,
                     "as_of_date": as_of,
                     "job_context": job_ctx,
+                    "skip_topics": [],
                 },
             )
-            for c in clauses
+            for c in to_judge
         ]
 
     g = StateGraph(AnalysisState, output_schema=_EvaluateOutput)
+    g.add_node("deterministic", _deterministic_node)
     g.add_node("judge_clause", _judge_clause_node)
     g.add_node("aggregate", _aggregate_node)
-    g.add_conditional_edges(START, _fan_out, ["judge_clause"])
+    g.add_edge(START, "deterministic")
+    g.add_conditional_edges("deterministic", _fan_out, ["judge_clause", "aggregate"])
     g.add_edge("judge_clause", "aggregate")
     g.add_edge("aggregate", END)
     return g.compile()
@@ -299,6 +336,7 @@ def _analysis_input(contract_text: str, contract_id: str, provider: str, review_
         "_plan": "extract",
         "_extract_started": False,
         "_evaluated": False,
+        "skip_llm_clauses": [],
     }
 
 
