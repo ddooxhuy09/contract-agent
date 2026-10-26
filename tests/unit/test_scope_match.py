@@ -109,7 +109,7 @@ def test_normative_rank_hierarchy():
     assert normative_rank(None, "Bộ luật Lao động") > normative_rank(None, "Thông tư …")
 
 
-def test_order_prefers_bo_luat_over_thong_tu_even_if_lower_score():
+def test_order_keeps_seed_search_order_over_doc_type():
     chunks = [
         RetrievedChunk(
             content="tt",
@@ -135,7 +135,34 @@ def test_order_prefers_bo_luat_over_thong_tu_even_if_lower_score():
         ),
     ]
     ordered = LegalGraphRag._order_for_prompt(chunks)
-    assert ordered[0].metadata["doc_type"] == "Bộ luật"
+    assert [c.metadata["path"] for c in ordered] == ["a", "b"]
+
+
+def test_order_puts_expansion_after_seeds_then_ranks_by_doc_type():
+    chunks = [
+        RetrievedChunk(
+            content="seed",
+            score=0.20,
+            metadata={"path": "seed", "doc_type": "Thông tư", "status_flag": 1, "role": "seed"},
+        ),
+        RetrievedChunk(
+            content="nd",
+            score=None,
+            metadata={"path": "nd", "doc_type": "Nghị định", "status_flag": 1, "role": "sibling"},
+        ),
+        RetrievedChunk(
+            content="bl",
+            score=None,
+            metadata={"path": "bl", "doc_type": "Bộ luật", "status_flag": 1, "role": "sibling"},
+        ),
+        RetrievedChunk(
+            content="rel",
+            score=0.99,
+            metadata={"path": "rel", "doc_type": "Bộ luật", "status_flag": 1, "role": "related"},
+        ),
+    ]
+    ordered = LegalGraphRag._order_for_prompt(chunks)
+    assert [c.metadata["path"] for c in ordered] == ["seed", "bl", "nd", "rel"]
 
 
 def test_order_drops_expired_when_effective_exists_via_validity():

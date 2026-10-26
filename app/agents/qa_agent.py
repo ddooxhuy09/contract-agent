@@ -106,7 +106,6 @@ async def _retrieve_node(state: QAState) -> dict:
         legal_query,
         k=5,
         title=legal_query,
-        contract_type="Hợp đồng lao động",
     )
     memory = await load_qa_memory(state["contract_id"])
 

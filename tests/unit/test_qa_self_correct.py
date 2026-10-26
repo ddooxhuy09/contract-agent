@@ -44,6 +44,34 @@ def _install_model(monkeypatch, responses):
     return fake
 
 
+def test_first_pass_does_not_assume_every_question_is_about_labor(monkeypatch):
+    calls = []
+
+    def capture_legal(query, k=3, **kwargs):
+        calls.append((query, k, kwargs))
+        return []
+
+    async def no_memory(_contract_id):
+        return ""
+
+    monkeypatch.setattr(qa, "retrieve_legal", capture_legal)
+    monkeypatch.setattr(qa, "load_qa_memory", no_memory)
+
+    asyncio.run(
+        qa._retrieve_node(
+            {
+                "query": "quyền của người tiêu dùng",
+                "messages": [qa.HumanMessage(content="quyền của người tiêu dùng")],
+                "contract_id": "c-rag-scope",
+            }
+        )
+    )
+
+    assert len(calls) == 1
+    assert calls[0][1] == 5
+    assert calls[0][2].get("contract_type") is None
+
+
 def test_empty_retrieval_loops_rewrite_then_refusal():
     result = asyncio.run(qa.answer_question("câu hỏi không có dữ liệu", "c-1"))
     assert result.answer == qa._NO_CONTEXT_ANSWER

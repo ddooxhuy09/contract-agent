@@ -403,20 +403,34 @@ class LegalGraphRag:
 
     @staticmethod
     def _order_for_prompt(chunks: list[RetrievedChunk], as_of: str | None = None) -> list[RetrievedChunk]:
-        """Order: còn HL → cấp văn bản (Bộ luật…→TT) → status → năm → role → score."""
+        """Order: effectiveness → seeds (hybrid-search order) → expansion (authority/status/year/score).
+
+        Seeds keep the ranking that produced them. Re-sorting them by instrument
+        level moves relevant provisions below rank 5 once expansion chunks are
+        merged; the authority hierarchy only orders hydrated context chunks,
+        which have no retrieval score of their own.
+        """
         role_rank = {"seed": 0, "sibling": 1, "ancestor": 2, "related": 3, "superseding": 0}
-        keyed = [(c, LegalGraphRag._validity_key(c, as_of)) for c in chunks]
-        keyed.sort(
-            key=lambda ck: (
-                ck[1][0],  # effectiveness bucket
+        positions = {id(chunk): index for index, chunk in enumerate(chunks)}
+
+        def key(chunk: RetrievedChunk):
+            priority, status_rank, year_rank = LegalGraphRag._validity_key(chunk, as_of)
+            rank = role_rank.get(chunk.metadata.get("role") or "seed", 9)
+            if rank == 0:
+                return (priority, rank, positions[id(chunk)], 0.0, 0, 0, 0.0)
+            return (
+                priority,
+                rank,
+                0,
                 -LegalGraphRag._doc_type_rank(
-                    ck[0].metadata.get("doc_type"),
-                    ck[0].metadata.get("title"),
+                    chunk.metadata.get("doc_type"),
+                    chunk.metadata.get("title"),
                 ),
-                ck[1][1],  # -status rank
-                ck[1][2],  # -year
-                role_rank.get(ck[0].metadata.get("role") or "seed", 9),
-                -(ck[0].score or 0),
+                status_rank,
+                year_rank,
+                -(chunk.score or 0),
             )
-        )
-        return [c for c, _ in keyed]
+
+        keyed = [(chunk, key(chunk)) for chunk in chunks]
+        keyed.sort(key=lambda pair: pair[1])
+        return [chunk for chunk, _ in keyed]

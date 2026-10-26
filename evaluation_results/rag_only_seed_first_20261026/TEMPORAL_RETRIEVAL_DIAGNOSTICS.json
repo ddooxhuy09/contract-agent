@@ -1,0 +1,96 @@
+{
+  "case_count": 14,
+  "temporal_retrieval_supported": false,
+  "structural_diagnostic": {
+    "cross_document_retrieval_coverage": {
+      "value": 0.369047619047619,
+      "sample_count": 14
+    },
+    "exact_provision_recall": {
+      "value": 0.2380952380952381,
+      "sample_count": 14
+    },
+    "explicit_distractor_retrieval_rate": {
+      "value": 0.0,
+      "sample_count": 14
+    },
+    "mrr": {
+      "value": 0.380952380952381,
+      "sample_count": 14
+    },
+    "pooled_binary_ndcg_at_1": {
+      "value": 0.2857142857142857,
+      "sample_count": 14
+    },
+    "pooled_binary_ndcg_at_10": {
+      "value": 0.24341686986201924,
+      "sample_count": 14
+    },
+    "pooled_binary_ndcg_at_3": {
+      "value": 0.23044959896649406,
+      "sample_count": 14
+    },
+    "pooled_binary_ndcg_at_5": {
+      "value": 0.24341686986201924,
+      "sample_count": 14
+    },
+    "pooled_precision_at_1": {
+      "value": 0.2857142857142857,
+      "sample_count": 14
+    },
+    "pooled_precision_at_10": {
+      "value": 0.05714285714285714,
+      "sample_count": 14
+    },
+    "pooled_precision_at_3": {
+      "value": 0.16666666666666666,
+      "sample_count": 14
+    },
+    "pooled_precision_at_5": {
+      "value": 0.11428571428571428,
+      "sample_count": 14
+    },
+    "recall_at_1": {
+      "value": 0.13095238095238096,
+      "sample_count": 14
+    },
+    "recall_at_10": {
+      "value": 0.2380952380952381,
+      "sample_count": 14
+    },
+    "recall_at_3": {
+      "value": 0.21428571428571427,
+      "sample_count": 14
+    },
+    "recall_at_5": {
+      "value": 0.2380952380952381,
+      "sample_count": 14
+    },
+    "required_evidence_coverage": {
+      "value": 0.2380952380952381,
+      "sample_count": 14
+    },
+    "retrieved_count": {
+      "value": 6.785714285714286,
+      "sample_count": 14
+    },
+    "unjudged_hit_count": {
+      "value": 6.142857142857143,
+      "sample_count": 14
+    }
+  },
+  "temporal_version_accuracy": {
+    "value": null,
+    "sample_count": 0,
+    "reason": "Benchmark dates are not forwarded by baseline QA/risk entry points. No verified version snapshots in output."
+  },
+  "applicable_law_selection_accuracy": {
+    "value": null,
+    "sample_count": 0
+  },
+  "outdated_citation_rate": {
+    "value": null,
+    "sample_count": 0
+  },
+  "note": "is_effective=false is not interpreted as never legally applicable. No temporal answer/reasoning is generated."
+}

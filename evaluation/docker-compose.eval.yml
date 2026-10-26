@@ -1,0 +1,62 @@
+name: contractlens-eval-01a154eb
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-contractlens}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-contractlens}
+      POSTGRES_DB: ${POSTGRES_DB:-contractlens}
+    volumes:
+      - eval_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  neo4j:
+    image: neo4j:5
+    environment:
+      NEO4J_AUTH: ${NEO4J_USER:-neo4j}/${NEO4J_PASSWORD:-contractlens}
+      NEO4J_server_memory_heap_initial__size: 256m
+      NEO4J_server_memory_heap_max__size: 512m
+      NEO4J_server_memory_pagecache_size: 512m
+    volumes:
+      - eval_neo4jdata:/data
+
+  worker:
+    image: contractlens-api:latest
+    entrypoint: []
+    working_dir: /workspace
+    env_file: ../.env
+    environment:
+      PYTHONPATH: /workspace
+      PYTHONUNBUFFERED: '1'
+      DATABASE_URL: postgresql://${POSTGRES_USER:-contractlens}:${POSTGRES_PASSWORD:-contractlens}@postgres:5432/${POSTGRES_DB:-contractlens}
+      NEO4J_URI: bolt://neo4j:7687
+      UPLOAD_DIR: /tmp/contractlens-eval-uploads
+      HF_HOME: /cache/huggingface
+      HUGGINGFACE_HUB_CACHE: /cache/huggingface/hub
+      HF_HUB_CACHE: /cache/huggingface/hub
+      TRANSFORMERS_CACHE: /cache/huggingface
+      HF_HUB_OFFLINE: '1'
+      TRANSFORMERS_OFFLINE: '1'
+      LANGCHAIN_TRACING_V2: 'false'
+      CONTRACTLENS_EVAL_ISOLATED: '1'
+    volumes:
+      - ..:/workspace:ro
+      - ../evaluation_results:/workspace/evaluation_results
+      - hf_cache:/cache/huggingface:ro
+    command: [python, -u, -m, evaluation.run_benchmark, --isolated-db]
+
+volumes:
+  eval_pgdata:
+    external: true
+    name: contractlens_eval_20261019_01a154eb_pgdata
+  eval_neo4jdata:
+    external: true
+    name: contractlens_eval_20261019_01a154eb_neo4jdata
+  hf_cache:
+    external: true
+    name: contractlens_hf_cache
