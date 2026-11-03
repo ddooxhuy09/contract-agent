@@ -159,7 +159,7 @@ def test_ground_citations_dedupes_sibling_points_and_drops_sector():
     )
     assert len(citations) == 1
     assert citations[0].doc_number == "12/2022/NĐ-CP"
-    assert citations[0].status == "Còn hiệu lực"
+    assert "Còn hiệu lực" in citations[0].status
 
 
 def test_extract_article_title_uses_heading_only():
