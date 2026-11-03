@@ -46,4 +46,13 @@ def test_health(client):
 def test_models(client):
     res = client.get("/api/v1/models")
     assert res.status_code == 200
-    assert isinstance(res.json(), list)
+    data = res.json()
+    assert isinstance(data, list)
+    leaked = ("gemini", "flash", "gpt", "claude", "openai", "google")
+    for item in data:
+        assert "provider" in item
+        assert "label" in item
+        assert "model" not in item
+        assert item["provider"] not in {"gemini", "google"}
+        blob = f"{item['provider']} {item['label']}".lower()
+        assert not any(token in blob for token in leaked)

@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, EmailStr, Field
 
-from app.agents.llm_client import DEFAULT_PROVIDER, PROVIDERS
+from app.agents.llm_client import DEFAULT_PROVIDER, get_providers, resolve_provider
 from app.api.deps import get_container_dep, get_current_user_id
 from app.application.use_cases.auth import LoginUser, RegisterUser
 from app.application.use_cases.contracts import (
@@ -85,7 +85,14 @@ class AuthRequest(BaseModel):
 
 @router.get("/models")
 async def list_models():
-    return [{"provider": key, **info} for key, info in PROVIDERS.items()]
+    """Public list of analysis modes. Aliases only — never leak vendor model names."""
+    return [
+        {
+            "provider": info.get("public_id") or key,
+            "label": info.get("alias", "Chuẩn"),
+        }
+        for key, info in get_providers().items()
+    ]
 
 
 @router.post("/auth/register")
@@ -143,7 +150,7 @@ async def analyze(
             container.contracts,
             container.contract_chunks,
             container.analyze_pipeline,
-        ).execute(req.contract_id, user_id, req.provider, req.force, req.review_mode)
+        ).execute(req.contract_id, user_id, resolve_provider(req.provider), req.force, req.review_mode)
         if result.get("status") == "awaiting_review":
             return AnalyzeReviewResponse(**result)
         return AnalyzeResponse(**result)
@@ -192,7 +199,7 @@ async def chat(
     try:
         assert container.qa_pipeline is not None
         result = await ChatWithContract(container.contracts, container.qa_pipeline).execute(
-            req.contract_id, req.question, user_id, req.provider, req.checkpoint_id
+            req.contract_id, req.question, user_id, resolve_provider(req.provider), req.checkpoint_id
         )
         return ChatResponse(**result)
     except NotFoundError as e:
@@ -216,7 +223,7 @@ async def chat_stream(
 
         async def event_gen():
             async for frame in container.qa_pipeline.stream(
-                req.contract_id, req.question, req.provider, req.checkpoint_id
+                req.contract_id, req.question, resolve_provider(req.provider), req.checkpoint_id
             ):
                 yield frame
 

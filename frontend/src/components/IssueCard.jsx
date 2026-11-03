@@ -148,7 +148,7 @@ export default function IssueCard({ risk, open, onToggle, cardId, clauseFallback
   };
 
   return (
-    <article id={cardId} className={`border-l-[3px] ${rail} scroll-mt-20`}>
+    <article id={cardId} className={`border-l-[3px] ${rail} scroll-mt-44 md:scroll-mt-36`}>
       <button
         type="button"
         onClick={onToggle}

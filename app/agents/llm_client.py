@@ -19,8 +19,29 @@ _gemini_chat_json: ChatGoogleGenerativeAI | None = None
 def get_providers() -> dict[str, dict[str, str]]:
     settings = get_settings()
     return {
-        "gemini": {"label": "Gemini 2.5 Flash", "model": settings.gemini_model},
+        "gemini": {
+            "public_id": "standard",
+            "alias": "Chuẩn",
+            "label": "Gemini 2.5 Flash",
+            "model": settings.gemini_model,
+        },
     }
+
+
+def resolve_provider(value: str | None) -> str:
+    """Map a public analysis-mode id (or legacy internal key) to the internal provider."""
+    if not value:
+        return DEFAULT_PROVIDER
+    providers = get_providers()
+    if value in providers:
+        return value
+    needle = value.strip().lower()
+    for key, info in providers.items():
+        if info.get("public_id", "").lower() == needle:
+            return key
+        if info.get("alias", "").lower() == needle:
+            return key
+    return DEFAULT_PROVIDER
 
 
 # Kept for routes that iterate providers at import/list time.

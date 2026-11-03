@@ -4,6 +4,7 @@ import IssueList from "./IssueList";
 import ContractProfile from "./ContractProfile";
 import ClauseIndex from "./ClauseIndex";
 import ChatTab from "./ChatTab";
+import AiDisclaimer from "./AiDisclaimer";
 import { parseIssue, normalizeRiskView, riskKey, sortRisks, dedupeRisks } from "../lib/riskDisplay";
 
 export default function AnalysisResult({
@@ -99,7 +100,7 @@ export default function AnalysisResult({
 
   return (
     <main className={mainClassName}>
-      <header className="sticky top-0 z-30 bg-paper/90 backdrop-blur-sm border-b border-rule">
+      <header className="sticky top-11 md:top-0 z-30 bg-paper/95 backdrop-blur-sm border-b border-rule">
         <div className="max-w-content mx-auto w-full page-pad !py-0 h-11 md:h-12 flex items-center gap-2">
           <button
             type="button"
@@ -111,6 +112,7 @@ export default function AnalysisResult({
           <span className="text-ink-faint hidden sm:inline shrink-0 text-[0.6875rem]">/</span>
           <span className="text-[0.8125rem] font-medium text-ink truncate min-w-0">{filename}</span>
         </div>
+        {activeTab === "report" && <AiDisclaimer flush />}
       </header>
 
       <div className="page-pad max-w-content mx-auto w-full">
