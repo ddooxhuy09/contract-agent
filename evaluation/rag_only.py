@@ -117,7 +117,7 @@ async def run(args):
                 "gold_used_in_retrieval": False, "legal_fixture_ingestion": False, "source_sha256": source_manifest(),
                 "query_adapters": {"qa_multi_hop_classification": "Original QA first pass: rule-based augmentation, retrieve_legal(k=5, contract_type=None). No QA LLM rewrite or answer generation.",
                                    "risk": "Original LegalGraphRag risk entry with question as title and supplied scenario as summary; k_seed=4, max_total=10, no inferred contract type. No LLM clause extraction."},
-                "temporal_dates_forwarded": False, "python": sys.version}
+                "temporal_dates_forwarded": args.date_field != "none", "date_field": args.date_field, "python": sys.version}
     write_json(output / "execution_metadata.json", metadata)
     print("RAG-only: Gemini credential absent, no LLM client is instantiated.", flush=True)
     metadata["corpus_before"] = fingerprints()
@@ -152,9 +152,9 @@ async def run(args):
                     "execution_status": "completed", "actual_answer": None, "generation_ms": None, "model_calls": 0,
                     "legal_relations": None, "contract_retrieval": [], "temporal_capability": "unsupported" if case['id'].startswith('TEMP-') else "not_requested"}
             query = "\n\n".join(str(v) for v in (case.get("scenario"), case["question"]) if v)
-            # Law applicable on the transaction date when given, else on the as-of date.
-            # Both are benchmark inputs (QUESTIONS_ONLY_NO_GOLD), not gold labels.
-            applicable_date = case.get("transaction_date") or case.get("as_of_date")
+            # Benchmark inputs (QUESTIONS_ONLY_NO_GOLD), not gold labels. --date-field picks which
+            # one is forwarded as the production `as_of_date` parameter ("none" = old behaviour).
+            applicable_date = None if args.date_field == "none" else case.get(args.date_field)
             try:
                 if case.get("contract_id"):
                     contract_start = time.perf_counter()
@@ -195,4 +195,6 @@ async def run(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", default=str(ROOT / "evaluation_results" / "rag_only"))
+    parser.add_argument("--date-field", choices=("as_of_date", "transaction_date", "none"), default="as_of_date",
+                        help="case date forwarded to retrieval as as_of_date")
     asyncio.run(run(parser.parse_args()))

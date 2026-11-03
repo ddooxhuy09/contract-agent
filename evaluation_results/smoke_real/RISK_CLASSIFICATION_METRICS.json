@@ -1,0 +1,85 @@
+{
+  "repository_labels": [
+    "critical",
+    "warning",
+    "ok"
+  ],
+  "risk_task_count": 1,
+  "gold_labeled_cases": 1,
+  "comparable_cases": 0,
+  "unobservable_or_failed_labeled_cases": 1,
+  "severity_accuracy": {
+    "value": null,
+    "sample_count": 0
+  },
+  "end_to_end_correct_detection_fraction": {
+    "value": 0.0,
+    "sample_count": 1,
+    "note": "Unavailable/failed outputs count as no correct detection. This is operational coverage, not conditional classifier accuracy."
+  },
+  "confusion_matrix": {
+    "critical": {
+      "critical": 0,
+      "warning": 0,
+      "ok": 0
+    },
+    "warning": {
+      "critical": 0,
+      "warning": 0,
+      "ok": 0
+    },
+    "ok": {
+      "critical": 0,
+      "warning": 0,
+      "ok": 0
+    }
+  },
+  "by_severity": {
+    "critical": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "support": 0,
+      "predicted": 0
+    },
+    "warning": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "support": 0,
+      "predicted": 0
+    },
+    "ok": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "support": 0,
+      "predicted": 0
+    }
+  },
+  "macro_f1": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Mean over classes with nonzero gold or predicted support; absent classes remain null."
+  },
+  "critical_risk_recall": {
+    "value": 0.0,
+    "sample_count": 1,
+    "note": "End-to-end: failed/unobservable cases are not detected."
+  },
+  "false_negative_rate": {
+    "value": 1.0,
+    "sample_count": 1,
+    "note": "End-to-end critical miss fraction including execution failures."
+  },
+  "citation_correctness": {
+    "value": null,
+    "sample_count": 0,
+    "reason": "Requires reviewed citation support."
+  },
+  "evidence_span_accuracy": {
+    "value": null,
+    "sample_count": 0,
+    "reason": "Output does not expose a comparable normalized predicted input span."
+  }
+}

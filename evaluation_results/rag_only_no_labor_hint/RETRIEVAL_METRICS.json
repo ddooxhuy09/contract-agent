@@ -1,0 +1,290 @@
+{
+  "mode": "rag_only_existing_corpus",
+  "case_count": 34,
+  "execution_counts": {
+    "completed": 34
+  },
+  "generation_model_calls": 0,
+  "stages": {
+    "seed": {
+      "cross_document_retrieval_coverage": {
+        "value": 0.2843137254901961,
+        "sample_count": 34
+      },
+      "exact_provision_recall": {
+        "value": 0.20098039215686272,
+        "sample_count": 34
+      },
+      "explicit_distractor_retrieval_rate": {
+        "value": 0.0,
+        "sample_count": 34
+      },
+      "mrr": {
+        "value": 0.2598039215686274,
+        "sample_count": 34
+      },
+      "pooled_binary_ndcg_at_1": {
+        "value": 0.20588235294117646,
+        "sample_count": 34
+      },
+      "pooled_binary_ndcg_at_10": {
+        "value": 0.19717406144218041,
+        "sample_count": 34
+      },
+      "pooled_binary_ndcg_at_3": {
+        "value": 0.19183459695578772,
+        "sample_count": 34
+      },
+      "pooled_binary_ndcg_at_5": {
+        "value": 0.19717406144218041,
+        "sample_count": 34
+      },
+      "pooled_precision_at_1": {
+        "value": 0.20588235294117646,
+        "sample_count": 34
+      },
+      "pooled_precision_at_10": {
+        "value": 0.03529411764705883,
+        "sample_count": 34
+      },
+      "pooled_precision_at_3": {
+        "value": 0.10784313725490197,
+        "sample_count": 34
+      },
+      "pooled_precision_at_5": {
+        "value": 0.07058823529411766,
+        "sample_count": 34
+      },
+      "recall_at_1": {
+        "value": 0.14215686274509806,
+        "sample_count": 34
+      },
+      "recall_at_10": {
+        "value": 0.20098039215686272,
+        "sample_count": 34
+      },
+      "recall_at_3": {
+        "value": 0.19117647058823528,
+        "sample_count": 34
+      },
+      "recall_at_5": {
+        "value": 0.20098039215686272,
+        "sample_count": 34
+      },
+      "required_evidence_coverage": {
+        "value": 0.20098039215686272,
+        "sample_count": 34
+      },
+      "retrieved_count": {
+        "value": 4.205882352941177,
+        "sample_count": 34
+      },
+      "unjudged_hit_count": {
+        "value": 3.823529411764706,
+        "sample_count": 34
+      }
+    },
+    "graph_expanded_ranked": {
+      "cross_document_retrieval_coverage": {
+        "value": 0.2843137254901961,
+        "sample_count": 34
+      },
+      "exact_provision_recall": {
+        "value": 0.20098039215686272,
+        "sample_count": 34
+      },
+      "explicit_distractor_retrieval_rate": {
+        "value": 0.0,
+        "sample_count": 34
+      },
+      "mrr": {
+        "value": 0.18487394957983194,
+        "sample_count": 34
+      },
+      "pooled_binary_ndcg_at_1": {
+        "value": 0.14705882352941177,
+        "sample_count": 34
+      },
+      "pooled_binary_ndcg_at_10": {
+        "value": 0.15537664476657542,
+        "sample_count": 34
+      },
+      "pooled_binary_ndcg_at_3": {
+        "value": 0.11559448454603094,
+        "sample_count": 34
+      },
+      "pooled_binary_ndcg_at_5": {
+        "value": 0.13464499224045715,
+        "sample_count": 34
+      },
+      "pooled_precision_at_1": {
+        "value": 0.14705882352941177,
+        "sample_count": 34
+      },
+      "pooled_precision_at_10": {
+        "value": 0.03529411764705883,
+        "sample_count": 34
+      },
+      "pooled_precision_at_3": {
+        "value": 0.0588235294117647,
+        "sample_count": 34
+      },
+      "pooled_precision_at_5": {
+        "value": 0.05294117647058823,
+        "sample_count": 34
+      },
+      "recall_at_1": {
+        "value": 0.0980392156862745,
+        "sample_count": 34
+      },
+      "recall_at_10": {
+        "value": 0.20098039215686272,
+        "sample_count": 34
+      },
+      "recall_at_3": {
+        "value": 0.10784313725490195,
+        "sample_count": 34
+      },
+      "recall_at_5": {
+        "value": 0.14705882352941177,
+        "sample_count": 34
+      },
+      "required_evidence_coverage": {
+        "value": 0.20098039215686272,
+        "sample_count": 34
+      },
+      "retrieved_count": {
+        "value": 7.029411764705882,
+        "sample_count": 34
+      },
+      "unjudged_hit_count": {
+        "value": 6.647058823529412,
+        "sample_count": 34
+      }
+    },
+    "final_retrieval": {
+      "cross_document_retrieval_coverage": {
+        "value": 0.2843137254901961,
+        "sample_count": 34
+      },
+      "exact_provision_recall": {
+        "value": 0.20098039215686272,
+        "sample_count": 34
+      },
+      "explicit_distractor_retrieval_rate": {
+        "value": 0.0,
+        "sample_count": 34
+      },
+      "mrr": {
+        "value": 0.18487394957983194,
+        "sample_count": 34
+      },
+      "pooled_binary_ndcg_at_1": {
+        "value": 0.14705882352941177,
+        "sample_count": 34
+      },
+      "pooled_binary_ndcg_at_10": {
+        "value": 0.15537664476657542,
+        "sample_count": 34
+      },
+      "pooled_binary_ndcg_at_3": {
+        "value": 0.11559448454603094,
+        "sample_count": 34
+      },
+      "pooled_binary_ndcg_at_5": {
+        "value": 0.13464499224045715,
+        "sample_count": 34
+      },
+      "pooled_precision_at_1": {
+        "value": 0.14705882352941177,
+        "sample_count": 34
+      },
+      "pooled_precision_at_10": {
+        "value": 0.03529411764705883,
+        "sample_count": 34
+      },
+      "pooled_precision_at_3": {
+        "value": 0.0588235294117647,
+        "sample_count": 34
+      },
+      "pooled_precision_at_5": {
+        "value": 0.05294117647058823,
+        "sample_count": 34
+      },
+      "recall_at_1": {
+        "value": 0.0980392156862745,
+        "sample_count": 34
+      },
+      "recall_at_10": {
+        "value": 0.20098039215686272,
+        "sample_count": 34
+      },
+      "recall_at_3": {
+        "value": 0.10784313725490195,
+        "sample_count": 34
+      },
+      "recall_at_5": {
+        "value": 0.14705882352941177,
+        "sample_count": 34
+      },
+      "required_evidence_coverage": {
+        "value": 0.20098039215686272,
+        "sample_count": 34
+      },
+      "retrieved_count": {
+        "value": 6.411764705882353,
+        "sample_count": 34
+      },
+      "unjudged_hit_count": {
+        "value": 6.029411764705882,
+        "sample_count": 34
+      }
+    }
+  },
+  "stage_case_counts": {
+    "seed": 34,
+    "graph_expanded_ranked": 34,
+    "final_retrieval": 34
+  },
+  "graph_expansion_effect": {
+    "paired_cases": 34,
+    "improved_coverage": 0,
+    "reduced_coverage": 0,
+    "unchanged_coverage": 34,
+    "mean_coverage_change": 0.0
+  },
+  "contract_text_span_coverage": {
+    "value": 1.0,
+    "sample_count": 20
+  },
+  "contract_clause_id_exact_match": {
+    "value": 0.0,
+    "sample_count": 20
+  },
+  "precision_at_k": {
+    "value": null,
+    "sample_count": 0,
+    "reason": "Unjudged real-corpus hits prevent exhaustive relevance precision. Pooled diagnostic values treat unjudged as nonrelevant."
+  },
+  "relation_edge_recall": {
+    "value": null,
+    "sample_count": 0,
+    "reason": "Observed expansion returns path/doc IDs; no actual used relation edge IDs are exposed."
+  },
+  "exact_versioned_provision_recall": {
+    "value": null,
+    "sample_count": 0,
+    "reason": "Verified historical provision-version IDs are not present in retrieved metadata."
+  },
+  "llm_context_evidence": {
+    "value": null,
+    "sample_count": 0,
+    "reason": "No model prompt or answer was generated."
+  },
+  "output_citations": {
+    "value": null,
+    "sample_count": 0,
+    "reason": "No answer generation; retrieved chunks are not treated as citations."
+  },
+  "label_quality": "All labels are synthetic draft. Structural identity scores do not establish legal correctness or correct historical text."
+}

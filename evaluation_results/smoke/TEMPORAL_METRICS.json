@@ -1,0 +1,30 @@
+{
+  "temporal_version_accuracy": {
+    "value": null,
+    "sample_count": 0,
+    "note": "No temporal predictions were executed/scored in this run."
+  },
+  "applicable_law_selection_accuracy": {
+    "value": null,
+    "sample_count": 0,
+    "note": "No temporal predictions were executed/scored in this run."
+  },
+  "outdated_citation_rate": {
+    "value": null,
+    "sample_count": 0,
+    "note": "No temporal predictions were executed/scored in this run."
+  },
+  "relation_edge_recall": {
+    "value": null,
+    "sample_count": 0,
+    "note": "No temporal predictions were executed/scored in this run."
+  },
+  "transitional_provision_accuracy": {
+    "value": null,
+    "sample_count": 0,
+    "note": "No temporal predictions were executed/scored in this run."
+  },
+  "temporal_case_count": 2,
+  "temporal_cases_executed": 0,
+  "system_capability_note": "Standard QA does not pass as_of_date or transaction_date into retrieve_legal; risk workflow also does not receive these dates."
+}

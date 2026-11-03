@@ -1,0 +1,64 @@
+{
+  "generated_at": "2026-10-19T16:19:05.674073+00:00",
+  "run_mode": "smoke",
+  "benchmark_version": "0.4.1",
+  "benchmark_path": "ContractLens_Mixed_Temporal_Eval_v04_34_Samples\\ContractLens_Mixed_Legal_Eval_v04",
+  "selected_case_count": 5,
+  "status_counts": {
+    "not_run": 5
+  },
+  "schema_validation": {
+    "returncode": 0,
+    "stdout": "PASS: 34 cases; 6 verified relationship definitions; 11 tracked documents\nWARN: schema passing is not proof of legal correctness. All cases require review.",
+    "stderr": ""
+  },
+  "settings": {
+    "provider": "gemini",
+    "llm_model": "gemini-2.5-flash",
+    "llm_api_key_configured": true,
+    "embedding_model": "BAAI/bge-m3",
+    "embedding_dimensions": 1024,
+    "embedding_device": "auto",
+    "top_k_retrieval": 5,
+    "similarity_threshold": 0.6,
+    "legal_expand_backend": "neo4j",
+    "database_host": "localhost",
+    "database_port": 5433,
+    "database_name": "contractlens"
+  },
+  "postgres_snapshot": {
+    "available": false,
+    "error": {
+      "type": "OperationalError",
+      "message": "Connection or operation failed; details redacted."
+    },
+    "legal_document_count": null,
+    "documents": []
+  },
+  "neo4j_snapshot": {
+    "available": false,
+    "error": {
+      "type": "ConnectionError",
+      "message": "Connection or operation failed; details redacted."
+    }
+  },
+  "local_corpus_metadata_files": [
+    "Bộ luật Hình sự số 100-2015-QH13--96122\\thuoc_tinh.json",
+    "tests\\fixtures\\legal_sample\\thuoc_tinh.json"
+  ],
+  "corpus_snapshot": "Read-only connectivity snapshot; no corpus writes or fixture ingest.",
+  "gold_loaded_after_inference": true,
+  "prediction_file_contains_gold": false,
+  "smoke_cases": [
+    "MIX-017",
+    "TEMP-006",
+    "MIX-018",
+    "TEMP-014",
+    "MIX-007"
+  ],
+  "inference_attempted": false,
+  "runtime": {
+    "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+    "platform": "win32"
+  }
+}

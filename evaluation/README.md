@@ -51,7 +51,9 @@ Final R@5 moved 0.147 → 0.201 and MRR 0.185 → 0.260 with unchanged coverage;
 | Legal QA without contract_id | Original QA retrieve/rewrite/generate/refusal nodes | Skip contract retrieval and persisted memory; no unrelated contract is assigned. Actual prompts, legal retrieval and LLM are retained. |
 | Risk scenario without contract_id | risk_flagger.evaluate_clause | Use only supplied question/scenario as clause summary; no fabricated contract or legal evidence. |
 
-Dates are not injected into retrieval parameters that the production entry points do not accept. Temporal outputs are retained and marked `unsupported_capability` when executed. `rag_only/` contains the earlier retrieval baseline with the labor hint; `rag_only_no_labor_hint/` contains the follow-up run after removing it; `rag_only_seed_first_20261026/` contains the run after the seed-first ranking change; `rerank_ablation_20261026/` contains the offline policy comparison.
+`rag_only.py --date-field` forwards a benchmark input date (`as_of_date` by default) to retrieval; `execution_metadata.json` records `date_field`. Older runs forwarded none. Temporal outputs from the generation runner are retained and marked `unsupported_capability` when executed. `rag_only/` contains the earlier retrieval baseline with the labor hint; `rag_only_no_labor_hint/` contains the follow-up run after removing it; `rag_only_seed_first_20261026/` contains the run after the seed-first ranking change; `rerank_ablation_20261026/` contains the offline policy comparison; `rag_only_chunker_asof_20261103/` and `rag_only_chunker_txdate_20261103/` contain the runs after the chunker fix and date forwarding (`CHUNKER_ASOF_RUN.md`). `scripts/audit_status4_provisions.py` writes `STATUS4_AUDIT.md`.
+
+`predictions.jsonl`, `traces/` and `corpus_snapshot.json` are git-ignored (tens of MB); regenerate them with the commands above.
 
 ## Reproduce safely
 

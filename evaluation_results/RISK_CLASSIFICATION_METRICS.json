@@ -1,0 +1,89 @@
+{
+  "repository_labels": [
+    "critical",
+    "warning",
+    "ok"
+  ],
+  "risk_task_count": 13,
+  "gold_labeled_cases": 11,
+  "comparable_cases": 0,
+  "unobservable_or_failed_labeled_cases": 11,
+  "severity_accuracy": {
+    "value": null,
+    "sample_count": 0
+  },
+  "end_to_end_correct_detection_fraction": {
+    "value": 0.0,
+    "sample_count": 11,
+    "note": "Unavailable/failed outputs count as no correct detection. This is operational coverage, not conditional classifier accuracy."
+  },
+  "confusion_matrix": {
+    "critical": {
+      "critical": 0,
+      "warning": 0,
+      "ok": 0
+    },
+    "warning": {
+      "critical": 0,
+      "warning": 0,
+      "ok": 0
+    },
+    "ok": {
+      "critical": 0,
+      "warning": 0,
+      "ok": 0
+    }
+  },
+  "by_severity": {
+    "critical": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "support": 0,
+      "predicted": 0
+    },
+    "warning": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "support": 0,
+      "predicted": 0
+    },
+    "ok": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "support": 0,
+      "predicted": 0
+    }
+  },
+  "macro_f1": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Mean over classes with nonzero gold or predicted support; absent classes remain null."
+  },
+  "critical_risk_recall": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Only comparable observed labels; unavailable outputs are not forced into classification metrics."
+  },
+  "false_negative_rate": {
+    "value": null,
+    "sample_count": 0
+  },
+  "end_to_end_critical_detection_fraction": {
+    "value": 0.0,
+    "sample_count": 10,
+    "note": "Operational fraction with a confirmed detection across all gold-critical cases, including cases blocked from execution; not conditional classifier recall."
+  },
+  "citation_correctness": {
+    "value": null,
+    "sample_count": 0,
+    "reason": "Requires reviewed citation support."
+  },
+  "evidence_span_accuracy": {
+    "value": null,
+    "sample_count": 0,
+    "reason": "Output does not expose a comparable normalized predicted input span."
+  }
+}

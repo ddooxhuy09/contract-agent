@@ -1,0 +1,259 @@
+{
+  "generated_at": "2026-10-19T16:48:53.418009+00:00",
+  "schema_valid": true,
+  "errors": [],
+  "warnings": [
+    "CTR-LAB-01: DOCX contains the reference body plus additional title/disclaimer text.",
+    "CTR-LAB-01: declared .txt artifact absent; DOCX exists and is used.",
+    "CTR-CTV-02: DOCX contains the reference body plus additional title/disclaimer text.",
+    "CTR-CTV-02: declared .txt artifact absent; DOCX exists and is used.",
+    "CTR-CIV-03: DOCX contains the reference body plus additional title/disclaimer text.",
+    "CTR-CIV-03: declared .txt artifact absent; DOCX exists and is used.",
+    "CTR-COM-04: DOCX contains the reference body plus additional title/disclaimer text.",
+    "CTR-COM-04: declared .txt artifact absent; DOCX exists and is used.",
+    "CTR-COM-05: DOCX contains the reference body plus additional title/disclaimer text.",
+    "CTR-COM-05: declared .txt artifact absent; DOCX exists and is used.",
+    "CTR-CONS-06: DOCX contains the reference body plus additional title/disclaimer text.",
+    "CTR-CONS-06: declared .txt artifact absent; DOCX exists and is used.",
+    "CTR-CONS-07: DOCX contains the reference body plus additional title/disclaimer text.",
+    "CTR-CONS-07: declared .txt artifact absent; DOCX exists and is used.",
+    "Provision laws omitted from status manifest: 36/2005/QH11, 84/2015/QH13, 91/2015/QH13"
+  ],
+  "case_count": 34,
+  "difficulty_counts": {
+    "easy": 10,
+    "expert": 6,
+    "hard": 14,
+    "medium": 4
+  },
+  "task_counts": {
+    "risk": 13,
+    "multi_hop": 7,
+    "qa": 13,
+    "classification": 1
+  },
+  "provision_count": 43,
+  "document_status_count": 11,
+  "unique_laws_in_provisions": 14,
+  "relation_count": 6,
+  "version_count": 3,
+  "retrieval_fixture_chunks": 44,
+  "verification_levels": {
+    "source_excerpt_crosscheck_required": 17,
+    "inherited_v02_needs_primary_pdf_verification": 5,
+    "official_text_or_metadata_verified": 17,
+    "secondary_text_primary_metadata_crosschecked": 4
+  },
+  "all_cases_independently_legally_verified": false,
+  "case_warnings": {
+    "MIX-017": [
+      "Synthetic draft; independent legal review pending."
+    ],
+    "TEMP-006": [
+      "Synthetic draft; independent legal review pending."
+    ],
+    "MIX-018": [
+      "Synthetic draft; independent legal review pending."
+    ],
+    "TEMP-014": [
+      "Synthetic draft; independent legal review pending."
+    ],
+    "MIX-007": [
+      "Synthetic draft; independent legal review pending."
+    ],
+    "MIX-006": [
+      "Synthetic draft; independent legal review pending."
+    ],
+    "MIX-012": [
+      "Synthetic draft; independent legal review pending.",
+      "Required law 36/2005/QH11 is absent from LEGAL_DOCUMENTS_STATUS metadata."
+    ],
+    "TEMP-009": [
+      "Synthetic draft; independent legal review pending."
+    ],
+    "MIX-019": [
+      "Synthetic draft; independent legal review pending."
+    ],
+    "MIX-005": [
+      "Synthetic draft; independent legal review pending.",
+      "Required law 84/2015/QH13 is absent from LEGAL_DOCUMENTS_STATUS metadata."
+    ],
+    "MIX-003": [
+      "Synthetic draft; independent legal review pending."
+    ],
+    "MIX-004": [
+      "Synthetic draft; independent legal review pending."
+    ],
+    "MIX-008": [
+      "Synthetic draft; independent legal review pending."
+    ],
+    "TEMP-011": [
+      "Synthetic draft; independent legal review pending.",
+      "Provision-version full text is incomplete/unverified; exact historical-text and current post-2025 applicability claims require review."
+    ],
+    "MIX-020": [
+      "Synthetic draft; independent legal review pending."
+    ],
+    "MIX-013": [
+      "Synthetic draft; independent legal review pending.",
+      "Required law 36/2005/QH11 is absent from LEGAL_DOCUMENTS_STATUS metadata."
+    ],
+    "MIX-014": [
+      "Synthetic draft; independent legal review pending.",
+      "Required law 36/2005/QH11 is absent from LEGAL_DOCUMENTS_STATUS metadata."
+    ],
+    "TEMP-010": [
+      "Synthetic draft; independent legal review pending.",
+      "Provision-version full text is incomplete/unverified; exact historical-text and current post-2025 applicability claims require review."
+    ],
+    "TEMP-003": [
+      "Synthetic draft; independent legal review pending."
+    ],
+    "MIX-009": [
+      "Synthetic draft; independent legal review pending.",
+      "Required law 91/2015/QH13 is absent from LEGAL_DOCUMENTS_STATUS metadata."
+    ],
+    "MIX-002": [
+      "Synthetic draft; independent legal review pending."
+    ],
+    "TEMP-001": [
+      "Synthetic draft; independent legal review pending."
+    ],
+    "TEMP-013": [
+      "Synthetic draft; independent legal review pending.",
+      "Provision-version full text is incomplete/unverified; exact historical-text and current post-2025 applicability claims require review."
+    ],
+    "MIX-011": [
+      "Synthetic draft; independent legal review pending.",
+      "Required law 36/2005/QH11 is absent from LEGAL_DOCUMENTS_STATUS metadata."
+    ],
+    "TEMP-012": [
+      "Synthetic draft; independent legal review pending.",
+      "Provision-version full text is incomplete/unverified; exact historical-text and current post-2025 applicability claims require review."
+    ],
+    "MIX-016": [
+      "Synthetic draft; independent legal review pending."
+    ],
+    "MIX-015": [
+      "Synthetic draft; independent legal review pending."
+    ],
+    "TEMP-005": [
+      "Synthetic draft; independent legal review pending."
+    ],
+    "TEMP-008": [
+      "Synthetic draft; independent legal review pending.",
+      "Risk task has no gold risk_severity in repository label space; severity scoring unavailable."
+    ],
+    "MIX-001": [
+      "Synthetic draft; independent legal review pending."
+    ],
+    "MIX-010": [
+      "Synthetic draft; independent legal review pending.",
+      "Required law 91/2015/QH13 is absent from LEGAL_DOCUMENTS_STATUS metadata."
+    ],
+    "TEMP-007": [
+      "Synthetic draft; independent legal review pending.",
+      "Risk task has no gold risk_severity in repository label space; severity scoring unavailable."
+    ],
+    "TEMP-004": [
+      "Synthetic draft; independent legal review pending."
+    ],
+    "TEMP-002": [
+      "Synthetic draft; independent legal review pending."
+    ]
+  },
+  "contracts": [
+    {
+      "id": "CTR-LAB-01",
+      "docx_exists": true,
+      "docx_matches_embedded_text": false,
+      "docx_contains_reference_body": true,
+      "declared_txt_missing": true
+    },
+    {
+      "id": "CTR-CTV-02",
+      "docx_exists": true,
+      "docx_matches_embedded_text": false,
+      "docx_contains_reference_body": true,
+      "declared_txt_missing": true
+    },
+    {
+      "id": "CTR-CIV-03",
+      "docx_exists": true,
+      "docx_matches_embedded_text": false,
+      "docx_contains_reference_body": true,
+      "declared_txt_missing": true
+    },
+    {
+      "id": "CTR-COM-04",
+      "docx_exists": true,
+      "docx_matches_embedded_text": false,
+      "docx_contains_reference_body": true,
+      "declared_txt_missing": true
+    },
+    {
+      "id": "CTR-COM-05",
+      "docx_exists": true,
+      "docx_matches_embedded_text": false,
+      "docx_contains_reference_body": true,
+      "declared_txt_missing": true
+    },
+    {
+      "id": "CTR-CONS-06",
+      "docx_exists": true,
+      "docx_matches_embedded_text": false,
+      "docx_contains_reference_body": true,
+      "declared_txt_missing": true
+    },
+    {
+      "id": "CTR-CONS-07",
+      "docx_exists": true,
+      "docx_matches_embedded_text": false,
+      "docx_contains_reference_body": true,
+      "declared_txt_missing": true
+    }
+  ],
+  "unverified_version_rows": [
+    {
+      "provision_id": "N145-4.2",
+      "version_id": "N145_ART4_CLAUSE2_ORIGINAL",
+      "effective_from": "2021-02-01",
+      "effective_until_exclusive": "2022-07-15",
+      "modifying_edge_id": null,
+      "text_status": "original_historical_version",
+      "full_text_available": false,
+      "comment": "Chưa trích toàn văn nguyên bản, không đánh giá text exact match ở bản này.",
+      "versioned_chunk_id": "N145-4.2@2021-02-01",
+      "text_source_review_status": "needs_exact_historical_snapshot_text_validation"
+    },
+    {
+      "provision_id": "N145-4.2",
+      "version_id": "N145_ART4_CLAUSE2_AMENDED_2022",
+      "effective_from": "2022-07-15",
+      "effective_until_exclusive": null,
+      "modifying_edge_id": "AMEND-145-2022",
+      "text_status": "amended_by_ND35_2022",
+      "full_text_available": false,
+      "comment": "Phải cập nhật tiếp các văn bản sửa đổi sau 2022 trước khi kết luận hiệu lực nội dung năm 2026.",
+      "versioned_chunk_id": "N145-4.2@2022-07-15",
+      "text_source_review_status": "needs_exact_historical_snapshot_text_validation"
+    },
+    {
+      "provision_id": "N145-4.4",
+      "version_id": "N145_ART4_CLAUSE4_ADDED_2024",
+      "effective_from": "2024-03-25",
+      "effective_until_exclusive": null,
+      "modifying_edge_id": "ADD-145-2024",
+      "text_status": "added_by_ND10_2024",
+      "full_text_available": false,
+      "comment": "Đánh giá tại 01/04/2024; không khẳng định toàn bộ nội dung hiện còn nguyên ở 2026.",
+      "versioned_chunk_id": "N145-4.4@2024-03-25",
+      "text_source_review_status": "needs_exact_historical_snapshot_text_validation"
+    }
+  ],
+  "statute_status_manifest_omissions": [
+    "36/2005/QH11",
+    "84/2015/QH13",
+    "91/2015/QH13"
+  ]
+}

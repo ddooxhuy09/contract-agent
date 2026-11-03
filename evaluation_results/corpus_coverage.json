@@ -1,0 +1,883 @@
+{
+  "snapshot_at": "2026-10-19T16:48:54.439207+00:00",
+  "requested_laws": [
+    "10/2012/QH13",
+    "10/2024/NĐ-CP",
+    "145/2020/NĐ-CP",
+    "19/2023/QH15",
+    "20/2023/QH15",
+    "35/2022/NĐ-CP",
+    "36/2005/QH11",
+    "41/2024/QH15",
+    "45/2019/QH14",
+    "51/2005/QH11",
+    "58/2014/QH13",
+    "59/2010/QH12",
+    "84/2015/QH13",
+    "91/2015/QH13"
+  ],
+  "documents": [
+    {
+      "doc_id": "70811",
+      "doc_num": "84/2015/QH13",
+      "title": "Luật An toàn, vệ sinh lao động số 84/2015/QH13",
+      "eff_from": "2016-07-01",
+      "eff_to": null,
+      "status_flag": 4,
+      "chunks": 516,
+      "effective_chunks": 0,
+      "embedded_chunks": 516
+    },
+    {
+      "doc_id": "152668",
+      "doc_num": "145/2020/NĐ-CP",
+      "title": "Nghị định số 145/2020/NĐ-CP Quy định chi tiết và hướng dẫn thi hành một số điều của Bộ luật Lao động về điều kiện lao động và quan hệ lao động",
+      "eff_from": "2021-02-01",
+      "eff_to": null,
+      "status_flag": 4,
+      "chunks": 674,
+      "effective_chunks": 0,
+      "embedded_chunks": 674
+    },
+    {
+      "doc_id": "165573",
+      "doc_num": "10/2024/NĐ-CP",
+      "title": "Nghị định số 10/2024/NĐ-CP Quy định về khu công nghệ cao",
+      "eff_from": "2024-03-25",
+      "eff_to": null,
+      "status_flag": 1,
+      "chunks": 389,
+      "effective_chunks": 389,
+      "embedded_chunks": 389
+    },
+    {
+      "doc_id": "95942",
+      "doc_num": "91/2015/QH13",
+      "title": "Bộ luật Dân sự số 91/2015/QH13",
+      "eff_from": "2017-01-01",
+      "eff_to": null,
+      "status_flag": 1,
+      "chunks": 1908,
+      "effective_chunks": 1908,
+      "embedded_chunks": 1908
+    },
+    {
+      "doc_id": "17067",
+      "doc_num": "51/2005/QH11",
+      "title": "Luật Giao dịch điện tử số 51/2005/QH11",
+      "eff_from": "2006-03-01",
+      "eff_to": "2024-07-01",
+      "status_flag": 2,
+      "chunks": 208,
+      "effective_chunks": 0,
+      "embedded_chunks": 208
+    },
+    {
+      "doc_id": "175027",
+      "doc_num": "41/2024/QH15",
+      "title": "Luật Bảo hiểm xã hội",
+      "eff_from": "2025-07-01",
+      "eff_to": "2026-01-01",
+      "status_flag": 2,
+      "chunks": 801,
+      "effective_chunks": 0,
+      "embedded_chunks": 801
+    },
+    {
+      "doc_id": "165913",
+      "doc_num": "20/2023/QH15",
+      "title": "Luật Giao dịch điện tử số 20/2023/QH15",
+      "eff_from": "2024-07-01",
+      "eff_to": null,
+      "status_flag": 4,
+      "chunks": 266,
+      "effective_chunks": 266,
+      "embedded_chunks": 266
+    },
+    {
+      "doc_id": "70827",
+      "doc_num": "91/2015/QH13",
+      "title": "Nghị quyết số 91/2015/QH13 Về chương trình hoạt động giám sát của Quốc hội năm 2016",
+      "eff_from": null,
+      "eff_to": null,
+      "status_flag": 0,
+      "chunks": 0,
+      "effective_chunks": 0,
+      "embedded_chunks": 0
+    },
+    {
+      "doc_id": "161263",
+      "doc_num": "19/2023/QH15",
+      "title": "Luật Bảo vệ quyền lợi người tiêu dùng số 19/2023/QH15",
+      "eff_from": "2024-07-01",
+      "eff_to": null,
+      "status_flag": 1,
+      "chunks": 508,
+      "effective_chunks": 508,
+      "embedded_chunks": 508
+    },
+    {
+      "doc_id": "139264",
+      "doc_num": "45/2019/QH14",
+      "title": "Bộ Luật lao động số 45/2019/QH14",
+      "eff_from": "2021-01-01",
+      "eff_to": null,
+      "status_flag": 4,
+      "chunks": 874,
+      "effective_chunks": 0,
+      "embedded_chunks": 874
+    },
+    {
+      "doc_id": "17116",
+      "doc_num": "51/2005/QH11",
+      "title": "Nghị quyết số 51/2005/QH11 Về nhiệm vụ năm 2006",
+      "eff_from": null,
+      "eff_to": null,
+      "status_flag": 0,
+      "chunks": 0,
+      "effective_chunks": 0,
+      "embedded_chunks": 0
+    },
+    {
+      "doc_id": "27615",
+      "doc_num": "10/2012/QH13",
+      "title": "Bộ luật Lao động số 10/2012/QH13",
+      "eff_from": "2013-05-01",
+      "eff_to": "2021-01-01",
+      "status_flag": 2,
+      "chunks": 243,
+      "effective_chunks": 0,
+      "embedded_chunks": 243
+    },
+    {
+      "doc_id": "46744",
+      "doc_num": "58/2014/QH13",
+      "title": "Luật Bảo hiểm xã hội số 58/2014/QH13",
+      "eff_from": "2016-01-01",
+      "eff_to": "2025-07-01",
+      "status_flag": 2,
+      "chunks": 126,
+      "effective_chunks": 0,
+      "embedded_chunks": 126
+    },
+    {
+      "doc_id": "26356",
+      "doc_num": "59/2010/QH12",
+      "title": "Luật Bảo vệ quyền lợi người tiêu dùng số 59/2010/QH12",
+      "eff_from": "2011-07-01",
+      "eff_to": "2024-07-01",
+      "status_flag": 2,
+      "chunks": 52,
+      "effective_chunks": 0,
+      "embedded_chunks": 52
+    },
+    {
+      "doc_id": "158798",
+      "doc_num": "35/2022/NĐ-CP",
+      "title": "Nghị định số 35/2022/NĐ-CP Quy định về quản lý khu công nghiệp và khu kinh tế",
+      "eff_from": "2022-07-15",
+      "eff_to": null,
+      "status_flag": 1,
+      "chunks": 525,
+      "effective_chunks": 525,
+      "embedded_chunks": 525
+    },
+    {
+      "doc_id": "vbpqta_6121",
+      "doc_num": "51/2005/QH11",
+      "title": "Luật 51/2005/QH11",
+      "eff_from": null,
+      "eff_to": null,
+      "status_flag": 0,
+      "chunks": 0,
+      "effective_chunks": 0,
+      "embedded_chunks": 0
+    }
+  ],
+  "provisions": [
+    {
+      "provision_id": "COM-301",
+      "law_number": "36/2005/QH11",
+      "article": "301",
+      "clause": null,
+      "point": null,
+      "granular_path_chunks": 0,
+      "effective_path_chunks": 0,
+      "example_path": null,
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "LAB-98.1.b",
+      "law_number": "45/2019/QH14",
+      "article": "98",
+      "clause": "1",
+      "point": "b",
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 0,
+      "example_path": "139264.C6.D98.K1.b",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "SI-13.1",
+      "law_number": "41/2024/QH15",
+      "article": "13",
+      "clause": "1",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 0,
+      "example_path": "175027.C2.M1.D13.K1",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "LAB-107.2.a",
+      "law_number": "45/2019/QH14",
+      "article": "107",
+      "clause": "2",
+      "point": "a",
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 0,
+      "example_path": "139264.C7.M1.D107.K2.a",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "LAB-168.1",
+      "law_number": "45/2019/QH14",
+      "article": "168",
+      "clause": "1",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 0,
+      "example_path": "139264.C12.D168.K1",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "COM-24.1",
+      "law_number": "36/2005/QH11",
+      "article": "24",
+      "clause": "1",
+      "point": null,
+      "granular_path_chunks": 0,
+      "effective_path_chunks": 0,
+      "example_path": null,
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "LAB-17.1",
+      "law_number": "45/2019/QH14",
+      "article": "17",
+      "clause": "1",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 0,
+      "example_path": "139264.C3.M1.D17.K1",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "CIV-385",
+      "law_number": "91/2015/QH13",
+      "article": "385",
+      "clause": null,
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 1,
+      "example_path": "95942.C1.M7.D385",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "E-35.1",
+      "law_number": "20/2023/QH15",
+      "article": "35",
+      "clause": "1",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 1,
+      "example_path": "165913.C4.D35.K1",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "E-36.3",
+      "law_number": "20/2023/QH15",
+      "article": "36",
+      "clause": "3",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 1,
+      "example_path": "165913.C4.D36.K3",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "COM-300",
+      "law_number": "36/2005/QH11",
+      "article": "300",
+      "clause": null,
+      "point": null,
+      "granular_path_chunks": 0,
+      "effective_path_chunks": 0,
+      "example_path": null,
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "CIV-119.1",
+      "law_number": "91/2015/QH13",
+      "article": "119",
+      "clause": "1",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 1,
+      "example_path": "95942.C8.D119.K1",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "CON-25.2",
+      "law_number": "19/2023/QH15",
+      "article": "25",
+      "clause": "2",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 1,
+      "example_path": "161263.C2.D25.K2",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "LAB-17.2",
+      "law_number": "45/2019/QH14",
+      "article": "17",
+      "clause": "2",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 0,
+      "example_path": "139264.C3.M1.D17.K2",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "CIV-328.1",
+      "law_number": "91/2015/QH13",
+      "article": "328",
+      "clause": "1",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 1,
+      "example_path": "95942.C1.M3.D328.K1",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "SAFE-7.2.b",
+      "law_number": "84/2015/QH13",
+      "article": "7",
+      "clause": "2",
+      "point": "b",
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 0,
+      "example_path": "70811.C1.D7.K2.b",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "CON-25.1",
+      "law_number": "19/2023/QH15",
+      "article": "25",
+      "clause": "1",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 1,
+      "example_path": "161263.C2.D25.K1",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "LAB-13.1",
+      "law_number": "45/2019/QH14",
+      "article": "13",
+      "clause": "1",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 0,
+      "example_path": "139264.C3.M1.D13.K1",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "LAB-21.1.d",
+      "law_number": "45/2019/QH14",
+      "article": "21",
+      "clause": "1",
+      "point": "đ",
+      "granular_path_chunks": 0,
+      "effective_path_chunks": 0,
+      "example_path": null,
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "SI-2.1.a",
+      "law_number": "41/2024/QH15",
+      "article": "2",
+      "clause": "1",
+      "point": "a",
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 0,
+      "example_path": "175027.C1.D2.K1.a",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "CON-25.3",
+      "law_number": "19/2023/QH15",
+      "article": "25",
+      "clause": "3",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 1,
+      "example_path": "161263.C2.D25.K3",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "CON-24",
+      "law_number": "19/2023/QH15",
+      "article": "24",
+      "clause": null,
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 1,
+      "example_path": "161263.C2.D24",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "SI14-2.1.a",
+      "law_number": "58/2014/QH13",
+      "article": "2",
+      "clause": "1",
+      "point": "a",
+      "granular_path_chunks": 0,
+      "effective_path_chunks": 0,
+      "example_path": null,
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "SI24-2.1.a",
+      "law_number": "41/2024/QH15",
+      "article": "2",
+      "clause": "1",
+      "point": "a",
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 0,
+      "example_path": "175027.C1.D2.K1.a",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "SI24-13.1",
+      "law_number": "41/2024/QH15",
+      "article": "13",
+      "clause": "1",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 0,
+      "example_path": "175027.C2.M1.D13.K1",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "SI24-140.1",
+      "law_number": "41/2024/QH15",
+      "article": "140",
+      "clause": "1",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 0,
+      "example_path": "175027.C11.D140.K1",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "SI24-140.2",
+      "law_number": "41/2024/QH15",
+      "article": "140",
+      "clause": "2",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 0,
+      "example_path": "175027.C11.D140.K2",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "E05-33",
+      "law_number": "51/2005/QH11",
+      "article": "33",
+      "clause": null,
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 0,
+      "example_path": "17067.C4.D33",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "E05-34",
+      "law_number": "51/2005/QH11",
+      "article": "34",
+      "clause": null,
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 0,
+      "example_path": "17067.C4.D34",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "E23-52.1",
+      "law_number": "20/2023/QH15",
+      "article": "52",
+      "clause": "1",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 1,
+      "example_path": "165913.C8.D52.K1",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "E23-52.2",
+      "law_number": "20/2023/QH15",
+      "article": "52",
+      "clause": "2",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 1,
+      "example_path": "165913.C8.D52.K2",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "E23-53.1",
+      "law_number": "20/2023/QH15",
+      "article": "53",
+      "clause": "1",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 1,
+      "example_path": "165913.C8.D53.K1",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "E23-36.3",
+      "law_number": "20/2023/QH15",
+      "article": "36",
+      "clause": "3",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 1,
+      "example_path": "165913.C4.D36.K3",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "C10-16.1.b",
+      "law_number": "59/2010/QH12",
+      "article": "16",
+      "clause": "1",
+      "point": "b",
+      "granular_path_chunks": 0,
+      "effective_path_chunks": 0,
+      "example_path": null,
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "C23-25.2",
+      "law_number": "19/2023/QH15",
+      "article": "25",
+      "clause": "2",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 1,
+      "example_path": "161263.C2.D25.K2",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "C23-79.1",
+      "law_number": "19/2023/QH15",
+      "article": "79",
+      "clause": "1",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 1,
+      "example_path": "161263.C7.D79.K1",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "C23-79.2",
+      "law_number": "19/2023/QH15",
+      "article": "79",
+      "clause": "2",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 1,
+      "example_path": "161263.C7.D79.K2",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "C23-80.1.a",
+      "law_number": "19/2023/QH15",
+      "article": "80",
+      "clause": "1",
+      "point": "a",
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 1,
+      "example_path": "161263.C7.D80.K1.a",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "N35-73.1",
+      "law_number": "35/2022/NĐ-CP",
+      "article": "73",
+      "clause": "1",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 1,
+      "example_path": "158798.C8.D73.K1",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "N10-49.1",
+      "law_number": "10/2024/NĐ-CP",
+      "article": "49",
+      "clause": "1",
+      "point": null,
+      "granular_path_chunks": 2,
+      "effective_path_chunks": 2,
+      "example_path": "165573.C7.D49.K1.a",
+      "version_text_verified": null
+    },
+    {
+      "provision_id": "N145-4.2",
+      "law_number": "145/2020/NĐ-CP",
+      "article": "4",
+      "clause": "2",
+      "point": null,
+      "granular_path_chunks": 1,
+      "effective_path_chunks": 0,
+      "example_path": "152668.C2.D4.K2",
+      "version_text_verified": false
+    },
+    {
+      "provision_id": "N145-4.4",
+      "law_number": "145/2020/NĐ-CP",
+      "article": "4",
+      "clause": "4",
+      "point": null,
+      "granular_path_chunks": 0,
+      "effective_path_chunks": 0,
+      "example_path": null,
+      "version_text_verified": false
+    },
+    {
+      "provision_id": "L12-20.1",
+      "law_number": "10/2012/QH13",
+      "article": "20",
+      "clause": "1",
+      "point": null,
+      "granular_path_chunks": 0,
+      "effective_path_chunks": 0,
+      "example_path": null,
+      "version_text_verified": null
+    }
+  ],
+  "graph_coverage": [
+    {
+      "benchmark_edge_id": "REPL-LAB-2021",
+      "benchmark_type": "REPLACES_ALL",
+      "source_law": "45/2019/QH14",
+      "target_law": "10/2012/QH13",
+      "observed_directed_document_edges": [],
+      "exact_scope_verified": false,
+      "observed_reverse_document_edges": []
+    },
+    {
+      "benchmark_edge_id": "REPL-SI-2025",
+      "benchmark_type": "REPLACES_ALL",
+      "source_law": "41/2024/QH15",
+      "target_law": "58/2014/QH13",
+      "observed_directed_document_edges": [
+        {
+          "source_doc_id": "175027",
+          "target_doc_id": "46744",
+          "type": "REPEALS",
+          "properties": {
+            "source_code": "van_ban_bi_bai_bo"
+          }
+        }
+      ],
+      "exact_scope_verified": false,
+      "observed_reverse_document_edges": []
+    },
+    {
+      "benchmark_edge_id": "REPL-E-2024",
+      "benchmark_type": "REPLACES_WITH_TRANSITION",
+      "source_law": "20/2023/QH15",
+      "target_law": "51/2005/QH11",
+      "observed_directed_document_edges": [
+        {
+          "source_doc_id": "165913",
+          "target_doc_id": "17067",
+          "type": "SUPERSEDES",
+          "properties": {
+            "source_code": "thay_the"
+          }
+        }
+      ],
+      "exact_scope_verified": false,
+      "observed_reverse_document_edges": []
+    },
+    {
+      "benchmark_edge_id": "REPL-C-2024",
+      "benchmark_type": "REPLACES_WITH_TRANSITION",
+      "source_law": "19/2023/QH15",
+      "target_law": "59/2010/QH12",
+      "observed_directed_document_edges": [
+        {
+          "source_doc_id": "161263",
+          "target_doc_id": "26356",
+          "type": "SUPERSEDES",
+          "properties": {
+            "source_code": "thay_the"
+          }
+        }
+      ],
+      "exact_scope_verified": false,
+      "observed_reverse_document_edges": []
+    },
+    {
+      "benchmark_edge_id": "AMEND-145-2022",
+      "benchmark_type": "AMENDS_CLAUSE",
+      "source_law": "35/2022/NĐ-CP",
+      "target_law": "145/2020/NĐ-CP",
+      "observed_directed_document_edges": [
+        {
+          "source_doc_id": "158798",
+          "target_doc_id": "152668",
+          "type": "AMENDS",
+          "properties": {
+            "source_code": "sua_doi_bo_sung"
+          }
+        }
+      ],
+      "exact_scope_verified": false,
+      "observed_reverse_document_edges": []
+    },
+    {
+      "benchmark_edge_id": "ADD-145-2024",
+      "benchmark_type": "ADDS_CLAUSE",
+      "source_law": "10/2024/NĐ-CP",
+      "target_law": "145/2020/NĐ-CP",
+      "observed_directed_document_edges": [
+        {
+          "source_doc_id": "165573",
+          "target_doc_id": "152668",
+          "type": "CITES",
+          "properties": {
+            "source_code": "dan_chieu"
+          }
+        },
+        {
+          "source_doc_id": "165573",
+          "target_doc_id": "152668",
+          "type": "AMENDS",
+          "properties": {
+            "source_code": "sua_doi_bo_sung"
+          }
+        }
+      ],
+      "exact_scope_verified": false,
+      "observed_reverse_document_edges": []
+    }
+  ],
+  "document_metadata_rows": 137151,
+  "documents_with_chunks": 21012,
+  "chunk_count": 1004988,
+  "embedded_chunk_count": 976148,
+  "effective_chunk_count": 439467,
+  "legal_embeddings_columns": [
+    "id",
+    "doc_id",
+    "chunk_type",
+    "chunk_text",
+    "embedding",
+    "is_effective",
+    "tsv",
+    "created_at",
+    "path",
+    "root_path",
+    "source_element_id"
+  ],
+  "path_relation_samples": [
+    {
+      "id": 2,
+      "source_path": "59_2024_QH15.D177.K1.a",
+      "target_path": "100_2015_QH13.P1.C12",
+      "ref_type": "bai_bo",
+      "created_at": "2026-08-17 03:32:54.142726+00:00"
+    },
+    {
+      "id": 1,
+      "source_path": "59_2024_QH15.D177.K1.b",
+      "target_path": "100_2015_QH13.P2.C14.D134.K1.g",
+      "ref_type": "sua_doi",
+      "created_at": "2026-08-17 03:32:54.142726+00:00"
+    }
+  ],
+  "path_relation_count": 2,
+  "placeholder_marker_count_in_requested_documents": 0,
+  "graph_counts": [
+    {
+      "relationship_type": "HAS_NODE",
+      "count": 1309324
+    },
+    {
+      "relationship_type": "PARENT_OF",
+      "count": 1187878
+    },
+    {
+      "relationship_type": "OF_DOC",
+      "count": 1004988
+    },
+    {
+      "relationship_type": "OF_NODE",
+      "count": 1004988
+    },
+    {
+      "relationship_type": "BASED_ON",
+      "count": 548431
+    },
+    {
+      "relationship_type": "DETAILS",
+      "count": 34525
+    },
+    {
+      "relationship_type": "CITES",
+      "count": 52103
+    },
+    {
+      "relationship_type": "SUPERSEDES",
+      "count": 7834
+    },
+    {
+      "relationship_type": "AMENDS",
+      "count": 6602
+    },
+    {
+      "relationship_type": "GUIDES",
+      "count": 876
+    },
+    {
+      "relationship_type": "EXPLAINS",
+      "count": 74
+    },
+    {
+      "relationship_type": "REPEALS",
+      "count": 6654
+    },
+    {
+      "relationship_type": "CONSOLIDATES",
+      "count": 3647
+    },
+    {
+      "relationship_type": "CORRECTS",
+      "count": 99
+    },
+    {
+      "relationship_type": "TRANSLATES",
+      "count": 40
+    },
+    {
+      "relationship_type": "SUSPENDS",
+      "count": 64
+    }
+  ]
+}

@@ -1,0 +1,605 @@
+[
+  {
+    "id": "MIX-017",
+    "task": "risk",
+    "difficulty": {
+      "level": "easy",
+      "ordinal": 1,
+      "components": [
+        "single_statute_clause_matching"
+      ],
+      "reason": "Phân loại theo số văn bản phải đối chiếu, độ phức tạp ngữ cảnh và loại nhiệm vụ, không dựa vào xác suất LLM trả lời sai."
+    },
+    "question": "Có được loại trừ toàn bộ trách nhiệm pháp lý bắt buộc với người tiêu dùng?",
+    "as_of_date": "2026-10-17",
+    "transaction_date": null,
+    "contract_id": "CTR-CONS-06",
+    "scenario": "Nhà cung cấp không chịu bất kỳ trách nhiệm pháp lý nào, kể cả trách nhiệm pháp luật bắt buộc đối với người tiêu dùng."
+  },
+  {
+    "id": "TEMP-006",
+    "task": "multi_hop",
+    "difficulty": {
+      "level": "expert",
+      "ordinal": 4,
+      "factors": [
+        "temporal_version_selection",
+        "relationship_traversal",
+        "transitional_exception"
+      ],
+      "reason": "Độ khó dựa trên số mốc hiệu lực, trường hợp chuyển tiếp, số tầng quan hệ và độ nhiễu của luật cũ/mới."
+    },
+    "question": "Cùng hợp đồng điện tử lập 15/06/2024 nhưng ngày 10/08/2024 hai bên thỏa thuận áp dụng luật mới. Có còn mặc định dùng Luật 2005 theo quy định chuyển tiếp?",
+    "as_of_date": "2024-08-10",
+    "transaction_date": "2024-06-15",
+    "contract_id": null,
+    "scenario": "Các bên đã thỏa thuận áp dụng luật 2023 cho giao dịch xác lập tháng 6/2024 chưa hoàn tất."
+  },
+  {
+    "id": "MIX-018",
+    "task": "multi_hop",
+    "difficulty": {
+      "level": "hard",
+      "ordinal": 3,
+      "components": [
+        "multi_document_retrieval",
+        "cross_statute_reasoning"
+      ],
+      "reason": "Phân loại theo số văn bản phải đối chiếu, độ phức tạp ngữ cảnh và loại nhiệm vụ, không dựa vào xác suất LLM trả lời sai."
+    },
+    "question": "Đã bấm Đồng ý trên website thì điều khoản tước quyền khiếu kiện có hợp pháp?",
+    "as_of_date": "2026-10-17",
+    "transaction_date": null,
+    "contract_id": "CTR-CONS-06",
+    "scenario": "Khi bấm đồng ý trên website, người dùng không được khiếu nại hoặc khởi kiện đối với mọi tranh chấp phát sinh."
+  },
+  {
+    "id": "TEMP-014",
+    "task": "qa",
+    "difficulty": {
+      "level": "hard",
+      "ordinal": 3,
+      "factors": [
+        "temporal_version_selection",
+        "relationship_traversal"
+      ],
+      "reason": "Độ khó dựa trên số mốc hiệu lực, trường hợp chuyển tiếp, số tầng quan hệ và độ nhiễu của luật cũ/mới."
+    },
+    "question": "Tháng 10/2020, hợp đồng yêu cầu doanh nghiệp giữ bản chính giấy tờ tùy thân. Dẫn Điều 20 Bộ luật Lao động 2012 hay Điều 17 Bộ luật Lao động 2019?",
+    "as_of_date": "2020-10-10",
+    "transaction_date": "2020-10-10",
+    "contract_id": null,
+    "scenario": "Điều khoản ký năm 2020, chỉ hỏi căn cứ tại thời điểm ký."
+  },
+  {
+    "id": "MIX-007",
+    "task": "qa",
+    "difficulty": {
+      "level": "hard",
+      "ordinal": 3,
+      "components": [
+        "multi_document_retrieval",
+        "cross_statute_reasoning"
+      ],
+      "reason": "Phân loại theo số văn bản phải đối chiếu, độ phức tạp ngữ cảnh và loại nhiệm vụ, không dựa vào xác suất LLM trả lời sai."
+    },
+    "question": "Tại sao tên gọi cộng tác viên không tự động miễn BHXH?",
+    "as_of_date": "2026-10-17",
+    "transaction_date": null,
+    "contract_id": "CTR-CTV-02",
+    "scenario": "Vì văn bản mang tên cộng tác viên nên hai bên không áp dụng pháp luật lao động và không tham gia BHXH bắt buộc."
+  },
+  {
+    "id": "MIX-006",
+    "task": "qa",
+    "difficulty": {
+      "level": "hard",
+      "ordinal": 3,
+      "components": [
+        "contract_type_disambiguation",
+        "scope_of_law"
+      ],
+      "reason": "Phân loại theo số văn bản phải đối chiếu, độ phức tạp ngữ cảnh và loại nhiệm vụ, không dựa vào xác suất LLM trả lời sai."
+    },
+    "question": "Gọi là cộng tác viên nhưng làm cố định nhận lương, có thể được coi là hợp đồng lao động không?",
+    "as_of_date": "2026-10-17",
+    "transaction_date": null,
+    "contract_id": "CTR-CTV-02",
+    "scenario": "Cộng tác viên làm việc cố định 8 giờ đến 17 giờ mỗi ngày từ thứ Hai đến thứ Sáu, nhận lương 10.000.000 đồng/tháng."
+  },
+  {
+    "id": "MIX-012",
+    "task": "risk",
+    "difficulty": {
+      "level": "easy",
+      "ordinal": 1,
+      "components": [
+        "single_statute_clause_matching"
+      ],
+      "reason": "Phân loại theo số văn bản phải đối chiếu, độ phức tạp ngữ cảnh và loại nhiệm vụ, không dựa vào xác suất LLM trả lời sai."
+    },
+    "question": "Điều khoản phạt 6% của phần nghĩa vụ vi phạm có vượt ngưỡng thông thường không?",
+    "as_of_date": "2026-10-17",
+    "transaction_date": null,
+    "contract_id": "CTR-COM-05",
+    "scenario": "Bên vi phạm nghĩa vụ phải chịu phạt 6% giá trị phần nghĩa vụ hợp đồng bị vi phạm."
+  },
+  {
+    "id": "TEMP-009",
+    "task": "multi_hop",
+    "difficulty": {
+      "level": "expert",
+      "ordinal": 4,
+      "factors": [
+        "temporal_version_selection",
+        "relationship_traversal",
+        "transitional_exception"
+      ],
+      "reason": "Độ khó dựa trên số mốc hiệu lực, trường hợp chuyển tiếp, số tầng quan hệ và độ nhiễu của luật cũ/mới."
+    },
+    "question": "Hợp đồng tiêu dùng ký tháng 5/2024, đến tháng 8/2024 vẫn thực hiện; nội dung/hình thức khác quy định luật 2023, các bên chưa thỏa thuận sửa đổi. Có thể mặc nhiên chỉ áp dụng Luật 2023 không?",
+    "as_of_date": "2024-08-20",
+    "transaction_date": "2024-05-20",
+    "contract_id": null,
+    "scenario": "Giao dịch đang thực hiện, xác lập trước 01/07/2024, nội dung/hình thức khác luật 2023, chưa sửa đổi."
+  },
+  {
+    "id": "MIX-019",
+    "task": "qa",
+    "difficulty": {
+      "level": "medium",
+      "ordinal": 2,
+      "components": [
+        "legal_semantic_retrieval"
+      ],
+      "reason": "Phân loại theo số văn bản phải đối chiếu, độ phức tạp ngữ cảnh và loại nhiệm vụ, không dựa vào xác suất LLM trả lời sai."
+    },
+    "question": "Nếu có hai cách hiểu về hợp đồng theo mẫu thì luôn giải thích theo ý doanh nghiệp?",
+    "as_of_date": "2026-10-17",
+    "transaction_date": null,
+    "contract_id": "CTR-CONS-06",
+    "scenario": "Khi nội dung hợp đồng có cách hiểu khác nhau, nhà cung cấp luôn được quyền chọn cách giải thích có lợi nhất cho mình."
+  },
+  {
+    "id": "MIX-005",
+    "task": "risk",
+    "difficulty": {
+      "level": "easy",
+      "ordinal": 1,
+      "components": [
+        "single_statute_clause_matching"
+      ],
+      "reason": "Phân loại theo số văn bản phải đối chiếu, độ phức tạp ngữ cảnh và loại nhiệm vụ, không dựa vào xác suất LLM trả lời sai."
+    },
+    "question": "Thỏa thuận không cấp bảo hộ và miễn trách nhiệm cho công ty có ổn không?",
+    "as_of_date": "2026-10-17",
+    "transaction_date": null,
+    "contract_id": "CTR-LAB-01",
+    "scenario": "Công ty không cấp thiết bị bảo hộ cho vị trí làm việc kho; người lao động tự chịu hoàn toàn trách nhiệm về an toàn."
+  },
+  {
+    "id": "MIX-003",
+    "task": "risk",
+    "difficulty": {
+      "level": "easy",
+      "ordinal": 1,
+      "components": [
+        "single_statute_clause_matching"
+      ],
+      "reason": "Phân loại theo số văn bản phải đối chiếu, độ phức tạp ngữ cảnh và loại nhiệm vụ, không dựa vào xác suất LLM trả lời sai."
+    },
+    "question": "Mức trả 150% cho làm thêm ngày nghỉ hằng tuần có đạt mức tối thiểu?",
+    "as_of_date": "2026-10-17",
+    "transaction_date": null,
+    "contract_id": "CTR-LAB-01",
+    "scenario": "Làm thêm vào ngày nghỉ hằng tuần được trả bằng 150% đơn giá tiền lương của ngày làm việc bình thường."
+  },
+  {
+    "id": "MIX-004",
+    "task": "risk",
+    "difficulty": {
+      "level": "hard",
+      "ordinal": 3,
+      "components": [
+        "multi_document_retrieval",
+        "cross_statute_reasoning"
+      ],
+      "reason": "Phân loại theo số văn bản phải đối chiếu, độ phức tạp ngữ cảnh và loại nhiệm vụ, không dựa vào xác suất LLM trả lời sai."
+    },
+    "question": "Có thể trả tiền thay BHXH bắt buộc cho nhân viên hợp đồng 24 tháng?",
+    "as_of_date": "2026-10-17",
+    "transaction_date": null,
+    "contract_id": "CTR-LAB-01",
+    "scenario": "Hai bên thống nhất công ty không đăng ký BHXH bắt buộc; khoản trả thêm 700.000 đồng/tháng thay thế nghĩa vụ đóng BHXH."
+  },
+  {
+    "id": "MIX-008",
+    "task": "risk",
+    "difficulty": {
+      "level": "easy",
+      "ordinal": 1,
+      "components": [
+        "single_statute_clause_matching"
+      ],
+      "reason": "Phân loại theo số văn bản phải đối chiếu, độ phức tạp ngữ cảnh và loại nhiệm vụ, không dựa vào xác suất LLM trả lời sai."
+    },
+    "question": "Nếu xác định đây là HĐLĐ theo bản chất, điều kiện nộp CCCD bản chính ra sao?",
+    "as_of_date": "2026-10-17",
+    "transaction_date": null,
+    "contract_id": "CTR-CTV-02",
+    "scenario": "Cộng tác viên phải giao bản chính CCCD cho công ty; công ty giữ bản chính đến khi kết thúc thời gian làm việc."
+  },
+  {
+    "id": "TEMP-011",
+    "task": "qa",
+    "difficulty": {
+      "level": "expert",
+      "ordinal": 4,
+      "factors": [
+        "temporal_version_selection",
+        "relationship_traversal"
+      ],
+      "reason": "Độ khó dựa trên số mốc hiệu lực, trường hợp chuyển tiếp, số tầng quan hệ và độ nhiễu của luật cũ/mới."
+    },
+    "question": "Ngày 20/08/2022, quy định về báo cáo thay đổi lao động tại khoản 2 Điều 4 Nghị định 145/2020 phải đọc cùng văn bản sửa đổi nào?",
+    "as_of_date": "2022-08-20",
+    "transaction_date": "2022-08-20",
+    "contract_id": null,
+    "scenario": "Doanh nghiệp hỏi khoản 2 Điều 4 sau đợt sửa đổi năm 2022."
+  },
+  {
+    "id": "MIX-020",
+    "task": "multi_hop",
+    "difficulty": {
+      "level": "hard",
+      "ordinal": 3,
+      "components": [
+        "multi_document_retrieval",
+        "cross_statute_reasoning"
+      ],
+      "reason": "Phân loại theo số văn bản phải đối chiếu, độ phức tạp ngữ cảnh và loại nhiệm vụ, không dựa vào xác suất LLM trả lời sai."
+    },
+    "question": "Điều khoản xác nhận quyền khiếu kiện trong hợp đồng điện tử có bị cấm?",
+    "as_of_date": "2026-10-17",
+    "transaction_date": null,
+    "contract_id": "CTR-CONS-07",
+    "scenario": "Người tiêu dùng được khiếu nại, khởi kiện theo pháp luật hiện hành; nhà cung cấp không hạn chế các quyền này."
+  },
+  {
+    "id": "MIX-013",
+    "task": "qa",
+    "difficulty": {
+      "level": "hard",
+      "ordinal": 3,
+      "components": [
+        "multi_document_retrieval",
+        "cross_statute_reasoning"
+      ],
+      "reason": "Phân loại theo số văn bản phải đối chiếu, độ phức tạp ngữ cảnh và loại nhiệm vụ, không dựa vào xác suất LLM trả lời sai."
+    },
+    "question": "Việc giao kết hợp đồng mua bán qua email có vô hiệu chỉ vì không ký trên giấy?",
+    "as_of_date": "2026-10-17",
+    "transaction_date": null,
+    "contract_id": "CTR-COM-04",
+    "scenario": "Hai bên xác nhận đề nghị và chấp nhận giao kết bằng thông điệp dữ liệu qua email doanh nghiệp."
+  },
+  {
+    "id": "MIX-014",
+    "task": "multi_hop",
+    "difficulty": {
+      "level": "hard",
+      "ordinal": 3,
+      "components": [
+        "multi_document_retrieval",
+        "cross_statute_reasoning"
+      ],
+      "reason": "Phân loại theo số văn bản phải đối chiếu, độ phức tạp ngữ cảnh và loại nhiệm vụ, không dựa vào xác suất LLM trả lời sai."
+    },
+    "question": "Nếu hợp đồng ký qua email thì điều khoản phạt 12% có tự động hợp pháp?",
+    "as_of_date": "2026-10-17",
+    "transaction_date": null,
+    "contract_id": "CTR-COM-04",
+    "scenario": "Bên vi phạm một phần nghĩa vụ giao hàng phải chịu phạt 12% trên tổng giá trị hợp đồng."
+  },
+  {
+    "id": "TEMP-010",
+    "task": "qa",
+    "difficulty": {
+      "level": "hard",
+      "ordinal": 3,
+      "factors": [
+        "temporal_version_selection",
+        "relationship_traversal"
+      ],
+      "reason": "Độ khó dựa trên số mốc hiệu lực, trường hợp chuyển tiếp, số tầng quan hệ và độ nhiễu của luật cũ/mới."
+    },
+    "question": "Vào tháng 3/2022, có thể viện dẫn Nghị định 35/2022/NĐ-CP để khẳng định khoản 2 Điều 4 Nghị định 145/2020 đã bị sửa đổi chưa?",
+    "as_of_date": "2022-03-01",
+    "transaction_date": "2022-03-01",
+    "contract_id": null,
+    "scenario": "Đơn vị yêu cầu xác định văn bản gốc liên quan chế độ báo cáo thay đổi lao động năm 2022."
+  },
+  {
+    "id": "TEMP-003",
+    "task": "qa",
+    "difficulty": {
+      "level": "medium",
+      "ordinal": 2,
+      "factors": [
+        "temporal_version_selection",
+        "relationship_traversal"
+      ],
+      "reason": "Độ khó dựa trên số mốc hiệu lực, trường hợp chuyển tiếp, số tầng quan hệ và độ nhiễu của luật cũ/mới."
+    },
+    "question": "Hợp đồng được giao kết qua thư điện tử ngày 10/05/2024 có bị phủ nhận giá trị pháp lý chỉ vì là thông điệp dữ liệu không?",
+    "as_of_date": "2024-05-10",
+    "transaction_date": "2024-05-10",
+    "contract_id": null,
+    "scenario": "Hai doanh nghiệp giao kết hợp đồng thông qua thư điện tử tháng 5/2024."
+  },
+  {
+    "id": "MIX-009",
+    "task": "qa",
+    "difficulty": {
+      "level": "medium",
+      "ordinal": 2,
+      "components": [
+        "legal_semantic_retrieval"
+      ],
+      "reason": "Phân loại theo số văn bản phải đối chiếu, độ phức tạp ngữ cảnh và loại nhiệm vụ, không dựa vào xác suất LLM trả lời sai."
+    },
+    "question": "Có thể kết luận đặt cọc dịch vụ dân sự bị cấm chỉ vì HĐLĐ cấm đặt cọc không?",
+    "as_of_date": "2026-10-17",
+    "transaction_date": null,
+    "contract_id": "CTR-CIV-03",
+    "scenario": "Bên thuê đặt cọc 3.000.000 đồng để bảo đảm giao kết và thực hiện hợp đồng dịch vụ; hai bên quy định hoàn cọc và xử lý cọc."
+  },
+  {
+    "id": "MIX-002",
+    "task": "risk",
+    "difficulty": {
+      "level": "easy",
+      "ordinal": 1,
+      "components": [
+        "single_statute_clause_matching"
+      ],
+      "reason": "Phân loại theo số văn bản phải đối chiếu, độ phức tạp ngữ cảnh và loại nhiệm vụ, không dựa vào xác suất LLM trả lời sai."
+    },
+    "question": "Công ty được nhận 5 triệu đồng đặt cọc từ người lao động không?",
+    "as_of_date": "2026-10-17",
+    "transaction_date": null,
+    "contract_id": "CTR-LAB-01",
+    "scenario": "Người lao động phải nộp 5.000.000 đồng tiền bảo đảm trách nhiệm thực hiện hợp đồng lao động."
+  },
+  {
+    "id": "TEMP-001",
+    "task": "qa",
+    "difficulty": {
+      "level": "medium",
+      "ordinal": 2,
+      "factors": [
+        "temporal_version_selection",
+        "relationship_traversal"
+      ],
+      "reason": "Độ khó dựa trên số mốc hiệu lực, trường hợp chuyển tiếp, số tầng quan hệ và độ nhiễu của luật cũ/mới."
+    },
+    "question": "Tháng 6/2024, nhân viên ký hợp đồng lao động 24 tháng thuộc nhóm đối tượng BHXH bắt buộc theo văn bản nào và điểm nào?",
+    "as_of_date": "2024-06-20",
+    "transaction_date": "2024-06-20",
+    "contract_id": null,
+    "scenario": "Công dân Việt Nam, làm việc theo HĐLĐ xác định thời hạn 24 tháng."
+  },
+  {
+    "id": "TEMP-013",
+    "task": "qa",
+    "difficulty": {
+      "level": "expert",
+      "ordinal": 4,
+      "factors": [
+        "temporal_version_selection",
+        "relationship_traversal"
+      ],
+      "reason": "Độ khó dựa trên số mốc hiệu lực, trường hợp chuyển tiếp, số tầng quan hệ và độ nhiễu của luật cũ/mới."
+    },
+    "question": "Nghị định 145/2020 đang được CSDL quốc gia ghi hết hiệu lực một phần. Có đúng là toàn bộ điều khoản trong nghị định đều không được trích dẫn trong năm 2026?",
+    "as_of_date": "2026-10-17",
+    "transaction_date": "2026-10-17",
+    "contract_id": null,
+    "scenario": "Người dùng hỏi cách hiểu trạng thái hiệu lực trên hệ thống VBPL, không yêu cầu kết luận khoản cụ thể đã sửa sau năm 2025."
+  },
+  {
+    "id": "MIX-011",
+    "task": "risk",
+    "difficulty": {
+      "level": "easy",
+      "ordinal": 1,
+      "components": [
+        "single_statute_clause_matching"
+      ],
+      "reason": "Phân loại theo số văn bản phải đối chiếu, độ phức tạp ngữ cảnh và loại nhiệm vụ, không dựa vào xác suất LLM trả lời sai."
+    },
+    "question": "Phạt 12% trên toàn bộ hợp đồng cho vi phạm một phần nghĩa vụ có phù hợp?",
+    "as_of_date": "2026-10-17",
+    "transaction_date": null,
+    "contract_id": "CTR-COM-04",
+    "scenario": "Bên vi phạm một phần nghĩa vụ giao hàng phải chịu phạt 12% trên tổng giá trị hợp đồng."
+  },
+  {
+    "id": "TEMP-012",
+    "task": "multi_hop",
+    "difficulty": {
+      "level": "expert",
+      "ordinal": 4,
+      "factors": [
+        "temporal_version_selection",
+        "relationship_traversal"
+      ],
+      "reason": "Độ khó dựa trên số mốc hiệu lực, trường hợp chuyển tiếp, số tầng quan hệ và độ nhiễu của luật cũ/mới."
+    },
+    "question": "Ngày 01/04/2024, quy định báo cáo thay đổi lao động đối với khu công nghệ cao có khoản bổ sung nào trong Điều 4 Nghị định 145/2020?",
+    "as_of_date": "2024-04-01",
+    "transaction_date": "2024-04-01",
+    "contract_id": null,
+    "scenario": "Người sử dụng lao động hoạt động trong khu công nghệ cao."
+  },
+  {
+    "id": "MIX-016",
+    "task": "risk",
+    "difficulty": {
+      "level": "easy",
+      "ordinal": 1,
+      "components": [
+        "single_statute_clause_matching"
+      ],
+      "reason": "Phân loại theo số văn bản phải đối chiếu, độ phức tạp ngữ cảnh và loại nhiệm vụ, không dựa vào xác suất LLM trả lời sai."
+    },
+    "question": "Nhà cung cấp có quyền đơn phương sửa mọi nội dung hợp đồng đã giao kết?",
+    "as_of_date": "2026-10-17",
+    "transaction_date": null,
+    "contract_id": "CTR-CONS-06",
+    "scenario": "Nhà cung cấp được đơn phương sửa giá, sửa quyền sử dụng và nội dung hợp đồng sau khi người tiêu dùng đã chấp nhận mà không cần đồng ý lại."
+  },
+  {
+    "id": "MIX-015",
+    "task": "risk",
+    "difficulty": {
+      "level": "easy",
+      "ordinal": 1,
+      "components": [
+        "single_statute_clause_matching"
+      ],
+      "reason": "Phân loại theo số văn bản phải đối chiếu, độ phức tạp ngữ cảnh và loại nhiệm vụ, không dựa vào xác suất LLM trả lời sai."
+    },
+    "question": "Điều khoản người tiêu dùng không được khiếu nại, khởi kiện có được phép?",
+    "as_of_date": "2026-10-17",
+    "transaction_date": null,
+    "contract_id": "CTR-CONS-06",
+    "scenario": "Khi bấm đồng ý trên website, người dùng không được khiếu nại hoặc khởi kiện đối với mọi tranh chấp phát sinh."
+  },
+  {
+    "id": "TEMP-005",
+    "task": "multi_hop",
+    "difficulty": {
+      "level": "expert",
+      "ordinal": 4,
+      "factors": [
+        "temporal_version_selection",
+        "relationship_traversal",
+        "transitional_exception"
+      ],
+      "reason": "Độ khó dựa trên số mốc hiệu lực, trường hợp chuyển tiếp, số tầng quan hệ và độ nhiễu của luật cũ/mới."
+    },
+    "question": "Hợp đồng điện tử lập 15/06/2024, đến 10/08/2024 chưa thực hiện xong và các bên không thỏa thuận áp dụng luật mới. Có được tiếp tục viện dẫn luật 2005 không?",
+    "as_of_date": "2024-08-10",
+    "transaction_date": "2024-06-15",
+    "contract_id": null,
+    "scenario": "Hợp đồng xác lập trước 01/07/2024, chưa thực hiện xong; không có thỏa thuận áp dụng luật 2023."
+  },
+  {
+    "id": "TEMP-008",
+    "task": "risk",
+    "difficulty": {
+      "level": "hard",
+      "ordinal": 3,
+      "factors": [
+        "temporal_version_selection",
+        "relationship_traversal"
+      ],
+      "reason": "Độ khó dựa trên số mốc hiệu lực, trường hợp chuyển tiếp, số tầng quan hệ và độ nhiễu của luật cũ/mới."
+    },
+    "question": "Hợp đồng tiêu dùng ký mới tháng 8/2024 có điều khoản cấm người tiêu dùng khởi kiện. Cần viện dẫn điều nào của luật mới?",
+    "as_of_date": "2024-08-20",
+    "transaction_date": "2024-08-20",
+    "contract_id": null,
+    "scenario": "Giao dịch mới tháng 8/2024, doanh nghiệp đưa điều khoản cấm khiếu kiện."
+  },
+  {
+    "id": "MIX-001",
+    "task": "risk",
+    "difficulty": {
+      "level": "easy",
+      "ordinal": 1,
+      "components": [
+        "single_statute_clause_matching"
+      ],
+      "reason": "Phân loại theo số văn bản phải đối chiếu, độ phức tạp ngữ cảnh và loại nhiệm vụ, không dựa vào xác suất LLM trả lời sai."
+    },
+    "question": "Có vi phạm về giữ giấy tờ gốc không?",
+    "as_of_date": "2026-10-17",
+    "transaction_date": null,
+    "contract_id": "CTR-LAB-01",
+    "scenario": "Người lao động phải giao bản chính căn cước công dân cho công ty giữ trong toàn bộ thời gian làm việc."
+  },
+  {
+    "id": "MIX-010",
+    "task": "classification",
+    "difficulty": {
+      "level": "hard",
+      "ordinal": 3,
+      "components": [
+        "multi_document_retrieval",
+        "cross_statute_reasoning"
+      ],
+      "reason": "Phân loại theo số văn bản phải đối chiếu, độ phức tạp ngữ cảnh và loại nhiệm vụ, không dựa vào xác suất LLM trả lời sai."
+    },
+    "question": "Có đủ căn cứ kết luận hợp đồng dịch vụ giữa hai cá nhân này là HĐLĐ?",
+    "as_of_date": "2026-10-17",
+    "transaction_date": null,
+    "contract_id": "CTR-CIV-03",
+    "scenario": "Hai cá nhân thỏa thuận dịch vụ thiết kế bộ nhận diện; người cung ứng tự quyết định lịch làm việc, không chịu quản lý giờ giấc."
+  },
+  {
+    "id": "TEMP-007",
+    "task": "risk",
+    "difficulty": {
+      "level": "hard",
+      "ordinal": 3,
+      "factors": [
+        "temporal_version_selection",
+        "relationship_traversal"
+      ],
+      "reason": "Độ khó dựa trên số mốc hiệu lực, trường hợp chuyển tiếp, số tầng quan hệ và độ nhiễu của luật cũ/mới."
+    },
+    "question": "Hợp đồng tiêu dùng tháng 5/2024 có điều khoản từ bỏ quyền khiếu nại, khởi kiện. Điều khoản đó có được phép theo luật đang áp dụng lúc ký không?",
+    "as_of_date": "2024-05-20",
+    "transaction_date": "2024-05-20",
+    "contract_id": null,
+    "scenario": "Hợp đồng theo mẫu với người tiêu dùng, điều khoản hạn chế khiếu nại/khởi kiện."
+  },
+  {
+    "id": "TEMP-004",
+    "task": "qa",
+    "difficulty": {
+      "level": "hard",
+      "ordinal": 3,
+      "factors": [
+        "temporal_version_selection",
+        "relationship_traversal"
+      ],
+      "reason": "Độ khó dựa trên số mốc hiệu lực, trường hợp chuyển tiếp, số tầng quan hệ và độ nhiễu của luật cũ/mới."
+    },
+    "question": "Hợp đồng điện tử ký tháng 8/2024 nên căn cứ Luật Giao dịch điện tử 2005 hay 2023? Nêu mốc thay thế.",
+    "as_of_date": "2024-08-11",
+    "transaction_date": "2024-08-11",
+    "contract_id": null,
+    "scenario": "Hợp đồng được xác lập lần đầu vào tháng 8/2024."
+  },
+  {
+    "id": "TEMP-002",
+    "task": "qa",
+    "difficulty": {
+      "level": "hard",
+      "ordinal": 3,
+      "factors": [
+        "temporal_version_selection",
+        "relationship_traversal"
+      ],
+      "reason": "Độ khó dựa trên số mốc hiệu lực, trường hợp chuyển tiếp, số tầng quan hệ và độ nhiễu của luật cũ/mới."
+    },
+    "question": "Tháng 8/2025, người làm theo hợp đồng lao động 24 tháng có thuộc diện tham gia BHXH bắt buộc không? Căn cứ vì sao không dùng luật 2014?",
+    "as_of_date": "2025-08-01",
+    "transaction_date": "2025-08-01",
+    "contract_id": null,
+    "scenario": "Công dân Việt Nam, HĐLĐ 24 tháng, đơn vị sử dụng lao động."
+  }
+]

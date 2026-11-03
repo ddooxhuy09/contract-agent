@@ -1,0 +1,347 @@
+{
+  "label_status": "Exploratory structural matching to synthetic draft qrels; not legally verified accuracy.",
+  "all_cases": 34,
+  "stages": {
+    "seed": {
+      "cross_document_retrieval_coverage": {
+        "value": 0.21428571428571427,
+        "sample_count": 7
+      },
+      "exact_provision_recall": {
+        "value": 0.047619047619047616,
+        "sample_count": 7
+      },
+      "explicit_distractor_retrieval_rate": {
+        "value": 0.0,
+        "sample_count": 7
+      },
+      "mrr": {
+        "value": 0.03571428571428571,
+        "sample_count": 7
+      },
+      "pooled_binary_ndcg_at_1": {
+        "value": 0.0,
+        "sample_count": 7
+      },
+      "pooled_binary_ndcg_at_10": {
+        "value": 0.028872478071506797,
+        "sample_count": 7
+      },
+      "pooled_binary_ndcg_at_3": {
+        "value": 0.0,
+        "sample_count": 7
+      },
+      "pooled_binary_ndcg_at_5": {
+        "value": 0.028872478071506797,
+        "sample_count": 7
+      },
+      "pooled_precision_at_1": {
+        "value": 0.0,
+        "sample_count": 7
+      },
+      "pooled_precision_at_10": {
+        "value": 0.014285714285714287,
+        "sample_count": 7
+      },
+      "pooled_precision_at_3": {
+        "value": 0.0,
+        "sample_count": 7
+      },
+      "pooled_precision_at_5": {
+        "value": 0.028571428571428574,
+        "sample_count": 7
+      },
+      "recall_at_1": {
+        "value": 0.0,
+        "sample_count": 7
+      },
+      "recall_at_10": {
+        "value": 0.047619047619047616,
+        "sample_count": 7
+      },
+      "recall_at_3": {
+        "value": 0.0,
+        "sample_count": 7
+      },
+      "recall_at_5": {
+        "value": 0.047619047619047616,
+        "sample_count": 7
+      },
+      "required_evidence_coverage": {
+        "value": 0.047619047619047616,
+        "sample_count": 7
+      },
+      "retrieved_count": {
+        "value": 4.714285714285714,
+        "sample_count": 7
+      },
+      "unjudged_hit_count": {
+        "value": 4.571428571428571,
+        "sample_count": 7
+      }
+    },
+    "graph_expanded_ranked": {
+      "cross_document_retrieval_coverage": {
+        "value": 0.21428571428571427,
+        "sample_count": 7
+      },
+      "exact_provision_recall": {
+        "value": 0.11904761904761904,
+        "sample_count": 7
+      },
+      "explicit_distractor_retrieval_rate": {
+        "value": 0.0,
+        "sample_count": 7
+      },
+      "mrr": {
+        "value": 0.11904761904761904,
+        "sample_count": 7
+      },
+      "pooled_binary_ndcg_at_1": {
+        "value": 0.0,
+        "sample_count": 7
+      },
+      "pooled_binary_ndcg_at_10": {
+        "value": 0.08878459574941712,
+        "sample_count": 7
+      },
+      "pooled_binary_ndcg_at_3": {
+        "value": 0.08878459574941712,
+        "sample_count": 7
+      },
+      "pooled_binary_ndcg_at_5": {
+        "value": 0.08878459574941712,
+        "sample_count": 7
+      },
+      "pooled_precision_at_1": {
+        "value": 0.0,
+        "sample_count": 7
+      },
+      "pooled_precision_at_10": {
+        "value": 0.028571428571428574,
+        "sample_count": 7
+      },
+      "pooled_precision_at_3": {
+        "value": 0.09523809523809523,
+        "sample_count": 7
+      },
+      "pooled_precision_at_5": {
+        "value": 0.05714285714285715,
+        "sample_count": 7
+      },
+      "recall_at_1": {
+        "value": 0.0,
+        "sample_count": 7
+      },
+      "recall_at_10": {
+        "value": 0.11904761904761904,
+        "sample_count": 7
+      },
+      "recall_at_3": {
+        "value": 0.11904761904761904,
+        "sample_count": 7
+      },
+      "recall_at_5": {
+        "value": 0.11904761904761904,
+        "sample_count": 7
+      },
+      "required_evidence_coverage": {
+        "value": 0.11904761904761904,
+        "sample_count": 7
+      },
+      "retrieved_count": {
+        "value": 8.285714285714286,
+        "sample_count": 7
+      },
+      "unjudged_hit_count": {
+        "value": 8.0,
+        "sample_count": 7
+      }
+    },
+    "final_retrieval": {
+      "cross_document_retrieval_coverage": {
+        "value": 0.21428571428571427,
+        "sample_count": 7
+      },
+      "exact_provision_recall": {
+        "value": 0.11904761904761904,
+        "sample_count": 7
+      },
+      "explicit_distractor_retrieval_rate": {
+        "value": 0.0,
+        "sample_count": 7
+      },
+      "mrr": {
+        "value": 0.11904761904761904,
+        "sample_count": 7
+      },
+      "pooled_binary_ndcg_at_1": {
+        "value": 0.0,
+        "sample_count": 7
+      },
+      "pooled_binary_ndcg_at_10": {
+        "value": 0.08878459574941712,
+        "sample_count": 7
+      },
+      "pooled_binary_ndcg_at_3": {
+        "value": 0.08878459574941712,
+        "sample_count": 7
+      },
+      "pooled_binary_ndcg_at_5": {
+        "value": 0.08878459574941712,
+        "sample_count": 7
+      },
+      "pooled_precision_at_1": {
+        "value": 0.0,
+        "sample_count": 7
+      },
+      "pooled_precision_at_10": {
+        "value": 0.028571428571428574,
+        "sample_count": 7
+      },
+      "pooled_precision_at_3": {
+        "value": 0.09523809523809523,
+        "sample_count": 7
+      },
+      "pooled_precision_at_5": {
+        "value": 0.05714285714285715,
+        "sample_count": 7
+      },
+      "recall_at_1": {
+        "value": 0.0,
+        "sample_count": 7
+      },
+      "recall_at_10": {
+        "value": 0.11904761904761904,
+        "sample_count": 7
+      },
+      "recall_at_3": {
+        "value": 0.11904761904761904,
+        "sample_count": 7
+      },
+      "recall_at_5": {
+        "value": 0.11904761904761904,
+        "sample_count": 7
+      },
+      "required_evidence_coverage": {
+        "value": 0.11904761904761904,
+        "sample_count": 7
+      },
+      "retrieved_count": {
+        "value": 7.571428571428571,
+        "sample_count": 7
+      },
+      "unjudged_hit_count": {
+        "value": 7.285714285714286,
+        "sample_count": 7
+      }
+    },
+    "confirmed_full_chunks_in_llm_context": {
+      "cross_document_retrieval_coverage": {
+        "value": 0.21428571428571427,
+        "sample_count": 7
+      },
+      "exact_provision_recall": {
+        "value": 0.11904761904761904,
+        "sample_count": 7
+      },
+      "explicit_distractor_retrieval_rate": {
+        "value": 0.0,
+        "sample_count": 7
+      },
+      "mrr": {
+        "value": 0.11904761904761904,
+        "sample_count": 7
+      },
+      "pooled_binary_ndcg_at_1": {
+        "value": 0.0,
+        "sample_count": 7
+      },
+      "pooled_binary_ndcg_at_10": {
+        "value": 0.08878459574941712,
+        "sample_count": 7
+      },
+      "pooled_binary_ndcg_at_3": {
+        "value": 0.08878459574941712,
+        "sample_count": 7
+      },
+      "pooled_binary_ndcg_at_5": {
+        "value": 0.08878459574941712,
+        "sample_count": 7
+      },
+      "pooled_precision_at_1": {
+        "value": 0.0,
+        "sample_count": 7
+      },
+      "pooled_precision_at_10": {
+        "value": 0.028571428571428574,
+        "sample_count": 7
+      },
+      "pooled_precision_at_3": {
+        "value": 0.09523809523809523,
+        "sample_count": 7
+      },
+      "pooled_precision_at_5": {
+        "value": 0.05714285714285715,
+        "sample_count": 7
+      },
+      "recall_at_1": {
+        "value": 0.0,
+        "sample_count": 7
+      },
+      "recall_at_10": {
+        "value": 0.11904761904761904,
+        "sample_count": 7
+      },
+      "recall_at_3": {
+        "value": 0.11904761904761904,
+        "sample_count": 7
+      },
+      "recall_at_5": {
+        "value": 0.11904761904761904,
+        "sample_count": 7
+      },
+      "required_evidence_coverage": {
+        "value": 0.11904761904761904,
+        "sample_count": 7
+      },
+      "retrieved_count": {
+        "value": 7.0,
+        "sample_count": 7
+      },
+      "unjudged_hit_count": {
+        "value": 6.714285714285714,
+        "sample_count": 7
+      }
+    }
+  },
+  "stage_case_counts": {
+    "seed": 7,
+    "graph_expanded_ranked": 7,
+    "final_retrieval": 7,
+    "confirmed_full_chunks_in_llm_context": 7
+  },
+  "precision_at_k": {
+    "value": null,
+    "sample_count": 0,
+    "reason": "Open real corpus contains unjudged hits. Pooled precision diagnostics are reported separately, treating unjudged as nonrelevant."
+  },
+  "relation_edge_recall": {
+    "value": null,
+    "sample_count": 0,
+    "reason": "Graph expansion exposes paths/documents, not observed relation edge IDs. Corpus edge presence is not evidence of use."
+  },
+  "exact_versioned_provision_recall": {
+    "value": null,
+    "sample_count": 0,
+    "reason": "Retrieved metadata does not expose verified historical provision-version IDs. Structural scores do not establish version identity."
+  },
+  "notes": [
+    "K precision denominator is K, including unfilled slots.",
+    "Article-level labels match descendants of the same article; clause/point labels require the corresponding path level.",
+    "Identity matching does not establish historical text/version correctness; an explicit expected version would require an identical observed version ID.",
+    "Pooled ranking gains count the first hit for each relevant provision only, so duplicate chunk hits cannot inflate nDCG above one.",
+    "Final-context metrics conservatively include full retrieved chunks actually observed in the model prompt. Citations are scored separately.",
+    "Risk deterministic branches without observed RAG calls are not treated as seed retrieval; their citation output remains available."
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "risk_case_count": 1,
+  "severity_accuracy": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Not computed: no executed risk labels."
+  },
+  "precision_by_severity": {},
+  "recall_by_severity": {},
+  "f1_by_severity": {},
+  "macro_f1": {
+    "value": null,
+    "sample_count": 0,
+    "note": "No completed comparable risk cases."
+  },
+  "critical_risk_recall": {
+    "value": null,
+    "sample_count": 0,
+    "note": "No completed critical-risk cases."
+  },
+  "false_negative_rate": {
+    "value": null,
+    "sample_count": 0,
+    "note": "No completed risk cases."
+  },
+  "citation_correctness": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Requires evidence-level citation verification; not scored."
+  },
+  "evidence_span_accuracy": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Benchmark does not provide complete span labels for all cases."
+  }
+}

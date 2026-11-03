@@ -1,0 +1,66 @@
+{
+  "run_mode": "smoke",
+  "case_count": 5,
+  "seed_retrieval_recorded": false,
+  "graph_expansion_recorded": false,
+  "required_evidence_coverage": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Computed only where real retrieval traces and canonical provision matches are available."
+  },
+  "recall_at_1": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Not computed: no labeled ranking sample was available in this run."
+  },
+  "recall_at_3": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Not computed: no labeled ranking sample was available in this run."
+  },
+  "recall_at_5": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Not computed: no labeled ranking sample was available in this run."
+  },
+  "recall_at_10": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Not computed: no labeled ranking sample was available in this run."
+  },
+  "precision_at_k": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Not computed: retrieval evidence could not be scored for the blocked run."
+  },
+  "mrr": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Not computed: no actual retrieval ranks."
+  },
+  "ndcg_at_k": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Not computed: benchmark labels have required/additional/irrelevant tiers, but no actual ranked trace."
+  },
+  "exact_provision_recall": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Not computed: no actual provision retrievals."
+  },
+  "relation_edge_recall": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Not observed: current GraphRAG returns expanded paths/doc IDs, not edge IDs."
+  },
+  "cross_document_retrieval_coverage": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Not computed: no actual retrievals."
+  },
+  "distractor_retrieval_rate": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Not computed: no actual retrievals."
+  }
+}

@@ -1,6 +1,6 @@
 # Handoff context: ContractLens RAG evaluation
 
-Updated: 2026-10-26 (Asia/Bangkok)
+Updated: 2026-11-03 (Asia/Bangkok)
 
 ## Continue from here
 
@@ -8,7 +8,12 @@ The active user instruction is: **do not call Gemini; work on and test RAG first
 
 The ranking issue is resolved. An offline ablation over the saved candidate pool showed that graph expansion added no gold evidence in this set; the old order ranked instrument level before role/score and buried seeds. Production now keeps seeds in hybrid-search order and places expansion after them. The seed-first run is `rag_only_seed_first_20261026/`: final R@5 0.147 → 0.201, MRR 0.185 → 0.260, coverage unchanged.
 
-Next priority is contract clause parsing: all 20 text spans are found, but exact clause ID match is still 0/20 because the chunker misses the fixture heading formats (`Điều <n>` followed by a newline, or `Mục A`). After that, the status-4 provision-level effectivity gap and temporal date forwarding remain open. Do not tune reranking or parsing against individual gold labels without reporting that explicitly.
+Update 2026-11-03 (branch `fix/rag-chunker-temporal-effectivity`; report `evaluation_results/CHUNKER_ASOF_RUN.md`):
+
+- Chunker now matches line-anchored `Điều N`, `Mục X`, `Khoản X` headings: exact clause ID 0/20 → 20/20, text-span 20/20, legal retrieval unchanged.
+- `as_of_date` is forwarded through `retrieve_legal` and the QA graph state; the runner has `--date-field {as_of_date,transaction_date,none}`. Run `rag_only_chunker_asof_20261103` (as_of_date) matches the baseline exactly (R@5 0.201, MRR 0.260). Run `rag_only_chunker_txdate_20261103` (transaction_date first) loses TEMP-009 (R@5 0.191). The default was picked after seeing that regression, so treat it as post-hoc.
+- Status-4 stays excluded. `scripts/audit_status4_provisions.py` shows 3132 status-4 nodes with no `eff_to` and 2 provision-level relations corpus-wide, so a date-aware filter is not supported by the data; no retrieval change was made (`evaluation_results/STATUS4_AUDIT.md`).
+- Still open: a policy for transitional questions (keep pre- and post-effective versions), reviewed provision-level status for status-4 laws, missing 36/2005/QH11, 41/2024 metadata conflict. Do not tune reranking or parsing against individual gold labels without reporting that explicitly.
 
 ## Current code changes
 
@@ -33,7 +38,7 @@ Run: `evaluation_results/rag_only_seed_first_20261026/`
 - Final retrieval: R@1 0.098 → 0.142, R@3 0.108 → 0.191, R@5 0.147 → 0.201, MRR 0.185 → 0.260. R@10, required-evidence coverage (0.201), and returned-chunk count (6.412) unchanged.
 - Per-task R@5: QA 0.077 → 0.192, multi-hop 0.214 → 0.262, risk 0.192 → 0.192, classification 0.000. Per-task MRR: QA 0.060 → 0.231, multi-hop 0.357 → 0.405, risk 0.231.
 - Every seed precedes every expansion chunk in 34/34 saved finals; the shipped policy reproduces the saved final order 34/34.
-- Contract text-span coverage remains 20/20 and exact clause ID remains 0/20.
+- Contract text-span coverage remains 20/20 and exact clause ID remains 0/20 (as of 2026-10-26; fixed on 2026-11-03, see top).
 - The end-to-end run used `as_of=2026-10-26`; the offline ablation used `2026-10-20`. End-to-end metrics matched the offline prediction to three decimals.
 
 ## Previous RAG-only run (no labor hint)
@@ -93,7 +98,7 @@ The retrieval-only runner writes actual retrieval traces. It adapts risk cases t
 - `python -m pytest tests/unit/test_qa_self_correct.py -q` → 11 passed (49.8s). The earlier full-suite collection stall did not reproduce with focused files.
 - `python -m evaluation.rerank_ablation` → frozen baseline reproduced 34/34; best decision policy `seed_search`; final R@5 0.201, MRR 0.260.
 - Docker RAG-only run `rag_only_seed_first_20261026`: 34/34 completed, 0 model calls, no Gemini credential, corpus unchanged; `score_rag_only` final R@5 0.201.
-- Related effectivity/citation suite: 27 passed, 1 failed in `tests/unit/test_legal_citations.py::test_ground_citations_dedupes_sibling_points_and_drops_sector` due to an expected status string `"Còn hiệu lực"` versus `"Đã đối chiếu · Còn hiệu lực · 2026-07-15"`. This is outside the changed retrieval files and was not investigated.
+- The `test_legal_citations.py` failure noted on 2026-10-26 was a stale assertion (the code intentionally returns `"Đã đối chiếu · Còn hiệu lực · <date>"`); the test now asserts the substring and the file passes (14).
 - `git diff --check` passed (line-ending conversion warnings only).
 - The benchmark Docker image does not include `pytest`; the tests above ran on the host environment.
 - `evaluation/tests/test_scoring.py` covers scoring invariants only, not production retrieval.

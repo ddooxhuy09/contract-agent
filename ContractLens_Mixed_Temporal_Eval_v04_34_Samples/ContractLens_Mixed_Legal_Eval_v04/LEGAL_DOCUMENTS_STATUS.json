@@ -1,0 +1,112 @@
+[
+  {
+    "id": "10/2012/QH13",
+    "title": "Bộ luật Lao động 2012",
+    "effective_from": "2013-05-01",
+    "general_effective_until_exclusive": "2021-01-01",
+    "status_label_as_of_2026_10_17": "expired",
+    "source_url": "https://vanban.chinhphu.vn/?classid=1&docid=163542&orggroupid=1&pageid=27160",
+    "effective_until_inclusive_note": "Ngày kết thúc ở dạng độc quyền (không áp dụng từ ngày đó), không tự suy luận luật cũ không bao giờ được viện dẫn.",
+    "status_scope_warning": "Trạng thái văn bản không đủ để suy ra hiệu lực của từng điều khoản hoặc quy định chuyển tiếp."
+  },
+  {
+    "id": "45/2019/QH14",
+    "title": "Bộ luật Lao động 2019",
+    "effective_from": "2021-01-01",
+    "general_effective_until_exclusive": null,
+    "status_label_as_of_2026_10_17": "in_force_with_amendments",
+    "source_url": "https://vanban.chinhphu.vn/?classid=1&docid=198540&orggroupid=1&pageid=27160",
+    "effective_until_inclusive_note": "Ngày kết thúc ở dạng độc quyền (không áp dụng từ ngày đó), không tự suy luận luật cũ không bao giờ được viện dẫn.",
+    "status_scope_warning": "Trạng thái văn bản không đủ để suy ra hiệu lực của từng điều khoản hoặc quy định chuyển tiếp."
+  },
+  {
+    "id": "58/2014/QH13",
+    "title": "Luật BHXH 2014",
+    "effective_from": "2016-01-01",
+    "general_effective_until_exclusive": "2025-07-01",
+    "status_label_as_of_2026_10_17": "expired_with_transitional_possibility",
+    "source_url": "https://vbpl.moj.gov.vn/bonoivu/Pages/vbpq-print.aspx?ItemID=46744",
+    "effective_until_inclusive_note": "Ngày kết thúc ở dạng độc quyền (không áp dụng từ ngày đó), không tự suy luận luật cũ không bao giờ được viện dẫn.",
+    "status_scope_warning": "Trạng thái văn bản không đủ để suy ra hiệu lực của từng điều khoản hoặc quy định chuyển tiếp."
+  },
+  {
+    "id": "41/2024/QH15",
+    "title": "Luật BHXH 2024",
+    "effective_from": "2025-07-01",
+    "general_effective_until_exclusive": null,
+    "status_label_as_of_2026_10_17": "in_force",
+    "source_url": "https://xaydungchinhsach.chinhphu.vn/toan-van-luat-so-41-2024-qh15-bao-hiem-xa-hoi-119240723163650489.htm",
+    "effective_until_inclusive_note": "Ngày kết thúc ở dạng độc quyền (không áp dụng từ ngày đó), không tự suy luận luật cũ không bao giờ được viện dẫn.",
+    "status_scope_warning": "Trạng thái văn bản không đủ để suy ra hiệu lực của từng điều khoản hoặc quy định chuyển tiếp."
+  },
+  {
+    "id": "51/2005/QH11",
+    "title": "Luật Giao dịch điện tử 2005",
+    "effective_from": "2006-03-01",
+    "general_effective_until_exclusive": "2024-07-01",
+    "status_label_as_of_2026_10_17": "expired_with_transitional_exceptions",
+    "source_url": "https://vanban.chinhphu.vn/?docid=29675&pageid=27160",
+    "effective_until_inclusive_note": "Ngày kết thúc ở dạng độc quyền (không áp dụng từ ngày đó), không tự suy luận luật cũ không bao giờ được viện dẫn.",
+    "status_scope_warning": "Trạng thái văn bản không đủ để suy ra hiệu lực của từng điều khoản hoặc quy định chuyển tiếp."
+  },
+  {
+    "id": "20/2023/QH15",
+    "title": "Luật Giao dịch điện tử 2023",
+    "effective_from": "2024-07-01",
+    "general_effective_until_exclusive": null,
+    "status_label_as_of_2026_10_17": "in_force",
+    "source_url": "https://vbpl.moj.gov.vn/bothongtin/Pages/vbpq-toanvan.aspx?ItemID=165913",
+    "effective_until_inclusive_note": "Ngày kết thúc ở dạng độc quyền (không áp dụng từ ngày đó), không tự suy luận luật cũ không bao giờ được viện dẫn.",
+    "status_scope_warning": "Trạng thái văn bản không đủ để suy ra hiệu lực của từng điều khoản hoặc quy định chuyển tiếp."
+  },
+  {
+    "id": "59/2010/QH12",
+    "title": "Luật BVQLNTD 2010",
+    "effective_from": "2011-07-01",
+    "general_effective_until_exclusive": "2024-07-01",
+    "status_label_as_of_2026_10_17": "expired_with_transitional_exceptions",
+    "source_url": "https://vanban.chinhphu.vn/?docid=98755&pageid=27160",
+    "effective_until_inclusive_note": "Ngày kết thúc ở dạng độc quyền (không áp dụng từ ngày đó), không tự suy luận luật cũ không bao giờ được viện dẫn.",
+    "status_scope_warning": "Trạng thái văn bản không đủ để suy ra hiệu lực của từng điều khoản hoặc quy định chuyển tiếp."
+  },
+  {
+    "id": "19/2023/QH15",
+    "title": "Luật BVQLNTD 2023",
+    "effective_from": "2024-07-01",
+    "general_effective_until_exclusive": null,
+    "status_label_as_of_2026_10_17": "in_force",
+    "source_url": "https://vbpl.moj.gov.vn/botuphap/Pages/vbpq-toanvan.aspx?ItemID=161263",
+    "effective_until_inclusive_note": "Ngày kết thúc ở dạng độc quyền (không áp dụng từ ngày đó), không tự suy luận luật cũ không bao giờ được viện dẫn.",
+    "status_scope_warning": "Trạng thái văn bản không đủ để suy ra hiệu lực của từng điều khoản hoặc quy định chuyển tiếp."
+  },
+  {
+    "id": "145/2020/NĐ-CP",
+    "title": "Nghị định 145/2020/NĐ-CP",
+    "effective_from": "2021-02-01",
+    "general_effective_until_exclusive": null,
+    "status_label_as_of_2026_10_17": "partially_amended_or_expired",
+    "source_url": "https://vbpl.moj.gov.vn/bokehoachvadautu/Pages/vbpq-thuoctinh.aspx?ItemID=152668",
+    "effective_until_inclusive_note": "Ngày kết thúc ở dạng độc quyền (không áp dụng từ ngày đó), không tự suy luận luật cũ không bao giờ được viện dẫn.",
+    "status_scope_warning": "Trạng thái văn bản không đủ để suy ra hiệu lực của từng điều khoản hoặc quy định chuyển tiếp."
+  },
+  {
+    "id": "35/2022/NĐ-CP",
+    "title": "Nghị định 35/2022/NĐ-CP",
+    "effective_from": "2022-07-15",
+    "general_effective_until_exclusive": null,
+    "status_label_as_of_2026_10_17": "in_force_at_relevant_2022_snapshot",
+    "source_url": "https://vbpl.moj.gov.vn/bokehoachvadautu/Pages/vbpq-luocdo.aspx?ItemID=158798",
+    "effective_until_inclusive_note": "Ngày kết thúc ở dạng độc quyền (không áp dụng từ ngày đó), không tự suy luận luật cũ không bao giờ được viện dẫn.",
+    "status_scope_warning": "Trạng thái văn bản không đủ để suy ra hiệu lực của từng điều khoản hoặc quy định chuyển tiếp."
+  },
+  {
+    "id": "10/2024/NĐ-CP",
+    "title": "Nghị định 10/2024/NĐ-CP",
+    "effective_from": "2024-03-25",
+    "general_effective_until_exclusive": null,
+    "status_label_as_of_2026_10_17": "in_force_at_relevant_2024_snapshot",
+    "source_url": "https://vbpl.moj.gov.vn/thanhphohochiminh/Pages/vbpq-vanbanlienquan.aspx?ItemID=165573",
+    "effective_until_inclusive_note": "Ngày kết thúc ở dạng độc quyền (không áp dụng từ ngày đó), không tự suy luận luật cũ không bao giờ được viện dẫn.",
+    "status_scope_warning": "Trạng thái văn bản không đủ để suy ra hiệu lực của từng điều khoản hoặc quy định chuyển tiếp."
+  }
+]

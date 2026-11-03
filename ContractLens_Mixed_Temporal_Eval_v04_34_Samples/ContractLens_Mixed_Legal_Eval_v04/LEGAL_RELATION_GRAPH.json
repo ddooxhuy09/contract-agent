@@ -1,0 +1,77 @@
+[
+  {
+    "edge_id": "REPL-LAB-2021",
+    "source_law_id": "45/2019/QH14",
+    "target_law_id": "10/2012/QH13",
+    "type": "REPLACES_ALL",
+    "affected_scope": "Bộ luật Lao động",
+    "effective_from": "2021-01-01",
+    "basis_provision_ids": [],
+    "comment": "Lưu ý đối chiếu luật lao động theo mốc thời gian."
+  },
+  {
+    "edge_id": "REPL-SI-2025",
+    "source_law_id": "41/2024/QH15",
+    "target_law_id": "58/2014/QH13",
+    "type": "REPLACES_ALL",
+    "affected_scope": "Luật BHXH, có các điều khoản chuyển tiếp",
+    "effective_from": "2025-07-01",
+    "basis_provision_ids": [
+      "SI24-140.1",
+      "SI24-140.2"
+    ],
+    "comment": ""
+  },
+  {
+    "edge_id": "REPL-E-2024",
+    "source_law_id": "20/2023/QH15",
+    "target_law_id": "51/2005/QH11",
+    "type": "REPLACES_WITH_TRANSITION",
+    "affected_scope": "Luật GDĐT, bảo lưu trường hợp điều 53",
+    "effective_from": "2024-07-01",
+    "basis_provision_ids": [
+      "E23-52.2",
+      "E23-53.1"
+    ],
+    "comment": ""
+  },
+  {
+    "edge_id": "REPL-C-2024",
+    "source_law_id": "19/2023/QH15",
+    "target_law_id": "59/2010/QH12",
+    "type": "REPLACES_WITH_TRANSITION",
+    "affected_scope": "Luật BVQLNTD, bảo lưu trường hợp Điều 80",
+    "effective_from": "2024-07-01",
+    "basis_provision_ids": [
+      "C23-79.2",
+      "C23-80.1.a"
+    ],
+    "comment": ""
+  },
+  {
+    "edge_id": "AMEND-145-2022",
+    "source_law_id": "35/2022/NĐ-CP",
+    "target_law_id": "145/2020/NĐ-CP",
+    "type": "AMENDS_CLAUSE",
+    "affected_scope": "Điều 4 khoản 2",
+    "effective_from": "2022-07-15",
+    "basis_provision_ids": [
+      "N35-73.1",
+      "N145-4.2"
+    ],
+    "comment": ""
+  },
+  {
+    "edge_id": "ADD-145-2024",
+    "source_law_id": "10/2024/NĐ-CP",
+    "target_law_id": "145/2020/NĐ-CP",
+    "type": "ADDS_CLAUSE",
+    "affected_scope": "Điều 4 khoản 4",
+    "effective_from": "2024-03-25",
+    "basis_provision_ids": [
+      "N10-49.1",
+      "N145-4.4"
+    ],
+    "comment": ""
+  }
+]

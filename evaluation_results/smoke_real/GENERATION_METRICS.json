@@ -1,0 +1,44 @@
+{
+  "generated_or_fallback_outputs": 5,
+  "human_reviewed_cases": 0,
+  "judge": "No calibrated legal judge configured; no semantic-similarity-only correctness score.",
+  "metrics": {
+    "answer_correctness": {
+      "value": null,
+      "sample_count": 0,
+      "reason": "Pending review using rubric and actual prompts/evidence."
+    },
+    "faithfulness": {
+      "value": null,
+      "sample_count": 0,
+      "reason": "Pending review using rubric and actual prompts/evidence."
+    },
+    "answer_relevance": {
+      "value": null,
+      "sample_count": 0,
+      "reason": "Pending review using rubric and actual prompts/evidence."
+    },
+    "citation_support_accuracy": {
+      "value": null,
+      "sample_count": 0,
+      "reason": "Pending review using rubric and actual prompts/evidence."
+    },
+    "hallucination_rate": {
+      "value": null,
+      "sample_count": 0,
+      "reason": "Pending review using rubric and actual prompts/evidence."
+    },
+    "legal_grounding": {
+      "value": null,
+      "sample_count": 0,
+      "reason": "Pending review using rubric and actual prompts/evidence."
+    },
+    "abstention_quality": {
+      "value": null,
+      "sample_count": 0,
+      "reason": "Pending review using rubric and actual prompts/evidence."
+    }
+  },
+  "structured_legal_citation_cases": 0,
+  "qa_citation_observability": "QA source_clauses identifies contract clauses only; legal citations in answer text have not been silently replaced with retrieved chunks or inferred source IDs."
+}

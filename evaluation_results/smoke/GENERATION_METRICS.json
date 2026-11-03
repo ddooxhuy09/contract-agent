@@ -1,0 +1,39 @@
+{
+  "answer_correctness": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Requires human review or a calibrated, independently grounded judge; none was run."
+  },
+  "faithfulness": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Requires human review or a calibrated, independently grounded judge; none was run."
+  },
+  "answer_relevance": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Requires human review or a calibrated, independently grounded judge; none was run."
+  },
+  "citation_support_accuracy": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Requires human review or a calibrated, independently grounded judge; none was run."
+  },
+  "hallucination_rate": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Requires human review or a calibrated, independently grounded judge; none was run."
+  },
+  "legal_grounding": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Requires human review or a calibrated, independently grounded judge; none was run."
+  },
+  "abstention_quality": {
+    "value": null,
+    "sample_count": 0,
+    "note": "Requires human review or a calibrated, independently grounded judge; none was run."
+  },
+  "generated_cases": 0,
+  "answer_correctness_method": "No semantic-similarity-only scoring; human legal review is pending."
+}

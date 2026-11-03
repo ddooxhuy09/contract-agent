@@ -1,0 +1,47 @@
+[
+  {
+    "id": "MIX-017",
+    "categories": [
+      "Invalid/Unverified Ground Truth",
+      "Pipeline Execution Failure"
+    ],
+    "details": "No clauses extracted; the workflow may have swallowed extraction errors."
+  },
+  {
+    "id": "TEMP-006",
+    "categories": [
+      "Invalid/Unverified Ground Truth",
+      "Unsupported Capability",
+      "Retrieval Missing Evidence"
+    ],
+    "details": "Last actual retrieval attempt; graph stage is ranked before final filtering/truncation. LLM stage includes only full chunks confirmed in the actual prompt."
+  },
+  {
+    "id": "MIX-018",
+    "categories": [
+      "Invalid/Unverified Ground Truth",
+      "Retrieval Missing Evidence",
+      "Wrong Legal Document"
+    ],
+    "details": "Last actual retrieval attempt; graph stage is ranked before final filtering/truncation. LLM stage includes only full chunks confirmed in the actual prompt."
+  },
+  {
+    "id": "TEMP-014",
+    "categories": [
+      "Invalid/Unverified Ground Truth",
+      "Unsupported Capability",
+      "Retrieval Missing Evidence",
+      "Wrong Legal Document"
+    ],
+    "details": "Last actual retrieval attempt; graph stage is ranked before final filtering/truncation. LLM stage includes only full chunks confirmed in the actual prompt."
+  },
+  {
+    "id": "MIX-007",
+    "categories": [
+      "Invalid/Unverified Ground Truth",
+      "Retrieval Missing Evidence",
+      "Wrong Legal Document"
+    ],
+    "details": "Last actual retrieval attempt; graph stage is ranked before final filtering/truncation. LLM stage includes only full chunks confirmed in the actual prompt."
+  }
+]

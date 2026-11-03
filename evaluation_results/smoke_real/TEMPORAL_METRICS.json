@@ -1,0 +1,118 @@
+{
+  "case_count": 2,
+  "execution_counts": {
+    "completed": 2
+  },
+  "capability_counts": {
+    "unsupported_capability": 2
+  },
+  "metrics": {
+    "temporal_version_accuracy": {
+      "value": null,
+      "sample_count": 0,
+      "reason": "No independently reviewed temporal selection/version labels in output; pipeline does not forward benchmark dates into retrieval."
+    },
+    "applicable_law_selection_accuracy": {
+      "value": null,
+      "sample_count": 0,
+      "reason": "No independently reviewed temporal selection/version labels in output; pipeline does not forward benchmark dates into retrieval."
+    },
+    "outdated_citation_rate": {
+      "value": null,
+      "sample_count": 0,
+      "reason": "No independently reviewed temporal selection/version labels in output; pipeline does not forward benchmark dates into retrieval."
+    },
+    "relation_edge_recall": {
+      "value": null,
+      "sample_count": 0,
+      "reason": "No independently reviewed temporal selection/version labels in output; pipeline does not forward benchmark dates into retrieval."
+    },
+    "transitional_provision_accuracy": {
+      "value": null,
+      "sample_count": 0,
+      "reason": "No independently reviewed temporal selection/version labels in output; pipeline does not forward benchmark dates into retrieval."
+    }
+  },
+  "structural_retrieval_diagnostic": {
+    "cross_document_retrieval_coverage": {
+      "value": 0.5,
+      "sample_count": 2
+    },
+    "exact_provision_recall": {
+      "value": 0.25,
+      "sample_count": 2
+    },
+    "explicit_distractor_retrieval_rate": {
+      "value": 0.0,
+      "sample_count": 2
+    },
+    "mrr": {
+      "value": 0.25,
+      "sample_count": 2
+    },
+    "pooled_binary_ndcg_at_1": {
+      "value": 0.0,
+      "sample_count": 2
+    },
+    "pooled_binary_ndcg_at_10": {
+      "value": 0.19342640361727081,
+      "sample_count": 2
+    },
+    "pooled_binary_ndcg_at_3": {
+      "value": 0.19342640361727081,
+      "sample_count": 2
+    },
+    "pooled_binary_ndcg_at_5": {
+      "value": 0.19342640361727081,
+      "sample_count": 2
+    },
+    "pooled_precision_at_1": {
+      "value": 0.0,
+      "sample_count": 2
+    },
+    "pooled_precision_at_10": {
+      "value": 0.05,
+      "sample_count": 2
+    },
+    "pooled_precision_at_3": {
+      "value": 0.16666666666666666,
+      "sample_count": 2
+    },
+    "pooled_precision_at_5": {
+      "value": 0.1,
+      "sample_count": 2
+    },
+    "recall_at_1": {
+      "value": 0.0,
+      "sample_count": 2
+    },
+    "recall_at_10": {
+      "value": 0.25,
+      "sample_count": 2
+    },
+    "recall_at_3": {
+      "value": 0.25,
+      "sample_count": 2
+    },
+    "recall_at_5": {
+      "value": 0.25,
+      "sample_count": 2
+    },
+    "required_evidence_coverage": {
+      "value": 0.25,
+      "sample_count": 2
+    },
+    "retrieved_count": {
+      "value": 7.5,
+      "sample_count": 2
+    },
+    "unjudged_hit_count": {
+      "value": 7.0,
+      "sample_count": 2
+    }
+  },
+  "notes": [
+    "is_effective=false is not equated with never-applicable law; transitional exceptions require reviewed selection reasoning.",
+    "Historical N145 snapshots are unverified and incomplete; no text/version exact score is asserted."
+  ]
+}

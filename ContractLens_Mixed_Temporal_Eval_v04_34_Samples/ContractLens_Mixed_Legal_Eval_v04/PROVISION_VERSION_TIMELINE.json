@@ -1,0 +1,38 @@
+[
+  {
+    "provision_id": "N145-4.2",
+    "version_id": "N145_ART4_CLAUSE2_ORIGINAL",
+    "effective_from": "2021-02-01",
+    "effective_until_exclusive": "2022-07-15",
+    "modifying_edge_id": null,
+    "text_status": "original_historical_version",
+    "full_text_available": false,
+    "comment": "Chưa trích toàn văn nguyên bản, không đánh giá text exact match ở bản này.",
+    "versioned_chunk_id": "N145-4.2@2021-02-01",
+    "text_source_review_status": "needs_exact_historical_snapshot_text_validation"
+  },
+  {
+    "provision_id": "N145-4.2",
+    "version_id": "N145_ART4_CLAUSE2_AMENDED_2022",
+    "effective_from": "2022-07-15",
+    "effective_until_exclusive": null,
+    "modifying_edge_id": "AMEND-145-2022",
+    "text_status": "amended_by_ND35_2022",
+    "full_text_available": false,
+    "comment": "Phải cập nhật tiếp các văn bản sửa đổi sau 2022 trước khi kết luận hiệu lực nội dung năm 2026.",
+    "versioned_chunk_id": "N145-4.2@2022-07-15",
+    "text_source_review_status": "needs_exact_historical_snapshot_text_validation"
+  },
+  {
+    "provision_id": "N145-4.4",
+    "version_id": "N145_ART4_CLAUSE4_ADDED_2024",
+    "effective_from": "2024-03-25",
+    "effective_until_exclusive": null,
+    "modifying_edge_id": "ADD-145-2024",
+    "text_status": "added_by_ND10_2024",
+    "full_text_available": false,
+    "comment": "Đánh giá tại 01/04/2024; không khẳng định toàn bộ nội dung hiện còn nguyên ở 2026.",
+    "versioned_chunk_id": "N145-4.4@2024-03-25",
+    "text_source_review_status": "needs_exact_historical_snapshot_text_validation"
+  }
+]

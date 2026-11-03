@@ -86,3 +86,4 @@ evaluation_results/**/predictions.jsonl
 evaluation_results/**/traces/
 evaluation_results/**/console.log
 dataset.csv
+!ContractLens_Mixed_Temporal_Eval_v04_34_Samples/**/contracts/*.docx
