@@ -8,9 +8,31 @@ from app.core.settings import get_settings
 
 _SEPARATORS = ["\n\n", "\n", ".", " ", ""]
 # Split on Điều only — Khoản stays inside the same Điều chunk unless over budget.
+# Legacy pattern: "Điều 1." anywhere in the text (punctuation required).
 _ARTICLE_PATTERN = re.compile(
     r"(?:(?:Điều|ĐIỀU)\s+(\d+)[\.:\-\)]\s*)",
 )
+# Line-anchored heading: "Điều 1" alone on a line, or "Điều 1. Title" / "ĐIỀU 2:".
+# Anchoring avoids cutting at in-sentence references such as "theo Điều 5. ".
+_LINE_ARTICLE_PATTERN = re.compile(
+    r"^[ 	]*(?:Điều|ĐIỀU)[ 	]+(\d+)(?!\w)[ 	]*(?:[\.:\-\)][ 	]*)?(?=\S|$)",
+    re.MULTILINE,
+)
+# Fallback heading levels used only when the text has no Điều heading at all.
+# Standalone line only ("Mục A", "Khoản B") so in-text references never split.
+_SECTION_PATTERNS = (
+    re.compile(r"^[ 	]*(?:Mục|MỤC)[ 	]+(\d+|[A-ZĐ])[ 	]*[\.:\-\)]?[ 	]*$", re.MULTILINE),
+    re.compile(r"^[ 	]*(?:Khoản|KHOẢN)[ 	]+(\d+|[A-ZĐ])[ 	]*[\.:\-\)]?[ 	]*$", re.MULTILINE),
+)
+
+
+def _find_headings(text: str) -> list:
+    """Return heading matches (group 1 = clause label), preferring Điều, then Mục, then Khoản."""
+    for pattern in (_LINE_ARTICLE_PATTERN, *_SECTION_PATTERNS, _ARTICLE_PATTERN):
+        matches = list(pattern.finditer(text))
+        if matches:
+            return matches
+    return []
 
 
 def _split_text(text: str, chunk_size: int, chunk_overlap: int, separators: List[str] = None) -> List[str]:
@@ -100,7 +122,7 @@ def chunk_by_clause(text: str, contract_id: str) -> List[Document]:
     documents: List[Document] = []
     chunk_index = 0
 
-    matches = list(_ARTICLE_PATTERN.finditer(text))
+    matches = _find_headings(text)
     if not matches:
         for idx, chunk in enumerate(_split_text(text, max_chunk_size, chunk_overlap)):
             if chunk.strip():
