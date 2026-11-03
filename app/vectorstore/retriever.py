@@ -31,8 +31,13 @@ def retrieve_legal(
     title: str | None = None,
     summary: str | None = None,
     contract_type: str | None = None,
+    as_of_date: str | None = None,
 ) -> List[Document]:
-    """Hybrid PG + optional GraphRAG hydrate. Prefer title/summary for rewrite."""
+    """Hybrid PG + optional GraphRAG hydrate. Prefer title/summary for rewrite.
+
+    ``as_of_date`` is the date whose law applies (ISO ``YYYY-MM-DD`` or ``dd/mm/yyyy``);
+    ``None`` means today.
+    """
     rag = get_graph_rag()
     if rag is not None:
         hits = rag.retrieve_for_clause(
@@ -41,6 +46,7 @@ def retrieve_legal(
             contract_type=contract_type,
             k_seed=k,
             max_total=max(k * 2, 8),
+            as_of_date=as_of_date,
         )
         return _as_documents(hits)
 

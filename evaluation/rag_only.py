@@ -152,6 +152,9 @@ async def run(args):
                     "execution_status": "completed", "actual_answer": None, "generation_ms": None, "model_calls": 0,
                     "legal_relations": None, "contract_retrieval": [], "temporal_capability": "unsupported" if case['id'].startswith('TEMP-') else "not_requested"}
             query = "\n\n".join(str(v) for v in (case.get("scenario"), case["question"]) if v)
+            # Law applicable on the transaction date when given, else on the as-of date.
+            # Both are benchmark inputs (QUESTIONS_ONLY_NO_GOLD), not gold labels.
+            applicable_date = case.get("transaction_date") or case.get("as_of_date")
             try:
                 if case.get("contract_id"):
                     contract_start = time.perf_counter()
@@ -159,11 +162,11 @@ async def run(args):
                     pred["contract_retrieval"] = [chunk_json(c) for c in docs]
                     pred["contract_retrieval_ms"] = (time.perf_counter() - contract_start) * 1000
                 if case["task"] == "risk":
-                    rag.retrieve_for_clause(case["question"], case.get("scenario"), contract_type=None, k_seed=4, max_total=10)
+                    rag.retrieve_for_clause(case["question"], case.get("scenario"), contract_type=None, k_seed=4, max_total=10, as_of_date=applicable_date)
                     pred["adapter"] = "risk GraphRAG with input fact pattern; no extraction/model"
                 else:
                     legal_query = augment_qa_retrieval_query(query, [])
-                    retrieve_legal(legal_query, k=5, title=legal_query)
+                    retrieve_legal(legal_query, k=5, title=legal_query, as_of_date=applicable_date)
                     pred["adapter"] = "QA first-pass legal retrieval; no rewrite LLM/model"
             except Exception as exc:
                 pred["status"] = pred["execution_status"] = "failed"

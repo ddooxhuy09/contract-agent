@@ -65,6 +65,8 @@ class QAState(TypedDict):
     _parse_ok: bool
     # Cross-thread long-term memory (from app.agents.memory), injected as context.
     _long_term_memory: str
+    # Date whose law applies to the question; None = today.
+    as_of_date: str | None
 
 
 def _now_iso() -> str:
@@ -106,6 +108,7 @@ async def _retrieve_node(state: QAState) -> dict:
         legal_query,
         k=5,
         title=legal_query,
+        as_of_date=state.get("as_of_date"),
     )
     memory = await load_qa_memory(state["contract_id"])
 
@@ -347,7 +350,9 @@ def _get_graph():
     return _compiled_graph
 
 
-def _qa_input(question: str, contract_id: str, provider: str) -> dict:
+def _qa_input(
+    question: str, contract_id: str, provider: str, as_of_date: str | None = None
+) -> dict:
     """Fresh per-turn input. Resets transient bookkeeping so a prior turn's attempt
     counters/scores can't leak into this invocation (the thread checkpointer persists
     them between turns)."""
@@ -364,6 +369,7 @@ def _qa_input(question: str, contract_id: str, provider: str) -> dict:
         "_max_score": None,
         "_parse_ok": False,
         "_long_term_memory": "",
+        "as_of_date": as_of_date,
     }
 
 
@@ -381,10 +387,11 @@ async def answer_question(
     contract_id: str,
     provider: str = DEFAULT_PROVIDER,
     checkpoint_id: str | None = None,
+    as_of_date: str | None = None,
 ) -> ChatResponse:
     graph = _get_graph()
     result = await graph.ainvoke(
-        _qa_input(question, contract_id, provider),
+        _qa_input(question, contract_id, provider, as_of_date),
         config=_qa_config(contract_id, checkpoint_id),
     )
     return ChatResponse(

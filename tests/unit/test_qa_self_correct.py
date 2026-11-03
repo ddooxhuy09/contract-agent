@@ -281,3 +281,50 @@ def test_stream_answer_emits_steps_then_done(monkeypatch):
     done_data = json.loads(frames[-1].split("data: ", 1)[1].strip())
     assert done_data["answer"] == "Trả lời stream."
     assert done_data["source_clauses"] == ["4"]
+
+
+def test_retrieve_node_forwards_as_of_date(monkeypatch):
+    calls = []
+
+    def capture_legal(query, k=3, **kwargs):
+        calls.append(kwargs)
+        return []
+
+    async def no_memory(_contract_id):
+        return ""
+
+    monkeypatch.setattr(qa, "retrieve_legal", capture_legal)
+    monkeypatch.setattr(qa, "load_qa_memory", no_memory)
+
+    state = {
+        "query": "mức phạt vi phạm hợp đồng",
+        "messages": [qa.HumanMessage(content="mức phạt vi phạm hợp đồng")],
+        "contract_id": "c-asof",
+    }
+    asyncio.run(qa._retrieve_node({**state, "as_of_date": "2024-06-01"}))
+    asyncio.run(qa._retrieve_node(state))
+
+    assert calls[0]["as_of_date"] == "2024-06-01"
+    assert calls[1]["as_of_date"] is None
+
+
+def test_qa_input_carries_as_of_date():
+    assert qa._qa_input("q", "c", "gemini", "2024-06-01")["as_of_date"] == "2024-06-01"
+    assert qa._qa_input("q", "c", "gemini")["as_of_date"] is None
+
+
+def test_retrieve_legal_passes_as_of_date_to_graph_rag(monkeypatch):
+    from app.vectorstore import retriever
+
+    seen = {}
+
+    class FakeRag:
+        def retrieve_for_clause(self, title, summary, **kwargs):
+            seen.update(kwargs)
+            return []
+
+    monkeypatch.setattr(retriever, "get_graph_rag", lambda: FakeRag())
+    retriever.retrieve_legal("q", k=5, title="q", as_of_date="2024-06-01")
+
+    assert seen["as_of_date"] == "2024-06-01"
+    assert seen["contract_type"] is None
