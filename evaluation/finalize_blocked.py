@@ -5,12 +5,12 @@ import importlib.metadata
 from collections import Counter
 from pathlib import Path
 
-from evaluation.runtime_adapter import ROOT, BENCHMARK
+from evaluation.runtime_adapter import ROOT, BENCHMARK, BASELINE_RUN
 from evaluation.run_benchmark import fingerprints, write_json, now
 
 
 def main():
-    output = ROOT / "evaluation_results"
+    output = BASELINE_RUN
     path = output / "predictions.jsonl"
     predictions = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
     log = (output / "baseline_console.log").read_text(encoding="utf-8-sig")

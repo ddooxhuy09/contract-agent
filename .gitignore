@@ -81,9 +81,9 @@ desktop.ini
 tests/
 
 # --- Heavy evaluation artifacts (regenerate with evaluation.rag_only) ---
-evaluation_results/corpus_snapshot.json
+evaluation_results/**/corpus_snapshot.json
 evaluation_results/**/predictions.jsonl
 evaluation_results/**/traces/
 evaluation_results/**/console.log
 dataset.csv
-!ContractLens_Mixed_Temporal_Eval_v04_34_Samples/**/contracts/*.docx
+!evaluation/benchmark/**/contracts/*.docx

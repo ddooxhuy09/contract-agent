@@ -1,6 +1,6 @@
 # ContractLens Mixed Temporal Legal Evaluation v0.4.1 — Baseline thực nghiệm
 
-Cập nhật theo yêu cầu dừng Gemini: đã có RAG-only đủ 34 case, không gọi LLM, tại [rag_only/RAG_ONLY_REPORT.md](rag_only/RAG_ONLY_REPORT.md). Các kết quả generation bị quota bên dưới được giữ riêng.
+Cập nhật theo yêu cầu dừng Gemini: đã có RAG-only đủ 34 case, không gọi LLM, tại [rag_only/RAG_ONLY_REPORT.md](../rag_only/RAG_ONLY_REPORT.md). Các kết quả generation bị quota bên dưới được giữ riêng.
 
 Thời gian UTC: 2026-10-19T16:32:11.686186+00:00 → 2026-10-19T16:41:40.215839+00:00. Múi giờ người dùng: Asia/Bangkok (UTC+7).
 

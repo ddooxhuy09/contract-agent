@@ -13,7 +13,7 @@ import uuid
 from collections import Counter
 from pathlib import Path
 
-from evaluation.runtime_adapter import ROOT, BENCHMARK, chunk_json, error_info, settings_summary
+from evaluation.runtime_adapter import ROOT, BENCHMARK, RUNS, chunk_json, error_info, settings_summary
 from evaluation.run_benchmark import fingerprints, write_json, now, source_manifest
 
 
@@ -194,7 +194,7 @@ async def run(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output-dir", default=str(ROOT / "evaluation_results" / "rag_only"))
+    parser.add_argument("--output-dir", default=str(RUNS / "rag_only"))
     parser.add_argument("--date-field", choices=("as_of_date", "transaction_date", "none"), default="as_of_date",
                         help="case date forwarded to retrieval as as_of_date")
     asyncio.run(run(parser.parse_args()))

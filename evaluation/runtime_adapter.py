@@ -16,7 +16,10 @@ from typing import Any
 from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
-BENCHMARK = ROOT / "ContractLens_Mixed_Temporal_Eval_v04_34_Samples" / "ContractLens_Mixed_Legal_Eval_v04"
+BENCHMARK = ROOT / "evaluation" / "benchmark" / "v04"
+RESULTS = ROOT / "evaluation_results"
+RUNS = RESULTS / "runs"
+BASELINE_RUN = RUNS / "baseline_20261019"
 
 
 def dumpable(value):

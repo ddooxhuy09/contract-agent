@@ -254,11 +254,11 @@ def build(args: argparse.Namespace) -> None:
 def parse_args() -> argparse.Namespace:
     root = Path(__file__).resolve().parents[1]
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--dataset", type=Path, default=root / "dataset.csv")
-    parser.add_argument("--corpus-root", type=Path, default=root)
+    parser.add_argument("--dataset", type=Path, default=root / "data" / "dataset.csv")
+    parser.add_argument("--corpus-root", type=Path, default=root / "data" / "legal_corpus_samples")
     parser.add_argument("--fixture", type=Path, default=root / "tests" / "fixtures" / "legal_qa.jsonl")
-    parser.add_argument("--missing-report", type=Path, default=root / "reports" / "missing_legal_documents.csv")
-    parser.add_argument("--coverage", type=Path, default=root / "reports" / "qa_coverage.md")
+    parser.add_argument("--missing-report", type=Path, default=root / "evaluation_results" / "reports" / "missing_legal_documents.csv")
+    parser.add_argument("--coverage", type=Path, default=root / "evaluation_results" / "reports" / "qa_coverage.md")
     return parser.parse_args()
 
 

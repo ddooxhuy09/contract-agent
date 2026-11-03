@@ -12,7 +12,7 @@ from app.agents.labor_completeness import (
 from app.agents.labor_code_resolver import _parse_as_of
 from app.schemas.contract import ContractAnalysis
 
-SAMPLE = Path(__file__).resolve().parents[2] / "CÔNG TY CỔ PHẦN CÔNG NGHỆ TƯƠNG LAI_SAI.md"
+SAMPLE = Path(__file__).resolve().parents[2] / "data" / "demo_contracts" / "CÔNG TY CỔ PHẦN CÔNG NGHỆ TƯƠNG LAI_SAI.md"
 
 
 def test_parse_as_of_formats():

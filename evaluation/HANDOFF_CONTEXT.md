@@ -8,11 +8,11 @@ The active user instruction is: **do not call Gemini; work on and test RAG first
 
 The ranking issue is resolved. An offline ablation over the saved candidate pool showed that graph expansion added no gold evidence in this set; the old order ranked instrument level before role/score and buried seeds. Production now keeps seeds in hybrid-search order and places expansion after them. The seed-first run is `rag_only_seed_first_20261026/`: final R@5 0.147 → 0.201, MRR 0.185 → 0.260, coverage unchanged.
 
-Update 2026-11-03 (branch `fix/rag-chunker-temporal-effectivity`; report `evaluation_results/CHUNKER_ASOF_RUN.md`):
+Update 2026-11-03 (branch `fix/rag-chunker-temporal-effectivity`; report `evaluation_results/reports/CHUNKER_ASOF_RUN.md`):
 
 - Chunker now matches line-anchored `Điều N`, `Mục X`, `Khoản X` headings: exact clause ID 0/20 → 20/20, text-span 20/20, legal retrieval unchanged.
 - `as_of_date` is forwarded through `retrieve_legal` and the QA graph state; the runner has `--date-field {as_of_date,transaction_date,none}`. Run `rag_only_chunker_asof_20261103` (as_of_date) matches the baseline exactly (R@5 0.201, MRR 0.260). Run `rag_only_chunker_txdate_20261103` (transaction_date first) loses TEMP-009 (R@5 0.191). The default was picked after seeing that regression, so treat it as post-hoc.
-- Status-4 stays excluded. `scripts/audit_status4_provisions.py` shows 3132 status-4 nodes with no `eff_to` and 2 provision-level relations corpus-wide, so a date-aware filter is not supported by the data; no retrieval change was made (`evaluation_results/STATUS4_AUDIT.md`).
+- Status-4 stays excluded. `scripts/audit_status4_provisions.py` shows 3132 status-4 nodes with no `eff_to` and 2 provision-level relations corpus-wide, so a date-aware filter is not supported by the data; no retrieval change was made (`evaluation_results/reports/STATUS4_AUDIT.md`).
 - Still open: a policy for transitional questions (keep pre- and post-effective versions), reviewed provision-level status for status-4 laws, missing 36/2005/QH11, 41/2024 metadata conflict. Do not tune reranking or parsing against individual gold labels without reporting that explicitly.
 
 ## Current code changes
@@ -25,16 +25,16 @@ Update 2026-11-03 (branch `fix/rag-chunker-temporal-effectivity`; report `evalua
 - `evaluation/rerank_ablation.py`: new offline reranking ablation over saved traces. It freezes the pre-change order, declares policies before scoring, and reads gold only after rankings are fixed.
 - `evaluation/score_rag_only.py`: updated the adapter description.
 - `evaluation/README.md`: documents the no-Gemini instruction, the RAG runs, and the reranking workflow.
-- `evaluation_results/RAG_SCOPE_ABLATION.md`: documents the labor-hint comparison, reranking ablation, production change, and status-4 corpus audit.
+- `evaluation_results/reports/RAG_SCOPE_ABLATION.md`: documents the labor-hint comparison, reranking ablation, production change, and status-4 corpus audit.
 
 These are incremental edits in a working tree with many pre-existing user changes. **Do not reset, clean, revert, or overwrite unrelated files.** `git status --short` contains unrelated edits and untracked documentation/frontend files from before this handoff.
 
 ## Latest RAG-only run (seed-first ranking)
 
-Run: `evaluation_results/rag_only_seed_first_20261026/`
+Run: `evaluation_results/runs/rag_only_seed_first_20261026/`
 
 - 34/34 completed; 0 model calls; `gemini_credential_present=false`; `llm_client_modules_loaded=[]`; corpus fingerprints unchanged.
-- Offline ablation: `evaluation_results/rerank_ablation_20261026/`. Frozen pre-change baseline reproduced the stored final order 34/34; policies were declared before gold was read.
+- Offline ablation: `evaluation_results/runs/rerank_ablation_20261026/`. Frozen pre-change baseline reproduced the stored final order 34/34; policies were declared before gold was read.
 - Final retrieval: R@1 0.098 → 0.142, R@3 0.108 → 0.191, R@5 0.147 → 0.201, MRR 0.185 → 0.260. R@10, required-evidence coverage (0.201), and returned-chunk count (6.412) unchanged.
 - Per-task R@5: QA 0.077 → 0.192, multi-hop 0.214 → 0.262, risk 0.192 → 0.192, classification 0.000. Per-task MRR: QA 0.060 → 0.231, multi-hop 0.357 → 0.405, risk 0.231.
 - Every seed precedes every expansion chunk in 34/34 saved finals; the shipped policy reproduces the saved final order 34/34.
@@ -43,7 +43,7 @@ Run: `evaluation_results/rag_only_seed_first_20261026/`
 
 ## Previous RAG-only run (no labor hint)
 
-Run: `evaluation_results/rag_only_no_labor_hint/`
+Run: `evaluation_results/runs/rag_only_no_labor_hint/`
 
 - 34/34 unique cases completed; one trace per case.
 - `generation_model_calls=0`, `gemini_credential_present=false`, `llm_client_modules_loaded=[]`.
@@ -66,17 +66,17 @@ Without the labor hint, seed R@5 is 0.201 and final R@5 is 0.147; final R@10 rem
 
 Report links/paths:
 
-- `evaluation_results/rag_only_seed_first_20261026/RAG_ONLY_REPORT.md`
-- `evaluation_results/rag_only_seed_first_20261026/RETRIEVAL_METRICS.json`
-- `evaluation_results/rag_only_seed_first_20261026/CASE_BY_CASE_RESULTS.csv`
-- `evaluation_results/rag_only_seed_first_20261026/predictions.jsonl`
-- `evaluation_results/rag_only_seed_first_20261026/traces/`
-- `evaluation_results/rerank_ablation_20261026/RERANK_ABLATION.md`
-- `evaluation_results/rerank_ablation_20261026/RERANK_METRICS.json`
-- `evaluation_results/rerank_ablation_20261026/CASE_RANK_COMPARISON.csv`
-- `evaluation_results/rag_only_no_labor_hint/RAG_ONLY_REPORT.md` (previous run)
-- `evaluation_results/rag_only/RAG_ONLY_REPORT.md` (pre-labor-hint comparison)
-- `evaluation_results/RAG_SCOPE_ABLATION.md`
+- `evaluation_results/runs/rag_only_seed_first_20261026/RAG_ONLY_REPORT.md`
+- `evaluation_results/runs/rag_only_seed_first_20261026/RETRIEVAL_METRICS.json`
+- `evaluation_results/runs/rag_only_seed_first_20261026/CASE_BY_CASE_RESULTS.csv`
+- `evaluation_results/runs/rag_only_seed_first_20261026/predictions.jsonl`
+- `evaluation_results/runs/rag_only_seed_first_20261026/traces/`
+- `evaluation_results/runs/rerank_ablation_20261026/RERANK_ABLATION.md`
+- `evaluation_results/runs/rerank_ablation_20261026/RERANK_METRICS.json`
+- `evaluation_results/runs/rerank_ablation_20261026/CASE_RANK_COMPARISON.csv`
+- `evaluation_results/runs/rag_only_no_labor_hint/RAG_ONLY_REPORT.md` (previous run)
+- `evaluation_results/runs/rag_only/RAG_ONLY_REPORT.md` (pre-labor-hint comparison)
+- `evaluation_results/reports/RAG_SCOPE_ABLATION.md`
 
 The retrieval-only runner writes actual retrieval traces. It adapts risk cases to search using the supplied question/scenario; there is no LLM clause extraction. No temporal dates are forwarded into retrieval, so the 14 temporal cases do not demonstrate time-aware retrieval. No final answer, legal citations, or answer quality was generated or scored.
 

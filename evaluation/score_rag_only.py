@@ -5,7 +5,7 @@ import json
 from collections import Counter, defaultdict
 from pathlib import Path
 
-from evaluation.runtime_adapter import ROOT
+from evaluation.runtime_adapter import ROOT, RUNS
 from evaluation.audit import load
 from evaluation.scoring import ref, stage_chunks, retrieval_scores, mean_metrics, charts, clause_key, format_metric
 
@@ -153,4 +153,4 @@ def score(output):
 
 if __name__ == '__main__':
     import sys
-    score(Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / 'evaluation_results' / 'rag_only')
+    score(Path(sys.argv[1]) if len(sys.argv) > 1 else RUNS / 'rag_only')

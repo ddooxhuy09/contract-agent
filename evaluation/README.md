@@ -1,5 +1,20 @@
 # ContractLens evaluation tooling
 
+## Bản đồ: xem gì ở đâu
+
+| Bạn muốn | Mở |
+|---|---|
+| Xem **câu hỏi** của 34 case | [`benchmark/v04/PREVIEW_34_MIXED_TEMPORAL_CASES.md`](benchmark/v04/PREVIEW_34_MIXED_TEMPORAL_CASES.md) (bảng dễ đọc) hoặc `benchmark/v04/QUESTIONS_ONLY_NO_GOLD.json` (đầu vào runner) |
+| Xem **đáp án gold** | `benchmark/v04/MIXED_34_TEST_CASES_V04.json`. Runner không đọc file này, chỉ bước chấm điểm đọc |
+| Xem hợp đồng mẫu | `benchmark/v04/contracts/*.docx` (7 file) |
+| Xem **kết quả** lần chạy mới nhất | [`../evaluation_results/reports/CHUNKER_ASOF_RUN.md`](../evaluation_results/reports/CHUNKER_ASOF_RUN.md) |
+| Xem danh sách mọi lần chạy | [`../evaluation_results/README.md`](../evaluation_results/README.md) |
+| **Chạy** benchmark | mục "RAG-only" bên dưới (`rag_only.py`, rồi `score_rag_only.py`) |
+| Hiểu trạng thái dự án để tiếp tục | [`HANDOFF_CONTEXT.md`](HANDOFF_CONTEXT.md) |
+
+Dữ liệu vào (`benchmark/`) tách hẳn khỏi kết quả (`../evaluation_results/`). Đường dẫn dùng chung nằm ở một chỗ: `BENCHMARK`, `RESULTS`, `RUNS`, `BASELINE_RUN` trong `runtime_adapter.py`.
+Test của phần chấm điểm: `tests/evaluation/test_scoring.py`.
+
 This package records ContractLens retrieval and generation behavior. The current QA change removes the unconditional labor-law hint from mixed-topic questions. Benchmark gold is read only after retrieval finishes.
 
 **Current instruction: do not call Gemini.** The active experiment is `rag_only/`; generation in `run_benchmark.py` is disabled by default. No resumption or scheduled Gemini call has been configured.
@@ -7,8 +22,8 @@ This package records ContractLens retrieval and generation behavior. The current
 ## RAG-only (current task)
 
 ```powershell
-docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docker-compose.eval.yml run --rm --no-deps -e GEMINI_API_KEY= worker python -m evaluation.rag_only --output-dir /workspace/evaluation_results/rag_only_no_labor_hint
-python -m evaluation.score_rag_only evaluation_results/rag_only_no_labor_hint
+docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docker-compose.eval.yml run --rm --no-deps -e GEMINI_API_KEY= worker python -m evaluation.rag_only --output-dir /workspace/evaluation_results/runs/rag_only_no_labor_hint
+python -m evaluation.score_rag_only evaluation_results/runs/rag_only_no_labor_hint
 ```
 
 This uses only cached BGE-M3, real PostgreSQL/Neo4j retrieval, and the original query-rewrite rules. It instantiates no LLM client, does not run an LLM query rewrite, and records that no Gemini credential was available. QA cases use the production first-pass QA legal retriever without forcing a labor contract type; risk cases use the production GraphRAG entry with the supplied fact pattern as the query instead of LLM-extracted clauses. All input contracts are indexed using the real local DOCX parser/chunker/embedder in the isolated copy.
@@ -26,11 +41,11 @@ python -m evaluation.rerank_ablation
 Production now keeps seeds in hybrid-search order and places graph expansion after them. The confirming run is `rag_only_seed_first_20261026/`:
 
 ```powershell
-MSYS_NO_PATHCONV=1 docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docker-compose.eval.yml run --rm --no-deps -e GEMINI_API_KEY= worker python -m evaluation.rag_only --output-dir /workspace/evaluation_results/rag_only_seed_first_20261026
-python -m evaluation.score_rag_only evaluation_results/rag_only_seed_first_20261026
+MSYS_NO_PATHCONV=1 docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docker-compose.eval.yml run --rm --no-deps -e GEMINI_API_KEY= worker python -m evaluation.rag_only --output-dir /workspace/evaluation_results/runs/rag_only_seed_first_20261026
+python -m evaluation.score_rag_only evaluation_results/runs/rag_only_seed_first_20261026
 ```
 
-Final R@5 moved 0.147 → 0.201 and MRR 0.185 → 0.260 with unchanged coverage; see `../evaluation_results/RAG_SCOPE_ABLATION.md`.
+Final R@5 moved 0.147 → 0.201 and MRR 0.185 → 0.260 with unchanged coverage; see `../evaluation_results/reports/RAG_SCOPE_ABLATION.md`.
 
 ## Experiment files
 

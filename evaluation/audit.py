@@ -8,7 +8,7 @@ from collections import Counter
 from datetime import date
 from pathlib import Path
 
-from evaluation.runtime_adapter import ROOT, BENCHMARK, error_info
+from evaluation.runtime_adapter import ROOT, BENCHMARK, BASELINE_RUN, error_info
 from evaluation.run_benchmark import write_json, now
 
 
@@ -221,7 +221,7 @@ def render_coverage(audit, coverage):
 
 
 def main():
-    out = ROOT / "evaluation_results"
+    out = BASELINE_RUN
     audit = audit_benchmark()
     write_json(out / "benchmark_validation.json", audit)
     try:

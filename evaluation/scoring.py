@@ -9,7 +9,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 from evaluation.audit import norm_law, load
-from evaluation.runtime_adapter import ROOT, BENCHMARK
+from evaluation.runtime_adapter import ROOT, BENCHMARK, BASELINE_RUN, RUNS
 
 
 KS = (1, 3, 5, 10)
@@ -318,12 +318,12 @@ def render_reports(output, predictions, results, metadata, retrieval, generation
     status_counts = Counter(r["capability_status"] for r in results)
     execution_counts = Counter(r["execution_status"] for r in results)
     final = retrieval["stages"].get("final_retrieval", {})
-    audit_path = ROOT / "evaluation_results" / "benchmark_validation.json"
+    audit_path = BASELINE_RUN / "benchmark_validation.json"
     audit = json.loads(audit_path.read_text(encoding="utf-8")) if audit_path.exists() else {}
-    coverage_path = ROOT / "evaluation_results" / "corpus_coverage.json"
+    coverage_path = BASELINE_RUN / "corpus_coverage.json"
     coverage = json.loads(coverage_path.read_text(encoding="utf-8")) if coverage_path.exists() else {}
     lines = ["# ContractLens Mixed Temporal Legal Evaluation v0.4.1 — Baseline thực nghiệm", "",
-             ("Cập nhật theo yêu cầu dừng Gemini: đã có RAG-only đủ 34 case, không gọi LLM, tại [rag_only/RAG_ONLY_REPORT.md](rag_only/RAG_ONLY_REPORT.md). Các kết quả generation bị quota bên dưới được giữ riêng." if (output / 'rag_only' / 'RAG_ONLY_REPORT.md').exists() else ""), "",
+             ("Cập nhật theo yêu cầu dừng Gemini: đã có RAG-only đủ 34 case, không gọi LLM, tại [rag_only/RAG_ONLY_REPORT.md](../rag_only/RAG_ONLY_REPORT.md). Các kết quả generation bị quota bên dưới được giữ riêng." if (output.parent / 'rag_only' / 'RAG_ONLY_REPORT.md').exists() else ""), "",
              f"Thời gian UTC: {metadata.get('started_at')} → {metadata.get('finished_at')}. Múi giờ người dùng: Asia/Bangkok (UTC+7).", "",
              f"Đã ghi trạng thái cho {len(results)} case: thực thi hoàn tất {execution_counts['completed']}, lỗi/bị ngắt {execution_counts['failed']}, chưa chạy {execution_counts['not_run']}. Trong các output quan sát được, {status_counts['unsupported_capability']} case được đánh dấu capability chưa hỗ trợ; các nhóm này chồng với thực thi hoàn tất.",
              "**Baseline chưa chạy đầy đủ do quota API. Các metric trên tập đã chạy không đại diện cho đủ 34 case.**" if metadata.get('termination') else "",
@@ -432,4 +432,4 @@ def charts(output, results, risk):
 
 if __name__ == "__main__":
     import sys
-    score_and_report(Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "evaluation_results")
+    score_and_report(Path(sys.argv[1]) if len(sys.argv) > 1 else BASELINE_RUN)

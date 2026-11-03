@@ -20,7 +20,7 @@ from app.infrastructure.retrieval.scope_match import (
     filter_sector_mismatches,
 )
 from evaluation.audit import load
-from evaluation.runtime_adapter import ROOT
+from evaluation.runtime_adapter import ROOT, RUNS
 from evaluation.scoring import (
     format_metric,
     matches,
@@ -589,11 +589,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--input-dir",
-        default=str(ROOT / "evaluation_results" / "rag_only_no_labor_hint"),
+        default=str(RUNS / "rag_only_no_labor_hint"),
     )
     parser.add_argument(
         "--output-dir",
-        default=str(ROOT / "evaluation_results" / "rerank_ablation_20261026"),
+        default=str(RUNS / "rerank_ablation_20261026"),
     )
     args = parser.parse_args()
     run(Path(args.input_dir).resolve(), Path(args.output_dir).resolve())

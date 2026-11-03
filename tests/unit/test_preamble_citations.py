@@ -9,7 +9,7 @@ from app.agents.preamble_citations import (
 )
 from app.schemas.contract import RiskItem
 
-SAMPLE = Path(__file__).resolve().parents[2] / "CÔNG TY CỔ PHẦN CÔNG NGHỆ TƯƠNG LAI_SAI.md"
+SAMPLE = Path(__file__).resolve().parents[2] / "data" / "demo_contracts" / "CÔNG TY CỔ PHẦN CÔNG NGHỆ TƯƠNG LAI_SAI.md"
 
 
 def test_parse_can_cu_from_sample():

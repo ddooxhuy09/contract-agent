@@ -6,7 +6,7 @@ accepts status 1/5). A date-aware retrieval filter is only safe if the nodes car
 `eff_from`/`eff_to` window or provision-level amendment relations. This script measures
 that and writes STATUS4_AUDIT.{json,md}; it never writes to the database.
 
-    python -m scripts.audit_status4_provisions --output-dir evaluation_results
+    python -m scripts.audit_status4_provisions --output-dir evaluation_results/reports
 """
 from __future__ import annotations
 
@@ -144,7 +144,7 @@ def render_markdown(result: dict) -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--output-dir", default="evaluation_results")
+    parser.add_argument("--output-dir", default="evaluation_results/reports")
     parser.add_argument("--doc-num", action="append", help="repeatable; defaults to the benchmark laws")
     args = parser.parse_args()
 

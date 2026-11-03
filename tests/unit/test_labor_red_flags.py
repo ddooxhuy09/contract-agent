@@ -12,7 +12,7 @@ from app.agents.labor_red_flags import (
 )
 from app.schemas.contract import ContractAnalysis, RiskItem
 
-SAMPLE = Path(__file__).resolve().parents[2] / "CÔNG TY CỔ PHẦN CÔNG NGHỆ TƯƠNG LAI_SAI.md"
+SAMPLE = Path(__file__).resolve().parents[2] / "data" / "demo_contracts" / "CÔNG TY CỔ PHẦN CÔNG NGHỆ TƯƠNG LAI_SAI.md"
 
 
 def _run(text: str):

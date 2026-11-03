@@ -13,7 +13,7 @@ from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
-from evaluation.runtime_adapter import ROOT, BENCHMARK, Runtime, error_info, settings_summary
+from evaluation.runtime_adapter import ROOT, BENCHMARK, RUNS, BASELINE_RUN, Runtime, error_info, settings_summary
 
 
 def now():
@@ -60,7 +60,7 @@ def source_manifest():
 
 
 async def run(args):
-    output = Path(args.output_dir).resolve() if args.output_dir else ROOT / "evaluation_results" / ("smoke" if args.smoke else "baseline")
+    output = Path(args.output_dir).resolve() if args.output_dir else RUNS / "smoke" if args.smoke else BASELINE_RUN
     output.mkdir(parents=True, exist_ok=True)
     if args.score_only:
         from evaluation.scoring import score_and_report
