@@ -1,0 +1,174 @@
+{
+  "generated_at": "2026-11-03T04:51:28.637324+00:00",
+  "documents": [
+    {
+      "doc_id": "152668",
+      "doc_num": "145/2020/NĐ-CP",
+      "status_flag": 4,
+      "eff_from": "2021-02-01",
+      "eff_to": null,
+      "levels": {
+        "legal_articles": [
+          {
+            "status_flag": 4,
+            "nodes": 115,
+            "with_eff_from": 115,
+            "with_eff_to": 0
+          }
+        ],
+        "legal_clauses": [
+          {
+            "status_flag": 4,
+            "nodes": 367,
+            "with_eff_from": 367,
+            "with_eff_to": 0
+          }
+        ],
+        "legal_points": [
+          {
+            "status_flag": 4,
+            "nodes": 398,
+            "with_eff_from": 398,
+            "with_eff_to": 0
+          }
+        ]
+      },
+      "chunks_by_is_effective": {
+        "False": 674
+      }
+    },
+    {
+      "doc_id": "135401",
+      "doc_num": "45/2019/NĐ-CP",
+      "status_flag": 4,
+      "eff_from": "2019-08-01",
+      "eff_to": null,
+      "levels": {
+        "legal_articles": [
+          {
+            "status_flag": 4,
+            "nodes": 29,
+            "with_eff_from": 29,
+            "with_eff_to": 0
+          }
+        ],
+        "legal_clauses": [
+          {
+            "status_flag": 4,
+            "nodes": 161,
+            "with_eff_from": 161,
+            "with_eff_to": 0
+          }
+        ],
+        "legal_points": [
+          {
+            "status_flag": 4,
+            "nodes": 296,
+            "with_eff_from": 296,
+            "with_eff_to": 0
+          }
+        ]
+      },
+      "chunks_by_is_effective": {
+        "False": 380
+      }
+    },
+    {
+      "doc_id": "139264",
+      "doc_num": "45/2019/QH14",
+      "status_flag": 4,
+      "eff_from": "2021-01-01",
+      "eff_to": null,
+      "levels": {
+        "legal_articles": [
+          {
+            "status_flag": 4,
+            "nodes": 220,
+            "with_eff_from": 220,
+            "with_eff_to": 0
+          }
+        ],
+        "legal_clauses": [
+          {
+            "status_flag": 4,
+            "nodes": 638,
+            "with_eff_from": 638,
+            "with_eff_to": 0
+          }
+        ],
+        "legal_points": [
+          {
+            "status_flag": 4,
+            "nodes": 267,
+            "with_eff_from": 267,
+            "with_eff_to": 0
+          }
+        ]
+      },
+      "chunks_by_is_effective": {
+        "False": 874
+      }
+    },
+    {
+      "doc_id": "70811",
+      "doc_num": "84/2015/QH13",
+      "status_flag": 4,
+      "eff_from": "2016-07-01",
+      "eff_to": null,
+      "levels": {
+        "legal_articles": [
+          {
+            "status_flag": 4,
+            "nodes": 93,
+            "with_eff_from": 93,
+            "with_eff_to": 0
+          }
+        ],
+        "legal_clauses": [
+          {
+            "status_flag": 4,
+            "nodes": 357,
+            "with_eff_from": 357,
+            "with_eff_to": 0
+          }
+        ],
+        "legal_points": [
+          {
+            "status_flag": 0,
+            "nodes": 10,
+            "with_eff_from": 0,
+            "with_eff_to": 0
+          },
+          {
+            "status_flag": 4,
+            "nodes": 191,
+            "with_eff_from": 191,
+            "with_eff_to": 0
+          }
+        ]
+      },
+      "chunks_by_is_effective": {
+        "False": 516
+      }
+    }
+  ],
+  "document_status_counts": {
+    "0": 113586,
+    "1": 9333,
+    "2": 12168,
+    "3": 28,
+    "4": 2036
+  },
+  "provision_relation_counts": {
+    "bai_bo": 1,
+    "sua_doi": 1
+  },
+  "verdict": {
+    "status4_nodes": 3132,
+    "status4_nodes_with_eff_to": 0,
+    "eff_to_share": 0.0,
+    "provision_relation_rows": 2,
+    "date_aware_filter_supported": false,
+    "reason": "status-4 nodes have eff_from only (no eff_to) and the corpus has almost no provision-level relations, so a date window cannot tell which provisions expired; enabling it would admit text whose status is unknown."
+  }
+}
