@@ -47,3 +47,17 @@ Lần chạy trước khi sửa trùng kết quả cũ (recall 0,201; MRR 0,260 
 3. Giữ chữ số khi viết lại truy vấn.
 4. Với hợp đồng lao động đã nhận diện được, thêm một lượt tìm trong phạm vi Bộ luật Lao động và nghị định hướng dẫn (lưu ý: gợi ý nhãn lao động trước đây làm recall giảm, xem `RAG_SCOPE_ABLATION.md`, nên cần kiểm chứng).
 TEMP-014 chỉ giải quyết được nếu bổ sung truy xuất văn bản đã hết hiệu lực theo ngày, đó là tính năng mới, ngoài phạm vi tuần này.
+
+## Thử sửa nhánh FTS: kết quả âm, không đưa vào mã
+Đã thử ba cách thay `plainto_tsquery` (AND mọi từ) trên kho đang dùng, bằng truy vấn đọc-chỉ, với các truy vấn thật lấy từ trace của sáu ca (MIX-002, 003, 006, 008, 009, TEMP-014). Cấu hình `simple` tách theo âm tiết nên "bản chính" là hai từ rời.
+
+| Cách | Thời gian mỗi truy vấn | Kết quả |
+|---|---|---|
+| Hiện tại: AND mọi từ | nhanh | 0 chunk với truy vấn dài |
+| OR các cặp từ liền kề (cụm `a <-> b`) | 4,5 đến 16,7 giây | Bộ luật Lao động không vào top 40 ở cả 6 truy vấn; đầu bảng là chunk ngắn chứa cụm chung chung |
+| AND 2-4 từ hiếm nhất (đếm tần suất văn bản tại chỗ) | 1 đến 12 giây (lần đầu, rồi có bộ nhớ đệm) | Từ viết tắt như `hđlđ`, `cccd` hiếm nhưng không có trong luật nên truy vấn rỗng; Điều 17 không xuất hiện; chỉ MIX-003 thấy Điều 98 (hạng 10-12, ca này vector đã làm được) |
+| OR các cụm ba từ liền kề | 0,5 đến 7,5 giây | Điều 17 không xuất hiện; đầu bảng là phần mở đầu (căn cứ) của văn bản khác |
+
+Kết luận: với `simple` trên kho 1 triệu chunk, các cách đơn giản vừa chậm hơn nhiều mức 1-2 giây của cả lượt truy xuất vừa không đưa Điều 17 lên. Muốn nhánh từ khóa hữu ích cần tách từ tiếng Việt và xếp hạng kiểu BM25 có trọng số tần suất (thư viện tách từ hoặc phần mở rộng BM25 cho Postgres), tức là thêm phụ thuộc và hạ tầng. Chưa làm.
+
+Vì vậy chưa đổi `_fts_search`. Các hướng rẻ hơn và có bằng chứng từ trace là đa dạng hóa hạt giống và thêm một lượt tìm trong phạm vi luật lao động (MIX-002 đứng hạng 2-3 khi tìm riêng trong Bộ luật Lao động). MIX-008 là vấn đề diễn đạt ("CCCD bản chính" so với "giấy tờ tùy thân", Điều 17 hạng 28 ngay cả trong Bộ luật Lao động), cần mở rộng từ đồng nghĩa hoặc viết lại truy vấn bằng LLM, và dễ bị chỉnh riêng cho bộ 34 ca.
