@@ -67,6 +67,7 @@ docker compose down             # dừng stack
 ```bash
 pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
+# Windows: giữ --reload. Không có nó uvicorn dùng ProactorEventLoop và psycopg async (checkpoint LangGraph) báo lỗi, /chat trả 503.
 cd frontend && npm install && npm run dev      # lint: npm run lint, build: npm run build
 ```
 
