@@ -59,6 +59,49 @@ docker compose logs -f api      # xem log API
 docker compose down             # dừng stack
 ```
 
+## Yêu cầu và phát triển cục bộ
+
+- Docker Desktop (cách chạy chính, xem trên). Image API dùng Python 3.12, image frontend dùng Node 22; máy dev hiện kiểm thử với Python 3.11.
+- Chạy backend ngoài Docker (cần Postgres/Neo4j đang chạy, ví dụ `docker compose up -d postgres neo4j`):
+
+```bash
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8000
+cd frontend && npm install && npm run dev      # lint: npm run lint, build: npm run build
+```
+
+### Biến môi trường (chỉ tên; mẫu ở `.env.example`, mặc định ở `app/core/settings.py`)
+
+| Nhóm | Biến |
+|---|---|
+| Bắt buộc | `GEMINI_API_KEY`, `JWT_SECRET` (khác giá trị mặc định, nếu không app không khởi động) |
+| LLM / embedding | `GEMINI_MODEL`, `EMBEDDING_MODEL`, `EMBEDDING_DIM`, `EMBEDDING_DEVICE`, `EMBEDDING_TRUST_REMOTE_CODE`, `EMBEDDING_NORMALIZE`, `EMBEDDING_MAX_SEQ_LENGTH`, `HF_TOKEN` |
+| Database | `DATABASE_URL`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `POSTGRES_PORT`, `NEO4J_URI`, `NEO4J_USER`, `NEO4J_PASSWORD` |
+| Auth / API | `JWT_ALGORITHM`, `JWT_EXPIRE_MINUTES`, `CORS_ORIGINS`, `UPLOAD_DIR`, `API_PORT`, `FRONTEND_PORT`, `VITE_API_BASE_URL` |
+| Retrieval | `MAX_CHUNK_SIZE`, `CHUNK_OVERLAP`, `TOP_K_RETRIEVAL`, `SIMILARITY_THRESHOLD`, `LEGAL_EXPAND_BACKEND` |
+| Tùy chọn | `LANGCHAIN_API_KEY`, `LANGCHAIN_PROJECT`, `COMPOSE_PROJECT_NAME`, `DEV_RELOAD` |
+
+### Test
+
+```bash
+python -m pytest tests -q --ignore=tests/integration   # unit + fixture QA, không cần dịch vụ ngoài
+python -m pytest tests/integration -q                  # cần stack đang chạy
+```
+
+Test unit không cần Postgres/Neo4j/Gemini (hiện 188 passed, 1 skipped).
+
+## Tài liệu
+
+| Cần gì | Đọc |
+|---|---|
+| Quy tắc cho coding agent | [`AGENTS.md`](AGENTS.md) (công cụ: [`CLAUDE.md`](CLAUDE.md)) |
+| Hiểu hệ thống | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
+| Tìm nơi cần sửa | [`docs/CODEBASE_MAP.md`](docs/CODEBASE_MAP.md) |
+| Quy ước code | [`docs/CODING_STANDARDS.md`](docs/CODING_STANDARDS.md) |
+| Nợ kỹ thuật, thay đổi đã làm | [`docs/REFACTOR_PLAN.md`](docs/REFACTOR_PLAN.md) |
+| Sơ đồ (Mermaid) | [`docs/diagrams/`](docs/diagrams/) |
+| Tài liệu thiết kế khác | [`docs/README.md`](docs/README.md) |
+
 ## Pipeline pháp điển (crawl → extract → DB)
 
 Mỗi văn bản là **một folder** (đặt dưới `data/crawl_data/…`, không để rải ở root repo) với:
@@ -178,15 +221,49 @@ python -m scripts.ingest_clause_amendments "data\crawl_data\documents" --dry-run
 python -m scripts.ingest_clause_amendments "data\crawl_data\documents"
 ```
 
-### 5) Test unit liên quan
+### 5) Bộ test hỏi đáp từ `data/dataset.csv`
+
+Sinh fixture QA offline và danh sách văn bản pháp luật chưa có trong local corpus:
+
+```powershell
+python -m scripts.build_qa_benchmark
+python -m pytest tests/evaluation -q
+```
+
+Các file được sinh:
+
+- `tests/fixtures/legal_qa.jsonl`: 3.298 mẫu, giữ `context` làm căn cứ tham chiếu và thêm Điều/số hiệu văn bản.
+- `evaluation_results/reports/missing_legal_documents.csv`: văn bản nguồn trong dataset chưa có metadata corpus tương ứng.
+- `evaluation_results/reports/qa_coverage.md`: thống kê độ bao phủ và các khoảng trống pháp lý quan trọng cho ContractLens.
+- `tests/fixtures/contract_qa_cases.json`: các câu hỏi trọng tâm trên hợp đồng lao động mẫu.
+
+Nhóm test này không gọi Gemini hoặc PostgreSQL. Trạng thái `missing_from_local_corpus` chỉ phản ánh file corpus trong repository; nếu database dùng dump riêng thì cần kiểm tra bổ sung trên database.
+
+### 6) Test unit liên quan
 
 ```powershell
 python -m pytest tests/unit/test_legal_corpus_parser.py tests/unit/test_clause_amendments.py tests/unit/test_effectivity_internal_refs.py tests/unit/test_legal_ingest_unit.py -q
 ```
 
+## Cấu trúc thư mục
+
+| Thư mục | Chứa gì |
+|---|---|
+| `app/` | Backend (FastAPI, agents, retrieval, ingest) |
+| `frontend/` | Giao diện React |
+| `scripts/` | Crawl, ingest, backfill, restore DB, audit |
+| `tests/` | Test tự động (unit, integration, QA fixture, chấm điểm benchmark) |
+| `evaluation/` | Code benchmark và **đề bài** (`benchmark/v04/`). Bắt đầu từ `evaluation/README.md` |
+| `evaluation_results/` | **Kết quả** benchmark: `reports/` (tổng hợp) và `runs/` (từng lần chạy) |
+| `docs/` | Tài liệu thiết kế, slide, prompt. Xem `docs/README.md` |
+| `data/` | Dữ liệu cục bộ, không đưa lên git (dataset.csv, corpus mẫu, hợp đồng demo, upload) |
+| `schema.sql`, `schema.cypher` | Schema Postgres/Neo4j mà docker-compose và app nạp trực tiếp |
+| `schemas/empty/` | Bản sao schema rỗng để bàn giao |
+
 ## API chính
 
-- `POST /api/v1/auth/register` · `login`
-- `POST /api/v1/upload` · `analyze` · `chat`
-- `GET /api/v1/contracts`
+- `POST /api/v1/auth/register` · `auth/login`
+- `POST /api/v1/upload` · `analyze` · `analyze/resume`
+- `POST /api/v1/chat` · `chat/stream` (SSE) · `chat/{contract_id}/rewind`
+- `GET /api/v1/contracts` · `models` · `chat/{contract_id}/history` · `chat/{contract_id}/states`
 - `GET /health`
