@@ -1,7 +1,6 @@
 # AGENTS.md — contract-agent (ContractLens)
 
-Quy tắc cốt lõi cho coding agent. Tooling chi tiết (Serena, CodeGraphContext, Trailmark, đường dẫn exe) nằm ở [`CLAUDE.md`](CLAUDE.md); không lặp lại ở đây.
-
+Quy tắc cốt lõi cho coding agent.
 ## Kiến trúc trong 6 dòng
 - Backend FastAPI (`app/`), frontend React/Vite (`frontend/`), Postgres+pgvector và Neo4j qua `docker-compose.yml`.
 - Phân lớp: `api` → `application/use_cases` → `domain/ports` ← `infrastructure` (adapter). `AppContainer` (`app/infrastructure/container.py`) nối port với adapter.
