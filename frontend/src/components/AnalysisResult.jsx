@@ -7,6 +7,8 @@ import ChatTab from "./ChatTab";
 import AiDisclaimer from "./AiDisclaimer";
 import { parseIssue, normalizeRiskView, riskKey, sortRisks, dedupeRisks } from "../lib/riskDisplay";
 
+const NOT_SEEN = Symbol("not-seen");
+
 export default function AnalysisResult({
   contractId,
   filename,
@@ -88,10 +90,14 @@ export default function AnalysisResult({
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [openKey, activeTab]);
 
-  useEffect(() => {
+  // Open the first critical issue on mount and whenever the contract changes
+  // (state adjusted during render instead of in an effect).
+  const [seenContractId, setSeenContractId] = useState(NOT_SEEN);
+  if (seenContractId !== contractId) {
+    setSeenContractId(contractId);
     const firstCritical = keyedRisks.find((r) => r.severity === "critical");
     if (firstCritical) setOpenKey(firstCritical.key);
-  }, [contractId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }
 
   const openIssue = (key) => {
     onTabChange?.("report");

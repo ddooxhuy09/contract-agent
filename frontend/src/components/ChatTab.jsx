@@ -78,9 +78,16 @@ export default function ChatTab({ contractId, provider }) {
   const [error, setError] = useState(null);
   const scrollRef = useRef(null);
 
+  // Show the history loader again when switching to another contract
+  // (state adjusted during render instead of in an effect).
+  const [historyFor, setHistoryFor] = useState(contractId);
+  if (historyFor !== contractId) {
+    setHistoryFor(contractId);
+    setLoadingHistory(true);
+  }
+
   useEffect(() => {
     let cancelled = false;
-    setLoadingHistory(true);
     fetchChatHistory(contractId)
       .then((res) => {
         if (!cancelled) setMessages(historyToMessages(res.messages || []));

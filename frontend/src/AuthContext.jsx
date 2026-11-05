@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AuthContext } from "./authContextObject";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
@@ -15,11 +15,8 @@ function loadStored() {
 
 export function AuthProvider({ children }) {
   const [auth, setAuth] = useState(() => loadStored());
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setLoading(false);
-  }, []);
+  // Stored auth is read synchronously above, so there is nothing to wait for.
+  const [loading] = useState(false);
 
   const persist = (next) => {
     setAuth(next);

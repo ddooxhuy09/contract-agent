@@ -3,7 +3,8 @@ import UploadScreen from "./components/UploadScreen";
 import AnalysisResult from "./components/AnalysisResult";
 import LoginScreen from "./components/LoginScreen";
 import ContractListScreen from "./components/ContractListScreen";
-import Sidebar, { shellMainClass, useSidebarCollapsed } from "./components/Sidebar";
+import Sidebar from "./components/Sidebar";
+import { shellMainClass, useSidebarCollapsed } from "./lib/sidebarShell";
 import { uploadContract, analyzeContract, listContracts } from "./api";
 import { useAuth } from "./useAuth";
 
@@ -14,6 +15,13 @@ export default function App() {
   const [result, setResult] = useState(null);
   const [view, setView] = useState("list");
   const [analysisTab, setAnalysisTab] = useState("report");
+  // Switch to the report tab whenever a different analysis result is shown
+  // (state adjusted during render instead of in an effect).
+  const [seenContractId, setSeenContractId] = useState(undefined);
+  if (seenContractId !== result?.contractId) {
+    setSeenContractId(result?.contractId);
+    if (result) setAnalysisTab("report");
+  }
   const [contracts, setContracts] = useState([]);
   const [contractsLoading, setContractsLoading] = useState(true);
   const [sidebarCollapsed, setSidebarCollapsed] = useSidebarCollapsed(false);
@@ -35,10 +43,6 @@ export default function App() {
       cancelled = true;
     };
   }, [session]);
-
-  useEffect(() => {
-    if (result) setAnalysisTab("report");
-  }, [result?.contractId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSubmit = async (file, provider) => {
     setError(null);
