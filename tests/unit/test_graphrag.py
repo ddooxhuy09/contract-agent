@@ -252,3 +252,52 @@ def test_validity_key_parses_dd_mm_yyyy_as_of_against_iso_eff_to():
     )
     assert LG._validity_key(stale, as_of="15/07/2026")[0] == 99
     assert LG._validity_key(stale, as_of="2024-01-01")[0] == 0
+
+
+class _SeqSearch:
+    """Returns the queued result lists in call order and records the queries."""
+
+    def __init__(self, *results):
+        self._results = list(results)
+        self.queries = []
+
+    def search(self, query, k=4, min_score=0.0, **kwargs):
+        self.queries.append((query, min_score))
+        return self._results.pop(0) if self._results else []
+
+    def search_in_docs(self, query, doc_ids, k=2, **kwargs):
+        return []
+
+
+def _chunk(path, title, doc_id="D"):
+    return RetrievedChunk(
+        content=f"body {path}",
+        score=0.9,
+        metadata={"path": path, "doc_id": doc_id, "doc_number": "1", "title": title},
+    )
+
+
+def test_no_seeds_anywhere_returns_empty_after_all_fallbacks():
+    search = _SeqSearch()
+    rag = LegalGraphRag(search, _FakeChunks(), None)
+    assert rag.retrieve_for_clause("Chấm dứt", "tóm tắt", contract_type="lao động") == []
+    # combined query (with floor), same query without floor, then narrow variants
+    assert len(search.queries) == 2 + 3
+    assert search.queries[0][1] > 0 and search.queries[1][1] == 0.0
+
+
+def test_sector_mismatch_seed_is_replaced_by_labor_law_recovery():
+    oil = _chunk("OIL.1", "Nghị định về hoạt động dầu khí")
+    labor = _chunk("BLLD.1", "Bộ luật Lao động")
+    search = _SeqSearch([oil], [labor])
+    rag = LegalGraphRag(search, _FakeChunks(), None)
+    hits = rag.retrieve_for_clause("Làm thêm giờ", "tăng ca", contract_type="lao động")
+    assert [h.metadata["path"] for h in hits] == ["BLLD.1"]
+    assert hits[0].metadata["role"] == "seed"
+    assert search.queries[1][0].startswith("Bộ luật Lao động")
+
+
+def test_max_total_limits_result_count():
+    seeds = [_chunk(f"P.{i}", "Bộ luật Lao động") for i in range(4)]
+    rag = LegalGraphRag(_SeqSearch(seeds), _FakeChunks(), None)
+    assert len(rag.retrieve_for_clause("t", "s", max_total=2)) == 2

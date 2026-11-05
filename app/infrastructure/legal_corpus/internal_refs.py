@@ -63,8 +63,8 @@ _PAT_POINT_CLAUSE_ART = re.compile(
     re.IGNORECASE,
 )
 _PAT_CLAUSE_ART = re.compile(
-    rf"(?:khoản|Khoản)\s*(\d+)\s+"
-    rf"(?:Điều|điều)\s+(\d+|này)",
+    r"(?:khoản|Khoản)\s*(\d+)\s+"
+    r"(?:Điều|điều)\s+(\d+|này)",
     re.IGNORECASE,
 )
 _PAT_ART_RANGE = re.compile(

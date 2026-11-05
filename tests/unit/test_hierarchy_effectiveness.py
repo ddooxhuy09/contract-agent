@@ -117,3 +117,19 @@ def test_cascade_rules_documented_in_schema_sql():
     assert "eff_from" in art
     assert "eff_date" not in art
     assert "status_flag" in art
+
+
+def test_every_hierarchy_level_has_an_upsert_function():
+    from app.infrastructure.db import legal_repository as repo
+
+    assert set(repo._LEVEL_UPSERTS) == set(repo._HIERARCHY_LEVELS)
+
+
+def test_expand_paths_pure_helpers():
+    from app.infrastructure.db import legal_repository as repo
+
+    assert repo._parent_clause_paths(["A.K12.b.c", "A.Kx.b", "A.D1", "A.K12.d"]) == ["A.K12"]
+    assert repo._seed_path_candidates(["D.P1.D2", "x:y"]) == ["D.P1.D2", repo.chunk_ref_to_ltree("x:y")]
+    first, second = repo._empty_expansion(), repo._empty_expansion()
+    first["related_docs"].append("X")
+    assert second["related_docs"] == []  # a fresh dict per call

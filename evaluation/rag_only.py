@@ -13,7 +13,7 @@ import uuid
 from collections import Counter
 from pathlib import Path
 
-from evaluation.runtime_adapter import ROOT, BENCHMARK, RUNS, chunk_json, error_info, settings_summary
+from evaluation.runtime_adapter import BENCHMARK, RUNS, chunk_json, error_info, settings_summary
 from evaluation.run_benchmark import fingerprints, write_json, now, source_manifest
 
 

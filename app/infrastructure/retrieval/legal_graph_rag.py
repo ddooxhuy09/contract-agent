@@ -2,7 +2,7 @@
 
 from datetime import date
 
-from app.agents.labor_code_resolver import _parse_as_of
+from app.core.dates import parse_as_of
 from app.core.logging import logger
 from app.core.settings import get_settings
 from app.domain.entities.search import RetrievedChunk
@@ -95,19 +95,15 @@ class LegalGraphRag:
             return _merge_expand(neo, pg)
         return neo
 
-    def retrieve_for_clause(
+    def _find_seeds(
         self,
+        query: str,
         title: str | None,
         summary: str | None,
-        *,
-        contract_type: str | None = None,
-        k_seed: int = 4,
-        max_total: int = 10,
-        as_of_date: str | None = None,
+        contract_type: str | None,
+        k_seed: int,
+        settings,
     ) -> list[RetrievedChunk]:
-        settings = get_settings()
-        query = rewrite_legal_query(title, summary, contract_type)
-        ctx = contract_context(contract_type, title, summary)
         # Do NOT pass contract_type as SQL doc_type_hint — it filters legal rows by
         # title/doc_type ILIKE and often zeros the corpus (e.g. "HĐLĐ" vs "Nghị định").
         # contract_type is already folded into the query text by rewrite_legal_query.
@@ -145,37 +141,142 @@ class LegalGraphRag:
                     break
         if not seeds:
             logger.warning("LegalGraphRag: still 0 seeds after narrow query fallbacks query=%r", query[:80])
+        return seeds
 
-        # Drop sector-specific instruments (oil & gas offshore, aviation, …) when
-        # the contract context does not belong to that sector.
+    def _filter_seeds_by_sector(
+        self,
+        seeds: list[RetrievedChunk],
+        ctx: str,
+        title: str | None,
+        summary: str | None,
+        k_seed: int,
+    ) -> list[RetrievedChunk]:
+        """Drop sector-specific instruments (oil & gas offshore, aviation, …) when
+        the contract context does not belong to that sector."""
+        kept, dropped = filter_sector_mismatches(seeds, ctx)
+        if dropped:
+            logger.info(
+                "LegalGraphRag: dropped %s sector-mismatch seed(s) e.g. %r",
+                len(dropped),
+                (dropped[0].metadata.get("title") or dropped[0].metadata.get("doc_number") or "")[:80],
+            )
+        if kept:
+            return kept
+        # All hits were niche circulars — re-seed on general labor law so
+        # clauses (OT, kỷ luật, BHXH…) are not left with empty grounding.
+        logger.info(
+            "LegalGraphRag: sector filter emptied seeds; recovering via Bộ luật Lao động"
+        )
+        recovery_q = " ".join(
+            p
+            for p in (
+                "Bộ luật Lao động",
+                (title or "").strip(),
+                (summary or "").strip()[:200],
+            )
+            if p
+        )
+        recovered = self._search.search(recovery_q, k=k_seed, min_score=0.0)
+        kept2, _ = filter_sector_mismatches(recovered, ctx) if ctx else (recovered, [])
+        return kept2 or recovered[:k_seed]
+
+    @staticmethod
+    def _hydrated_chunk(path_key: str, text: str, meta: dict, role: str) -> RetrievedChunk:
+        return RetrievedChunk(
+            content=text,
+            score=None,
+            metadata={
+                "path": path_key,
+                "doc_id": meta.get("doc_id"),
+                "chunk_type": meta.get("chunk_type", "body"),
+                "doc_number": meta.get("doc_number"),
+                "title": meta.get("title"),
+                "eff_from": meta.get("eff_from"),
+                "eff_to": meta.get("eff_to"),
+                "status_flag": meta.get("status_flag"),
+                "eff_flag": meta.get("eff_flag"),
+                "root_path": meta.get("root_path"),
+                "doc_type": meta.get("doc_type"),
+                "issue_date": meta.get("issue_date"),
+                "source_element_id": meta.get("source_element_id"),
+                "source_url": meta.get("source_url"),
+                "role": role,
+            },
+        )
+
+    def _expand_seeds(self, by_path: dict[str, RetrievedChunk], query: str) -> tuple[set[str], int]:
+        """Add sibling/ancestor/related/superseding chunks to ``by_path`` (mutated in place).
+
+        Returns ``(repealed_doc_ids, superseding_added)``.
+        """
+        seed_keys = list(by_path.keys())
+        expansion = self._expand(seed_keys)
+        sibling_paths = expansion.get("sibling_paths") or []
+        ancestor_paths = expansion.get("ancestor_paths") or []
+        parent_clause_paths = expansion.get("parent_clause_paths") or []
+        related_docs = expansion.get("related_docs") or []
+        repealed = set(expansion.get("repealed_by_docs") or [])
+
+        hydrate_paths = list(
+            dict.fromkeys([*sibling_paths, *ancestor_paths, *parent_clause_paths])
+        )
+        texts = self._chunks.get_texts_by_paths(hydrate_paths)
+        meta_rows = self._chunks.get_meta_by_paths(hydrate_paths)
+
+        for path_key, text in texts.items():
+            if path_key in by_path:
+                continue
+            role = "sibling" if path_key in sibling_paths else "ancestor"
+            if path_key in parent_clause_paths:
+                role = "sibling"
+            by_path[path_key] = self._hydrated_chunk(path_key, text, meta_rows.get(path_key, {}), role)
+
+        if related_docs:
+            related_hits = self._search.search_in_docs(query, related_docs, k=2)
+            for h in related_hits:
+                key = _chunk_key(h.metadata)
+                if not key or key in by_path:
+                    continue
+                h.metadata["role"] = "related"
+                if h.metadata.get("doc_id") in repealed:
+                    h.metadata["note"] = "source_doc_may_be_repealed"
+                by_path[key] = h
+
+        if repealed and len(by_path) > 2:
+            for _key, chunk in list(by_path.items()):
+                if chunk.metadata.get("doc_id") in repealed and chunk.metadata.get("role") == "seed":
+                    chunk.metadata["note"] = "source_doc_may_be_repealed"
+
+        superseding_added = 0
+        if repealed:
+            for d_id in repealed:
+                superseding_hits = self._search.search_in_docs(query, [d_id], k=2)
+                for h in superseding_hits:
+                    key = _chunk_key(h.metadata)
+                    if not key or key in by_path:
+                        continue
+                    h.metadata["role"] = "superseding"
+                    h.metadata["note"] = f"replaces {d_id}"
+                    by_path[key] = h
+                    superseding_added += 1
+        return repealed, superseding_added
+
+    def retrieve_for_clause(
+        self,
+        title: str | None,
+        summary: str | None,
+        *,
+        contract_type: str | None = None,
+        k_seed: int = 4,
+        max_total: int = 10,
+        as_of_date: str | None = None,
+    ) -> list[RetrievedChunk]:
+        settings = get_settings()
+        query = rewrite_legal_query(title, summary, contract_type)
+        ctx = contract_context(contract_type, title, summary)
+        seeds = self._find_seeds(query, title, summary, contract_type, k_seed, settings)
         if seeds and ctx:
-            kept, dropped = filter_sector_mismatches(seeds, ctx)
-            if dropped:
-                logger.info(
-                    "LegalGraphRag: dropped %s sector-mismatch seed(s) e.g. %r",
-                    len(dropped),
-                    (dropped[0].metadata.get("title") or dropped[0].metadata.get("doc_number") or "")[:80],
-                )
-            if kept:
-                seeds = kept
-            else:
-                # All hits were niche circulars — re-seed on general labor law so
-                # clauses (OT, kỷ luật, BHXH…) are not left with empty grounding.
-                logger.info(
-                    "LegalGraphRag: sector filter emptied seeds; recovering via Bộ luật Lao động"
-                )
-                recovery_q = " ".join(
-                    p
-                    for p in (
-                        "Bộ luật Lao động",
-                        (title or "").strip(),
-                        (summary or "").strip()[:200],
-                    )
-                    if p
-                )
-                recovered = self._search.search(recovery_q, k=k_seed, min_score=0.0)
-                kept2, _ = filter_sector_mismatches(recovered, ctx) if ctx else (recovered, [])
-                seeds = kept2 or recovered[:k_seed]
+            seeds = self._filter_seeds_by_sector(seeds, ctx, title, summary, k_seed)
         for s in seeds:
             s.metadata["role"] = "seed"
 
@@ -186,79 +287,8 @@ class LegalGraphRag:
                 by_path[key] = s
         repealed: set[str] = set()
         superseding_added = 0
-
         if by_path:
-            seed_keys = list(by_path.keys())
-            expansion = self._expand(seed_keys)
-            sibling_paths = expansion.get("sibling_paths") or []
-            ancestor_paths = expansion.get("ancestor_paths") or []
-            parent_clause_paths = expansion.get("parent_clause_paths") or []
-            related_docs = expansion.get("related_docs") or []
-            repealed = set(expansion.get("repealed_by_docs") or [])
-
-            hydrate_paths = list(
-                dict.fromkeys([*sibling_paths, *ancestor_paths, *parent_clause_paths])
-            )
-            texts = self._chunks.get_texts_by_paths(hydrate_paths)
-            meta_rows = self._chunks.get_meta_by_paths(hydrate_paths)
-
-            for path_key, text in texts.items():
-                if path_key in by_path:
-                    continue
-                role = "sibling" if path_key in sibling_paths else "ancestor"
-                if path_key in parent_clause_paths:
-                    role = "sibling"
-                meta = meta_rows.get(path_key, {})
-                by_path[path_key] = RetrievedChunk(
-                    content=text,
-                    score=None,
-                    metadata={
-                        "path": path_key,
-                        "doc_id": meta.get("doc_id"),
-                        "chunk_type": meta.get("chunk_type", "body"),
-                        "doc_number": meta.get("doc_number"),
-                        "title": meta.get("title"),
-                        "eff_from": meta.get("eff_from"),
-                        "eff_to": meta.get("eff_to"),
-                        "status_flag": meta.get("status_flag"),
-                        "eff_flag": meta.get("eff_flag"),
-                        "root_path": meta.get("root_path"),
-                        "doc_type": meta.get("doc_type"),
-                        "issue_date": meta.get("issue_date"),
-                        "source_element_id": meta.get("source_element_id"),
-                        "source_url": meta.get("source_url"),
-                        "role": role,
-                    },
-                )
-
-            if related_docs:
-                related_hits = self._search.search_in_docs(query, related_docs, k=2)
-                for h in related_hits:
-                    key = _chunk_key(h.metadata)
-                    if not key or key in by_path:
-                        continue
-                    h.metadata["role"] = "related"
-                    if h.metadata.get("doc_id") in repealed:
-                        h.metadata["note"] = "source_doc_may_be_repealed"
-                    by_path[key] = h
-
-            if repealed and len(by_path) > 2:
-                for _key, chunk in list(by_path.items()):
-                    if chunk.metadata.get("doc_id") in repealed and chunk.metadata.get("role") == "seed":
-                        chunk.metadata["note"] = "source_doc_may_be_repealed"
-
-            superseding_added = 0
-            if repealed:
-                for d_id in repealed:
-                    superseding_hits = self._search.search_in_docs(query, [d_id], k=2)
-                    for h in superseding_hits:
-                        key = _chunk_key(h.metadata)
-                        if not key or key in by_path:
-                            continue
-                        h.metadata["role"] = "superseding"
-                        h.metadata["note"] = f"replaces {d_id}"
-                        by_path[key] = h
-                        superseding_added += 1
+            repealed, superseding_added = self._expand_seeds(by_path, query)
 
         ordered = self._order_for_prompt(list(by_path.values()), as_of=as_of_date)
         if ctx:
@@ -359,7 +389,7 @@ class LegalGraphRag:
         if not text:
             return None
         try:
-            return _parse_as_of(text)
+            return parse_as_of(text)
         except Exception:
             return None
 
@@ -375,7 +405,7 @@ class LegalGraphRag:
             sf = int(sf_raw) if sf_raw is not None else 0
         except (TypeError, ValueError):
             sf = 0
-        ref = _parse_as_of(as_of) if as_of else date.today()
+        ref = parse_as_of(as_of) if as_of else date.today()
         from_d = LegalGraphRag._as_date(chunk.metadata.get("eff_from"))
         to_d = LegalGraphRag._as_date(chunk.metadata.get("eff_to"))
 

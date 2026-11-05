@@ -5,7 +5,7 @@ import json
 from collections import Counter, defaultdict
 from pathlib import Path
 
-from evaluation.runtime_adapter import ROOT, RUNS
+from evaluation.runtime_adapter import RUNS
 from evaluation.audit import load
 from evaluation.scoring import ref, stage_chunks, retrieval_scores, mean_metrics, charts, clause_key, format_metric
 

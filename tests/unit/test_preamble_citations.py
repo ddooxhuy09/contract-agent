@@ -143,3 +143,39 @@ def test_preamble_warns_when_partial_effect():
     assert any("một phần" in r.lower() or "sửa đổi" in r.lower() for r in (risks[0].reasons or []))
     assert risks[0].legal_citations
     assert any("Đã đối chiếu" in (c.status or "") for c in risks[0].legal_citations)
+
+
+def test_lookup_doc_maps_row_and_passes_spelling_variants(monkeypatch):
+    import app.agents.preamble_citations as pre
+    import app.infrastructure.retrieval.context as ctx
+
+    seen = {}
+
+    class Docs:
+        def find_row_by_doc_num(self, variants):
+            seen["variants"] = variants
+            return ("D1", "145/2020/NĐ-CP", "Nghị định", "Nghị định", 1, "ok", None, None, None, "u")
+
+    monkeypatch.setattr(ctx, "get_legal_docs", lambda: Docs())
+    out = pre._lookup_doc("145/2020/NĐ-CP")
+    assert out["doc_id"] == "D1" and out["status_flag"] == 1
+    assert seen["variants"][0] == "145/2020/NĐ-CP"
+    assert "145/2020/ND-CP" in seen["variants"]
+
+
+def test_lookup_doc_returns_none_when_missing_or_repository_fails(monkeypatch):
+    import app.agents.preamble_citations as pre
+    import app.infrastructure.retrieval.context as ctx
+
+    class Missing:
+        def find_row_by_doc_num(self, variants):
+            return None
+
+    class Broken:
+        def find_row_by_doc_num(self, variants):
+            raise RuntimeError("db down")
+
+    monkeypatch.setattr(ctx, "get_legal_docs", lambda: Missing())
+    assert pre._lookup_doc("1/2020/NĐ-CP") is None
+    monkeypatch.setattr(ctx, "get_legal_docs", lambda: Broken())
+    assert pre._lookup_doc("1/2020/NĐ-CP") is None

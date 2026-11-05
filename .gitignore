@@ -78,8 +78,6 @@ PROGRESS_REPORT.md
 Thumbs.db
 desktop.ini
 
-tests/
-
 # --- Heavy evaluation artifacts (regenerate with evaluation.rag_only) ---
 evaluation_results/**/corpus_snapshot.json
 evaluation_results/**/predictions.jsonl

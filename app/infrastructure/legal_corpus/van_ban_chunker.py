@@ -119,7 +119,6 @@ def _clause_lead_and_points(clause_body: str) -> tuple[str, list[tuple[str, str]
     points = _split_points(clause_body)
     if not points:
         return clause_body.strip(), []
-    first_pos = clause_body.find(points[0][1][:20]) if points[0][1] else -1
     # lead = text before first point marker
     m0 = _POINT_SPLIT.search(clause_body)
     lead = clause_body[: m0.start()].strip() if m0 else ""

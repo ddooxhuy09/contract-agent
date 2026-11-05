@@ -291,7 +291,7 @@ def table_columns(cur, table_name):
 
 
 def sample_rows(cur, table_name, where="", limit=4, order=""):
-    o = order if order else f"ORDER BY RANDOM()"
+    o = order if order else "ORDER BY RANDOM()"
     q = f"SELECT * FROM {table_name} {where} {o} LIMIT {limit}"
     try:
         cur.execute(q)
@@ -335,8 +335,6 @@ def build():
         row_comments = ROW_COMMENTS.get(tbl, [])
 
         # Fetch sample rows with custom filtering
-        where = ""
-        order = "ORDER BY RANDOM()"
         limit = 4
         if tbl == "legal_documents":
             rows = sample_rows(cur, tbl, "WHERE status_flag=1", limit=2, order="ORDER BY RANDOM()")

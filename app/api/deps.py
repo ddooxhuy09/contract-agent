@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import Depends, Header, HTTPException, Request
+from fastapi import Header, HTTPException, Request
 
 from app.application.use_cases.auth import ResolveUserId
 from app.domain.errors import AuthError

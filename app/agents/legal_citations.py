@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import re
-from datetime import date
 from typing import Any
 from urllib.parse import parse_qsl, quote, urlencode, urlsplit, urlunsplit
 
@@ -261,16 +260,6 @@ def _doc_meta(doc: Any) -> tuple[dict, str]:
         content = doc.get("content") or doc.get("page_content") or ""
         return meta, str(content)
     return dict(getattr(doc, "metadata", {}) or {}), str(getattr(doc, "page_content", "") or "")
-
-
-def _citation_status(meta: dict, as_of: str | date | None = None) -> str | None:
-    """Prefer as_of + dates over stale VBPL ``eff_flag`` cache."""
-    from app.agents.effectivity import evaluate_document_effectivity
-
-    eff = evaluate_document_effectivity(meta, as_of)
-    if not eff.ok_to_cite:
-        return eff.status_label
-    return eff.status_label
 
 
 def _article_key(meta: dict, location: dict) -> str:

@@ -44,7 +44,7 @@ def _isolated(monkeypatch):
     qa._compiled_graph = None
     monkeypatch.setattr(qa, "get_checkpointer", lambda: MemorySaver())
     monkeypatch.setattr(qa, "retrieve_contract", _strong_contract)
-    monkeypatch.setattr(qa, "retrieve_legal", lambda query, k=3: [])
+    monkeypatch.setattr(qa, "retrieve_legal", lambda query, k=3, **kwargs: [])
     monkeypatch.setattr(qa, "chat_completion", lambda prompt, provider="gemini": "truy vấn pháp lý")
     store = InMemoryStore()
     monkeypatch.setattr(mem, "get_memory_store", lambda: store)
@@ -99,7 +99,7 @@ def test_no_memory_saved_on_clarification(monkeypatch):
 
 def test_no_memory_saved_on_refusal(monkeypatch):
     monkeypatch.setattr(qa, "retrieve_contract", lambda query, contract_id, k=None: [])
-    monkeypatch.setattr(qa, "retrieve_legal", lambda query, k=3: [])
+    monkeypatch.setattr(qa, "retrieve_legal", lambda query, k=3, **kwargs: [])
 
     result = asyncio.run(qa.answer_question("không có dữ liệu", "c-z"))
     assert result.answer == qa._NO_CONTEXT_ANSWER

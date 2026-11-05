@@ -5,7 +5,7 @@ import importlib.metadata
 from collections import Counter
 from pathlib import Path
 
-from evaluation.runtime_adapter import ROOT, BENCHMARK, BASELINE_RUN
+from evaluation.runtime_adapter import BENCHMARK, BASELINE_RUN
 from evaluation.run_benchmark import fingerprints, write_json, now
 
 

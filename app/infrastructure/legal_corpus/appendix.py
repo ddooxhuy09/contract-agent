@@ -44,7 +44,6 @@ def _parse_md_tables(block: str) -> list[tuple[str, list[str]]]:
         header = rows[0]
         # skip separator
         data_start = 1
-        cells = [c.strip() for c in header.strip("|").split("|")]
         if data_start < len(rows):
             sep_cells = [c.strip() for c in rows[1].strip("|").split("|")]
             if _is_separator_row(sep_cells):

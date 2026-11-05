@@ -45,18 +45,9 @@ class IngestLegalDocument:
         self._embedder = embedder
         self._graph = graph
 
-    def execute(
-        self,
-        thuoc_tinh: dict[str, Any],
-        chunks: list[dict[str, Any]],
-        relations: list[dict[str, str]] | None = None,
-        graph_nodes: list[dict[str, Any]] | None = None,
-        stub_docs: dict[str, dict[str, Any]] | None = None,
-        legal_nodes: list[dict[str, Any]] | None = None,
-        path_relations: list[dict[str, str]] | None = None,
-    ) -> dict[str, Any]:
-        doc_id = str(thuoc_tinh["doc_id"])
-        doc = LegalDocument(
+    @staticmethod
+    def _build_document(thuoc_tinh: dict[str, Any], doc_id: str) -> LegalDocument:
+        return LegalDocument(
             doc_id=doc_id,
             doc_num=str(thuoc_tinh.get("doc_num") or ""),
             title=str(thuoc_tinh.get("title") or ""),
@@ -74,38 +65,41 @@ class IngestLegalDocument:
             source_url=thuoc_tinh.get("source_url"),
             full_text=thuoc_tinh.get("full_text"),
         )
-        self._docs.upsert(doc)
 
-        node_rows = legal_nodes or []
-        if node_rows:
-            doc_eff_from = _parse_date(thuoc_tinh.get("eff_from"))
-            doc_eff_to = _parse_date(thuoc_tinh.get("eff_to"))
-            doc_eff_flag = thuoc_tinh.get("eff_flag")
-            doc_status = int(thuoc_tinh.get("status_flag") or 1)
-            self._chunks.upsert_nodes(
-                [
-                    LegalNode(
-                        doc_id=str(n.get("doc_id") or doc_id),
-                        level=str(n.get("level") or "Other"),
-                        path=str(n["path"]),
-                        label=n.get("label"),
-                        parent_path=n.get("parent_path"),
-                        sort_order=n.get("sort_order"),
-                        eff_from=_parse_date(n.get("eff_from")) or doc_eff_from,
-                        eff_to=_parse_date(n.get("eff_to")) or doc_eff_to,
-                        eff_flag=n.get("eff_flag") or doc_eff_flag,
-                        status_flag=int(
-                            n["status_flag"]
-                            if n.get("status_flag") is not None
-                            else doc_status
-                        ),
-                        muc_luc_id=n.get("muc_luc_id"),
-                    )
-                    for n in node_rows
-                    if n.get("path")
-                ]
-            )
+    def _upsert_nodes(self, thuoc_tinh: dict[str, Any], doc_id: str, node_rows: list[dict[str, Any]]) -> None:
+        """Hierarchy nodes inherit the document's effectivity when they have none."""
+        doc_eff_from = _parse_date(thuoc_tinh.get("eff_from"))
+        doc_eff_to = _parse_date(thuoc_tinh.get("eff_to"))
+        doc_eff_flag = thuoc_tinh.get("eff_flag")
+        doc_status = int(thuoc_tinh.get("status_flag") or 1)
+        self._chunks.upsert_nodes(
+            [
+                LegalNode(
+                    doc_id=str(n.get("doc_id") or doc_id),
+                    level=str(n.get("level") or "Other"),
+                    path=str(n["path"]),
+                    label=n.get("label"),
+                    parent_path=n.get("parent_path"),
+                    sort_order=n.get("sort_order"),
+                    eff_from=_parse_date(n.get("eff_from")) or doc_eff_from,
+                    eff_to=_parse_date(n.get("eff_to")) or doc_eff_to,
+                    eff_flag=n.get("eff_flag") or doc_eff_flag,
+                    status_flag=int(
+                        n["status_flag"]
+                        if n.get("status_flag") is not None
+                        else doc_status
+                    ),
+                    muc_luc_id=n.get("muc_luc_id"),
+                )
+                for n in node_rows
+                if n.get("path")
+            ]
+        )
 
+    def _build_chunks(
+        self, thuoc_tinh: dict[str, Any], doc_id: str, chunks: list[dict[str, Any]]
+    ) -> list[LegalChunk]:
+        """Embed chunk texts and turn the rows that have a path into LegalChunk entities."""
         texts = [c["chunk_text"] for c in chunks]
         vectors = self._embedder.embed_documents(texts) if texts else []
         entities = []
@@ -129,51 +123,43 @@ class IngestLegalDocument:
                     root_path=c.get("root_path") or article_root_ltree(path),
                 )
             )
-        self._chunks.upsert_many(entities)
+        return entities
 
-        rel_entities = [
-            LegalDocRelation(
-                from_doc_id=r["from_doc_id"],
-                to_doc_id=r["to_doc_id"],
-                relation_type=r["relation_type"],
-            )
-            for r in (relations or [])
-        ]
-        stubs = stub_docs or {}
-        if rel_entities:
-            for rel in rel_entities:
-                for other_id in (rel.from_doc_id, rel.to_doc_id):
-                    if other_id == doc_id:
-                        continue
-                    if self._docs.get(other_id) is not None:
-                        continue
-                    meta = stubs.get(other_id) or {}
-                    self._docs.upsert(
-                        LegalDocument(
-                            doc_id=other_id,
-                            doc_num=str(meta.get("doc_num") or other_id),
-                            title=str(meta.get("title") or f"Stub {other_id}"),
-                            doc_type=str(meta.get("doc_type") or "Unknown"),
-                            issue_date=_parse_date(meta.get("issue_date")),
-                            eff_from=_parse_date(meta.get("eff_from")),
-                            eff_to=_parse_date(meta.get("eff_to")),
-                            status_flag=int(meta.get("status_flag") or 0),
-                        )
+    def _upsert_doc_relations(
+        self,
+        doc_id: str,
+        rel_entities: list[LegalDocRelation],
+        stubs: dict[str, dict[str, Any]],
+    ) -> None:
+        """Create stub documents for unknown relation endpoints, then upsert the relations."""
+        for rel in rel_entities:
+            for other_id in (rel.from_doc_id, rel.to_doc_id):
+                if other_id == doc_id:
+                    continue
+                if self._docs.get(other_id) is not None:
+                    continue
+                meta = stubs.get(other_id) or {}
+                self._docs.upsert(
+                    LegalDocument(
+                        doc_id=other_id,
+                        doc_num=str(meta.get("doc_num") or other_id),
+                        title=str(meta.get("title") or f"Stub {other_id}"),
+                        doc_type=str(meta.get("doc_type") or "Unknown"),
+                        issue_date=_parse_date(meta.get("issue_date")),
+                        eff_from=_parse_date(meta.get("eff_from")),
+                        eff_to=_parse_date(meta.get("eff_to")),
+                        status_flag=int(meta.get("status_flag") or 0),
                     )
-            self._docs.upsert_relations(rel_entities)
+                )
+        self._docs.upsert_relations(rel_entities)
 
-        path_rel_entities = [
-            LegalChunkRelation(
-                from_path=r["source_path"],
-                to_path=r["target_path"],
-                relation_type=r.get("ref_type") or "dan_chieu",
-            )
-            for r in (path_relations or [])
-            if r.get("source_path") and r.get("target_path")
-        ]
-        if path_rel_entities:
-            self._chunks.upsert_relations(path_rel_entities)
-
+    def _sync_graph(
+        self,
+        doc: LegalDocument,
+        entities: list[LegalChunk],
+        graph_nodes: list[dict[str, Any]] | None,
+        rel_entities: list[LegalDocRelation],
+    ) -> None:
         nodes = graph_nodes or [
             {
                 "path": c.path,
@@ -184,7 +170,7 @@ class IngestLegalDocument:
             for c in entities
         ]
         self._graph.upsert_document_tree(
-            doc_id=doc_id,
+            doc_id=doc.doc_id,
             doc_num=doc.doc_num,
             doc_type=doc.doc_type,
             nodes=nodes,
@@ -201,6 +187,52 @@ class IngestLegalDocument:
                     for r in rel_entities
                 ]
             )
+
+    def execute(
+        self,
+        thuoc_tinh: dict[str, Any],
+        chunks: list[dict[str, Any]],
+        relations: list[dict[str, str]] | None = None,
+        graph_nodes: list[dict[str, Any]] | None = None,
+        stub_docs: dict[str, dict[str, Any]] | None = None,
+        legal_nodes: list[dict[str, Any]] | None = None,
+        path_relations: list[dict[str, str]] | None = None,
+    ) -> dict[str, Any]:
+        doc_id = str(thuoc_tinh["doc_id"])
+        doc = self._build_document(thuoc_tinh, doc_id)
+        self._docs.upsert(doc)
+
+        node_rows = legal_nodes or []
+        if node_rows:
+            self._upsert_nodes(thuoc_tinh, doc_id, node_rows)
+
+        entities = self._build_chunks(thuoc_tinh, doc_id, chunks)
+        self._chunks.upsert_many(entities)
+
+        rel_entities = [
+            LegalDocRelation(
+                from_doc_id=r["from_doc_id"],
+                to_doc_id=r["to_doc_id"],
+                relation_type=r["relation_type"],
+            )
+            for r in (relations or [])
+        ]
+        if rel_entities:
+            self._upsert_doc_relations(doc_id, rel_entities, stub_docs or {})
+
+        path_rel_entities = [
+            LegalChunkRelation(
+                from_path=r["source_path"],
+                to_path=r["target_path"],
+                relation_type=r.get("ref_type") or "dan_chieu",
+            )
+            for r in (path_relations or [])
+            if r.get("source_path") and r.get("target_path")
+        ]
+        if path_rel_entities:
+            self._chunks.upsert_relations(path_rel_entities)
+
+        self._sync_graph(doc, entities, graph_nodes, rel_entities)
 
         logger.info(
             "Ingested legal doc_id=%s chunks=%s nodes=%s path_rels=%s",

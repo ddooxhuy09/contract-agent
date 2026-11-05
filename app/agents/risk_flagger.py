@@ -1,4 +1,4 @@
-from typing import Any, List, Optional
+from typing import Any, Optional
 import re
 
 from app.agents.json_parsing import parse_json_object
@@ -74,53 +74,15 @@ def _build_recommendation_fallback(actions: list[str], revised: str | None) -> s
     return "\n".join(parts) if parts else None
 
 
-def evaluate_clause(
+def _retrieve_legal(
     clause: Clause,
-    provider: str = DEFAULT_PROVIDER,
-    *,
-    contract_id: str | None = None,
-    contract_type: str | None = None,
-    as_of_date: str | None = None,
-    job_context: str | None = None,
-    skip_topics: list[str] | None = None,
-) -> Optional[RiskItem]:
-    """Retrieve law relevant to THIS clause specifically, then judge compliance against it.
-
-    ``skip_topics``: topic keys already covered by deterministic red-flags (prompt hint
-    only — callers that fully skip the clause never invoke this).
-    """
-    clause_ref = f"Điều {clause.clause_number}"
-    clause_text = _resolve_clause_text(clause, contract_id)
-    summary_for_query = clause.summary or clause_text
-    # Fold job/workplace text so sector filters see "AI / công nghệ" vs "dầu khí".
-    scope_summary = " ".join(
-        p for p in (summary_for_query, job_context) if p and str(p).strip()
-    ).strip() or summary_for_query
-
+    scope_summary: str,
+    contract_type: str | None,
+    as_of_date: str | None,
+):
+    """Return ``(legal_docs, legal_context)``: GraphRAG when bound, else plain vector search."""
     rag = get_graph_rag()
-    if rag is not None:
-        hits = rag.retrieve_for_clause(
-            clause.title,
-            scope_summary,
-            contract_type=contract_type,
-            k_seed=4,
-            max_total=10,
-            as_of_date=as_of_date,
-        )
-        from langchain_core.documents import Document
-
-        legal_docs = [
-            Document(page_content=h.content, metadata=h.metadata) for h in hits
-        ]
-        legal_context = rag.format_context(hits, max_chars=7000)
-        logger.info(
-            "Clause %s: legal=%s superseding=%s expired_seeds=%s assessing",
-            clause.clause_number,
-            len(hits),
-            sum(1 for h in hits if h.metadata.get("role") == "superseding"),
-            sum(1 for h in hits if h.metadata.get("note") == "source_doc_may_be_repealed"),
-        )
-    else:
+    if rag is None:
         legal_docs = retrieve_legal(
             f"{clause.title or ''} {scope_summary}".strip(),
             k=4,
@@ -128,60 +90,81 @@ def evaluate_clause(
             summary=scope_summary,
             contract_type=contract_type,
         )
-        legal_context = format_legal_context(legal_docs, max_chars=7000)
+        return legal_docs, format_legal_context(legal_docs, max_chars=7000)
 
-    if not legal_docs:
-        logger.info(
-            "Insufficient legal grounding for clause %s, skipping LLM call",
-            clause.clause_number,
-        )
-        return RiskItem(
-            clause_ref=clause_ref,
-            title="Thiếu căn cứ pháp luật để đối chiếu",
-            issue="Không tìm thấy căn cứ pháp luật đủ liên quan trong kho dữ liệu để đối chiếu điều khoản này.",
-            severity="warning",
-            summary_topics=["Thiếu căn cứ"],
-            reasons=["Kho luật truy hồi không có đoạn đủ liên quan trên ngưỡng tương đồng."],
-            impact=["Cần luật sư rà soát thủ công trước khi ký."],
-            actions=["Nhờ luật sư đối chiếu thủ công với Bộ luật / nghị định liên quan."],
-            legal_basis=None,
-            recommendation="Cần luật sư rà soát thủ công do thiếu dữ liệu pháp luật tham chiếu cho điều khoản này.",
-            original_clause=clause_text or None,
-            confidence=0.35,
-        )
+    hits = rag.retrieve_for_clause(
+        clause.title,
+        scope_summary,
+        contract_type=contract_type,
+        k_seed=4,
+        max_total=10,
+        as_of_date=as_of_date,
+    )
+    from langchain_core.documents import Document
 
-    skip_note = ""
-    if skip_topics:
-        skip_note = (
-            "\n\nĐã có phân tích deterministic cho các chủ đề: "
-            + ", ".join(skip_topics)
-            + ". Chỉ nêu rủi ro *khác* các chủ đề đó; không lặp lại.\n"
-        )
+    legal_docs = [Document(page_content=h.content, metadata=h.metadata) for h in hits]
+    legal_context = rag.format_context(hits, max_chars=7000)
+    logger.info(
+        "Clause %s: legal=%s superseding=%s expired_seeds=%s assessing",
+        clause.clause_number,
+        len(hits),
+        sum(1 for h in hits if h.metadata.get("role") == "superseding"),
+        sum(1 for h in hits if h.metadata.get("note") == "source_doc_may_be_repealed"),
+    )
+    return legal_docs, legal_context
 
-    prompt = CLAUSE_RISK_PROMPT.format(
-        clause_number=clause.clause_number,
-        clause_title_suffix=f" - {clause.title}" if clause.title else "",
-        clause_text=clause_text[:6000],
-        clause_summary=(clause.summary or "")[:800],
-        legal_context=legal_context + skip_note,
+
+def _no_grounding_risk(clause: Clause, clause_ref: str, clause_text: str) -> RiskItem:
+    """Warning returned instead of calling the LLM when no legal text was retrieved."""
+    logger.info(
+        "Insufficient legal grounding for clause %s, skipping LLM call",
+        clause.clause_number,
+    )
+    return RiskItem(
+        clause_ref=clause_ref,
+        title="Thiếu căn cứ pháp luật để đối chiếu",
+        issue="Không tìm thấy căn cứ pháp luật đủ liên quan trong kho dữ liệu để đối chiếu điều khoản này.",
+        severity="warning",
+        summary_topics=["Thiếu căn cứ"],
+        reasons=["Kho luật truy hồi không có đoạn đủ liên quan trên ngưỡng tương đồng."],
+        impact=["Cần luật sư rà soát thủ công trước khi ký."],
+        actions=["Nhờ luật sư đối chiếu thủ công với Bộ luật / nghị định liên quan."],
+        legal_basis=None,
+        recommendation="Cần luật sư rà soát thủ công do thiếu dữ liệu pháp luật tham chiếu cho điều khoản này.",
+        original_clause=clause_text or None,
+        confidence=0.35,
     )
 
+
+def _judge(prompt: str, provider: str, clause_number: str) -> dict | None:
+    """Call the LLM and parse its JSON; retry once when the output is unparsable."""
     raw = chat_completion(prompt, provider=provider)
     result = parse_json_object(raw)
     if result is None:
         logger.error(
             "Failed to parse clause risk output for clause %s, retrying once",
-            clause.clause_number,
+            clause_number,
         )
         raw = chat_completion(prompt, provider=provider)
         result = parse_json_object(raw)
         if result is None:
             logger.error(
                 "Clause %s: still unparsable after retry, skipping",
-                clause.clause_number,
+                clause_number,
             )
-            return None
+    return result
 
+
+def _risk_from_judgement(
+    result: dict,
+    *,
+    clause_ref: str,
+    clause_text: str,
+    legal_docs: list,
+    scope_summary: str,
+    as_of_date: str | None,
+) -> Optional[RiskItem]:
+    """Turn the parsed LLM judgement into a RiskItem (None when the clause is fine)."""
     severity = result.get("severity", "ok")
     issue = (result.get("issue") or "").strip()
     if severity == "ok" and not issue:
@@ -220,7 +203,10 @@ def evaluate_clause(
     # Build legacy issue text if model only returned structured reasons
     reasons = _as_str_list(result.get("reasons"))
     if not issue and reasons:
-        issue = "\n".join(["Kết luận: " + (result.get("title") or "Có vấn đề cần xử lý."), "Lý do:"] + [f"- {r}" for r in reasons])
+        issue = "\n".join([
+            "Kết luận: " + (result.get("title") or "Có vấn đề cần xử lý."),
+            "Lý do:",
+        ] + [f"- {r}" for r in reasons])
 
     return RiskItem(
         clause_ref=clause_ref,
@@ -239,34 +225,59 @@ def evaluate_clause(
     )
 
 
-def flag_risks(
-    clauses: List[Clause],
-    contract_id: str,
+def evaluate_clause(
+    clause: Clause,
     provider: str = DEFAULT_PROVIDER,
+    *,
+    contract_id: str | None = None,
     contract_type: str | None = None,
-) -> List[RiskItem]:
-    """Sequential fallback used outside the async workflow (e.g. tests, scripts)."""
-    logger.info(
-        "Flagging risks per-clause for contract %s: %s clause(s)",
-        contract_id,
-        len(clauses),
+    as_of_date: str | None = None,
+    job_context: str | None = None,
+    skip_topics: list[str] | None = None,
+) -> Optional[RiskItem]:
+    """Retrieve law relevant to THIS clause specifically, then judge compliance against it.
+
+    ``skip_topics``: topic keys already covered by deterministic red-flags (prompt hint
+    only — callers that fully skip the clause never invoke this).
+    """
+    clause_ref = f"Điều {clause.clause_number}"
+    clause_text = _resolve_clause_text(clause, contract_id)
+    summary_for_query = clause.summary or clause_text
+    # Fold job/workplace text so sector filters see "AI / công nghệ" vs "dầu khí".
+    scope_summary = " ".join(
+        p for p in (summary_for_query, job_context) if p and str(p).strip()
+    ).strip() or summary_for_query
+
+    legal_docs, legal_context = _retrieve_legal(clause, scope_summary, contract_type, as_of_date)
+    if not legal_docs:
+        return _no_grounding_risk(clause, clause_ref, clause_text)
+
+    skip_note = ""
+    if skip_topics:
+        skip_note = (
+            "\n\nĐã có phân tích deterministic cho các chủ đề: "
+            + ", ".join(skip_topics)
+            + ". Chỉ nêu rủi ro *khác* các chủ đề đó; không lặp lại.\n"
+        )
+
+    prompt = CLAUSE_RISK_PROMPT.format(
+        clause_number=clause.clause_number,
+        clause_title_suffix=f" - {clause.title}" if clause.title else "",
+        clause_text=clause_text[:6000],
+        clause_summary=(clause.summary or "")[:800],
+        legal_context=legal_context + skip_note,
     )
-    risks: List[RiskItem] = []
-    for clause in clauses:
-        try:
-            risk = evaluate_clause(
-                clause,
-                provider,
-                contract_id=contract_id,
-                contract_type=contract_type,
-            )
-            if risk:
-                risks.append(risk)
-        except Exception as e:
-            logger.error(
-                "Risk evaluation failed for clause %s in %s: %s",
-                clause.clause_number,
-                contract_id,
-                e,
-            )
-    return risks
+
+    result = _judge(prompt, provider, clause.clause_number)
+    if result is None:
+        return None
+    return _risk_from_judgement(
+        result,
+        clause_ref=clause_ref,
+        clause_text=clause_text,
+        legal_docs=legal_docs,
+        scope_summary=scope_summary,
+        as_of_date=as_of_date,
+    )
+
+

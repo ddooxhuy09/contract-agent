@@ -13,7 +13,7 @@ from datetime import date, datetime
 from typing import Any
 
 from app.agents.effectivity import Effectivity, evaluate_document_effectivity
-from app.agents.labor_code_resolver import _parse_as_of
+from app.core.dates import parse_as_of
 from app.core.logging import logger
 from app.schemas.contract import LegalCitation, RiskItem
 
@@ -113,7 +113,9 @@ def parse_can_cu_citations(text: str) -> list[PreambleCite]:
 
 def _lookup_doc(doc_num: str) -> dict[str, Any] | None:
     try:
-        from app.infrastructure.db.connection import get_db
+        from app.infrastructure.retrieval.context import get_legal_docs
+
+        docs = get_legal_docs()
     except Exception as e:
         logger.warning("preamble lookup: no DB (%s)", e)
         return None
@@ -128,27 +130,7 @@ def _lookup_doc(doc_num: str) -> dict[str, Any] | None:
         )
     )
     try:
-        with get_db() as conn:
-            with conn.cursor() as cur:
-                cur.execute(
-                    """
-                    SELECT doc_id, doc_num, title, doc_type, status_flag, eff_flag,
-                           eff_from, eff_to, issue_date, source_url
-                    FROM legal_documents
-                    WHERE UPPER(REPLACE(doc_num, 'Đ', 'D')) = ANY(%s)
-                       OR doc_num = ANY(%s)
-                    ORDER BY
-                      CASE status_flag
-                        WHEN 1 THEN 0 WHEN 5 THEN 1 WHEN 4 THEN 2 WHEN 0 THEN 3 ELSE 9
-                      END
-                    LIMIT 1
-                    """,
-                    (
-                        [v.upper().replace("Đ", "D").replace("đ", "d") for v in variants],
-                        variants,
-                    ),
-                )
-                row = cur.fetchone()
+        row = docs.find_row_by_doc_num(variants)
     except Exception as e:
         logger.warning("preamble lookup failed for %s: %s", doc_num, e)
         return None
@@ -201,7 +183,7 @@ def check_preamble_citations(
     if not cites:
         return []
 
-    as_of = _parse_as_of(as_of_date)
+    as_of = parse_as_of(as_of_date)
     problems: list[str] = []
     citations: list[LegalCitation] = []
     severity = "warning"

@@ -6,9 +6,8 @@ import re
 import unicodedata
 from collections import Counter
 from datetime import date
-from pathlib import Path
 
-from evaluation.runtime_adapter import ROOT, BENCHMARK, BASELINE_RUN, error_info
+from evaluation.runtime_adapter import BENCHMARK, BASELINE_RUN, error_info
 from evaluation.run_benchmark import write_json, now
 
 

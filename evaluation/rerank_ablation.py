@@ -20,7 +20,7 @@ from app.infrastructure.retrieval.scope_match import (
     filter_sector_mismatches,
 )
 from evaluation.audit import load
-from evaluation.runtime_adapter import ROOT, RUNS
+from evaluation.runtime_adapter import RUNS
 from evaluation.scoring import (
     format_metric,
     matches,
@@ -241,7 +241,6 @@ def build_rankings(input_dir: Path) -> dict:
     for pred in predictions:
         trace = load_trace(input_dir / "traces" / (pred["id"] + ".json"))
         pool = trace["candidates"]
-        seeds = _seed_positions(pool)
         composition.update(c.metadata.get("role") or "seed" for c in pool)
         case_rankings = {"saved_final": trace["saved_final"]}
         for name, policy in POLICIES.items():

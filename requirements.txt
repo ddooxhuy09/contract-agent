@@ -26,3 +26,5 @@ python-docx
 pdfplumber
 httpx
 requests
+pytest
+pytest-asyncio

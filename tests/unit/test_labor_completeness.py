@@ -9,15 +9,15 @@ from app.agents.labor_completeness import (
     is_labor_contract,
     missing_mandatory_fields,
 )
-from app.agents.labor_code_resolver import _parse_as_of
+from app.core.dates import parse_as_of
 from app.schemas.contract import ContractAnalysis
 
 SAMPLE = Path(__file__).resolve().parents[2] / "data" / "demo_contracts" / "CÔNG TY CỔ PHẦN CÔNG NGHỆ TƯƠNG LAI_SAI.md"
 
 
 def test_parse_as_of_formats():
-    assert _parse_as_of("2026-07-15").isoformat() == "2026-07-15"
-    assert _parse_as_of("15/07/2026").isoformat() == "2026-07-15"
+    assert parse_as_of("2026-07-15").isoformat() == "2026-07-15"
+    assert parse_as_of("15/07/2026").isoformat() == "2026-07-15"
 
 
 def test_sample_is_labor_contract():
@@ -87,3 +87,73 @@ def test_wage_requires_payment_form_or_schedule():
 
     wage = next(f for f in _MANDATORY if f.key == "wage")
     assert not field_is_covered(thin, wage)
+
+
+class _Docs:
+    def __init__(self, row=None, error=None):
+        self.row, self.error, self.calls = row, error, []
+
+    def find_labor_code_row(self, as_of, statuses):
+        self.calls.append((as_of, statuses))
+        if self.error:
+            raise self.error
+        return self.row
+
+
+class _Chunks:
+    def __init__(self, rows, error=None):
+        self.rows, self.error, self.calls = rows, error, []
+
+    def find_article_chunks(self, doc_id, path_regex, limit):
+        self.calls.append((doc_id, path_regex, limit))
+        if self.error:
+            raise self.error
+        return self.rows
+
+
+def test_resolve_labor_code_document_maps_row_and_passes_acceptable_statuses(monkeypatch):
+    from datetime import date
+
+    import app.agents.labor_code_resolver as resolver
+    import app.infrastructure.retrieval.context as ctx
+
+    row = ("D1", "45/2019/QH14", "Bộ luật Lao động", "Bộ luật", None, "ok", date(2019, 1, 1), None, None, "http://u")
+    docs = _Docs(row)
+    monkeypatch.setattr(ctx, "get_legal_docs", lambda: docs)
+    out = resolver.resolve_labor_code_document("2024-05-01")
+    assert out["doc_id"] == "D1" and out["status_flag"] == 0
+    assert out["eff_from"] == "2019-01-01" and out["eff_to"] is None
+    assert docs.calls == [(date(2024, 5, 1), [1, 5, 4, 0])]
+
+
+def test_resolve_labor_code_document_returns_none_on_repository_error(monkeypatch):
+    import app.agents.labor_code_resolver as resolver
+    import app.infrastructure.retrieval.context as ctx
+
+    monkeypatch.setattr(ctx, "get_legal_docs", lambda: _Docs(error=RuntimeError("db down")))
+    assert resolver.resolve_labor_code_document("2024-05-01") is None
+
+
+def test_fetch_article_helpers_use_chunk_repository(monkeypatch):
+    import app.agents.labor_code_resolver as resolver
+    import app.infrastructure.retrieval.context as ctx
+
+    chunks = _Chunks([("  Nội dung A ", "D1.P.D21"), (None, "x"), ("B", "D1.P.D21.K1")])
+    monkeypatch.setattr(ctx, "get_legal_chunks", lambda: chunks)
+    assert resolver.fetch_article_meta("D1", 21, limit=4) == {"quote": "Nội dung A\nB", "path": "D1.P.D21"}
+    assert chunks.calls[-1] == ("D1", r"\.D21(\.|$)", 4)
+    assert resolver.fetch_article_snippet("D1", [21, 5, 0]) == "  Nội dung A \nB"
+    assert chunks.calls[-1] == ("D1", r"\.D21(\.|$)|\.D5(\.|$)", 3)
+    assert resolver.fetch_article_meta(None, 21) is None
+
+
+def test_fetch_article_helpers_return_none_without_rows_or_on_error(monkeypatch):
+    import app.agents.labor_code_resolver as resolver
+    import app.infrastructure.retrieval.context as ctx
+
+    monkeypatch.setattr(ctx, "get_legal_chunks", lambda: _Chunks([]))
+    assert resolver.fetch_article_meta("D1", 21) is None
+    assert resolver.fetch_article_snippet("D1", [21]) is None
+    monkeypatch.setattr(ctx, "get_legal_chunks", lambda: _Chunks([], error=RuntimeError("db down")))
+    assert resolver.fetch_article_meta("D1", 21) is None
+    assert resolver.fetch_article_snippet("D1", [21]) is None

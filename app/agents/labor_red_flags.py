@@ -560,22 +560,3 @@ def matching_law_blurbs(text: str, *, limit: int = 4) -> list[str]:
 
 
 
-def topic_keys_for_risks(red_flag_risks: list[RiskItem]) -> dict[str, set[str]]:
-    """Map clause number → red-flag keys inferred from reasons/titles."""
-    out: dict[str, set[str]] = {}
-    for r in red_flag_risks:
-        n = clause_number_from_ref(r.clause_ref)
-        if not n:
-            continue
-        blob = f"{r.title or ''} {' '.join(r.reasons or [])}".lower()
-        keys: set[str] = set()
-        for f in _FLAGS:
-            if f.title.lower() in blob or f.reason.lower() in blob:
-                keys.add(f.key)
-            elif any(t.lower() in blob for t in f.topics):
-                # weak match — only if clause_hint matches
-                if clause_number_from_ref(f.clause_hint) == n:
-                    keys.add(f.key)
-        if keys:
-            out.setdefault(n, set()).update(keys)
-    return out

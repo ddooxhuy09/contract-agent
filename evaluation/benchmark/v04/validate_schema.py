@@ -1,5 +1,5 @@
 # coding: utf-8
-import json,pathlib,collections
+import json,pathlib
 root=pathlib.Path(__file__).parent
 j=json.loads((root/'MIXED_34_TEST_CASES_V04.json').read_text(encoding='utf-8'))
 cases=j['test_cases']; ids=[c['id'] for c in cases]

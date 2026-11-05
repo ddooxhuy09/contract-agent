@@ -1,7 +1,6 @@
 """Convert a vbpl.vn document's raw article HTML + attributes + relation
 references into the 3 on-disk artifacts: van_ban.md, thuoc_tinh.json, luoc_do.json.
 """
-import json
 import re
 
 from bs4 import BeautifulSoup, NavigableString, Tag

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datetime import date
+
 from app.domain.entities.legal import (
     LegalChunk,
     LegalChunkRelation,
@@ -174,6 +176,351 @@ class PgLegalDocumentRepository:
                         (rel.from_doc_id, rel.to_doc_id, rel.relation_type),
                     )
 
+    def find_labor_code_row(self, as_of: date, statuses: list[int]) -> tuple | None:
+        """Bộ luật Lao động row effective on ``as_of`` (not guiding circulars)."""
+        with get_db() as conn:
+            with conn.cursor() as cur:
+                # Strict: instrument level = Bộ luật; title starts with Bộ luật Lao động
+                # (avoids TT 10/2020 whose title contains "… Bộ luật Lao động …").
+                cur.execute(
+                    """
+                    SELECT doc_id, doc_num, title, doc_type, status_flag, eff_flag,
+                           eff_from, eff_to, issue_date, source_url
+                    FROM legal_documents
+                    WHERE doc_type ILIKE %s
+                      AND (
+                        title ILIKE %s
+                        OR title ILIKE %s
+                        OR doc_num IN ('45/2019/QH14', '10/2012/QH13')
+                      )
+                      AND status_flag = ANY(%s)
+                      AND (eff_from IS NULL OR eff_from <= %s)
+                      AND (eff_to IS NULL OR eff_to > %s)
+                    ORDER BY
+                      CASE status_flag
+                        WHEN 1 THEN 0 WHEN 5 THEN 1 WHEN 4 THEN 2 WHEN 0 THEN 3 ELSE 9
+                      END,
+                      COALESCE(issue_date, eff_from) DESC NULLS LAST,
+                      doc_num DESC
+                    LIMIT 1
+                    """,
+                    (
+                        "Bộ luật%",
+                        "Bộ luật Lao động%",
+                        "Bộ Luật lao động%",
+                        statuses,
+                        as_of,
+                        as_of,
+                    ),
+                )
+                return cur.fetchone()
+
+    def find_row_by_doc_num(self, variants: list[str]) -> tuple | None:
+        """Best document row whose ``doc_num`` matches one of the spelling ``variants``."""
+        with get_db() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
+                    SELECT doc_id, doc_num, title, doc_type, status_flag, eff_flag,
+                           eff_from, eff_to, issue_date, source_url
+                    FROM legal_documents
+                    WHERE UPPER(REPLACE(doc_num, 'Đ', 'D')) = ANY(%s)
+                       OR doc_num = ANY(%s)
+                    ORDER BY
+                      CASE status_flag
+                        WHEN 1 THEN 0 WHEN 5 THEN 1 WHEN 4 THEN 2 WHEN 0 THEN 3 ELSE 9
+                      END
+                    LIMIT 1
+                    """,
+                    (
+                        [v.upper().replace("Đ", "D").replace("đ", "d") for v in variants],
+                        variants,
+                    ),
+                )
+                return cur.fetchone()
+
+
+def _upsert_part(cur, n: LegalNode, title: str, content: str, eff: tuple) -> None:
+    cur.execute(
+        f"""
+        INSERT INTO legal_parts
+            (doc_id, title, content, path, parent_path, {_EFF_COLS})
+        VALUES (%s, %s, %s, %s::ltree, %s::ltree, %s, %s, %s, %s)
+        ON CONFLICT (doc_id, path) DO UPDATE SET
+            title = COALESCE(EXCLUDED.title, legal_parts.title),
+            content = COALESCE(EXCLUDED.content, legal_parts.content),
+            parent_path = EXCLUDED.parent_path,
+            {_EFF_UPSERT.format(t="legal_parts")}
+        """,
+        (n.doc_id, title, content, n.path, n.parent_path, *eff),
+    )
+
+
+def _upsert_chapter(cur, n: LegalNode, title: str, content: str, eff: tuple) -> None:
+    part_id = _lookup_id_by_path(cur, "legal_parts", n.parent_path)
+    if not part_id:
+        root = ensure_doc_root_path(cur, n.doc_id, n.path)
+        part_id = ensure_part(cur, n.doc_id, root, None)
+    cur.execute(
+        f"""
+        INSERT INTO legal_chapters
+            (part_id, title, content, path, parent_path, {_EFF_COLS})
+        VALUES (%s, %s, %s, %s::ltree, %s::ltree, %s, %s, %s, %s)
+        ON CONFLICT (path) DO UPDATE SET
+            part_id = COALESCE(EXCLUDED.part_id, legal_chapters.part_id),
+            title = COALESCE(EXCLUDED.title, legal_chapters.title),
+            content = COALESCE(EXCLUDED.content, legal_chapters.content),
+            parent_path = EXCLUDED.parent_path,
+            {_EFF_UPSERT.format(t="legal_chapters")}
+        """,
+        (part_id, title, content, n.path, n.parent_path, *eff),
+    )
+
+
+def _upsert_section(cur, n: LegalNode, title: str, content: str, eff: tuple) -> None:
+    chapter_id = _lookup_id_by_path(cur, "legal_chapters", n.parent_path)
+    if not chapter_id:
+        ensure_chain_for_article(cur, n.doc_id, f"{n.path}.D0")
+        chapter_id = _lookup_id_by_path(cur, "legal_chapters", n.parent_path)
+    if not chapter_id:
+        ssid = ensure_chain_for_article(cur, n.doc_id, n.path + ".D0")
+        cur.execute(
+            """
+            SELECT c.id FROM legal_sub_sections ss
+            JOIN legal_sections s ON s.id = ss.section_id
+            JOIN legal_chapters c ON c.id = s.chapter_id
+            WHERE ss.id = %s
+            """,
+            (ssid,),
+        )
+        chapter_id = int(cur.fetchone()[0])
+    cur.execute(
+        f"""
+        INSERT INTO legal_sections
+            (chapter_id, title, content, path, parent_path, {_EFF_COLS})
+        VALUES (%s, %s, %s, %s::ltree, %s::ltree, %s, %s, %s, %s)
+        ON CONFLICT (path) DO UPDATE SET
+            chapter_id = COALESCE(
+                EXCLUDED.chapter_id, legal_sections.chapter_id
+            ),
+            title = COALESCE(EXCLUDED.title, legal_sections.title),
+            content = COALESCE(EXCLUDED.content, legal_sections.content),
+            parent_path = EXCLUDED.parent_path,
+            {_EFF_UPSERT.format(t="legal_sections")}
+        """,
+        (chapter_id, title, content, n.path, n.parent_path, *eff),
+    )
+
+
+def _upsert_sub_section(cur, n: LegalNode, title: str, content: str, eff: tuple) -> None:
+    section_id = _lookup_id_by_path(cur, "legal_sections", n.parent_path)
+    if not section_id:
+        ensure_chain_for_article(cur, n.doc_id, f"{n.path}.D0")
+        section_id = _lookup_id_by_path(cur, "legal_sections", n.parent_path)
+    if not section_id:
+        ssid = ensure_chain_for_article(cur, n.doc_id, n.path + ".D0")
+        cur.execute(
+            "SELECT section_id FROM legal_sub_sections WHERE id = %s",
+            (ssid,),
+        )
+        section_id = int(cur.fetchone()[0])
+    cur.execute(
+        f"""
+        INSERT INTO legal_sub_sections
+            (section_id, title, content, path, parent_path, {_EFF_COLS})
+        VALUES (%s, %s, %s, %s::ltree, %s::ltree, %s, %s, %s, %s)
+        ON CONFLICT (path) DO UPDATE SET
+            section_id = COALESCE(
+                EXCLUDED.section_id, legal_sub_sections.section_id
+            ),
+            title = COALESCE(EXCLUDED.title, legal_sub_sections.title),
+            content = COALESCE(
+                EXCLUDED.content, legal_sub_sections.content
+            ),
+            parent_path = EXCLUDED.parent_path,
+            {_EFF_UPSERT.format(t="legal_sub_sections")}
+        """,
+        (section_id, title, content, n.path, n.parent_path, *eff),
+    )
+
+
+def _upsert_article(cur, n: LegalNode, title: str, content: str, eff: tuple) -> None:
+    sub_section_id = ensure_chain_for_article(cur, n.doc_id, n.path)
+    cur.execute(
+        f"""
+        INSERT INTO legal_articles
+            (sub_section_id, title, content, path, parent_path, {_EFF_COLS})
+        VALUES (%s, %s, %s, %s::ltree, %s::ltree, %s, %s, %s, %s)
+        ON CONFLICT (path) DO UPDATE SET
+            sub_section_id = EXCLUDED.sub_section_id,
+            title = EXCLUDED.title,
+            content = COALESCE(EXCLUDED.content, legal_articles.content),
+            parent_path = EXCLUDED.parent_path,
+            {_EFF_UPSERT.format(t="legal_articles")}
+        """,
+        (sub_section_id, title, content, n.path, n.parent_path, *eff),
+    )
+
+
+def _upsert_clause(cur, n: LegalNode, title: str, content: str, eff: tuple) -> None:
+    article_id = _lookup_id_by_path(cur, "legal_articles", n.parent_path)
+    if not article_id:
+        return
+    cur.execute(
+        f"""
+        INSERT INTO legal_clauses
+            (article_id, title, content, path, parent_path, {_EFF_COLS})
+        VALUES (%s, %s, %s, %s::ltree, %s::ltree, %s, %s, %s, %s)
+        ON CONFLICT (path) DO UPDATE SET
+            article_id = COALESCE(
+                EXCLUDED.article_id, legal_clauses.article_id
+            ),
+            title = EXCLUDED.title,
+            content = COALESCE(EXCLUDED.content, legal_clauses.content),
+            parent_path = EXCLUDED.parent_path,
+            {_EFF_UPSERT.format(t="legal_clauses")}
+        """,
+        (article_id, title, content, n.path, n.parent_path, *eff),
+    )
+
+
+def _upsert_point(cur, n: LegalNode, title: str, content: str, eff: tuple) -> None:
+    clause_id = _lookup_id_by_path(cur, "legal_clauses", n.parent_path)
+    if not clause_id:
+        return
+    symbol = _path_leaf(n.path)[:10] or "x"
+    cur.execute(
+        f"""
+        INSERT INTO legal_points
+            (clause_id, symbol, title, content,
+             path, parent_path, {_EFF_COLS})
+        VALUES (%s, %s, %s, %s, %s::ltree, %s::ltree, %s, %s, %s, %s)
+        ON CONFLICT (path) DO UPDATE SET
+            clause_id = COALESCE(
+                EXCLUDED.clause_id, legal_points.clause_id
+            ),
+            symbol = EXCLUDED.symbol,
+            title = COALESCE(EXCLUDED.title, legal_points.title),
+            content = COALESCE(EXCLUDED.content, legal_points.content),
+            parent_path = EXCLUDED.parent_path,
+            {_EFF_UPSERT.format(t="legal_points")}
+        """,
+        (clause_id, symbol, title, content, n.path, n.parent_path, *eff),
+    )
+
+
+# One upsert function per hierarchy level (keys == _HIERARCHY_LEVELS).
+_LEVEL_UPSERTS = {
+    "Part": _upsert_part,
+    "Chapter": _upsert_chapter,
+    "Section": _upsert_section,
+    "SubSection": _upsert_sub_section,
+    "Article": _upsert_article,
+    "Clause": _upsert_clause,
+    "Point": _upsert_point,
+}
+
+
+def _empty_expansion() -> dict:
+    return {
+        "sibling_paths": [],
+        "ancestor_paths": [],
+        "parent_clause_paths": [],
+        "related_docs": [],
+        "repealed_by_docs": [],
+    }
+
+
+def _seed_path_candidates(seed_keys: list[str]) -> list[str]:
+    """Seeds may be ``doc:ref`` chunk refs or ltree paths; return ltree paths."""
+    path_candidates = []
+    for k in seed_keys:
+        if ":" in k:
+            lt = chunk_ref_to_ltree(k)
+            if lt:
+                path_candidates.append(lt)
+        else:
+            path_candidates.append(k)
+    return path_candidates
+
+
+def _sibling_paths(cur, seeds: list[str], limit: int) -> list[str]:
+    """Siblings under the same parent_path of the seed leaf nodes."""
+    cur.execute(
+        """
+        WITH seeds AS (
+            SELECT path, subpath(path, 0, nlevel(path) - 1) AS parent
+            FROM unnest(%s::ltree[]) AS path
+            WHERE nlevel(path) > 1
+        )
+        SELECT DISTINCT e.path::text
+        FROM legal_embeddings e
+        JOIN seeds s ON e.path <@ s.parent AND nlevel(e.path) = nlevel(s.path)
+        WHERE e.path <> ALL(%s::ltree[])
+        LIMIT %s
+        """,
+        (seeds, seeds, min(limit, 24)),
+    )
+    return [r[0] for r in cur.fetchall()]
+
+
+def _ancestor_paths(cur, seeds: list[str], limit: int) -> list[str]:
+    cur.execute(
+        """
+        SELECT DISTINCT subpath(path, 0, n)::text
+        FROM unnest(%s::ltree[]) AS path
+        CROSS JOIN generate_series(1, nlevel(path) - 1) AS n
+        LIMIT %s
+        """,
+        (seeds, min(limit, 16)),
+    )
+    return [r[0] for r in cur.fetchall() if r[0]]
+
+
+def _parent_clause_paths(seeds: list[str]) -> list[str]:
+    """Nearest ancestor of each seed whose path segment looks like ``K<digits>``."""
+    parent_clauses = []
+    for s in seeds:
+        parts = s.split(".")
+        for i in range(len(parts) - 1, -1, -1):
+            if parts[i].startswith("K") and parts[i][1:].isdigit():
+                parent_clauses.append(".".join(parts[: i + 1]))
+                break
+    return list(dict.fromkeys(parent_clauses))
+
+
+def _related_docs(cur, doc_ids: list[str]) -> list[str]:
+    cur.execute(
+        """
+        SELECT DISTINCT ldr.to_doc_id
+        FROM legal_document_relations ldr
+        WHERE ldr.from_doc_id = ANY(%s)
+          AND ldr.relation_type IN (
+              'can_cu_ban_hanh', 'dan_chieu', 'sua_doi_bo_sung',
+              'BASED_ON', 'CITES', 'AMENDS'
+          )
+        LIMIT 8
+        """,
+        (doc_ids,),
+    )
+    return [r[0] for r in cur.fetchall()]
+
+
+def _repealed_by_docs(cur, doc_ids: list[str]) -> list[str]:
+    cur.execute(
+        """
+        SELECT DISTINCT ldr.from_doc_id
+        FROM legal_document_relations ldr
+        WHERE ldr.to_doc_id = ANY(%s)
+          AND ldr.relation_type IN (
+              'van_ban_bi_bai_bo', 'thay_the', 'REPEALS', 'SUPERSEDES'
+          )
+        LIMIT 8
+        """,
+        (doc_ids,),
+    )
+    return [r[0] for r in cur.fetchall()]
+
 
 class PgLegalChunkRepository:
     def upsert_many(self, chunks: list[LegalChunk]) -> None:
@@ -225,199 +572,7 @@ class PgLegalChunkRepository:
         with get_db() as conn:
             with conn.cursor() as cur:
                 for n in ranked:
-                    title = _node_title(n)
-                    content = KHONG_CO
-                    eff = _eff_params(n)
-
-                    if n.level == "Part":
-                        cur.execute(
-                            f"""
-                            INSERT INTO legal_parts
-                                (doc_id, title, content, path, parent_path, {_EFF_COLS})
-                            VALUES (%s, %s, %s, %s::ltree, %s::ltree, %s, %s, %s, %s)
-                            ON CONFLICT (doc_id, path) DO UPDATE SET
-                                title = COALESCE(EXCLUDED.title, legal_parts.title),
-                                content = COALESCE(EXCLUDED.content, legal_parts.content),
-                                parent_path = EXCLUDED.parent_path,
-                                {_EFF_UPSERT.format(t="legal_parts")}
-                            """,
-                            (n.doc_id, title, content, n.path, n.parent_path, *eff),
-                        )
-                    elif n.level == "Chapter":
-                        part_id = _lookup_id_by_path(cur, "legal_parts", n.parent_path)
-                        if not part_id:
-                            root = ensure_doc_root_path(cur, n.doc_id, n.path)
-                            part_id = ensure_part(cur, n.doc_id, root, None)
-                        cur.execute(
-                            f"""
-                            INSERT INTO legal_chapters
-                                (part_id, title, content, path, parent_path, {_EFF_COLS})
-                            VALUES (%s, %s, %s, %s::ltree, %s::ltree, %s, %s, %s, %s)
-                            ON CONFLICT (path) DO UPDATE SET
-                                part_id = COALESCE(EXCLUDED.part_id, legal_chapters.part_id),
-                                title = COALESCE(EXCLUDED.title, legal_chapters.title),
-                                content = COALESCE(EXCLUDED.content, legal_chapters.content),
-                                parent_path = EXCLUDED.parent_path,
-                                {_EFF_UPSERT.format(t="legal_chapters")}
-                            """,
-                            (part_id, title, content, n.path, n.parent_path, *eff),
-                        )
-                    elif n.level == "Section":
-                        chapter_id = _lookup_id_by_path(
-                            cur, "legal_chapters", n.parent_path
-                        )
-                        if not chapter_id:
-                            ensure_chain_for_article(cur, n.doc_id, f"{n.path}.D0")
-                            chapter_id = _lookup_id_by_path(
-                                cur, "legal_chapters", n.parent_path
-                            )
-                        if not chapter_id:
-                            ssid = ensure_chain_for_article(cur, n.doc_id, n.path + ".D0")
-                            cur.execute(
-                                """
-                                SELECT c.id FROM legal_sub_sections ss
-                                JOIN legal_sections s ON s.id = ss.section_id
-                                JOIN legal_chapters c ON c.id = s.chapter_id
-                                WHERE ss.id = %s
-                                """,
-                                (ssid,),
-                            )
-                            chapter_id = int(cur.fetchone()[0])
-                        cur.execute(
-                            f"""
-                            INSERT INTO legal_sections
-                                (chapter_id, title, content, path, parent_path, {_EFF_COLS})
-                            VALUES (%s, %s, %s, %s::ltree, %s::ltree, %s, %s, %s, %s)
-                            ON CONFLICT (path) DO UPDATE SET
-                                chapter_id = COALESCE(
-                                    EXCLUDED.chapter_id, legal_sections.chapter_id
-                                ),
-                                title = COALESCE(EXCLUDED.title, legal_sections.title),
-                                content = COALESCE(EXCLUDED.content, legal_sections.content),
-                                parent_path = EXCLUDED.parent_path,
-                                {_EFF_UPSERT.format(t="legal_sections")}
-                            """,
-                            (chapter_id, title, content, n.path, n.parent_path, *eff),
-                        )
-                    elif n.level == "SubSection":
-                        section_id = _lookup_id_by_path(
-                            cur, "legal_sections", n.parent_path
-                        )
-                        if not section_id:
-                            ensure_chain_for_article(cur, n.doc_id, f"{n.path}.D0")
-                            section_id = _lookup_id_by_path(
-                                cur, "legal_sections", n.parent_path
-                            )
-                        if not section_id:
-                            ssid = ensure_chain_for_article(cur, n.doc_id, n.path + ".D0")
-                            cur.execute(
-                                "SELECT section_id FROM legal_sub_sections WHERE id = %s",
-                                (ssid,),
-                            )
-                            section_id = int(cur.fetchone()[0])
-                        cur.execute(
-                            f"""
-                            INSERT INTO legal_sub_sections
-                                (section_id, title, content, path, parent_path, {_EFF_COLS})
-                            VALUES (%s, %s, %s, %s::ltree, %s::ltree, %s, %s, %s, %s)
-                            ON CONFLICT (path) DO UPDATE SET
-                                section_id = COALESCE(
-                                    EXCLUDED.section_id, legal_sub_sections.section_id
-                                ),
-                                title = COALESCE(EXCLUDED.title, legal_sub_sections.title),
-                                content = COALESCE(
-                                    EXCLUDED.content, legal_sub_sections.content
-                                ),
-                                parent_path = EXCLUDED.parent_path,
-                                {_EFF_UPSERT.format(t="legal_sub_sections")}
-                            """,
-                            (section_id, title, content, n.path, n.parent_path, *eff),
-                        )
-                    elif n.level == "Article":
-                        sub_section_id = ensure_chain_for_article(cur, n.doc_id, n.path)
-                        cur.execute(
-                            f"""
-                            INSERT INTO legal_articles
-                                (sub_section_id, title, content, path, parent_path, {_EFF_COLS})
-                            VALUES (%s, %s, %s, %s::ltree, %s::ltree, %s, %s, %s, %s)
-                            ON CONFLICT (path) DO UPDATE SET
-                                sub_section_id = EXCLUDED.sub_section_id,
-                                title = EXCLUDED.title,
-                                content = COALESCE(EXCLUDED.content, legal_articles.content),
-                                parent_path = EXCLUDED.parent_path,
-                                {_EFF_UPSERT.format(t="legal_articles")}
-                            """,
-                            (
-                                sub_section_id,
-                                title,
-                                content,
-                                n.path,
-                                n.parent_path,
-                                *eff,
-                            ),
-                        )
-                    elif n.level == "Clause":
-                        article_id = _lookup_id_by_path(
-                            cur, "legal_articles", n.parent_path
-                        )
-                        if not article_id:
-                            continue
-                        cur.execute(
-                            f"""
-                            INSERT INTO legal_clauses
-                                (article_id, title, content, path, parent_path, {_EFF_COLS})
-                            VALUES (%s, %s, %s, %s::ltree, %s::ltree, %s, %s, %s, %s)
-                            ON CONFLICT (path) DO UPDATE SET
-                                article_id = COALESCE(
-                                    EXCLUDED.article_id, legal_clauses.article_id
-                                ),
-                                title = EXCLUDED.title,
-                                content = COALESCE(EXCLUDED.content, legal_clauses.content),
-                                parent_path = EXCLUDED.parent_path,
-                                {_EFF_UPSERT.format(t="legal_clauses")}
-                            """,
-                            (
-                                article_id,
-                                title,
-                                content,
-                                n.path,
-                                n.parent_path,
-                                *eff,
-                            ),
-                        )
-                    elif n.level == "Point":
-                        clause_id = _lookup_id_by_path(
-                            cur, "legal_clauses", n.parent_path
-                        )
-                        if not clause_id:
-                            continue
-                        symbol = _path_leaf(n.path)[:10] or "x"
-                        cur.execute(
-                            f"""
-                            INSERT INTO legal_points
-                                (clause_id, symbol, title, content,
-                                 path, parent_path, {_EFF_COLS})
-                            VALUES (%s, %s, %s, %s, %s::ltree, %s::ltree, %s, %s, %s, %s)
-                            ON CONFLICT (path) DO UPDATE SET
-                                clause_id = COALESCE(
-                                    EXCLUDED.clause_id, legal_points.clause_id
-                                ),
-                                symbol = EXCLUDED.symbol,
-                                title = COALESCE(EXCLUDED.title, legal_points.title),
-                                content = COALESCE(EXCLUDED.content, legal_points.content),
-                                parent_path = EXCLUDED.parent_path,
-                                {_EFF_UPSERT.format(t="legal_points")}
-                            """,
-                            (
-                                clause_id,
-                                symbol,
-                                title,
-                                content,
-                                n.path,
-                                n.parent_path,
-                                *eff,
-                            ),
-                        )
+                    _LEVEL_UPSERTS[n.level](cur, n, _node_title(n), KHONG_CO, _eff_params(n))
 
     def upsert_relations(self, relations: list[LegalChunkRelation]) -> None:
         """Store path cross-refs as legal_path_relations (ltree dan_chieu)."""
@@ -452,6 +607,24 @@ class PgLegalChunkRepository:
                 )
                 row = cur.fetchone()
                 return int(row[0] or 0)
+
+    def find_article_chunks(self, doc_id: str, path_regex: str, limit: int) -> list[tuple]:
+        """Effective chunks of ``doc_id`` whose path matches ``path_regex``: (text, path)."""
+        with get_db() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
+                    SELECT chunk_text, path::text
+                    FROM legal_embeddings
+                    WHERE doc_id = %s
+                      AND is_effective
+                      AND path::text ~ %s
+                    ORDER BY nlevel(path) ASC, path
+                    LIMIT %s
+                    """,
+                    (doc_id, path_regex, limit),
+                )
+                return cur.fetchall()
 
     def get_texts_by_refs(self, chunk_refs: list[str]) -> dict[str, str]:
         """Compat: accept legacy colon refs or ltree; return keyed by input."""
@@ -533,29 +706,15 @@ class PgLegalChunkRepository:
 
     def expand_paths(self, seed_keys: list[str], limit: int = 80) -> dict:
         """Postgres ltree expand. Seeds are ltree path strings."""
-        empty: dict = {
-            "sibling_paths": [],
-            "ancestor_paths": [],
-            "parent_clause_paths": [],
-            "related_docs": [],
-            "repealed_by_docs": [],
-        }
         if not seed_keys:
-            return empty
+            return _empty_expansion()
 
-        path_candidates = []
-        for k in seed_keys:
-            if ":" in k:
-                lt = chunk_ref_to_ltree(k)
-                if lt:
-                    path_candidates.append(lt)
-            else:
-                path_candidates.append(k)
+        path_candidates = _seed_path_candidates(seed_keys)
 
         with get_db() as conn:
             with conn.cursor() as cur:
                 if not path_candidates:
-                    return empty
+                    return _empty_expansion()
                 cur.execute(
                     """
                     SELECT path::text, doc_id FROM legal_embeddings
@@ -565,81 +724,14 @@ class PgLegalChunkRepository:
                 )
                 rows = cur.fetchall()
                 if not rows:
-                    return empty
+                    return _empty_expansion()
                 seeds = [r[0] for r in rows]
                 doc_ids = list({r[1] for r in rows})
 
-                # siblings under same parent_path of seed leaf nodes
-                cur.execute(
-                    """
-                    WITH seeds AS (
-                        SELECT path, subpath(path, 0, nlevel(path) - 1) AS parent
-                        FROM unnest(%s::ltree[]) AS path
-                        WHERE nlevel(path) > 1
-                    )
-                    SELECT DISTINCT e.path::text
-                    FROM legal_embeddings e
-                    JOIN seeds s ON e.path <@ s.parent AND nlevel(e.path) = nlevel(s.path)
-                    WHERE e.path <> ALL(%s::ltree[])
-                    LIMIT %s
-                    """,
-                    (seeds, seeds, min(limit, 24)),
-                )
-                siblings = [r[0] for r in cur.fetchall()]
-
-                cur.execute(
-                    """
-                    SELECT DISTINCT subpath(path, 0, n)::text
-                    FROM unnest(%s::ltree[]) AS path
-                    CROSS JOIN generate_series(1, nlevel(path) - 1) AS n
-                    LIMIT %s
-                    """,
-                    (seeds, min(limit, 16)),
-                )
-                ancestors = [r[0] for r in cur.fetchall() if r[0]]
-
-                # parent clause = nearest ancestor ending in K*
-                parent_clauses = []
-                for s in seeds:
-                    parts = s.split(".")
-                    for i in range(len(parts) - 1, -1, -1):
-                        if parts[i].startswith("K") and parts[i][1:].isdigit():
-                            parent_clauses.append(".".join(parts[: i + 1]))
-                            break
-
-                cur.execute(
-                    """
-                    SELECT DISTINCT ldr.to_doc_id
-                    FROM legal_document_relations ldr
-                    WHERE ldr.from_doc_id = ANY(%s)
-                      AND ldr.relation_type IN (
-                          'can_cu_ban_hanh', 'dan_chieu', 'sua_doi_bo_sung',
-                          'BASED_ON', 'CITES', 'AMENDS'
-                      )
-                    LIMIT 8
-                    """,
-                    (doc_ids,),
-                )
-                related = [r[0] for r in cur.fetchall()]
-
-                cur.execute(
-                    """
-                    SELECT DISTINCT ldr.from_doc_id
-                    FROM legal_document_relations ldr
-                    WHERE ldr.to_doc_id = ANY(%s)
-                      AND ldr.relation_type IN (
-                          'van_ban_bi_bai_bo', 'thay_the', 'REPEALS', 'SUPERSEDES'
-                      )
-                    LIMIT 8
-                    """,
-                    (doc_ids,),
-                )
-                repealed = [r[0] for r in cur.fetchall()]
-
                 return {
-                    "sibling_paths": siblings,
-                    "ancestor_paths": ancestors,
-                    "parent_clause_paths": list(dict.fromkeys(parent_clauses)),
-                    "related_docs": related,
-                    "repealed_by_docs": repealed,
+                    "sibling_paths": _sibling_paths(cur, seeds, limit),
+                    "ancestor_paths": _ancestor_paths(cur, seeds, limit),
+                    "parent_clause_paths": _parent_clause_paths(seeds),
+                    "related_docs": _related_docs(cur, doc_ids),
+                    "repealed_by_docs": _repealed_by_docs(cur, doc_ids),
                 }

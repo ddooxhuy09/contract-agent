@@ -9,7 +9,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 from evaluation.audit import norm_law, load
-from evaluation.runtime_adapter import ROOT, BENCHMARK, BASELINE_RUN, RUNS
+from evaluation.runtime_adapter import BASELINE_RUN
 
 
 KS = (1, 3, 5, 10)
@@ -317,7 +317,6 @@ def score_and_report(output):
 def render_reports(output, predictions, results, metadata, retrieval, generation, temporal, risk, errors, by_difficulty, by_task):
     status_counts = Counter(r["capability_status"] for r in results)
     execution_counts = Counter(r["execution_status"] for r in results)
-    final = retrieval["stages"].get("final_retrieval", {})
     audit_path = BASELINE_RUN / "benchmark_validation.json"
     audit = json.loads(audit_path.read_text(encoding="utf-8")) if audit_path.exists() else {}
     coverage_path = BASELINE_RUN / "corpus_coverage.json"

@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from datetime import date, datetime
 from typing import Any
 
-from app.agents.labor_code_resolver import _parse_as_of
+from app.core.dates import parse_as_of
 
 _STATUS_LABEL = {
     0: "Chưa xác định",
@@ -61,7 +61,7 @@ def evaluate_document_effectivity(
     as_of: str | date | None = None,
 ) -> Effectivity:
     """Decide whether a document may be used as a living legal basis on ``as_of``."""
-    as_of_d = _parse_as_of(as_of)
+    as_of_d = parse_as_of(as_of)
     as_of_s = as_of_d.isoformat()
 
     if not row:

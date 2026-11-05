@@ -1,6 +1,10 @@
 """Runtime holders so legacy agent modules can retrieve without circular imports."""
 
-from app.domain.ports.repositories import ContractChunkRepository, LegalChunkRepository
+from app.domain.ports.repositories import (
+    ContractChunkRepository,
+    LegalChunkRepository,
+    LegalDocumentRepository,
+)
 from app.domain.ports.services import ContractVectorSearch, GraphRepository, LegalVectorSearch
 from app.infrastructure.retrieval.legal_graph_rag import LegalGraphRag
 
@@ -53,3 +57,19 @@ def get_graph_rag() -> LegalGraphRag | None:
 
 def get_contract_chunks() -> ContractChunkRepository | None:
     return _contract_chunks
+
+
+def get_legal_docs() -> LegalDocumentRepository:
+    """Stateless Postgres repository; usable without app startup (scripts, evaluation)."""
+    from app.infrastructure.db.legal_repository import PgLegalDocumentRepository
+
+    return PgLegalDocumentRepository()
+
+
+def get_legal_chunks() -> LegalChunkRepository:
+    """Bound repository, else a stateless Postgres one (callers outside app startup)."""
+    if _legal_chunks is not None:
+        return _legal_chunks
+    from app.infrastructure.db.legal_repository import PgLegalChunkRepository
+
+    return PgLegalChunkRepository()
