@@ -8,6 +8,7 @@ from langgraph.types import Command, Send, interrupt
 
 from app.schemas.contract import ContractAnalysis, Clause, RiskItem
 from app.core.logging import logger
+from app.domain.errors import NotFoundError
 from app.agents.clause_parser import parse_contract
 from app.agents.risk_flagger import evaluate_clause
 from app.agents.llm_client import DEFAULT_PROVIDER
@@ -403,14 +404,16 @@ async def resume_analysis_review(
 ) -> dict:
     """Resume a paused analysis. `approved=False` marks it rejected; `edits` may carry
     a human-corrected risk list that replaces the AI draft."""
-    thread_id = f"analysis:{review_id}"
+    config = _run_config(f"analysis:{review_id}")
     graph = _get_review_graph()
+    # Unknown, already-finished or foreign review ids all look the same to the caller.
+    state = await graph.aget_state(config)
+    if not state.next or state.values.get("contract_id") != contract_id:
+        raise NotFoundError(f"No pending review found: {review_id}")
     result = await graph.ainvoke(
         Command(resume={"approved": approved, "edits": edits or []}),
-        config=_run_config(thread_id),
+        config=config,
     )
-    if result.get("contract_id") != contract_id:
-        raise RuntimeError(f"review {review_id} belongs to a different contract")
     analysis = result.get("analysis") or ContractAnalysis(contract_id=contract_id)
     risks = result["risks"]
     if result.get("_edited_risks") is not None:

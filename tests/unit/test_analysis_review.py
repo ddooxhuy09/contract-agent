@@ -13,6 +13,7 @@ from langgraph.checkpoint.memory import InMemorySaver
 
 import app.agents.checkpointer as cp
 import app.agents.workflow as wf
+from app.domain.errors import NotFoundError
 from app.schemas.contract import ContractAnalysis, Clause, RiskItem
 
 pytestmark = pytest.mark.usefixtures("stub_deterministic_checks")
@@ -138,3 +139,30 @@ def test_resume_does_not_duplicate_risks_multicause(monkeypatch):
     )
     assert len(result["risks"]) == 3
     assert {r.clause_ref for r in result["risks"]} == {"Điều 1", "Điều 2", "Điều 3"}
+
+
+@pytest.mark.usefixtures("use_inmemory_checkpointer")
+def test_resume_unknown_review_id_raises_not_found():
+    with pytest.raises(NotFoundError):
+        asyncio.run(wf.resume_analysis_review("c-test", "no-such-review", approved=True))
+
+
+@pytest.mark.usefixtures("use_inmemory_checkpointer")
+def test_resume_other_contracts_review_raises_not_found(monkeypatch):
+    monkeypatch.setattr(wf, "parse_contract", lambda text, contract_id, provider: _analysis())
+    monkeypatch.setattr(wf, "evaluate_clause", lambda *a, **k: _risk())
+
+    draft = asyncio.run(wf.run_analysis_workflow_review(_CONTRACT_TEXT, "c-test"))
+    with pytest.raises(NotFoundError):
+        asyncio.run(wf.resume_analysis_review("c-other", draft["review_id"], approved=True))
+
+
+@pytest.mark.usefixtures("use_inmemory_checkpointer")
+def test_resume_twice_raises_not_found(monkeypatch):
+    monkeypatch.setattr(wf, "parse_contract", lambda text, contract_id, provider: _analysis())
+    monkeypatch.setattr(wf, "evaluate_clause", lambda *a, **k: _risk())
+
+    draft = asyncio.run(wf.run_analysis_workflow_review(_CONTRACT_TEXT, "c-test"))
+    asyncio.run(wf.resume_analysis_review("c-test", draft["review_id"], approved=True))
+    with pytest.raises(NotFoundError):
+        asyncio.run(wf.resume_analysis_review("c-test", draft["review_id"], approved=True))
