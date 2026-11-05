@@ -57,7 +57,7 @@ def parse_image(file_path: str) -> str:
 
 def parse_document(file_path: str, file_ext: str) -> str:
     ext = file_ext.lower()
-    if ext in (".docx", ".doc"):
+    if ext == ".docx":
         return parse_docx(file_path)
     elif ext == ".pdf":
         return parse_pdf(file_path)

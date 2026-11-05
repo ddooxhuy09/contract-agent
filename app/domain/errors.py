@@ -16,3 +16,7 @@ class ConflictError(DomainError):
 
 class ValidationError(DomainError):
     pass
+
+
+class AnalysisFailedError(DomainError):
+    """The analysis could not be produced (e.g. no clauses could be extracted)."""

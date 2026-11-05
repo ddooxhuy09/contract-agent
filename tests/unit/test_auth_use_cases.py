@@ -46,7 +46,6 @@ class FakeTokens:
         if not token.startswith("token:"):
             raise AuthError("bad")
         _, uid, email = token.split(":", 2)
-        from uuid import UUID
 
         return {"sub": uid, "email": email}
 

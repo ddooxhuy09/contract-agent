@@ -3,37 +3,64 @@ so the FK contract_chunks_contract_id_fkey is always satisfied.
 """
 
 import asyncio
-from unittest.mock import ANY, MagicMock, call
+from unittest.mock import MagicMock
 from uuid import UUID
 
+import pytest
+
 from app.application.use_cases.contracts import UploadContract
-from app.domain.entities.contract import ContractChunk
 
 
-def test_upload_upserts_contract_before_chunks():
-    contracts = MagicMock()
-    chunks = MagicMock()
-    storage = MagicMock()
-    embedder = MagicMock()
+_USER = UUID("00000000-0000-0000-0000-000000000001")
 
+
+def _parts():
+    contracts, chunks, storage, embedder = MagicMock(), MagicMock(), MagicMock(), MagicMock()
     storage.save_upload.return_value = "test_key"
-    storage.resolve_path.return_value = "/tmp/test.docx"
+    storage.resolve_path.return_value = "/tmp/test"
     embedder.embed_documents.return_value = [[0.1] * 1024]
+    return contracts, chunks, storage, UploadContract(contracts, chunks, storage, embedder)
 
-    uc = UploadContract(contracts, chunks, storage, embedder)
 
-    # write a tiny fake .docx that parse_document can handle — or better,
-    # skip real parsing: UploadContract calls parse_document which opens the
-    # file path. Instead, let the try/except catch the parse error and verify
-    # upsert is still called (FK-safety on failure path too).
+def test_unreadable_file_is_rejected_and_nothing_is_stored():
+    """A file whose text cannot be extracted (e.g. scanned PDF) must not become a contract."""
+    contracts, chunks, storage, uc = _parts()
     storage.resolve_path.return_value = "/tmp/missing.docx"
 
-    result = asyncio.run(uc.execute(b"fake", "test.docx", UUID("00000000-0000-0000-0000-000000000001")))
+    with pytest.raises(ValueError, match="Không trích xuất được văn bản"):
+        asyncio.run(uc.execute(b"fake", "test.docx", _USER))
 
-    # On parse failure: upsert MUST be called (contract row exists with status uploaded).
-    contracts.upsert.assert_called_once()
-    assert result["status"] == "uploaded"
-    assert result["chunk_count"] == 0
+    contracts.upsert.assert_not_called()
+    chunks.replace_for_contract.assert_not_called()
+    storage.delete.assert_called_once_with("test_key")
+
+
+def test_pdf_without_text_layer_is_rejected(monkeypatch):
+    contracts, _, storage, uc = _parts()
+
+    def no_text(path, ext):
+        raise ValueError("No text could be extracted from the PDF file")
+
+    monkeypatch.setattr("app.application.use_cases.contracts.parse_document", no_text)
+    with pytest.raises(ValueError, match="PDF dạng ảnh quét"):
+        asyncio.run(uc.execute(b"%PDF", "scan.pdf", _USER))
+    contracts.upsert.assert_not_called()
+    storage.delete.assert_called_once()
+
+
+def test_doc_format_is_rejected_before_saving():
+    contracts, _, storage, uc = _parts()
+    with pytest.raises(ValueError, match=r"\.doc chưa được hỗ trợ"):
+        asyncio.run(uc.execute(b"fake", "hop-dong.DOC", _USER))
+    storage.save_upload.assert_not_called()
+    contracts.upsert.assert_not_called()
+
+
+def test_unknown_extension_is_rejected():
+    _, _, storage, uc = _parts()
+    with pytest.raises(ValueError, match="chưa được hỗ trợ"):
+        asyncio.run(uc.execute(b"fake", "x.exe", _USER))
+    storage.save_upload.assert_not_called()
 
 
 def test_upload_upsert_before_chunks_on_success(monkeypatch):

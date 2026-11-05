@@ -3,7 +3,7 @@ import { fetchModels } from "../api";
 import AiDisclaimer from "./AiDisclaimer";
 import TermsModal from "./TermsModal";
 
-const ACCEPTED_EXTENSIONS = [".docx", ".doc", ".pdf", ".png", ".jpg", ".jpeg"];
+const ACCEPTED_EXTENSIONS = [".docx", ".pdf", ".png", ".jpg", ".jpeg"];
 
 function isAccepted(file) {
   const name = file.name.toLowerCase();
@@ -34,7 +34,7 @@ export default function UploadScreen({ onSubmit, statusText, error, mainClassNam
   const pickFile = useCallback((file) => {
     if (!file) return;
     if (!isAccepted(file)) {
-      setLocalError("Chỉ hỗ trợ tệp .DOCX, .DOC, .PDF hoặc ảnh (.PNG, .JPG, .JPEG)");
+      setLocalError("Chỉ hỗ trợ tệp .DOCX, .PDF hoặc ảnh (.PNG, .JPG, .JPEG). Tệp .DOC cần chuyển sang .DOCX.");
       return;
     }
     setLocalError(null);
@@ -85,7 +85,7 @@ export default function UploadScreen({ onSubmit, statusText, error, mainClassNam
           <input
             ref={inputRef}
             type="file"
-            accept=".doc,.docx,.pdf,.png,.jpg,.jpeg"
+            accept=".docx,.pdf,.png,.jpg,.jpeg"
             className="hidden"
             onChange={(e) => pickFile(e.target.files?.[0])}
           />
@@ -100,7 +100,7 @@ export default function UploadScreen({ onSubmit, statusText, error, mainClassNam
           ) : (
             <>
               <h2 className="ui-text font-medium text-ink mb-0.5">Kéo thả hoặc chọn tệp</h2>
-              <p className="text-[0.75rem] text-ink-muted">DOCX, DOC, PDF hoặc ảnh (OCR)</p>
+              <p className="text-[0.75rem] text-ink-muted">DOCX, PDF hoặc ảnh (OCR)</p>
             </>
           )}
 

@@ -8,9 +8,10 @@ from langgraph.types import Command, Send, interrupt
 
 from app.schemas.contract import ContractAnalysis, Clause, RiskItem
 from app.core.logging import logger
+from app.domain.errors import AnalysisFailedError
 from app.domain.errors import NotFoundError
 from app.agents.clause_parser import parse_contract
-from app.agents.risk_flagger import evaluate_clause
+from app.agents.risk_flagger import JudgeUnparsable, evaluate_clause
 from app.agents.llm_client import DEFAULT_PROVIDER
 
 # Caps concurrent LLM calls per analysis run so a large contract doesn't fan out
@@ -30,6 +31,8 @@ class AnalysisState(TypedDict):
     provider: str
     analysis: ContractAnalysis | None
     risks: Annotated[List[RiskItem], operator.add]
+    # Clauses the judge could not assess: {"clause_ref", "status"} (unchecked_error | unparsable).
+    unchecked: Annotated[List[dict], operator.add]
     attempts: int
     _extract_failed: bool
     # Human-in-the-loop (review) bookkeeping.
@@ -65,6 +68,7 @@ class _ExtractOutput(TypedDict):
 
 class _EvaluateOutput(TypedDict):
     risks: List[RiskItem]
+    unchecked: List[dict]
 
 
 class _ReviewOutput(TypedDict):
@@ -110,11 +114,45 @@ async def _judge_clause_node(state: ClauseState) -> dict:
                 logger.info("Judge result: contract_id=%s clause=%s severity=ok (no issue)",
                     state["contract_id"], clause.clause_number)
             return {"risks": [risk] if risk else []}
+        except JudgeUnparsable as e:
+            # The judge already retried its own output once; do not burn more calls.
+            logger.error(f"Judge output unusable: contract_id={state['contract_id']} clause_number={clause.clause_number} error={e}")
+            return {"risks": [], "unchecked": [_unchecked(clause, "unparsable")]}
         except Exception as e:
             logger.error(
                 f"Judge failed: contract_id={state['contract_id']} clause_number={clause.clause_number} error={e} (attempt {attempt}/{_MAX_JUDGE_RETRIES + 1})"
             )
-    return {"risks": []}
+    return {"risks": [], "unchecked": [_unchecked(clause, "unchecked_error")]}
+
+
+def _unchecked(clause: Clause, status: str) -> dict:
+    return {"clause_ref": f"Điều {clause.clause_number}", "status": status}
+
+
+def _with_coverage(analysis: ContractAnalysis | None, unchecked: list[dict]) -> ContractAnalysis | None:
+    """Copy of ``analysis`` carrying how many clauses were really checked.
+
+    ``risks == []`` must never be read as "clean" for a clause listed in ``unchecked``.
+    """
+    if analysis is None:
+        return None
+    total = len(analysis.clauses)
+    failed = {u["clause_ref"]: u for u in unchecked or []}
+    checked = max(total - len(failed), 0)
+    coverage = {
+        "tong_so_dieu": total,
+        "da_kiem": checked,
+        "chua_kiem": len(failed),
+        "ty_le_da_kiem": round(checked / total, 4) if total else 0.0,
+        "chua_kiem_chi_tiet": list(failed.values()),
+    }
+    return analysis.model_copy(update={"coverage": coverage})
+
+
+def _require_clauses(analysis: ContractAnalysis | None, contract_id: str) -> ContractAnalysis:
+    if analysis is None or not analysis.clauses:
+        raise AnalysisFailedError(f"no clauses could be extracted: contract_id={contract_id}")
+    return analysis
 
 
 def _deterministic_node(state: AnalysisState) -> dict:
@@ -164,7 +202,9 @@ async def _review_node(state: AnalysisState) -> dict:
     analysis = state.get("analysis")
     payload = {
         "contract_id": state["contract_id"],
-        "draft_analysis": analysis.model_dump() if analysis is not None else None,
+        "draft_analysis": (
+            _with_coverage(analysis, state.get("unchecked") or []).model_dump() if analysis is not None else None
+        ),
         "draft_risks": [r.model_dump() if hasattr(r, "model_dump") else r for r in state.get("risks", [])],
     }
     decision = interrupt(payload)
@@ -329,6 +369,7 @@ def _analysis_input(contract_text: str, contract_id: str, provider: str, review_
         "contract_id": contract_id,
         "provider": provider,
         "risks": [],
+        "unchecked": [],
         "attempts": 0,
         "_extract_failed": False,
         "review_mode": review_mode,
@@ -360,11 +401,12 @@ async def run_analysis_workflow(contract_text: str, contract_id: str, provider: 
         config=_run_config(),
     )
 
-    analysis: ContractAnalysis = result.get("analysis") or ContractAnalysis(contract_id=contract_id)
+    analysis = _with_coverage(_require_clauses(result.get("analysis"), contract_id), result.get("unchecked") or [])
     risks: List[RiskItem] = result["risks"]
     logger.info(
         f"Analysis workflow completed for contract: {contract_id} "
-        f"({len(risks)} risk item(s) across {len(analysis.clauses)} clause(s))"
+        f"({len(risks)} risk item(s) across {len(analysis.clauses)} clause(s), "
+        f"{analysis.coverage['chua_kiem']} unchecked)"
     )
     return analysis, risks
 
@@ -387,6 +429,8 @@ async def run_analysis_workflow_review(
     if not interrupts:
         raise RuntimeError(f"analysis did not pause for review: contract_id={contract_id}")
     payload = interrupts[0].value
+    if not (payload.get("draft_analysis") or {}).get("clauses"):
+        raise AnalysisFailedError(f"no clauses could be extracted: contract_id={contract_id}")
     logger.info(f"Analysis paused for review: contract_id={contract_id} review_id={review_id} risks={len(payload.get('draft_risks', []))}")
     return {
         "review_id": review_id,
@@ -414,7 +458,7 @@ async def resume_analysis_review(
         Command(resume={"approved": approved, "edits": edits or []}),
         config=config,
     )
-    analysis = result.get("analysis") or ContractAnalysis(contract_id=contract_id)
+    analysis = _with_coverage(_require_clauses(result.get("analysis"), contract_id), result.get("unchecked") or [])
     risks = result["risks"]
     if result.get("_edited_risks") is not None:
         risks = [RiskItem(**r) for r in result["_edited_risks"]]

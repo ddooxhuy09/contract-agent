@@ -21,7 +21,7 @@ from app.application.use_cases.contracts import (
     UploadContract,
 )
 from app.core.logging import logger
-from app.domain.errors import AuthError, ConflictError, NotFoundError
+from app.domain.errors import AnalysisFailedError, AuthError, ConflictError, NotFoundError
 from app.infrastructure.container import AppContainer
 from app.schemas.contract import (
     AnalyzeResponse,
@@ -62,6 +62,14 @@ def _http_error(e: Exception) -> HTTPException:
         )
     logger.exception("Unhandled error")
     return HTTPException(status_code=500, detail="Đã xảy ra lỗi nội bộ.")
+
+
+def _analysis_failed(e: AnalysisFailedError) -> HTTPException:
+    logger.error("Analysis failed: %s", e)
+    return HTTPException(
+        status_code=502,
+        detail="Không trích xuất được điều khoản từ hợp đồng. Vui lòng thử lại hoặc kiểm tra nội dung tệp.",
+    )
 
 
 class AnalyzeRequest(BaseModel):
@@ -156,6 +164,8 @@ async def analyze(
         return AnalyzeResponse(**result)
     except NotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e)) from e
+    except AnalysisFailedError as e:
+        raise _analysis_failed(e) from e
     except Exception as e:
         raise _http_error(e) from e
 
@@ -175,6 +185,8 @@ async def resume_analysis(
         return ResumeAnalysisResponse(**result)
     except NotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e)) from e
+    except AnalysisFailedError as e:
+        raise _analysis_failed(e) from e
     except Exception as e:
         raise _http_error(e) from e
 

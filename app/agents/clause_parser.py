@@ -400,11 +400,21 @@ def _extract_clauses(text: str) -> List[Clause]:
 # ============================================================
 
 
+# Input cap for the LLM that fills fields the regexes missed. It does not limit which clauses are
+# split out or judged (that runs on the full text).
+_LLM_GAPFILL_CHAR_LIMIT = 12000
+
+
 def _extract_with_llm(text: str, contract_id: str, provider: str) -> Optional[dict]:
     """LLM fallback for whatever the regexes above missed. Runs once per upload (not
     per-clause), so cost stays bounded even though it's a full-contract call.
     """
-    prompt = EXTRACTION_PROMPT.format(contract_text=text[:12000])
+    if len(text) > _LLM_GAPFILL_CHAR_LIMIT:
+        logger.warning(
+            f"Contract {contract_id}: LLM gap-fill sees only the first {_LLM_GAPFILL_CHAR_LIMIT} of {len(text)} characters "
+            "(regex clause splitting still covers the whole text)"
+        )
+    prompt = EXTRACTION_PROMPT.format(contract_text=text[:_LLM_GAPFILL_CHAR_LIMIT])
     raw = chat_completion(prompt, provider=provider)
     result = parse_json_object(raw)
     if result is None:

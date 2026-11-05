@@ -10,6 +10,13 @@ from app.document.chunker import chunk_by_clause
 from app.document.parser import parse_document
 
 
+_SUPPORTED_EXTENSIONS = {".docx", ".pdf", ".png", ".jpg", ".jpeg"}
+_UNREADABLE_MESSAGE = (
+    "Không trích xuất được văn bản từ tệp. Nếu là PDF dạng ảnh quét hoặc tệp hỏng, "
+    "hãy chuyển sang .docx hoặc PDF có lớp chữ (hoặc tải ảnh .png/.jpg)."
+)
+
+
 class UploadContract:
     def __init__(
         self,
@@ -27,19 +34,26 @@ class UploadContract:
         from pathlib import Path
 
         ext = Path(filename).suffix.lower()
-        allowed = {".doc", ".docx", ".pdf", ".png", ".jpg", ".jpeg"}
-        if ext not in allowed:
-            raise ValueError(f"File type '{ext}' is not supported")
+        if ext == ".doc":
+            raise ValueError("Định dạng .doc chưa được hỗ trợ, vui lòng chuyển sang .docx.")
+        if ext not in _SUPPORTED_EXTENSIONS:
+            raise ValueError(f"Định dạng '{ext}' chưa được hỗ trợ. Chỉ nhận .docx, .pdf, .png, .jpg, .jpeg.")
 
         contract_id = str(uuid.uuid4())
         storage_key = self._storage.save_upload(file_bytes, f"{contract_id}{ext}")
         file_path = self._storage.resolve_path(storage_key)
-        status, message, chunk_count = "uploaded", f"File uploaded successfully: {filename}", 0
-        full_text: str | None = None
         logger.info("Upload started: contract_id=%s user_id=%s", contract_id, user_id)
 
+        # A file we cannot read is rejected outright: nothing is stored, so the user is never
+        # sent on to analyse a contract that has no text.
         try:
             full_text = parse_document(file_path, ext)
+        except Exception as e:
+            logger.error("Upload parse failed: contract_id=%s error=%s", contract_id, e)
+            self._storage.delete(storage_key)
+            raise ValueError(_UNREADABLE_MESSAGE) from e
+
+        try:
             docs = chunk_by_clause(full_text, contract_id)
             texts = [d.page_content for d in docs]
             vectors = self._embedder.embed_documents(texts) if texts else []
@@ -71,23 +85,11 @@ class UploadContract:
                 )
             )
             self._chunks.replace_for_contract(contract_id, entities)
-            logger.info("Upload parsed OK: contract_id=%s chunk_count=%s", contract_id, chunk_count)
         except Exception as e:
-            logger.error("Upload parse failed: contract_id=%s error=%s", contract_id, e)
-            status, message, chunk_count = "uploaded", f"File uploaded but parsing failed: {e}", 0
-            self._contracts.upsert(
-                Contract(
-                    contract_id=contract_id,
-                    user_id=user_id,
-                    filename=filename or "unknown",
-                    file_type=ext,
-                    storage_key=storage_key,
-                    full_text=None,
-                    status=status,
-                    message=message,
-                    chunk_count=0,
-                )
-            )
+            logger.error("Upload indexing failed: contract_id=%s error=%s", contract_id, e)
+            self._storage.delete(storage_key)
+            raise
+        logger.info("Upload parsed OK: contract_id=%s chunk_count=%s", contract_id, chunk_count)
 
         return {
             "contract_id": contract_id,
@@ -97,6 +99,17 @@ class UploadContract:
             "message": message,
             "chunk_count": chunk_count,
         }
+
+
+def _is_complete(analysis: dict | None) -> bool:
+    """A saved analysis may be served from cache only if it covers every clause.
+
+    Missing analyses, ones with no clauses, and ones with unchecked clauses are re-run so a
+    partial result is never presented as final.
+    """
+    if not analysis or not analysis.get("clauses"):
+        return False
+    return not (analysis.get("coverage") or {}).get("chua_kiem")
 
 
 class AnalyzeContract:
@@ -122,7 +135,7 @@ class AnalyzeContract:
         if contract is None:
             raise NotFoundError(f"No documents found for contract: {contract_id}")
 
-        if not force and contract.analysis is not None and not review_mode:
+        if not force and _is_complete(contract.analysis) and not review_mode:
             return {
                 "contract_id": contract_id,
                 "analysis": contract.analysis,

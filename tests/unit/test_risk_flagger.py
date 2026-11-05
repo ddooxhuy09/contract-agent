@@ -124,10 +124,18 @@ def test_unparsable_once_then_ok_retries(env):
     assert risk.issue == "Vấn đề"
 
 
-def test_unparsable_twice_returns_none(env):
+def test_unparsable_twice_raises_not_clean(env):
     env.llm_outputs.extend(["x", "y"])
-    assert rf.evaluate_clause(CLAUSE, contract_id="c1") is None
+    with pytest.raises(rf.JudgeUnparsable):
+        rf.evaluate_clause(CLAUSE, contract_id="c1")
     assert len(env.prompts) == 2
+
+
+@pytest.mark.parametrize("verdict", ['{"issue": "x"}', '{"severity": "high", "issue": "x"}', "[]"])
+def test_verdict_without_valid_severity_is_unusable(env, verdict):
+    env.llm_outputs.extend([verdict, verdict])
+    with pytest.raises(rf.JudgeUnparsable):
+        rf.evaluate_clause(CLAUSE, contract_id="c1")
 
 
 def test_ok_without_issue_returns_none(env):

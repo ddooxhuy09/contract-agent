@@ -33,9 +33,12 @@ export default function AnalysisResult({
   const criticalCount = actionable.filter((r) => r.severity === "critical").length;
   const warningCount = actionable.filter((r) => r.severity === "warning").length;
   const clauseCount = analysis.clauses?.length || 0;
+  // Clauses the judge could not assess are neither "ổn" nor flagged: count them apart.
+  const uncheckedCount = analysis.coverage?.chua_kiem || 0;
   const okClauseCount = Math.max(
     0,
     clauseCount -
+      uncheckedCount -
       new Set(
         actionable.map((r) => String(r.clause_ref || "").replace(/\D/g, "")).filter(Boolean),
       ).size,
@@ -128,6 +131,8 @@ export default function AnalysisResult({
               criticalCount={criticalCount}
               warningCount={warningCount}
               okClauseCount={okClauseCount}
+              uncheckedCount={uncheckedCount}
+              clauseCount={clauseCount}
               topIssues={topIssues}
               onOpenIssue={openIssue}
             />

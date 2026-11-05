@@ -25,7 +25,7 @@ Tra cứu nhanh "sửa gì ở đâu". Tên symbol lấy từ mã hiện tại; 
 | `domain/` | `entities/`, `ports/repositories.py`, `ports/services.py`, `errors.py` |
 | `schemas/contract.py` | Pydantic: request/response, `ContractAnalysis`, `Clause`, `RiskItem`, `LegalCitation` |
 | `core/` | `settings.py` (`Settings`, `get_settings`), `logging.py` (`logger`), `prompts.py`, `dates.py` (`parse_as_of`) |
-| `document/` | `parser.py` (`parse_document`), `chunker.py` (`chunk_by_clause`), `file_handler.py` |
+| `document/` | `parser.py` (`parse_document`), `chunker.py` (`chunk_by_clause`) |
 | `vectorstore/retriever.py` | `retrieve_contract`, `retrieve_legal`, `format_legal_context` (cầu nối agents → search) |
 | `agents/` | Xem bảng dưới |
 | `infrastructure/` | Adapter; xem bảng dưới |

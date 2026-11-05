@@ -4,6 +4,8 @@ export default function ExecutiveSummary({
   criticalCount,
   warningCount,
   okClauseCount,
+  uncheckedCount = 0,
+  clauseCount = 0,
   topIssues,
   onOpenIssue,
 }) {
@@ -18,6 +20,10 @@ export default function ExecutiveSummary({
     accentClass = "bg-stamp";
   } else if (warningCount > 0) {
     verdict = `Không thấy vi phạm nghiêm trọng rõ ràng; còn ${warningCount} điểm cần chú ý trước khi chốt.`;
+    bannerClass = "border-caution/30 bg-caution-soft/50";
+    accentClass = "bg-caution";
+  } else if (uncheckedCount > 0) {
+    verdict = `Chưa thể kết luận: ${uncheckedCount}/${clauseCount} điều khoản chưa kiểm được, hãy phân tích lại.`;
     bannerClass = "border-caution/30 bg-caution-soft/50";
     accentClass = "bg-caution";
   } else {
@@ -37,11 +43,12 @@ export default function ExecutiveSummary({
             {verdict}
           </h2>
 
-          <dl className="mt-3.5 grid grid-cols-3 gap-2 sm:gap-3">
+          <dl className={`mt-3.5 grid gap-2 sm:gap-3 ${uncheckedCount > 0 ? "grid-cols-2 sm:grid-cols-4" : "grid-cols-3"}`}>
             {[
               { label: "Nghiêm trọng", value: criticalCount, color: "text-stamp" },
               { label: "Cần chú ý", value: warningCount, color: "text-caution" },
               { label: "Ổn", value: okClauseCount, color: "text-ok" },
+              ...(uncheckedCount > 0 ? [{ label: "Chưa kiểm", value: uncheckedCount, color: "text-ink-muted" }] : []),
             ].map((item) => (
               <div
                 key={item.label}

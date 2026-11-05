@@ -14,3 +14,6 @@ class LocalObjectStorage:
 
     def resolve_path(self, storage_key: str) -> str:
         return str(get_settings().upload_path / storage_key)
+
+    def delete(self, storage_key: str) -> None:
+        (get_settings().upload_path / storage_key).unlink(missing_ok=True)

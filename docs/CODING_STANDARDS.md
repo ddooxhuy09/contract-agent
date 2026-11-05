@@ -23,7 +23,7 @@ Rút ra từ mã hiện có; áp dụng cho mã mới. Quy tắc chung cho agent
 
 ## Validation
 - Request/response khai báo bằng Pydantic ở `schemas/contract.py` hoặc cạnh route (`AuthRequest`, `ChatRequest`). Đầu ra LLM phải qua `parse_json_object` rồi ép sang model Pydantic, không tin JSON thô.
-- Upload kiểm tra qua `document/file_handler.validate_file`.
+- Upload kiểm tra phần mở rộng và đọc được văn bản ngay trong `UploadContract.execute` (`application/use_cases/contracts.py`); tệp không đọc được bị từ chối (400), không lưu.
 
 ## Async và đồng thời
 - Route và use case là `async`; việc đồng bộ nặng hoặc blocking (LLM, Postgres, embedding) chạy qua `asyncio.to_thread` (xem `workflow.py`).

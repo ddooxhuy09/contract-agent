@@ -15,6 +15,13 @@ from app.schemas.contract import Clause, RiskItem
 from app.vectorstore.retriever import format_legal_context, retrieve_legal
 
 
+_SEVERITIES = ("critical", "warning", "ok")
+
+
+class JudgeUnparsable(Exception):
+    """The judge LLM returned no usable JSON verdict; the clause was NOT checked."""
+
+
 def _resolve_clause_text(
     clause: Clause,
     contract_id: str | None,
@@ -136,23 +143,18 @@ def _no_grounding_risk(clause: Clause, clause_ref: str, clause_text: str) -> Ris
     )
 
 
-def _judge(prompt: str, provider: str, clause_number: str) -> dict | None:
-    """Call the LLM and parse its JSON; retry once when the output is unparsable."""
-    raw = chat_completion(prompt, provider=provider)
-    result = parse_json_object(raw)
-    if result is None:
-        logger.error(
-            "Failed to parse clause risk output for clause %s, retrying once",
-            clause_number,
-        )
-        raw = chat_completion(prompt, provider=provider)
-        result = parse_json_object(raw)
-        if result is None:
-            logger.error(
-                "Clause %s: still unparsable after retry, skipping",
-                clause_number,
-            )
-    return result
+def _judge(prompt: str, provider: str, clause_number: str) -> dict:
+    """Call the LLM and parse its JSON verdict; retry once when the output is unusable.
+
+    Raises ``JudgeUnparsable`` rather than returning an empty verdict, so a clause the
+    judge could not assess is never mistaken for one it found clean.
+    """
+    for attempt in (1, 2):
+        result = parse_json_object(chat_completion(prompt, provider=provider))
+        if result is not None and result.get("severity") in _SEVERITIES:
+            return result
+        logger.error("Unusable clause risk output for clause %s (attempt %s/2)", clause_number, attempt)
+    raise JudgeUnparsable(f"clause {clause_number}: judge output unusable after retry")
 
 
 def _risk_from_judgement(
@@ -165,7 +167,7 @@ def _risk_from_judgement(
     as_of_date: str | None,
 ) -> Optional[RiskItem]:
     """Turn the parsed LLM judgement into a RiskItem (None when the clause is fine)."""
-    severity = result.get("severity", "ok")
+    severity = result["severity"]
     issue = (result.get("issue") or "").strip()
     if severity == "ok" and not issue:
         return None
@@ -269,8 +271,6 @@ def evaluate_clause(
     )
 
     result = _judge(prompt, provider, clause.clause_number)
-    if result is None:
-        return None
     return _risk_from_judgement(
         result,
         clause_ref=clause_ref,

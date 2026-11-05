@@ -103,6 +103,8 @@ class ContractAnalysis(BaseModel):
     severability: Optional[str] = None
     amendments: Optional[str] = None
     clauses: List[Clause] = []
+    # Set by the analysis workflow: how many clauses were actually checked (see workflow._coverage).
+    coverage: Optional[dict] = None
 
 
 class UploadResponse(BaseModel):
