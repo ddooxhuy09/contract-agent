@@ -1,6 +1,6 @@
 # Kế hoạch refactor và nợ kỹ thuật
 
-Trạng thái ngày 2026-11-05. Phần "Đã thực hiện" chỉ liệt kê thay đổi thật sự đã áp dụng vào mã; mọi thứ khác là **chưa làm**. Tất cả thay đổi còn ở working tree, chưa commit.
+Trạng thái ngày 2026-11-05. Phần "Đã thực hiện" chỉ liệt kê thay đổi thật sự đã áp dụng vào mã; mọi thứ khác là **chưa làm**. Các thay đổi đã được commit trên nhánh `refactor/structure-docs` và đã merge (fast-forward) vào `main`.
 
 ## Phương pháp
 - Import vòng và ma trận phụ thuộc giữa các gói: script AST trên toàn bộ `app/` (gồm import trong hàm).
