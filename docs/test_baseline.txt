@@ -1,0 +1,30 @@
+Baseline kiểm thử (tag baseline-tuan-0, commit dd1782f)
+=======================================================
+Môi trường: container api (python:3.12.14, image của docker-compose), cài thêm pytest + pytest-asyncio
+(image dựng trước khi hai gói này vào requirements.txt). tests/ và evaluation/ được mount vào.
+Lệnh: python -m pytest tests -q --ignore=tests/integration -p no:cacheprovider
+
+Kết quả
+-------
+1) Có mount thư mục data/ và evaluation_results/ (giống máy phát triển):
+   191 passed, 1 skipped, 0 failed.
+
+2) Không có data/ và evaluation_results/ (giống clone mới từ git):
+   174 passed, 1 skipped, 17 failed.
+
+Phân loại 17 test fail ở trường hợp 2 (đều là LỖI MÔI TRƯỜNG, không phải lỗi code)
+---------------------------------------------------------------------------------
+Nguyên nhân: các test đọc file nằm trong thư mục bị .gitignore nên không có khi clone mới.
+ - 15 test thiếu data/demo_contracts/CÔNG TY CỔ PHẦN CÔNG NGHỆ TƯƠNG LAI_SAI.md
+     tests/unit/test_labor_completeness.py   (4)
+     tests/unit/test_labor_red_flags.py      (5)
+     tests/unit/test_preamble_citations.py   (4)
+     tests/evaluation/test_contract_qa_cases.py (2)
+ - 2 test thiếu evaluation_results/reports/missing_legal_documents.csv
+     tests/evaluation/test_dataset_qa.py     (2)
+
+Ghi chú
+-------
+ - Con số "13 test fail" trong báo cáo cũ không còn đúng: sau khi sửa, không còn test fail do lỗi code.
+ - tests/integration/ (cần Postgres/Neo4j) không nằm trong lần chạy này; lần chạy trước đó 2 test pass.
+ - Chưa đổi gì để 17 test này tự bỏ qua khi thiếu dữ liệu; xem Ngày 6/7 nếu cần.
