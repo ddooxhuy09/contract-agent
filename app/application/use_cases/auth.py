@@ -5,6 +5,9 @@ from app.domain.ports.repositories import UserRepository
 from app.domain.ports.services import PasswordHasher, TokenService
 
 
+MIN_PASSWORD_LENGTH = 8
+
+
 class RegisterUser:
     def __init__(self, users: UserRepository, hasher: PasswordHasher, tokens: TokenService):
         self._users = users
@@ -12,8 +15,8 @@ class RegisterUser:
         self._tokens = tokens
 
     def execute(self, email: str, password: str) -> dict:
-        if len(password) < 6:
-            raise AuthError("Password must be at least 6 characters")
+        if len(password) < MIN_PASSWORD_LENGTH:
+            raise AuthError(f"Mật khẩu phải có ít nhất {MIN_PASSWORD_LENGTH} ký tự")
         try:
             user = self._users.create(email, self._hasher.hash(password))
         except ConflictError:

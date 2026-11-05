@@ -20,3 +20,19 @@ Ghi lại các quyết định và thay đổi so với kế hoạch gốc. Mố
 - Tệp không đọc được (PDF ảnh quét không có lớp chữ, tệp hỏng) bị từ chối với 400 và xóa tệp đã lưu. Trước đây vẫn lưu hợp đồng trạng thái `uploaded` và giao diện đi tiếp sang bước phân tích rồi báo lỗi khó hiểu. Lỗi khi tạo chunk/embedding/ghi DB giờ lan ra (không nuốt), tệp đã lưu được xóa.
 - Xóa `app/document/file_handler.py`: không nơi nào gọi.
 - **Giới hạn 12.000 ký tự** (`clause_parser._LLM_GAPFILL_CHAR_LIMIT`): chỉ giới hạn đầu vào của LLM bù các trường mà regex bỏ sót; việc tách và đánh giá điều khoản chạy trên toàn văn. Báo cáo cũ nói điều khoản sau 12.000 ký tự không được kiểm là chưa đúng. Đã thêm cảnh báo log khi bị cắt. Chưa đo trên 5–10 hợp đồng: máy chỉ có 1 hợp đồng mẫu thật (3.605 ký tự, dưới ngưỡng) nên cần bạn cung cấp thêm file để đo.
+
+## Ngày 4-5: công cụ gold set và đánh giá (nhãn do người gán)
+- `evaluation/gold/`: mẫu CSV, hướng dẫn gán nhãn, `prepare_units.py` (chọn Điều bằng rút ngẫu nhiên có seed, không nhìn đầu ra hệ thống, ghi băm SHA-256 hợp đồng chứ không ghi tên tệp), `kappa.py` (Cohen's kappa thuần Python, không thêm pandas/sklearn), `make_split.py` (chia dev/test theo hợp đồng), `draw_citations.py` (rút 50 trích dẫn để hai người kiểm 3 tiêu chí). Đổi tên từ `sample_citations.py` vì `.gitignore` có mẫu `sample_*`.
+- `evaluation/run_eval.py`: Precision/Recall/F1/False rate ở mức Điều, bootstrap 95% (1000 lần, mức đơn vị), độ phủ, hash commit; cấu hình `rule_only` (regex luật đỏ + căn cứ pháp lý ở phần mở đầu, không LLM) và `full`. Điều chưa kiểm được tính là dự đoán "không có rủi ro" và báo riêng ở cột độ phủ.
+- Đã chạy thử toàn bộ đường đi (rule_only và full) trên hai hợp đồng mẫu với nhãn giả; kết quả thử không được lưu vào repo và không có ý nghĩa thống kê.
+- Chưa làm: baseline không RAG (kế hoạch cho phép cắt). Chưa có gold set thật nên chưa có số liệu đánh giá.
+- Lưu ý khi chạy: hợp đồng đưa vào nên là `.docx`; tệp `.md` còn dấu `#`/`**` làm bước trích điều khoản không thấy Điều nào (nay báo lỗi 502 thay vì trả kết quả rỗng).
+
+## Ngày 6: bảo mật nhẹ và tài liệu
+- Mật khẩu đăng ký tối thiểu 8 ký tự. Đăng nhập không đặt sàn độ dài để tài khoản cũ (6 ký tự) vẫn vào được. Giao diện hiển thị được lỗi 422.
+- Giới hạn đăng nhập sai: 5 lần mỗi 15 phút theo (địa chỉ, email), trả 429 kèm `Retry-After`. Trong bộ nhớ, một tiến trình; không thêm thư viện mới.
+- Đăng ký trùng email: trả 400 với thông báo chung (trước là 409 "Email already registered"). Giới hạn: không có xác minh email nên người dùng vẫn phân biệt được qua việc đăng ký email mới thành công (200).
+- Giới hạn tải lên 10 MB (`MAX_UPLOAD_MB`), 413. Chỉ đọc tối đa giới hạn+1 byte vào bộ nhớ của ứng dụng; máy chủ vẫn nhận phần thân yêu cầu trước đó (muốn chặn sớm hơn cần cấu hình ở proxy).
+- `requirements.txt` ghim phiên bản theo container đang chạy (Python 3.12); Dockerfile ghim `torch==2.13.0` từ chỉ mục CPU. Chưa dựng lại image sau thay đổi này.
+- README: đổi sang hợp đồng lao động, thêm mục Giới hạn. README trước đó không nêu đa-LLM, `as_of_date` hay HITL trên giao diện, nên không có gì cần xóa ở đó; cần rà các tuyên bố này ở slide và báo cáo (tệp của bạn).
+- Credential mặc định ghi rõ chỉ dành cho phát triển (README), chưa đổi giá trị.

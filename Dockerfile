@@ -16,7 +16,7 @@ COPY requirements.txt .
 RUN pip install --upgrade pip \
     && pip install --no-cache-dir --timeout=300 --retries=10 \
         --index-url https://download.pytorch.org/whl/cpu \
-        torch \
+        torch==2.13.0 \
     && grep -Ev '^(torch|#|$)' requirements.txt > /tmp/requirements-no-torch.txt \
     && pip install --no-cache-dir --timeout=300 --retries=10 \
         -r /tmp/requirements-no-torch.txt \

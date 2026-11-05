@@ -1,6 +1,18 @@
-# ContractLens — AI rà soát hợp đồng tiếng Việt
+# ContractLens — AI rà soát hợp đồng lao động tiếng Việt
 
 Stack: FastAPI · Postgres/pgvector · Neo4j · Gemini · BAAI/bge-m3 · React (Vite)
+
+Phạm vi: hợp đồng lao động. Đây không phải tư vấn pháp lý; xem [`docs/PHAM_VI.md`](docs/PHAM_VI.md).
+
+## Giới hạn
+
+- Chưa đo được độ chính xác của câu trả lời hỏi đáp. Bộ gold set có chuyên gia kiểm đang được xây dựng (`evaluation/gold/`); số đo đầu ra ở `evaluation_results/RESULTS_TUAN.md` kèm cỡ mẫu và khoảng tin cậy. Chưa kiểm chứng trên hợp đồng ngoài bộ dữ liệu.
+- Điều khoản mà mô hình không đánh giá được (lỗi, hết quota, JSON hỏng) được báo là "chưa kiểm" trong `analysis.coverage`, không phải "ổn".
+- Chỉ dùng một nhà cung cấp LLM (Gemini). Tham số `provider` của API chỉ có một giá trị.
+- Không hỗ trợ `.doc` (chuyển sang `.docx`) và PDF dạng ảnh quét không có lớp chữ (tải ảnh `.png/.jpg` để dùng OCR). Giới hạn tải lên 10 MB.
+- Bước duyệt thủ công (`review_mode`, `POST /analyze/resume`) chỉ có ở API, giao diện chưa dùng. API không nhận ngày hiệu lực (`as_of`); ngày áp dụng luật lấy từ ngày ký trong hợp đồng.
+- Hiệu lực luật: văn bản có trạng thái "hết hiệu lực một phần" mặc định bị loại khỏi truy xuất; chỉ Bộ luật Lao động 2019, Nghị định 145/2020 và Luật An toàn vệ sinh lao động 2015 đã được bật lại (xem [`docs/kiem_tra_hieu_luc.md`](docs/kiem_tra_hieu_luc.md)).
+- Mật khẩu và cổng mặc định trong `docker-compose.yml` (`contractlens`, 5433/7688/8010) chỉ dành cho môi trường phát triển; không đưa lên production. Giới hạn đăng nhập sai chỉ có tác dụng trong một tiến trình.
 
 ## Chạy bằng Docker
 
@@ -78,7 +90,7 @@ cd frontend && npm install && npm run dev      # lint: npm run lint, build: npm 
 | Bắt buộc | `GEMINI_API_KEY`, `JWT_SECRET` (khác giá trị mặc định, nếu không app không khởi động) |
 | LLM / embedding | `GEMINI_MODEL`, `EMBEDDING_MODEL`, `EMBEDDING_DIM`, `EMBEDDING_DEVICE`, `EMBEDDING_TRUST_REMOTE_CODE`, `EMBEDDING_NORMALIZE`, `EMBEDDING_MAX_SEQ_LENGTH`, `HF_TOKEN` |
 | Database | `DATABASE_URL`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `POSTGRES_PORT`, `NEO4J_URI`, `NEO4J_USER`, `NEO4J_PASSWORD` |
-| Auth / API | `JWT_ALGORITHM`, `JWT_EXPIRE_MINUTES`, `CORS_ORIGINS`, `UPLOAD_DIR`, `API_PORT`, `FRONTEND_PORT`, `VITE_API_BASE_URL` |
+| Auth / API | `JWT_ALGORITHM`, `JWT_EXPIRE_MINUTES`, `CORS_ORIGINS`, `UPLOAD_DIR`, `MAX_UPLOAD_MB`, `LOGIN_MAX_FAILURES`, `LOGIN_WINDOW_SECONDS`, `API_PORT`, `FRONTEND_PORT`, `VITE_API_BASE_URL` |
 | Retrieval | `MAX_CHUNK_SIZE`, `CHUNK_OVERLAP`, `TOP_K_RETRIEVAL`, `SIMILARITY_THRESHOLD`, `LEGAL_EXPAND_BACKEND` |
 | Tùy chọn | `LANGCHAIN_API_KEY`, `LANGCHAIN_PROJECT`, `COMPOSE_PROJECT_NAME`, `DEV_RELOAD` |
 
@@ -89,17 +101,19 @@ python -m pytest tests -q --ignore=tests/integration   # unit + fixture QA, khô
 python -m pytest tests/integration -q                  # cần stack đang chạy
 ```
 
-Test unit không cần Postgres/Neo4j/Gemini (hiện 188 passed, 1 skipped).
+Test unit không cần Postgres/Neo4j/Gemini (hiện 227 passed, 1 skipped khi có thư mục `data/` và `evaluation_results/`; clone mới không có hai thư mục này sẽ fail 17 test đọc dữ liệu, xem `docs/test_baseline.txt`).
 
 ## Tài liệu
 
 | Cần gì | Đọc |
 |---|---|
-| Quy tắc cho coding agent | [`AGENTS.md`](AGENTS.md) (công cụ: [`CLAUDE.md`](CLAUDE.md)) |
+| Quy tắc cho coding agent | [`AGENTS.md`](AGENTS.md) |
 | Hiểu hệ thống | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
 | Tìm nơi cần sửa | [`docs/CODEBASE_MAP.md`](docs/CODEBASE_MAP.md) |
 | Quy ước code | [`docs/CODING_STANDARDS.md`](docs/CODING_STANDARDS.md) |
 | Nợ kỹ thuật, thay đổi đã làm | [`docs/REFACTOR_PLAN.md`](docs/REFACTOR_PLAN.md) |
+| Phạm vi, hiệu lực luật, nhật ký thay đổi | [`docs/PHAM_VI.md`](docs/PHAM_VI.md), [`docs/kiem_tra_hieu_luc.md`](docs/kiem_tra_hieu_luc.md), [`docs/NHAT_KY_THAY_DOI.md`](docs/NHAT_KY_THAY_DOI.md) |
+| Gold set và đánh giá | [`evaluation/README.md`](evaluation/README.md), [`evaluation/gold/`](evaluation/gold/) |
 | Sơ đồ (Mermaid) | [`docs/diagrams/`](docs/diagrams/) |
 | Tài liệu thiết kế khác | [`docs/README.md`](docs/README.md) |
 

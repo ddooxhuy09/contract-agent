@@ -54,11 +54,11 @@ def test_register_and_login():
     users = FakeUsers()
     hasher = FakeHasher()
     tokens = FakeTokens()
-    reg = RegisterUser(users, hasher, tokens).execute("a@b.com", "secret1")
+    reg = RegisterUser(users, hasher, tokens).execute("a@b.com", "secret123")
     assert reg["email"] == "a@b.com"
     assert reg["access_token"].startswith("token:")
 
-    login = LoginUser(users, hasher, tokens).execute("a@b.com", "secret1")
+    login = LoginUser(users, hasher, tokens).execute("a@b.com", "secret123")
     assert login["user_id"] == reg["user_id"]
 
     with pytest.raises(AuthError):

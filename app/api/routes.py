@@ -3,13 +3,14 @@ from uuid import UUID
 
 import psycopg
 import psycopg2
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, Request, UploadFile
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, EmailStr, Field
 
 from app.agents.llm_client import DEFAULT_PROVIDER, get_providers, resolve_provider
 from app.api.deps import get_container_dep, get_current_user_id
-from app.application.use_cases.auth import LoginUser, RegisterUser
+from app.api.login_throttle import LoginThrottle
+from app.application.use_cases.auth import MIN_PASSWORD_LENGTH, LoginUser, RegisterUser
 from app.application.use_cases.contracts import (
     AnalyzeContract,
     ChatWithContract,
@@ -21,6 +22,7 @@ from app.application.use_cases.contracts import (
     UploadContract,
 )
 from app.core.logging import logger
+from app.core.settings import get_settings
 from app.domain.errors import AnalysisFailedError, AuthError, ConflictError, NotFoundError
 from app.infrastructure.container import AppContainer
 from app.schemas.contract import (
@@ -86,9 +88,16 @@ class ChatRequest(BaseModel):
     checkpoint_id: Optional[str] = None
 
 
-class AuthRequest(BaseModel):
+class LoginRequest(BaseModel):
     email: EmailStr
-    password: str = Field(min_length=6)
+    password: str = Field(min_length=1)  # no length floor: accounts made under the old 6-char rule must still log in
+
+
+class RegisterRequest(LoginRequest):
+    password: str = Field(min_length=MIN_PASSWORD_LENGTH)
+
+
+_login_throttle = LoginThrottle(get_settings().login_max_failures, get_settings().login_window_seconds)
 
 
 @router.get("/models")
@@ -104,25 +113,40 @@ async def list_models():
 
 
 @router.post("/auth/register")
-async def register(req: AuthRequest, container: AppContainer = Depends(get_container_dep)):
+async def register(req: RegisterRequest, container: AppContainer = Depends(get_container_dep)):
     try:
         return RegisterUser(container.users, container.password_hasher, container.tokens).execute(
             req.email, req.password
         )
     except ConflictError as e:
-        raise HTTPException(status_code=409, detail=str(e)) from e
+        # Same wording as any other refusal: do not confirm which emails already have an account.
+        logger.info("Register refused: %s", e)
+        raise HTTPException(
+            status_code=400, detail="Không thể đăng ký với thông tin này. Nếu đã có tài khoản, hãy đăng nhập."
+        ) from e
     except AuthError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
 
 
 @router.post("/auth/login")
-async def login(req: AuthRequest, container: AppContainer = Depends(get_container_dep)):
+async def login(req: LoginRequest, request: Request, container: AppContainer = Depends(get_container_dep)):
+    key = f"{request.client.host if request.client else '?'}|{req.email.lower()}"
+    wait = _login_throttle.retry_after(key)
+    if wait:
+        raise HTTPException(
+            status_code=429,
+            detail="Đăng nhập sai quá nhiều lần. Vui lòng thử lại sau ít phút.",
+            headers={"Retry-After": str(wait)},
+        )
     try:
-        return LoginUser(container.users, container.password_hasher, container.tokens).execute(
+        result = LoginUser(container.users, container.password_hasher, container.tokens).execute(
             req.email, req.password
         )
     except AuthError as e:
+        _login_throttle.record_failure(key)
         raise HTTPException(status_code=401, detail=str(e)) from e
+    _login_throttle.reset(key)
+    return result
 
 
 @router.post("/upload", response_model=UploadResponse)
@@ -131,8 +155,11 @@ async def upload(
     user_id: UUID = Depends(get_current_user_id),
     container: AppContainer = Depends(get_container_dep),
 ):
+    max_mb = get_settings().max_upload_mb
+    data = await file.read(max_mb * 1024 * 1024 + 1)  # never pull more than the cap into memory
+    if len(data) > max_mb * 1024 * 1024:
+        raise HTTPException(status_code=413, detail=f"Tệp quá lớn (tối đa {max_mb} MB).")
     try:
-        data = await file.read()
         result = await UploadContract(
             container.contracts,
             container.contract_chunks,

@@ -10,7 +10,7 @@ Tra cứu nhanh "sửa gì ở đâu". Tên symbol lấy từ mã hiện tại; 
 | `frontend/` | React/Vite (`src/App.jsx`, `api.js`, `AuthContext.jsx`, `components/`, `lib/`, `content/`) |
 | `scripts/` | Nạp corpus, backfill, restore DB, audit, crawl (`crawl_vbpl/`) |
 | `tests/` | `unit/`, `integration/test_api.py`, `evaluation/`, `fixtures/` |
-| `evaluation/` | Mã benchmark (đề bài ở `benchmark/v04/`); xem `evaluation/README.md` |
+| `evaluation/` | Mã benchmark (đề bài ở `benchmark/v04/`), gold set theo điều khoản (`gold/`) và `run_eval.py`; xem `evaluation/README.md` |
 | `evaluation_results/`, `data/` | Kết quả và dữ liệu cục bộ; không đọc/index |
 | `schema.sql`, `schema.cypher` | Schema Postgres, Neo4j (nạp lúc khởi động) |
 | `docker-compose.yml`, `Dockerfile`, `docker/` | Triển khai (postgres, neo4j, api, frontend) |
@@ -20,7 +20,7 @@ Tra cứu nhanh "sửa gì ở đâu". Tên symbol lấy từ mã hiện tại; 
 | Gói | Nội dung chính |
 |---|---|
 | `main.py` | `lifespan` (khởi tạo), `health`, CORS, mount `frontend/dist` |
-| `api/` | `routes.py` (12 route dưới `/api/v1`), `deps.py` (`get_current_user_id`, `get_container_dep`) |
+| `api/` | `routes.py` (12 route dưới `/api/v1`), `deps.py` (`get_current_user_id`, `get_container_dep`), `login_throttle.py` (giới hạn đăng nhập sai, trong bộ nhớ) |
 | `application/use_cases/` | `auth.py` (`RegisterUser`, `LoginUser`), `contracts.py` (`UploadContract`, `AnalyzeContract`, `ResumeAnalysisReview`, `ListContracts`, `ChatWithContract`, `GetChatHistory`, `GetChatStates`, `RewindChat`), `legal_ingest.py` (`IngestLegalDocument`) |
 | `domain/` | `entities/`, `ports/repositories.py`, `ports/services.py`, `errors.py` |
 | `schemas/contract.py` | Pydantic: request/response, `ContractAnalysis`, `Clause`, `RiskItem`, `LegalCitation` |

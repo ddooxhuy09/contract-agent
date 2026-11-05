@@ -13,6 +13,13 @@ function loadStored() {
   }
 }
 
+// FastAPI sends `detail` as a string for our errors but as a list of objects for validation (422).
+function errorMessage(data, res) {
+  if (typeof data.detail === "string") return data.detail;
+  if (Array.isArray(data.detail)) return "Thông tin không hợp lệ: kiểm tra email và mật khẩu (tối thiểu 8 ký tự).";
+  return res.statusText;
+}
+
 export function AuthProvider({ children }) {
   const [auth, setAuth] = useState(() => loadStored());
   // Stored auth is read synchronously above, so there is nothing to wait for.
@@ -32,7 +39,7 @@ export function AuthProvider({ children }) {
     });
     if (!res.ok) {
       const data = await res.json().catch(() => ({}));
-      return { error: { message: data.detail || res.statusText } };
+      return { error: { message: errorMessage(data, res) } };
     }
     const data = await res.json();
     persist({
@@ -50,7 +57,7 @@ export function AuthProvider({ children }) {
     });
     if (!res.ok) {
       const data = await res.json().catch(() => ({}));
-      return { error: { message: data.detail || res.statusText } };
+      return { error: { message: errorMessage(data, res) } };
     }
     const data = await res.json();
     persist({

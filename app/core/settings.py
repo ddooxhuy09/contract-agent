@@ -35,6 +35,9 @@ class Settings(BaseSettings):
     jwt_expire_minutes: int = 60 * 24 * 7
 
     upload_dir: str = "data/uploads"
+    max_upload_mb: int = 10
+    login_max_failures: int = 5
+    login_window_seconds: int = 15 * 60
     # Comma-separated allowlist of frontend origins (no trailing slash). Local
     # Vite dev server by default; extend for deployed frontend domains.
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
