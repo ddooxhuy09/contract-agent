@@ -1,0 +1,24 @@
+Kiểm thử cuối (sau Ngày 6)
+==========================
+Môi trường: container api (python:3.12.14) + pytest, tests/ và evaluation/ mount vào.
+Lệnh: python -m pytest tests -q --ignore=tests/integration -p no:cacheprovider
+Lint: ruff check app tests evaluation scripts --select F -> sạch. Frontend: npm run lint và npm run build sạch.
+
+Có mount data/ và evaluation_results/ (như máy phát triển):
+  227 passed, 1 skipped, 0 failed          (baseline: 191 passed, 1 skipped)
+
+Không có hai thư mục này (như clone mới từ git):
+  210 passed, 1 skipped, 17 failed         (baseline: 174 passed, 1 skipped, 17 failed)
+  17 test fail vẫn là cùng nhóm lỗi môi trường đã phân loại ở docs/test_baseline.txt
+  (thiếu data/demo_contracts/... và evaluation_results/reports/missing_legal_documents.csv).
+  Chưa sửa để các test này tự bỏ qua khi thiếu dữ liệu.
+
+Không chạy trong lần này: tests/integration (cần stack đang chạy; lần trước 2 passed).
+
+Kiểm tra trên stack Docker thật (API :8010) trong tuần:
+  - Cổng duyệt/rewind: 14/14 bước pass; resume review_id sai trả 404.
+  - /analyze force: coverage 5/5; cache phục vụ lại. Upload .doc, PDF không có chữ, .exe: 400, không tạo hợp đồng.
+  - Đăng ký mật khẩu 7 ký tự: 422; trùng email: 400 thông báo chung; 5 lần đăng nhập sai rồi 429 kèm Retry-After;
+    upload 11 MB: 413; đăng nhập đúng vẫn 200.
+  - Chưa kiểm tra trên stack thật: ép judge lỗi, extract thất bại trả 502 (chỉ có test đơn vị);
+    dựng lại image Docker sau khi ghim requirements/torch.
