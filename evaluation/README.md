@@ -111,3 +111,19 @@ docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docke
 ```
 
 The copied volumes are retained for review/reproduction. No production volume should be removed or restored by this tooling.
+
+## Gold set and clause-level evaluation (one-week plan)
+
+Separate from the v04 benchmark above: a small human-labelled set of Điều units from anonymised labor contracts. Guide: `gold/HUONG_DAN_GAN_NHAN.md`.
+
+```text
+python -m evaluation.gold.prepare_units --input-dir <contracts>   # draw units, write annotation_template.csv + contracts_manifest.json
+python -m evaluation.gold.kappa --write                           # KAPPA.md after both annotators finish
+python -m evaluation.gold.make_split                              # dev/test split by contract -> split.json
+python -m evaluation.run_eval --split test --config rule_only --contracts-dir <contracts>
+python -m evaluation.run_eval --split test --config full --contracts-dir <contracts> [--estimate]
+python -m evaluation.run_eval --split test --report               # evaluation_results/RESULTS_TUAN.md
+python -m evaluation.gold.draw_citations --result evaluation_results/<date>_test_full.json
+```
+
+Run the `rule_only` and `full` configs inside the api container (the host cannot reach the database with the default settings), with `evaluation/` mounted and `EVAL_COMMIT` set. Give contracts as `.docx`; markdown files must have `#` and `**` stripped or clause extraction finds no Điều. The `full` config caches finished contracts and never caches a contract with unchecked clauses, so a quota-limited run can be repeated the next day.
