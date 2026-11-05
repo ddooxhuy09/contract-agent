@@ -119,3 +119,22 @@ def test_citation_sampling_and_summary():
     s = summarize(picked)
     assert s["n"] == 2 and s["ann1_ton_tai"] == {"n": 1, "rate": 1.0}
     assert s["agreed_ton_tai"]["rate"] == 1.0 and s["agreed_ho_tro"]["n"] == 0
+
+
+from evaluation.gold.adopt_ai import adopt
+
+
+def test_adopt_copies_ai_draft_except_listed_units_and_never_overwrites():
+    rows = [
+        {"unit_id": "A", "ai_co_rui_ro": "1", "ai_luat_dau_ra": "no_bhxh", "ai_dieu_luat_dung": "Điều 168", "ann1_co_rui_ro": ""},
+        {"unit_id": "B", "ai_co_rui_ro": "0", "ai_luat_dau_ra": "", "ai_dieu_luat_dung": "", "ann1_co_rui_ro": ""},
+    ]
+    assert adopt(rows, 1, {"B"}) == 1
+    assert rows[0]["ann1_co_rui_ro"] == "1" and rows[0]["ann1_luat_dau_ra"] == "no_bhxh"
+    assert rows[1]["ann1_co_rui_ro"] == ""  # left for the human
+    with pytest.raises(SystemExit):
+        adopt(rows, 1, set())  # A already labelled by ann1
+
+
+def test_ai_labels_are_never_used_as_gold():
+    assert gold_label({"ai_co_rui_ro": "1", "ann1_co_rui_ro": "", "ann2_co_rui_ro": "", "expert_final": ""}) is None

@@ -1,1 +1,71 @@
-﻿unit_id,contract_id,dieu,noi_dung,ann1_co_rui_ro,ann1_luat_dau_ra,ann1_dieu_luat_dung,ann2_co_rui_ro,ann2_luat_dau_ra,ann2_dieu_luat_dung,expert_final,ghi_chu
+﻿unit_id,contract_id,dieu,noi_dung,ann1_co_rui_ro,ann1_luat_dau_ra,ann1_dieu_luat_dung,ann2_co_rui_ro,ann2_luat_dau_ra,ann2_dieu_luat_dung,expert_final,ghi_chu,ai_co_rui_ro,ai_luat_dau_ra,ai_dieu_luat_dung,ai_ghi_chu
+HDLD01_D02,HDLD01,2,"Điều 2. Loại và thời hạn hợp đồng
+Đây là hợp đồng lao động xác định thời hạn 24 tháng, có hiệu lực từ ngày 03 tháng 02 năm 2025 đến hết ngày 02 tháng 02 năm 2027. Khi hợp đồng hết hạn mà Bên B vẫn tiếp tục làm việc thì hai bên ký hợp đồng mới theo quy định của pháp luật lao động.",,,,,,,,,0,,,"Hợp đồng xác định thời hạn 24 tháng, nằm trong khoảng 12-36 tháng (Điều 20)."
+HDLD01_D03,HDLD01,3,"Điều 3. Thử việc
+1. Thời gian thử việc là 90 ngày kể từ ngày 03 tháng 02 năm 2025.
+2. Tiền lương trong thời gian thử việc bằng 70% mức lương chính thức nêu tại Điều 4.
+3. Trong thời gian thử việc, Bên A có quyền chấm dứt thử việc nếu Bên B không đạt yêu cầu mà không cần báo trước.",,,,,,,,,1,khac,"Điều 25, Điều 26 BLLĐ 2019",Thử việc 90 ngày vượt mức 60 ngày cho công việc cần trình độ cao đẳng trở lên (đại học); lương thử việc 70% thấp hơn mức tối thiểu 85%.
+HDLD01_D04,HDLD01,4,"Điều 4. Tiền lương và hình thức trả lương
+1. Mức lương chính thức là 18.000.000 đồng mỗi tháng, đã bao gồm phụ cấp ăn trưa và đi lại.
+2. Lương được trả bằng chuyển khoản vào ngày 05 hằng tháng cho tháng liền trước. Bên A thông báo bảng kê trả lương cho Bên B trong mỗi kỳ trả lương.
+3. Bên A chỉ khấu trừ các khoản thuế thu nhập cá nhân và bảo hiểm do Bên B đóng theo quy định pháp luật.",,,,,,,,,0,,,"Lương trả đúng kỳ, chỉ khấu trừ thuế và bảo hiểm theo luật."
+HDLD01_D05,HDLD01,5,"Điều 5. Thời giờ làm việc và làm thêm giờ
+1. Thời giờ làm việc là 08 giờ mỗi ngày, từ thứ Hai đến thứ Sáu, nghỉ trưa 01 giờ 30 phút; nghỉ thứ Bảy và Chủ nhật.
+2. Khi dự án cần bàn giao gấp, Bên B có nghĩa vụ làm thêm giờ theo yêu cầu của Bên A và không được từ chối.
+3. Tiền lương của thời gian làm thêm giờ đã được tính gộp vào mức lương tại Điều 4, Bên A không trả thêm khoản nào khác cho thời gian này.",,,,,,,,,1,ot_unpaid,"Điều 107 khoản 2 điểm a, Điều 98 khoản 1 BLLĐ 2019","Bắt buộc làm thêm giờ, không được từ chối (làm thêm phải được người lao động đồng ý) và tuyên bố không trả thêm tiền làm thêm giờ (phải ít nhất 150%)."
+HDLD01_D10,HDLD01,10,"Điều 10. Điều khoản chung
+Hợp đồng được lập thành hai bản có giá trị pháp lý như nhau, mỗi bên giữ một bản. Những nội dung không được ghi trong hợp đồng này được thực hiện theo quy định của pháp luật lao động hiện hành.
+ĐẠI DIỆN BÊN A                                  BÊN B",,,,,,,,,0,,,"Điều khoản chung, không có nội dung bất lợi."
+HDLD02_D02,HDLD02,2,"Điều 2. Loại và thời hạn hợp đồng
+Hợp đồng lao động xác định thời hạn 12 tháng, bắt đầu từ ngày 24 tháng 03 năm 2025 và kết thúc vào ngày 23 tháng 03 năm 2026.",,,,,,,,,0,,,"Hợp đồng 12 tháng, hợp lệ."
+HDLD02_D03,HDLD02,3,"Điều 3. Thử việc
+Bên B thử việc trong 30 ngày kể từ ngày bắt đầu làm việc, hưởng 85% mức lương chính thức. Hết thời gian thử việc, Bên A thông báo kết quả cho Bên B; nếu đạt yêu cầu thì tiếp tục thực hiện hợp đồng này.",,,,,,,,,0,,,Thử việc 30 ngày cho trình độ trung cấp (tối đa 30 ngày) và lương 85% (đạt mức tối thiểu).
+HDLD02_D05,HDLD02,5,"Điều 5. Thời giờ làm việc
+Cửa hàng mở cửa từ 08 giờ đến 21 giờ. Bên B làm việc 10 giờ mỗi ngày, 6 ngày mỗi tuần, tổng cộng 60 giờ mỗi tuần, nghỉ ngày Chủ nhật. Thời gian này là thời giờ làm việc bình thường nên Bên A không tính là giờ làm thêm.",,,,,,,,,1,khac,Điều 105 khoản 1 BLLĐ 2019,60 giờ mỗi tuần vượt giới hạn 48 giờ mỗi tuần; còn khẳng định không tính là giờ làm thêm nên không trả lương làm thêm.
+HDLD02_D06,HDLD02,6,"Điều 6. Bảo hiểm
+Hai bên thỏa thuận Bên A không đóng bảo hiểm xã hội và bảo hiểm y tế cho Bên B. Thay vào đó mỗi tháng Bên A trả thêm cho Bên B 500.000 đồng, Bên B tự chịu trách nhiệm về bảo hiểm của mình.",,,,,,,,,1,no_bhxh,Điều 168 BLLĐ 2019; Luật Bảo hiểm xã hội hiện hành tại ngày ký 10/03/2025,"Thỏa thuận không đóng BHXH, BHYT bắt buộc, thay bằng khoản tiền hằng tháng; đây là nghĩa vụ bắt buộc, không thể thỏa thuận bỏ."
+HDLD02_D07,HDLD02,7,"Điều 7. Quản lý giấy tờ
+Để quản lý nhân sự, Bên A giữ bản chính căn cước công dân và bản chính bằng tốt nghiệp của Bên B trong suốt thời gian làm việc, và chỉ trả lại khi Bên B chấm dứt hợp đồng và hoàn tất bàn giao tài sản.",,,,,,,,,1,retain_id_papers,Điều 17 khoản 1 BLLĐ 2019,Người sử dụng lao động giữ bản chính căn cước và văn bằng của người lao động.
+HDLD03_D01,HDLD03,1,"Điều 1. Công việc
+Bên B đảm nhận vị trí Kế toán tổng hợp, chịu trách nhiệm lập sổ sách, báo cáo thuế và báo cáo tài chính của Bên A, báo cáo trực tiếp cho Kế toán trưởng.",,,,,,,,,0,,,"Mô tả công việc, không có nội dung bất lợi."
+HDLD03_D02,HDLD03,2,"Điều 2. Thời hạn hợp đồng
+Hợp đồng lao động xác định thời hạn 36 tháng kể từ ngày 05 tháng 05 năm 2025.",,,,,,,,,0,,,"Hợp đồng xác định thời hạn 36 tháng, nằm trong giới hạn."
+HDLD03_D03,HDLD03,3,"Điều 3. Thử việc
+Bên B thử việc 45 ngày, hưởng lương bằng 90% mức lương chính thức. Trong thời gian thử việc mỗi bên có quyền hủy bỏ thỏa thuận thử việc mà không cần báo trước và không phải bồi thường.",,,,,,,,,0,,,"Thử việc 45 ngày (dưới 60 ngày cho trình độ đại học), lương 90% (trên mức tối thiểu 85%)."
+HDLD03_D06,HDLD03,6,"Điều 6. Bảo hiểm và chế độ
+Bên A đóng bảo hiểm xã hội, bảo hiểm y tế, bảo hiểm thất nghiệp cho Bên B theo quy định của pháp luật. Bên A không giữ bản chính giấy tờ tùy thân hay văn bằng của Bên B, chỉ lưu bản sao có xác nhận trong hồ sơ nhân sự.",,,,,,,,,0,,,"Đóng đủ BHXH, BHYT, BHTN; nêu không giữ bản chính giấy tờ, chỉ lưu bản sao (đúng quy định)."
+HDLD03_D08,HDLD03,8,"Điều 8. Chấm dứt hợp đồng
+Bên A có quyền chấm dứt hợp đồng này nếu Bên B kết hôn hoặc mang thai trong 24 tháng đầu kể từ ngày hợp đồng có hiệu lực, vì lý do công việc kế toán cần người ổn định. Việc chấm dứt có hiệu lực kể từ ngày Bên A gửi thông báo bằng văn bản.",,,,,,,,,1,terminate_pregnancy,Điều 137 khoản 3 BLLĐ 2019,Cho phép chấm dứt hợp đồng vì lý do kết hôn hoặc mang thai; người sử dụng lao động không được sa thải hoặc đơn phương chấm dứt vì lý do này.
+HDLD04_D01,HDLD04,1,"Điều 1. Công việc
+Bên B làm công nhân may tại Xưởng số 2 của Bên A, vận hành máy may công nghiệp theo định mức sản phẩm mà tổ trưởng giao hằng ngày.",,,,,,,,,0,,,"Mô tả công việc, không có nội dung bất lợi."
+HDLD04_D05,HDLD04,5,"Điều 5. Thời giờ làm việc và làm thêm giờ
+1. Thời giờ làm việc bình thường là 8 giờ mỗi ngày, 6 ngày mỗi tuần, tổng không quá 48 giờ mỗi tuần.
+2. Khi có đơn hàng gấp, Bên B làm thêm giờ tối đa 80 giờ mỗi tháng và 400 giờ mỗi năm. Tiền lương làm thêm giờ được trả bằng 100% mức lương giờ bình thường, kể cả làm vào ngày nghỉ hằng tuần và ngày lễ.",,,,,,,,,1,khac,"Điều 107 khoản 2 điểm b, c; Điều 98 khoản 1 BLLĐ 2019",Làm thêm tối đa 80 giờ/tháng và 400 giờ/năm vượt giới hạn 40 giờ/tháng và 200 giờ/năm (300 giờ chỉ cho ngành đặc thù); trả 100% thấp hơn mức tối thiểu 150%/200%/300%.
+HDLD04_D06,HDLD04,6,"Điều 6. Bảo hiểm và phúc lợi
+Bên A đóng bảo hiểm xã hội, bảo hiểm y tế và bảo hiểm thất nghiệp cho Bên B từ tháng đầu tiên ký hợp đồng chính thức, theo mức lương ghi tại Điều 4 và quy định hiện hành. Bên B được nghỉ hằng năm 12 ngày làm việc hưởng nguyên lương.",,,,,,,,,0,,,"Đóng đủ bảo hiểm, nghỉ phép 12 ngày đúng quy định."
+HDLD04_D07,HDLD04,7,"Điều 7. Kỷ luật và xử phạt
+Bên B vi phạm nội quy sẽ bị phạt tiền theo bảng sau, khoản phạt được trừ trực tiếp vào lương của tháng vi phạm: đi muộn 50.000 đồng mỗi lần; làm hỏng sản phẩm 200.000 đồng mỗi lần; nghỉ không phép 300.000 đồng mỗi ngày.",,,,,,,,,1,fine_deduct_wage,Điều 127 khoản 2 BLLĐ 2019,Phạt tiền và trừ trực tiếp vào lương thay cho việc xử lý kỷ luật lao động; hành vi bị nghiêm cấm.
+HDLD04_D10,HDLD04,10,"Điều 10. Điều khoản chung
+Hợp đồng lập thành hai bản có giá trị như nhau, mỗi bên giữ một bản. Các vấn đề khác thực hiện theo nội quy lao động của Bên A và quy định của pháp luật lao động.
+ĐẠI DIỆN BÊN A                                  BÊN B",,,,,,,,,0,,,"Điều khoản chung, không có nội dung bất lợi."
+HDLD05_D02,HDLD05,2,"Điều 2. Loại và thời hạn hợp đồng
+Đây là hợp đồng lao động xác định thời hạn 12 tháng, từ ngày 01 tháng 06 năm 2025. Hợp đồng này là hợp đồng xác định thời hạn thứ ba mà hai bên ký liên tiếp; hai hợp đồng trước đã hết hạn lần lượt vào các năm 2023 và 2024 và Bên B vẫn làm việc liên tục.",,,,,,,,,1,khac,Điều 20 khoản 2 điểm c BLLĐ 2019,Ký hợp đồng xác định thời hạn lần thứ ba liên tiếp; sau một lần ký thêm hợp đồng xác định thời hạn thì phải chuyển sang không xác định thời hạn.
+HDLD05_D05,HDLD05,5,"Điều 5. Thời giờ làm việc và làm thêm giờ
+Thời giờ làm việc là 8 giờ mỗi ngày từ thứ Hai đến thứ Sáu. Việc làm thêm giờ chỉ được thực hiện khi Bên B đồng ý, không quá 50% số giờ làm việc bình thường trong một ngày và không quá 40 giờ trong một tháng. Giờ làm thêm được trả ít nhất 150% lương giờ vào ngày thường, 200% vào ngày nghỉ hằng tuần và 300% vào ngày lễ, tết, chưa kể tiền lương của ngày đó.",,,,,,,,,0,,,"Làm thêm có sự đồng ý, trong giới hạn 50% giờ bình thường mỗi ngày và 40 giờ mỗi tháng, lương làm thêm 150%/200%/300%: đúng quy định."
+HDLD05_D08,HDLD05,8,"Điều 8. Nghỉ việc trước thời hạn
+Nếu Bên B nghỉ việc trước khi hợp đồng hết hạn, Bên A không thanh toán lương và hoa hồng của tháng cuối cùng, đồng thời giữ lại hoa hồng chưa quyết toán của các tháng trước đó như khoản bồi thường cho việc nghỉ việc sớm.",,,,,,,,,1,forfeit_wage_quit,"Điều 48 khoản 1, Điều 94 BLLĐ 2019","Không thanh toán lương và hoa hồng tháng cuối, giữ lại hoa hồng làm bồi thường; hai bên phải thanh toán đầy đủ trong 14 ngày làm việc."
+HDLD05_D09,HDLD05,9,"Điều 9. Giải quyết tranh chấp
+Mọi tranh chấp giữa hai bên do Hội đồng nội bộ của Bên A quyết định và quyết định này có hiệu lực cuối cùng. Bên B không được khởi kiện hoặc yêu cầu bất kỳ cơ quan, tổ chức nào giải quyết tranh chấp lao động với Bên A.",,,,,,,,,1,ban_lawsuit,Điều 187 BLLĐ 2019,"Hội đồng nội bộ quyết định cuối cùng và cấm khởi kiện; tranh chấp lao động cá nhân thuộc thẩm quyền hòa giải viên, Hội đồng trọng tài lao động và Tòa án."
+HDLD05_D10,HDLD05,10,"Điều 10. Điều khoản chung
+Hợp đồng lập thành hai bản có giá trị như nhau. Những vấn đề chưa ghi trong hợp đồng được thực hiện theo quy định của pháp luật lao động và nội quy lao động của Bên A.
+ĐẠI DIỆN BÊN A                                  BÊN B",,,,,,,,,0,,,"Điều khoản chung, không có nội dung bất lợi."
+HDLD06_D01,HDLD06,1,"Điều 1. Công việc và địa điểm làm việc
+Bên B làm Chuyên viên hành chính nhân sự tại văn phòng Bên A ở quận Ninh Kiều, thành phố Cần Thơ, phụ trách tuyển dụng, chấm công, hồ sơ nhân sự và các công việc hành chính khác do Trưởng phòng phân công.",,,,,,,,,0,,,"Mô tả công việc, địa điểm, không có nội dung bất lợi."
+HDLD06_D03,HDLD06,3,"Điều 3. Thử việc
+Hai bên đã ký hợp đồng thử việc 45 ngày từ ngày 12 tháng 05 năm 2025, sau đó Bên A đề nghị Bên B thử việc thêm 60 ngày nữa cho cùng vị trí công việc này kể từ ngày 01 tháng 07 năm 2025. Bên B được trả lương thử việc bằng 85% mức lương chính thức trong cả hai giai đoạn.",,,,,,,,,1,khac,Điều 25 BLLĐ 2019,"Thử việc 45 ngày rồi thử thêm 60 ngày cho cùng một công việc: tổng 105 ngày vượt 60 ngày cho trình độ đại học, và chỉ được thử việc một lần đối với một công việc (cụm từ này chưa tìm thấy trong kho luật, cần mở văn bản gốc để kiểm)."
+HDLD06_D04,HDLD06,4,"Điều 4. Tiền lương
+Mức lương chính thức là 14.000.000 đồng mỗi tháng. Bên A trả lương bằng chuyển khoản vào ngày 05 hằng tháng và có bảng kê chi tiết các khoản thu nhập, khấu trừ gửi cho Bên B.",,,,,,,,,0,,,"Lương trả đúng kỳ, có bảng kê."
+HDLD06_D07,HDLD06,7,"Điều 7. Kỷ luật lao động
+Bên A chỉ xử lý kỷ luật theo nội quy lao động đã đăng ký, bằng các hình thức khiển trách, kéo dài thời hạn nâng lương, cách chức hoặc sa thải theo quy định của Bộ luật Lao động. Bên A không phạt tiền, không cắt lương thay cho việc xử lý kỷ luật và chỉ yêu cầu bồi thường thiệt hại theo đúng trình tự và mức mà pháp luật cho phép.",,,,,,,,,0,,,"Nêu rõ không phạt tiền, không cắt lương; hình thức kỷ luật đúng luật (Điều 127 bị tuân thủ)."
+HDLD06_D08,HDLD06,8,"Điều 8. Chấm dứt hợp đồng
+Bên B có quyền đơn phương chấm dứt hợp đồng không xác định thời hạn nếu báo trước ít nhất 45 ngày. Bên A chỉ được đơn phương chấm dứt hợp đồng trong các trường hợp luật định, phải báo trước 45 ngày và bảo đảm quyền lợi của Bên B theo pháp luật, nhất là đối với lao động nữ đang mang thai hoặc nuôi con dưới 12 tháng tuổi.",,,,,,,,,0,,,"Báo trước 45 ngày cho hợp đồng không xác định thời hạn đúng Điều 35 khoản 1; có bảo vệ lao động nữ mang thai, nuôi con dưới 12 tháng."

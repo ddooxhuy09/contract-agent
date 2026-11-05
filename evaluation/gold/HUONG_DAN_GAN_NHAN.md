@@ -2,6 +2,11 @@
 
 Mỗi dòng trong `annotation_template.csv` là **một Điều** của một hợp đồng lao động đã ẩn danh. Hai người gán nhãn làm **độc lập**, không xem nhãn của nhau; chuyên gia chốt các dòng bất đồng.
 
+## Hợp đồng và nhãn nháp của AI
+- Sáu hợp đồng trong `contracts/` là **hợp đồng tổng hợp** do AI viết, cài sẵn các lỗi và có điều khoản đối chứng đúng luật. Chúng không phải hợp đồng thật; mọi bảng số liệu phải ghi rõ điều này.
+- Các cột `ai_*` là nhãn nháp của AI kèm lý do và điều luật (đã đối chiếu với nội dung trong kho luật, **chưa** đối chiếu văn bản gốc). Chúng chỉ để tham khảo: hệ thống không bao giờ dùng `ai_*` làm gold.
+- Người kiểm đọc từng Điều, đối chiếu văn bản gốc, rồi mới nhận nhãn bằng `python -m evaluation.gold.adopt_ai --annotator 1 --confirm-reviewed --except <các đơn vị không đồng ý>`; các đơn vị đó tự gán. Người gán thứ hai vẫn phải gán độc lập, không xem `ai_*` của người kia.
+
 ## Cách điền
 | Cột | Giá trị |
 |---|---|
@@ -9,6 +14,7 @@ Mỗi dòng trong `annotation_template.csv` là **một Điều** của một h�
 | `annN_luat_dau_ra` | Nếu `1`: mã luật đỏ phù hợp trong bảng dưới, hoặc `khac` nếu là rủi ro thật nhưng không thuộc 7 mục. Nếu `0`: để trống. Nhiều mục thì ngăn bằng dấu `;`. |
 | `annN_dieu_luat_dung` | Điều luật bạn dùng làm căn cứ, ví dụ `Điều 98 BLLĐ 2019`. Chỉ ghi điều bạn đã mở văn bản gốc kiểm tra. Để trống nếu `0`. |
 | `expert_final` | Chuyên gia ghi `0`, `1`, hoặc `1:<mã luật>` cho các dòng bất đồng và một mẫu ngẫu nhiên khoảng 5 dòng đồng thuận. |
+| `ai_*` | Nhãn nháp của AI (xem trên). Không sửa tay; không dùng làm gold. |
 | `ghi_chu` | Lý do khi không chắc. Đánh dấu `?` ở đầu ghi chú nếu bạn thật sự không chắc; không đoán. |
 
 ## Định nghĩa "có rủi ro" cho 7 luật đỏ

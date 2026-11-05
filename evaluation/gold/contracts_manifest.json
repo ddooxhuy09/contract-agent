@@ -1,0 +1,20 @@
+{
+  "HDLD01": {
+    "sha256": "b55316cd3441206e23cca678c1c00ec3eaeff088242304b96f7b57c3b0419154"
+  },
+  "HDLD02": {
+    "sha256": "bcfdedd460ff20cc06015abccae245a78cfc1ac3dc9f7056326b40df24d326a9"
+  },
+  "HDLD03": {
+    "sha256": "4009e0b69159bca66eda29d0b73e88cf1cd89112de2df816e317c0e9d21bb21a"
+  },
+  "HDLD04": {
+    "sha256": "65a502f341a531d67cff9e3b84ee3cefcbe7ed6bb1091d79b83b5443621c2690"
+  },
+  "HDLD05": {
+    "sha256": "d91e608e91ba6f2d6827bf33b516be3fa83f20c80e150295b8e7f2d529578bd7"
+  },
+  "HDLD06": {
+    "sha256": "4c6456356bef2e6344fc3036fe842d4d70509b360a51b5a5cdd80b0f0d1bb86d"
+  }
+}

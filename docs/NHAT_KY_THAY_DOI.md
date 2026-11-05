@@ -36,3 +36,9 @@ Ghi lại các quyết định và thay đổi so với kế hoạch gốc. Mố
 - `requirements.txt` ghim phiên bản theo container đang chạy (Python 3.12); Dockerfile ghim `torch==2.13.0` từ chỉ mục CPU. Chưa dựng lại image sau thay đổi này.
 - README: đổi sang hợp đồng lao động, thêm mục Giới hạn. README trước đó không nêu đa-LLM, `as_of_date` hay HITL trên giao diện, nên không có gì cần xóa ở đó; cần rà các tuyên bố này ở slide và báo cáo (tệp của bạn).
 - Credential mặc định ghi rõ chỉ dành cho phát triển (README), chưa đổi giá trị.
+
+## Gold set nháp do AI soạn (cần người xác minh)
+- Bạn không có 6-8 hợp đồng lao động thật đã ẩn danh nên AI viết 6 hợp đồng tổng hợp (`evaluation/gold/contracts/`, 10 Điều mỗi hợp đồng, 4 Điều cài lỗi và các Điều đối chứng đúng luật; hợp đồng 06 chỉ có 2 lỗi). Không dùng hợp đồng mẫu `data/demo_contracts` và `CTR-LAB-01` vì mã đã được chỉnh theo chúng.
+- 30 đơn vị rút ngẫu nhiên có seed (`prepare_units`), trong đó 12 có rủi ro theo thiết kế (40%). Nhãn nháp ở cột `ai_*` kèm điều luật; các điều luật chính (Điều 17, 20, 25, 35, 48, 98, 105, 107, 113, 127, 137, 168, 187) đã đối chiếu với nội dung trong kho luật của hệ thống. Riêng cụm "chỉ được thử việc một lần đối với một công việc" (Điều 25) không tìm thấy trong kho, cần mở văn bản gốc.
+- Các cột người gán (`ann1_*`, `ann2_*`, `expert_final`) để trống có chủ đích: nhãn AI không phải gold. Điền hộ cả hai người gán và chuyên gia sẽ cho kappa giả. Người xác minh dùng `adopt_ai` sau khi đã kiểm từng đơn vị.
+- Hệ quả cho báo cáo: đây là bộ kiểm thử tổng hợp, đo xem hệ thống có phát hiện đúng các lỗi đã biết không; không phải độ chính xác trên hợp đồng thật. Lỗi viết ngay theo mẫu quen thuộc của 7 luật đỏ nên kết quả `rule_only` có thể cao hơn thực tế.

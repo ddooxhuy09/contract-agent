@@ -16,6 +16,8 @@ COLUMNS = (
     "ann1_co_rui_ro", "ann1_luat_dau_ra", "ann1_dieu_luat_dung",
     "ann2_co_rui_ro", "ann2_luat_dau_ra", "ann2_dieu_luat_dung",
     "expert_final", "ghi_chu",
+    # AI draft labels: reference only, to be verified by a person. Never read as gold (see run_eval.gold_label).
+    "ai_co_rui_ro", "ai_luat_dau_ra", "ai_dieu_luat_dung", "ai_ghi_chu",
 )
 
 
