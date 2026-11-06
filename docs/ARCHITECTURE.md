@@ -58,7 +58,7 @@ Sơ đồ: [`diagrams/analysis-workflow.md`](diagrams/analysis-workflow.md), [`d
 ## Luồng dữ liệu
 
 - Ghi: file upload → `data/uploads`; chunk và vector hợp đồng → Postgres; corpus pháp luật → Postgres (`legal_documents`, hierarchy, `legal_embeddings`, quan hệ) và cây Neo4j qua `IngestLegalDocument`.
-- Đọc: vector search (Postgres, RRF ở `vector/rrf.py`) lấy seed → mở rộng cây qua Neo4j và/hoặc ltree Postgres (`LEGAL_EXPAND_BACKEND`) → hydrate theo path (`legal_graph_rag.py`).
+- Đọc: vector search (Postgres, RRF ở `vector/rrf.py`) lấy seed; với câu hỏi về lao động còn tìm riêng trong Bộ luật Lao động 2019 và Nghị định 145/2020 (`RAG_LABOR_SCOPE`, role `labor_scope`) → mở rộng cây qua Neo4j và/hoặc ltree Postgres (`LEGAL_EXPAND_BACKEND`) → hydrate theo path (`legal_graph_rag.py`).
 - Hiệu lực: `agents/effectivity.py` dùng `status_flag` 0..5 cùng `eff_from`/`eff_to` để quyết định có được trích dẫn theo ngày hợp đồng hay không.
 
 Sơ đồ: [`diagrams/system-architecture.md`](diagrams/system-architecture.md), [`diagrams/module-dependencies.md`](diagrams/module-dependencies.md).

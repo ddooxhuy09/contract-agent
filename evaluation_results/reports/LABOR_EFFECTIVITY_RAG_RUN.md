@@ -61,3 +61,21 @@ TEMP-014 chỉ giải quyết được nếu bổ sung truy xuất văn bản đ
 Kết luận: với `simple` trên kho 1 triệu chunk, các cách đơn giản vừa chậm hơn nhiều mức 1-2 giây của cả lượt truy xuất vừa không đưa Điều 17 lên. Muốn nhánh từ khóa hữu ích cần tách từ tiếng Việt và xếp hạng kiểu BM25 có trọng số tần suất (thư viện tách từ hoặc phần mở rộng BM25 cho Postgres), tức là thêm phụ thuộc và hạ tầng. Chưa làm.
 
 Vì vậy chưa đổi `_fts_search`. Các hướng rẻ hơn và có bằng chứng từ trace là đa dạng hóa hạt giống và thêm một lượt tìm trong phạm vi luật lao động (MIX-002 đứng hạng 2-3 khi tìm riêng trong Bộ luật Lao động). MIX-008 là vấn đề diễn đạt ("CCCD bản chính" so với "giấy tờ tùy thân", Điều 17 hạng 28 ngay cả trong Bộ luật Lao động), cần mở rộng từ đồng nghĩa hoặc viết lại truy vấn bằng LLM, và dễ bị chỉnh riêng cho bộ 34 ca.
+
+## Thử hai cách truy xuất: đa dạng hóa hạt giống và lượt tìm phạm vi luật lao động
+Cùng bản sao cách ly (cờ hiệu lực đã sửa), cùng benchmark v04 (34 ca nháp), bốn lần chạy RAG-only, mỗi lần chỉ đổi cờ. Lần đối chứng A cho đúng 0,230 như lần trước, nên kết quả lặp lại được.
+
+| Cấu hình | Exact provision recall | Recall@5 | MRR | Precision@5 | Cross-doc coverage |
+|---|---:|---:|---:|---:|---:|
+| A. Đối chứng (không bật gì) | 0,230 | 0,230 | 0,275 | 0,076 | 0,373 |
+| B. Chỉ đa dạng hóa hạt giống (tối đa 2 chunk mỗi văn bản) | 0,221 | 0,221 | 0,265 | 0,071 | 0,373 |
+| C. Chỉ lượt tìm phạm vi luật lao động | 0,299 | 0,270 | 0,300 | 0,088 | 0,446 |
+| D. Cả hai | 0,289 | 0,260 | 0,287 | 0,082 | 0,446 |
+
+- **B bị loại:** không ca nào tốt lên, một ca xấu đi (TEMP-005, 0,33 xuống 0). Đã gỡ khỏi mã.
+- **C được giữ, bật mặc định (`RAG_LABOR_SCOPE`):** ba ca tốt lên (MIX-001 và MIX-002 từ 0 lên 1, MIX-004 từ 0 lên 0,33), không ca nào xấu đi, distractor vẫn 0. MIX-002 (đặt cọc) nay có Điều 17 khoản 1 và 2 ở hạng 4-5 trên kho đang dùng.
+- Lượt tìm phụ chạy khi truy vấn có "lao động" hoặc "HĐLĐ" (hoặc loại hợp đồng lao động): tìm thêm tối đa 3 chunk trong Bộ luật Lao động 2019 và Nghị định 145/2020, xếp ngay sau các hạt giống.
+- **Độ trễ:** trung bình mỗi lượt truy xuất 1,48 giây (A), 2,53 giây (C), 2,03 giây sau khi dùng lại vector embedding của cùng truy vấn giữa các lần tìm (cấu hình cuối, kết quả y hệt C: recall@5 0,270, MRR 0,300). Tăng khoảng 0,55 giây.
+- MIX-008 (diễn đạt "CCCD bản chính") vẫn 0; ca TEMP-014 vẫn cần truy xuất luật đã hết hiệu lực (xem trên).
+
+Giới hạn: n = 34 ca với nhãn nháp, bộ này nhiều ca lao động nên lợi ích không suy ra được cho câu hỏi ngoài lao động (lượt tìm phụ không chạy với chúng). Chênh lệch là 3 ca, chưa đủ để kết luận có ý nghĩa thống kê. Thư mục chạy nằm cục bộ trong `evaluation_results/runs/rag_abl_*` và `rag_final_laborscope_20261105` (không đưa vào git).

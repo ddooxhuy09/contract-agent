@@ -57,6 +57,9 @@ class _FakeSearch:
     def search(self, query, k, min_score=None, doc_type_hint=None, doc_ids=None):
         return list(self._seeds)[:k]
 
+    def search_in_doc_nums(self, query, doc_nums, k=3):
+        return []
+
     def search_in_docs(self, query, doc_ids, k=2):
         return [
             RetrievedChunk(
@@ -268,6 +271,9 @@ class _SeqSearch:
     def search_in_docs(self, query, doc_ids, k=2, **kwargs):
         return []
 
+    def search_in_doc_nums(self, query, doc_nums, k=3, **kwargs):
+        return []
+
 
 def _chunk(path, title, doc_id="D"):
     return RetrievedChunk(
@@ -301,3 +307,75 @@ def test_max_total_limits_result_count():
     seeds = [_chunk(f"P.{i}", "Bộ luật Lao động") for i in range(4)]
     rag = LegalGraphRag(_SeqSearch(seeds), _FakeChunks(), None)
     assert len(rag.retrieve_for_clause("t", "s", max_total=2)) == 2
+
+
+# --- seed diversification and labor-scope pass ---------------------------------------------
+
+import pytest
+
+from app.core.settings import get_settings
+
+
+class _ScopedSearch(_SeqSearch):
+    def __init__(self, *results, scoped=()):
+        super().__init__(*results)
+        self.scoped_calls = []
+        self._scoped = list(scoped)
+
+    def search_in_doc_nums(self, query, doc_nums, k=3, **kwargs):
+        self.scoped_calls.append((query, tuple(doc_nums), k))
+        return list(self._scoped)
+
+
+@pytest.fixture
+def flags():
+    s = get_settings()
+    old = s.rag_labor_scope
+    yield s
+    s.rag_labor_scope = old
+
+
+def test_labor_scope_pass_adds_labor_code_chunk_after_seeds(flags):
+    flags.rag_labor_scope = True
+    seed = _chunk("OTHER.1", "Nghị định bảo hiểm", doc_id="X")
+    labor = _chunk("139264.D17.K2", "Bộ luật Lao động", doc_id="139264")
+    search = _ScopedSearch([seed], scoped=[labor])
+    hits = LegalGraphRag(search, _FakeChunks(), None).retrieve_for_clause(
+        "Đặt cọc", "người lao động nộp tiền bảo đảm", max_total=10
+    )
+    assert [h.metadata["path"] for h in hits] == ["OTHER.1", "139264.D17.K2"]
+    assert hits[1].metadata["role"] == "labor_scope"
+    assert search.scoped_calls and "45/2019/QH14" in search.scoped_calls[0][1]
+
+
+def test_labor_scope_pass_is_skipped_for_non_labor_queries_and_when_disabled(flags):
+    seed = _chunk("OTHER.1", "Luật Dân sự", doc_id="X")
+    flags.rag_labor_scope = True
+    search = _ScopedSearch([seed], scoped=[_chunk("L.1", "Bộ luật Lao động", doc_id="L")])
+    LegalGraphRag(search, _FakeChunks(), None).retrieve_for_clause("Đặt cọc dân sự", "hợp đồng thuê nhà")
+    assert search.scoped_calls == []
+
+    flags.rag_labor_scope = False
+    search = _ScopedSearch([seed], scoped=[_chunk("L.1", "Bộ luật Lao động", doc_id="L")])
+    LegalGraphRag(search, _FakeChunks(), None).retrieve_for_clause("Làm thêm giờ", "người lao động", contract_type="lao động")
+    assert search.scoped_calls == []
+
+
+def test_query_embedding_is_reused_across_searches_of_one_retrieval():
+    from app.infrastructure.vector.pg_search import PgLegalVectorSearch
+
+    class CountingEmbedder:
+        calls = 0
+
+        def embed_query(self, q):
+            CountingEmbedder.calls += 1
+            return [0.1, 0.2]
+
+    s = PgLegalVectorSearch(CountingEmbedder())
+    assert s._embed_query("q1") == s._embed_query("q1") == [0.1, 0.2]
+    assert CountingEmbedder.calls == 1
+    s._embed_query("q2")
+    assert CountingEmbedder.calls == 2
+    for i in range(PgLegalVectorSearch._EMBED_CACHE_SIZE + 5):  # bounded
+        s._embed_query(f"x{i}")
+    assert len(s._query_vectors) <= PgLegalVectorSearch._EMBED_CACHE_SIZE

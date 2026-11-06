@@ -84,8 +84,21 @@ class PgContractVectorSearch:
 
 
 class PgLegalVectorSearch:
+    _EMBED_CACHE_SIZE = 64
+
     def __init__(self, embedder: Embedder):
         self._embedder = embedder
+        self._query_vectors: dict[str, list[float]] = {}
+
+    def _embed_query(self, query: str):
+        """One retrieval searches the same query several times (seeds, related documents, labor scope)."""
+        vec = self._query_vectors.get(query)
+        if vec is None:
+            vec = self._embedder.embed_query(query)
+            if len(self._query_vectors) >= self._EMBED_CACHE_SIZE:
+                self._query_vectors.pop(next(iter(self._query_vectors)))
+            self._query_vectors[query] = vec
+        return vec
 
     def search(
         self,
@@ -94,18 +107,19 @@ class PgLegalVectorSearch:
         min_score: float | None = None,
         doc_type_hint: str | None = None,
         doc_ids: list[str] | None = None,
+        doc_nums: list[str] | None = None,
     ) -> list[RetrievedChunk]:
         settings = get_settings()
         threshold = settings.similarity_threshold if min_score is None else min_score
         fetch_n = max(k * 4, 12)
         try:
-            vector_hits = self._vector_search(query, fetch_n, doc_type_hint, doc_ids)
+            vector_hits = self._vector_search(query, fetch_n, doc_type_hint, doc_ids, doc_nums)
         except Exception as e:
             # Typical: dump embeddings dim ≠ query dim (768 vs 1024) or embedder not ready.
             logger.error("Legal vector search failed (falling back to FTS): %s", e)
             vector_hits = []
         try:
-            fts_hits = self._fts_search(query, fetch_n, doc_type_hint, doc_ids)
+            fts_hits = self._fts_search(query, fetch_n, doc_type_hint, doc_ids, doc_nums)
         except Exception as e:
             logger.error("Legal FTS search failed: %s", e)
             fts_hits = []
@@ -143,7 +157,15 @@ class PgLegalVectorSearch:
             return []
         return self.search(query, k=k, min_score=0.0, doc_ids=doc_ids)
 
-    def _base_where(self, doc_type_hint: str | None, doc_ids: list[str] | None) -> tuple[str, list]:
+    def search_in_doc_nums(self, query: str, doc_nums: list[str], k: int = 3) -> list[RetrievedChunk]:
+        """Search only inside the instruments with these document numbers (e.g. '45/2019/QH14')."""
+        if not doc_nums:
+            return []
+        return self.search(query, k=k, min_score=0.0, doc_nums=doc_nums)
+
+    def _base_where(
+        self, doc_type_hint: str | None, doc_ids: list[str] | None, doc_nums: list[str] | None = None
+    ) -> tuple[str, list]:
         # Chunk still effective (hierarchy cache) + document not fully expired.
         clauses = [
             "c.is_effective",
@@ -155,6 +177,9 @@ class PgLegalVectorSearch:
         if doc_ids:
             clauses.append("c.doc_id = ANY(%s)")
             params.append(doc_ids)
+        if doc_nums:
+            clauses.append("d.doc_num = ANY(%s)")
+            params.append(doc_nums)
         if doc_type_hint:
             clauses.append("(d.doc_type ILIKE %s OR d.title ILIKE %s OR d.doc_num ILIKE %s)")
             hint = f"%{doc_type_hint}%"
@@ -167,9 +192,10 @@ class PgLegalVectorSearch:
         n: int,
         doc_type_hint: str | None,
         doc_ids: list[str] | None,
+        doc_nums: list[str] | None = None,
     ) -> list[RetrievedChunk]:
-        vector = self._embedder.embed_query(query)
-        where_sql, params = self._base_where(doc_type_hint, doc_ids)
+        vector = self._embed_query(query)
+        where_sql, params = self._base_where(doc_type_hint, doc_ids, doc_nums)
         with get_db() as conn:
             with conn.cursor() as cur:
                 cur.execute(
@@ -196,11 +222,12 @@ class PgLegalVectorSearch:
         n: int,
         doc_type_hint: str | None,
         doc_ids: list[str] | None,
+        doc_nums: list[str] | None = None,
     ) -> list[RetrievedChunk]:
         q = (query or "").strip()
         if not q:
             return []
-        where_sql, params = self._base_where(doc_type_hint, doc_ids)
+        where_sql, params = self._base_where(doc_type_hint, doc_ids, doc_nums)
         # FTS does not require embedding but we keep same filters for consistency
         where_sql = where_sql.replace("c.embedding IS NOT NULL", "c.tsv IS NOT NULL")
         with get_db() as conn:

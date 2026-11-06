@@ -1,5 +1,6 @@
 """GraphRAG: hybrid PG seeds → expand (Neo4j and/or PG ltree) → hydrate by path."""
 
+import re
 from datetime import date
 
 from app.core.dates import parse_as_of
@@ -26,6 +27,11 @@ _EMPTY_EXPAND = {
     "related_docs": [],
     "repealed_by_docs": [],
 }
+
+
+# Core labor-law instruments searched on their own for labor queries (document numbers, not ids).
+LABOR_CORE_DOC_NUMS = ("45/2019/QH14", "145/2020/NĐ-CP")
+_LABOR_QUERY = re.compile(r"lao\s*động|hđlđ", re.IGNORECASE)
 
 
 def _chunk_key(meta: dict) -> str | None:
@@ -261,6 +267,15 @@ class LegalGraphRag:
                     superseding_added += 1
         return repealed, superseding_added
 
+    def _add_labor_scope(self, by_path: dict[str, RetrievedChunk], query: str) -> None:
+        """Global seeds can be crowded out by unrelated decrees; also search inside the core labor-law
+        instruments so the Labor Code can surface for a labor question."""
+        for h in self._search.search_in_doc_nums(query, list(LABOR_CORE_DOC_NUMS), k=3):
+            key = _chunk_key(h.metadata)
+            if key and key not in by_path:
+                h.metadata["role"] = "labor_scope"
+                by_path[key] = h
+
     def retrieve_for_clause(
         self,
         title: str | None,
@@ -289,6 +304,8 @@ class LegalGraphRag:
         superseding_added = 0
         if by_path:
             repealed, superseding_added = self._expand_seeds(by_path, query)
+        if settings.rag_labor_scope and (_LABOR_QUERY.search(query) or _LABOR_QUERY.search(contract_type or "")):
+            self._add_labor_scope(by_path, query)
 
         ordered = self._order_for_prompt(list(by_path.values()), as_of=as_of_date)
         if ctx:
@@ -440,13 +457,13 @@ class LegalGraphRag:
         merged; the authority hierarchy only orders hydrated context chunks,
         which have no retrieval score of their own.
         """
-        role_rank = {"seed": 0, "sibling": 1, "ancestor": 2, "related": 3, "superseding": 0}
+        role_rank = {"seed": 0, "labor_scope": 0.5, "sibling": 1, "ancestor": 2, "related": 3, "superseding": 0}
         positions = {id(chunk): index for index, chunk in enumerate(chunks)}
 
         def key(chunk: RetrievedChunk):
             priority, status_rank, year_rank = LegalGraphRag._validity_key(chunk, as_of)
             rank = role_rank.get(chunk.metadata.get("role") or "seed", 9)
-            if rank == 0:
+            if rank < 1:  # seeds and labor-scope hits keep the order they were retrieved in
                 return (priority, rank, positions[id(chunk)], 0.0, 0, 0, 0.0)
             return (
                 priority,

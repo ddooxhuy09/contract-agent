@@ -50,6 +50,9 @@ class Settings(BaseSettings):
     schema_sql_path: str = "schema.sql"
     schema_cypher_path: str = "schema.cypher"
 
+    # Retrieval experiments (see evaluation_results/reports/LABOR_EFFECTIVITY_RAG_RUN.md).
+    rag_labor_scope: bool = True  # extra search inside the core labor-law instruments for labor queries
+
     # GraphRAG hierarchy expand: neo4j | postgres | both (merge, prefer neo4j then fill gaps)
     legal_expand_backend: str = "neo4j"
 

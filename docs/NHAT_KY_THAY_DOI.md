@@ -42,3 +42,10 @@ Ghi lại các quyết định và thay đổi so với kế hoạch gốc. Mố
 - 30 đơn vị rút ngẫu nhiên có seed (`prepare_units`), trong đó 12 có rủi ro theo thiết kế (40%). Nhãn nháp ở cột `ai_*` kèm điều luật; các điều luật chính (Điều 17, 20, 25, 35, 48, 98, 105, 107, 113, 127, 137, 168, 187) đã đối chiếu với nội dung trong kho luật của hệ thống. Riêng cụm "chỉ được thử việc một lần đối với một công việc" (Điều 25) không tìm thấy trong kho, cần mở văn bản gốc.
 - Các cột người gán (`ann1_*`, `ann2_*`, `expert_final`) để trống có chủ đích: nhãn AI không phải gold. Điền hộ cả hai người gán và chuyên gia sẽ cho kappa giả. Người xác minh dùng `adopt_ai` sau khi đã kiểm từng đơn vị.
 - Hệ quả cho báo cáo: đây là bộ kiểm thử tổng hợp, đo xem hệ thống có phát hiện đúng các lỗi đã biết không; không phải độ chính xác trên hợp đồng thật. Lỗi viết ngay theo mẫu quen thuộc của 7 luật đỏ nên kết quả `rule_only` có thể cao hơn thực tế.
+
+## Truy xuất: lượt tìm phạm vi luật lao động
+- Thêm lượt tìm riêng trong Bộ luật Lao động 2019 và Nghị định 145/2020 khi truy vấn là về lao động (`RAG_LABOR_SCOPE`, mặc định bật; `PgLegalVectorSearch.search_in_doc_nums`). Đo trên bản sao cách ly: exact provision recall 0,230 lên 0,299, recall@5 0,230 lên 0,270, ba ca tốt lên, không ca nào xấu đi; số liệu và cách đọc ở `evaluation_results/reports/LABOR_EFFECTIVITY_RAG_RUN.md`.
+- Đa dạng hóa hạt giống đã thử và gỡ bỏ vì không có lợi (một ca xấu đi, không ca nào tốt lên).
+- Dùng lại vector embedding của cùng một truy vấn trong một lượt truy xuất (bộ nhớ đệm 64 mục), giảm độ trễ của lượt tìm phụ.
+- Nhánh từ khóa FTS vẫn chưa sửa (ba cách thử đều thất bại; xem báo cáo trên).
+- Lưu ý khi đọc kết quả: đây là thay đổi truy xuất, cần chạy lại các đánh giá sau này trên cấu hình mới; số liệu RAG-only cũ (0,201) là trước hai thay đổi (sửa cờ hiệu lực và lượt tìm phụ).

@@ -42,9 +42,12 @@ class LegalVectorSearch(Protocol):
         min_score: float | None = None,
         doc_type_hint: str | None = None,
         doc_ids: list[str] | None = None,
+        doc_nums: list[str] | None = None,
     ) -> list[RetrievedChunk]: ...
 
     def search_in_docs(self, query: str, doc_ids: list[str], k: int = 2) -> list[RetrievedChunk]: ...
+
+    def search_in_doc_nums(self, query: str, doc_nums: list[str], k: int = 3) -> list[RetrievedChunk]: ...
 
 
 class GraphRepository(Protocol):
