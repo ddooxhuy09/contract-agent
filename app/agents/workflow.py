@@ -137,14 +137,14 @@ def _with_coverage(analysis: ContractAnalysis | None, unchecked: list[dict]) -> 
     if analysis is None:
         return None
     total = len(analysis.clauses)
-    failed = {u["clause_ref"]: u for u in unchecked or []}
+    failed = list(unchecked or [])  # one entry per clause; clause_ref is not unique (an annex can repeat "Điều 1")
     checked = max(total - len(failed), 0)
     coverage = {
         "tong_so_dieu": total,
         "da_kiem": checked,
         "chua_kiem": len(failed),
         "ty_le_da_kiem": round(checked / total, 4) if total else 0.0,
-        "chua_kiem_chi_tiet": list(failed.values()),
+        "chua_kiem_chi_tiet": failed,
     }
     return analysis.model_copy(update={"coverage": coverage})
 

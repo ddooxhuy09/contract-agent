@@ -92,3 +92,23 @@ def test_rotates_when_key_has_no_access_to_the_model(monkeypatch):
     assert llm._is_model_unavailable(Exception("404 contract not found")) is False
     assert llm.rotate_api_key_on_key_failure(not_found) is True
     assert llm.active_api_key() == "k2"
+
+
+def test_retry_delay_ignores_errors_that_only_contain_the_word_generate():
+    # "generateContent" holds the letters "rate"; a 404 must not be treated as a rate limit.
+    err = Exception("404 models/x is not supported for generateContent. Call ListModels.")
+    assert _retry_delay_seconds(err) is None
+    assert _retry_delay_seconds(Exception("rate limit hit")) is not None
+
+
+def test_concurrent_key_failures_move_only_one_key(monkeypatch):
+    per_day = Exception("429 RESOURCE_EXHAUSTED: requests per day limit exceeded")
+    monkeypatch.setattr(llm, "get_settings", lambda: _Keys(["k1", "k2", "k3"]))
+    monkeypatch.setattr(llm, "_key_index", 0)
+    # Two threads both failed on k1: the second must reuse the switch, not skip k2.
+    assert llm.rotate_api_key_on_key_failure(per_day, "k1") is True
+    assert llm.rotate_api_key_on_key_failure(per_day, "k1") is True
+    assert llm.active_api_key() == "k2"
+    # A failure of the key now in use does advance.
+    assert llm.rotate_api_key_on_key_failure(per_day, "k2") is True
+    assert llm.active_api_key() == "k3"

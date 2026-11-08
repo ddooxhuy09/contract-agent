@@ -3,7 +3,7 @@ from uuid import UUID
 
 from app.core.logging import logger
 from app.domain.entities.contract import Contract, ContractChunk
-from app.domain.errors import NotFoundError
+from app.domain.errors import NotFoundError, ValidationError
 from app.domain.ports.repositories import ContractChunkRepository, ContractRepository
 from app.domain.ports.services import AnalyzePipeline, Embedder, ObjectStorage, QaPipeline
 from app.document.chunker import chunk_by_clause
@@ -35,9 +35,9 @@ class UploadContract:
 
         ext = Path(filename).suffix.lower()
         if ext == ".doc":
-            raise ValueError("Định dạng .doc chưa được hỗ trợ, vui lòng chuyển sang .docx.")
+            raise ValidationError("Định dạng .doc chưa được hỗ trợ, vui lòng chuyển sang .docx.")
         if ext not in _SUPPORTED_EXTENSIONS:
-            raise ValueError(f"Định dạng '{ext}' chưa được hỗ trợ. Chỉ nhận .docx, .pdf, .png, .jpg, .jpeg.")
+            raise ValidationError(f"Định dạng '{ext}' chưa được hỗ trợ. Chỉ nhận .docx, .pdf, .png, .jpg, .jpeg.")
 
         contract_id = str(uuid.uuid4())
         storage_key = self._storage.save_upload(file_bytes, f"{contract_id}{ext}")
@@ -51,7 +51,7 @@ class UploadContract:
         except Exception as e:
             logger.error("Upload parse failed: contract_id=%s error=%s", contract_id, e)
             self._storage.delete(storage_key)
-            raise ValueError(_UNREADABLE_MESSAGE) from e
+            raise ValidationError(_UNREADABLE_MESSAGE) from e
 
         try:
             docs = chunk_by_clause(full_text, contract_id)

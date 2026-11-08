@@ -1,3 +1,5 @@
+import threading
+
 from app.core.logging import logger
 from app.core.settings import get_settings
 from app.domain.entities.search import RetrievedChunk
@@ -89,15 +91,18 @@ class PgLegalVectorSearch:
     def __init__(self, embedder: Embedder):
         self._embedder = embedder
         self._query_vectors: dict[str, list[float]] = {}
+        # Clause checks call this from several threads; eviction mutates the dict while iterating it.
+        self._query_lock = threading.Lock()
 
     def _embed_query(self, query: str):
         """One retrieval searches the same query several times (seeds, related documents, labor scope)."""
         vec = self._query_vectors.get(query)
         if vec is None:
-            vec = self._embedder.embed_query(query)
-            if len(self._query_vectors) >= self._EMBED_CACHE_SIZE:
-                self._query_vectors.pop(next(iter(self._query_vectors)))
-            self._query_vectors[query] = vec
+            vec = self._embedder.embed_query(query)  # outside the lock: slow, and threads should not queue on it
+            with self._query_lock:
+                if query not in self._query_vectors and len(self._query_vectors) >= self._EMBED_CACHE_SIZE:
+                    self._query_vectors.pop(next(iter(self._query_vectors)))
+                self._query_vectors[query] = vec
         return vec
 
     def search(

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+import threading
 import time
 
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -15,6 +16,8 @@ DEFAULT_PROVIDER = "gemini"
 _gemini_chat: ChatGoogleGenerativeAI | None = None
 _gemini_chat_json: ChatGoogleGenerativeAI | None = None
 _key_index = 0
+# Clause checks run on several threads at once; one key failure must move the index only once.
+_rotate_lock = threading.Lock()
 
 
 def active_api_key() -> str:
@@ -46,12 +49,14 @@ def _is_model_unavailable(exc: BaseException) -> bool:
     return "no longer available" in text.lower() or "is not found" in text.lower()
 
 
-def rotate_api_key_on_key_failure(exc: BaseException) -> bool:
+def rotate_api_key_on_key_failure(exc: BaseException, failed_key: str | None = None) -> bool:
     """Switch to the next configured key when this one cannot serve the request.
 
     Two failures are worth another key: the per-day quota, which lasts hours, and a
     model the key's project has no access to at all. A per-minute limit clears on its
     own and is handled by the sleep in ``chat_completion``.
+    ``failed_key`` is the key the failed call used: if another thread already moved on
+    from it, that switch is reused instead of skipping a further key.
     Returns True when a different key is now active.
     """
     global _key_index, _gemini_chat, _gemini_chat_json
@@ -59,14 +64,17 @@ def rotate_api_key_on_key_failure(exc: BaseException) -> bool:
         "model unavailable for this key" if _is_model_unavailable(exc) else "")
     if not reason:
         return False
-    keys = get_settings().gemini_api_keys
-    if _key_index + 1 >= len(keys):
-        return False
-    _key_index += 1
-    _gemini_chat = None
-    _gemini_chat_json = None
-    logger.warning("Gemini key %s: %s; switching to key %s of %s", _key_index, reason, _key_index + 1, len(keys))
-    return True
+    with _rotate_lock:
+        if failed_key is not None and failed_key != active_api_key():
+            return True
+        keys = get_settings().gemini_api_keys
+        if _key_index + 1 >= len(keys):
+            return False
+        _key_index += 1
+        _gemini_chat = None
+        _gemini_chat_json = None
+        logger.warning("Gemini key %s: %s; switching to key %s of %s", _key_index, reason, _key_index + 1, len(keys))
+        return True
 
 
 def keys_remaining() -> int:
@@ -140,10 +148,14 @@ def get_chat_model(provider: str = DEFAULT_PROVIDER, *, json_mode: bool = False)
     return _gemini_chat
 
 
+# Not a bare "rate": it would match "generateContent" in any Gemini error.
+_RATE_LIMIT_RE = re.compile(r"\b429\b|RESOURCE_EXHAUSTED|rate[\s_-]?limit", re.I)
+
+
 def _retry_delay_seconds(exc: BaseException, default: float = 30.0) -> float | None:
     """Parse Gemini RESOURCE_EXHAUSTED retryDelay; None if not a rate-limit error."""
     text = str(exc)
-    if "429" not in text and "RESOURCE_EXHAUSTED" not in text and "rate" not in text.lower():
+    if not _RATE_LIMIT_RE.search(text):
         return None
     m = re.search(r"retry(?:Delay| in)\D+(\d+(?:\.\d+)?)\s*s", text, re.I)
     if m:
@@ -156,12 +168,13 @@ def chat_completion(prompt: str, provider: str = DEFAULT_PROVIDER) -> str:
     model = get_chat_model(provider)
     last_err: BaseException | None = None
     for attempt in range(3):
+        key_used = active_api_key()
         try:
             response = model.invoke(prompt)
             return response.content
         except Exception as e:
             last_err = e
-            if attempt < 2 and rotate_api_key_on_key_failure(e):
+            if attempt < 2 and rotate_api_key_on_key_failure(e, key_used):
                 model = get_chat_model(provider)
                 continue
             delay = _retry_delay_seconds(e)

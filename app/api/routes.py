@@ -23,7 +23,7 @@ from app.application.use_cases.contracts import (
 )
 from app.core.logging import logger
 from app.core.settings import get_settings
-from app.domain.errors import AnalysisFailedError, AuthError, ConflictError, NotFoundError
+from app.domain.errors import AnalysisFailedError, AuthError, ConflictError, NotFoundError, ValidationError
 from app.infrastructure.container import AppContainer
 from app.schemas.contract import (
     AnalyzeResponse,
@@ -167,7 +167,7 @@ async def upload(
             container.embedder,
         ).execute(data, file.filename or "unknown", user_id)
         return UploadResponse(**result)
-    except ValueError as e:
+    except ValidationError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
     except Exception as e:
         raise _http_error(e) from e

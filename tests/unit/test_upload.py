@@ -9,6 +9,7 @@ from uuid import UUID
 import pytest
 
 from app.application.use_cases.contracts import UploadContract
+from app.domain.errors import ValidationError
 
 
 _USER = UUID("00000000-0000-0000-0000-000000000001")
@@ -27,7 +28,7 @@ def test_unreadable_file_is_rejected_and_nothing_is_stored():
     contracts, chunks, storage, uc = _parts()
     storage.resolve_path.return_value = "/tmp/missing.docx"
 
-    with pytest.raises(ValueError, match="Không trích xuất được văn bản"):
+    with pytest.raises(ValidationError, match="Không trích xuất được văn bản"):
         asyncio.run(uc.execute(b"fake", "test.docx", _USER))
 
     contracts.upsert.assert_not_called()
@@ -42,7 +43,7 @@ def test_pdf_without_text_layer_is_rejected(monkeypatch):
         raise ValueError("No text could be extracted from the PDF file")
 
     monkeypatch.setattr("app.application.use_cases.contracts.parse_document", no_text)
-    with pytest.raises(ValueError, match="PDF dạng ảnh quét"):
+    with pytest.raises(ValidationError, match="PDF dạng ảnh quét"):
         asyncio.run(uc.execute(b"%PDF", "scan.pdf", _USER))
     contracts.upsert.assert_not_called()
     storage.delete.assert_called_once()
@@ -50,7 +51,7 @@ def test_pdf_without_text_layer_is_rejected(monkeypatch):
 
 def test_doc_format_is_rejected_before_saving():
     contracts, _, storage, uc = _parts()
-    with pytest.raises(ValueError, match=r"\.doc chưa được hỗ trợ"):
+    with pytest.raises(ValidationError, match=r"\.doc chưa được hỗ trợ"):
         asyncio.run(uc.execute(b"fake", "hop-dong.DOC", _USER))
     storage.save_upload.assert_not_called()
     contracts.upsert.assert_not_called()
@@ -58,7 +59,7 @@ def test_doc_format_is_rejected_before_saving():
 
 def test_unknown_extension_is_rejected():
     _, _, storage, uc = _parts()
-    with pytest.raises(ValueError, match="chưa được hỗ trợ"):
+    with pytest.raises(ValidationError, match="chưa được hỗ trợ"):
         asyncio.run(uc.execute(b"fake", "x.exe", _USER))
     storage.save_upload.assert_not_called()
 
