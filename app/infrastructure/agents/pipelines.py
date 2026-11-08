@@ -1,5 +1,6 @@
 import functools
-from typing import Any, Awaitable, Callable, TypeVar
+from typing import Any, TypeVar
+from collections.abc import Awaitable, Callable
 
 import psycopg
 

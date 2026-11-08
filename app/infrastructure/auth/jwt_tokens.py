@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, UTC
 from typing import Any
 from uuid import UUID
 
@@ -14,8 +14,8 @@ class JwtTokenService:
         payload = {
             "sub": str(user_id),
             "email": email,
-            "exp": datetime.now(timezone.utc) + timedelta(minutes=settings.jwt_expire_minutes),
-            "iat": datetime.now(timezone.utc),
+            "exp": datetime.now(UTC) + timedelta(minutes=settings.jwt_expire_minutes),
+            "iat": datetime.now(UTC),
         }
         return jwt.encode(payload, settings.jwt_secret, algorithm=settings.jwt_algorithm)
 

@@ -1,4 +1,3 @@
-from typing import Optional, Union
 from uuid import UUID
 
 import psycopg
@@ -85,7 +84,7 @@ class ChatRequest(BaseModel):
     contract_id: str
     question: str
     provider: str = DEFAULT_PROVIDER
-    checkpoint_id: Optional[str] = None
+    checkpoint_id: str | None = None
 
 
 class LoginRequest(BaseModel):
@@ -173,7 +172,7 @@ async def upload(
         raise _http_error(e) from e
 
 
-@router.post("/analyze", response_model=Union[AnalyzeResponse, AnalyzeReviewResponse])
+@router.post("/analyze", response_model=AnalyzeResponse | AnalyzeReviewResponse)
 async def analyze(
     req: AnalyzeRequest,
     user_id: UUID = Depends(get_current_user_id),

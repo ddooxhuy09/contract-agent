@@ -1,4 +1,3 @@
-# coding: utf-8
 import argparse,json,collections,pathlib
 p=argparse.ArgumentParser();p.add_argument('--pred',required=True,help='JSONL rows: id, cited_provision_ids, relation_edge_ids, claimed_statute_ids')
 a=p.parse_args();root=pathlib.Path(__file__).parent

@@ -10,14 +10,14 @@ import platform
 import subprocess
 import sys
 from collections import Counter
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from pathlib import Path
 
 from evaluation.runtime_adapter import ROOT, BENCHMARK, RUNS, BASELINE_RUN, Runtime, error_info, settings_summary
 
 
 def now():
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 def write_json(path, value):

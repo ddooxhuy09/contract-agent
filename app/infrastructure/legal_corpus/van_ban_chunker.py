@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import re
 import unicodedata
-from dataclasses import dataclass
 from typing import Any
 
 from app.infrastructure.legal_corpus.effectivity import is_effectivity_title
@@ -33,14 +32,6 @@ _SIGN_HINT = re.compile(
 
 def _nfc(text: str) -> str:
     return unicodedata.normalize("NFC", text or "").replace("\u00a0", " ")
-
-
-@dataclass
-class _Span:
-    id: str
-    start: int  # position of content start (after anchor / marker)
-    end: int
-    kind: str  # article | clause
 
 
 def _line_start(text: str, pos: int) -> int:

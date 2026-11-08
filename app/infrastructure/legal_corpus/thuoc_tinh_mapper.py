@@ -42,15 +42,6 @@ _EFF_FLAG_TO_STATUS: dict[str, int] = {
     EFF_CON_MOT_PHAN: 5,
 }
 
-_STATUS_TO_EFF_FLAG: dict[int, str] = {
-    0: EFF_CHUA_XAC_DINH,
-    1: EFF_CON,
-    2: EFF_HET_TOAN_BO,
-    3: EFF_CHUA_HL,
-    4: EFF_HET_MOT_PHAN,
-    5: EFF_CON_MOT_PHAN,
-}
-
 _CODE_TO_EFF_FLAG: dict[str, str] = {
     "CHL": EFF_CON,
     "HHL": EFF_HET_TOAN_BO,
@@ -84,10 +75,6 @@ def status_flag_from_eff_flag(eff_flag: str | None) -> int:
     if not eff_flag:
         return 0
     return _EFF_FLAG_TO_STATUS.get(eff_flag, 0)
-
-
-def eff_flag_for_status(status_flag: int) -> str:
-    return _STATUS_TO_EFF_FLAG.get(int(status_flag), EFF_CHUA_XAC_DINH)
 
 
 def normalize_eff_flag(data: dict[str, Any]) -> str:

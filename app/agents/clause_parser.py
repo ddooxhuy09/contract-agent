@@ -1,6 +1,5 @@
 import re
 import unicodedata
-from typing import List, Optional
 
 from pydantic import ValidationError
 
@@ -26,7 +25,7 @@ def _normalize(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
-def _extract_line_around(text: str, keyword: str, context_lines: int = 2) -> Optional[str]:
+def _extract_line_around(text: str, keyword: str, context_lines: int = 2) -> str | None:
     lines = text.split("\n")
     for i, line in enumerate(lines):
         if re.search(keyword, line, re.IGNORECASE):
@@ -38,7 +37,7 @@ def _extract_line_around(text: str, keyword: str, context_lines: int = 2) -> Opt
     return None
 
 
-def _find_first_match(text: str, patterns: List[str]) -> Optional[str]:
+def _find_first_match(text: str, patterns: list[str]) -> str | None:
     for pattern in patterns:
         m = re.search(pattern, text, re.IGNORECASE | re.DOTALL)
         if m:
@@ -82,7 +81,7 @@ _ADDRESS_RE = re.compile(
 )
 
 
-def _extract_parties(text: str) -> List[Party]:
+def _extract_parties(text: str) -> list[Party]:
     parties = []
 
     party_a_match = _PARTY_A_RE.search(text)
@@ -94,7 +93,7 @@ def _extract_parties(text: str) -> List[Party]:
     return parties
 
 
-def _extract_party_a(text: str, match, parties: List[Party]):
+def _extract_party_a(text: str, match, parties: list[Party]):
     if not match:
         return
 
@@ -130,7 +129,7 @@ def _extract_party_a(text: str, match, parties: List[Party]):
         parties.append(Party(name=name, role=role, address=address, tax_id=tax_id, representative=representative))
 
 
-def _extract_party_b(text: str, match, parties: List[Party]):
+def _extract_party_b(text: str, match, parties: list[Party]):
     role = (match.group("role") or "Người lao động").strip() if match else "Người lao động"
 
     name = None
@@ -206,7 +205,7 @@ def _extract_dates(text: str) -> dict:
     }
 
 
-def _extract_force_majeure(text: str) -> Optional[str]:
+def _extract_force_majeure(text: str) -> str | None:
     for kw in [r"bất\s+khả\s+kháng", r"force\s*majeure", r"sự\s+kiện\s+bất\s+khả\s+kháng"]:
         ctx = _extract_line_around(text, kw, context_lines=1)
         if ctx and len(ctx) > 10:
@@ -259,7 +258,7 @@ def _extract_finance(text: str) -> dict:
 # ============================================================
 
 
-def _extract_termination(text: str) -> Optional[str]:
+def _extract_termination(text: str) -> str | None:
     for kw in [r"(?:Tạm\s+hoãn|tạm\s+hoãn).*chấm\s+dứt", r"chấm\s+dứt\s+hợp\s+đồng\s+lao\s+động", r"đơn\s+phương\s+chấm\s+dứt"]:
         ctx = _extract_line_around(text, kw, context_lines=1)
         if ctx and len(ctx) > 15 and "bồi thường" not in ctx.lower():
@@ -285,7 +284,7 @@ def _extract_penalty(text: str) -> dict:
     return {"penalty_clause": penalty, "indemnity": indemnity}
 
 
-def _extract_dispute(text: str) -> Optional[str]:
+def _extract_dispute(text: str) -> str | None:
     for kw in [
         r"(?:trọng\s+tài|tòa\s+án)\s+có\s+thẩm\s+quyền",
         r"giải\s+quyết\s+tranh\s+chấp",
@@ -301,7 +300,7 @@ def _extract_dispute(text: str) -> Optional[str]:
 # ============================================================
 
 
-def _extract_governing_law(text: str) -> Optional[str]:
+def _extract_governing_law(text: str) -> str | None:
     for kw in [
         r"pháp\s+luật\s+lao\s+động",
         r"luật\s+áp\s+dụng",
@@ -313,7 +312,7 @@ def _extract_governing_law(text: str) -> Optional[str]:
     return None
 
 
-def _extract_confidentiality(text: str) -> Optional[str]:
+def _extract_confidentiality(text: str) -> str | None:
     for kw in [r"bảo\s+mật", r"bí\s+mật", r"confidential"]:
         ctx = _extract_line_around(text, kw, context_lines=0)
         if ctx and len(ctx) > 5:
@@ -321,7 +320,7 @@ def _extract_confidentiality(text: str) -> Optional[str]:
     return None
 
 
-def _extract_severability(text: str) -> Optional[str]:
+def _extract_severability(text: str) -> str | None:
     for kw in [
         r"độc\s+lập\s+của\s+điều\s+khoản",
         r"vô\s+hiệu\s+(?:từng|một)\s+phần",
@@ -333,7 +332,7 @@ def _extract_severability(text: str) -> Optional[str]:
     return None
 
 
-def _extract_amendments(text: str) -> Optional[str]:
+def _extract_amendments(text: str) -> str | None:
     for kw in [
         r"sửa\s+đổi(?:\s+bổ\s+sung)?",
         r"phụ\s+lục\s+(?:sửa|hợp\s+đồng)",
@@ -354,7 +353,7 @@ _CONTRACT_TYPE_RE = re.compile(
 )
 
 
-def _extract_contract_type(text: str) -> Optional[str]:
+def _extract_contract_type(text: str) -> str | None:
     m = _CONTRACT_TYPE_RE.search(text)
     if m:
         ct = m.group("type").strip()
@@ -371,7 +370,7 @@ def _extract_contract_type(text: str) -> Optional[str]:
 #  Trích xuất điều khoản
 # ============================================================
 
-def _extract_clauses(text: str) -> List[Clause]:
+def _extract_clauses(text: str) -> list[Clause]:
     """Split the contract into clause units.
 
     Heading detection is shared with the chunker, which already accepts "Điều 1" with
@@ -410,7 +409,7 @@ def _extract_clauses(text: str) -> List[Clause]:
 _LLM_GAPFILL_CHAR_LIMIT = 12000
 
 
-def _extract_with_llm(text: str, contract_id: str, provider: str) -> Optional[dict]:
+def _extract_with_llm(text: str, contract_id: str, provider: str) -> dict | None:
     """LLM fallback for whatever the regexes above missed. Runs once per upload (not
     per-clause), so cost stays bounded even though it's a full-contract call.
     """

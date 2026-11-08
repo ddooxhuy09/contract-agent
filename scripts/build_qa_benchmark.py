@@ -13,7 +13,8 @@ import json
 import re
 from collections import Counter
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
+from collections.abc import Iterable
 
 
 DOC_ID_RE = re.compile(r"^(?P<source>[^+]+?)(?:\+(?P<element>[^+]+))?$")

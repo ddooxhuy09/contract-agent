@@ -1,4 +1,3 @@
-from typing import List
 
 from langchain_core.documents import Document
 
@@ -6,7 +5,7 @@ from app.core.settings import get_settings
 from app.infrastructure.retrieval.context import get_contract_search, get_graph_rag, get_legal_search
 
 
-def _as_documents(hits) -> List[Document]:
+def _as_documents(hits) -> list[Document]:
     """Convert RetrievedChunk -> Document, preserving score in metadata so graph
     nodes can rerank / decide whether retrieval is strong enough."""
     docs = []
@@ -18,7 +17,7 @@ def _as_documents(hits) -> List[Document]:
     return docs
 
 
-def retrieve_contract(query: str, contract_id: str, k: int | None = None) -> List[Document]:
+def retrieve_contract(query: str, contract_id: str, k: int | None = None) -> list[Document]:
     settings = get_settings()
     hits = get_contract_search().search(query, contract_id, k or settings.top_k_retrieval)
     return _as_documents(hits)
@@ -32,7 +31,7 @@ def retrieve_legal(
     summary: str | None = None,
     contract_type: str | None = None,
     as_of_date: str | None = None,
-) -> List[Document]:
+) -> list[Document]:
     """Hybrid PG + optional GraphRAG hydrate. Prefer title/summary for rewrite.
 
     ``as_of_date`` is the date whose law applies (ISO ``YYYY-MM-DD`` or ``dd/mm/yyyy``);
@@ -57,7 +56,7 @@ def retrieve_legal(
     return _as_documents(hits)
 
 
-def format_legal_context(docs: List[Document], max_chars: int = 7000) -> str:
+def format_legal_context(docs: list[Document], max_chars: int = 7000) -> str:
     """Structured context when GraphRAG metadata roles are present."""
     from app.domain.entities.search import RetrievedChunk
     from app.infrastructure.retrieval.legal_graph_rag import LegalGraphRag

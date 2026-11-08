@@ -110,10 +110,6 @@ def resolve_provider(value: str | None) -> str:
     return DEFAULT_PROVIDER
 
 
-# Kept for routes that iterate providers at import/list time.
-PROVIDERS = get_providers()
-
-
 def get_chat_model(provider: str = DEFAULT_PROVIDER, *, json_mode: bool = False) -> ChatGoogleGenerativeAI:
     """Return the underlying LangChain chat model, for callers that need message-list
     invocation (e.g. a LangGraph node building its own SystemMessage/HumanMessage prompt)

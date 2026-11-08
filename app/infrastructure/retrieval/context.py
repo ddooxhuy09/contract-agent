@@ -10,7 +10,6 @@ from app.infrastructure.retrieval.legal_graph_rag import LegalGraphRag
 
 _contract_search: ContractVectorSearch | None = None
 _legal_search: LegalVectorSearch | None = None
-_graph: GraphRepository | None = None
 _legal_chunks: LegalChunkRepository | None = None
 _contract_chunks: ContractChunkRepository | None = None
 _graph_rag: LegalGraphRag | None = None
@@ -23,10 +22,9 @@ def bind_retrieval(
     legal_chunks: LegalChunkRepository | None = None,
     contract_chunks: ContractChunkRepository | None = None,
 ) -> None:
-    global _contract_search, _legal_search, _graph, _legal_chunks, _contract_chunks, _graph_rag
+    global _contract_search, _legal_search, _legal_chunks, _contract_chunks, _graph_rag
     _contract_search = contract_search
     _legal_search = legal_search
-    _graph = graph
     _legal_chunks = legal_chunks
     _contract_chunks = contract_chunks
     if legal_search is not None and legal_chunks is not None:
@@ -45,10 +43,6 @@ def get_legal_search() -> LegalVectorSearch:
     if _legal_search is None:
         raise RuntimeError("LegalVectorSearch not bound — app startup incomplete")
     return _legal_search
-
-
-def get_graph() -> GraphRepository | None:
-    return _graph
 
 
 def get_graph_rag() -> LegalGraphRag | None:

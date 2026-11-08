@@ -1,4 +1,3 @@
-# coding: utf-8
 import json,pathlib
 root=pathlib.Path(__file__).parent
 j=json.loads((root/'MIXED_34_TEST_CASES_V04.json').read_text(encoding='utf-8'))

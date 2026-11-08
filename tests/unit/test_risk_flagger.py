@@ -110,10 +110,9 @@ def test_empty_rag_hits_returns_insufficient_grounding_item(env):
     assert env.prompts == []
 
 
-def test_skip_topics_added_to_prompt(env):
+def test_prompt_carries_clause_title(env):
     env.llm_outputs.append(_llm())
-    rf.evaluate_clause(CLAUSE, contract_id="c1", skip_topics=["bhxh", "thu_viec"])
-    assert "bhxh, thu_viec" in env.prompts[0]
+    rf.evaluate_clause(CLAUSE, contract_id="c1")
     assert "Điều 3 - Chấm dứt" in env.prompts[0]
 
 

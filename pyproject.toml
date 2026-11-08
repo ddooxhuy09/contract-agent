@@ -1,0 +1,15 @@
+# Tooling config only; the app itself is installed from requirements.txt.
+[tool.ruff]
+target-version = "py311"
+extend-exclude = ["frontend", "data", "evaluation_results"]
+
+[tool.ruff.lint]
+# F: pyflakes, UP: modern typing, B/BLE: likely bugs and blind excepts.
+select = ["F", "UP", "B"]
+ignore = [
+    "B008",  # FastAPI declares dependencies as Depends() defaults
+    "B905",  # zip(strict=True) would change behaviour on uneven inputs; judge per call site
+]
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"

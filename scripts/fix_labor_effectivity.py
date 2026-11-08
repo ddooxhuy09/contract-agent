@@ -16,7 +16,7 @@ hierarchy node that is expired (status 2/3 or `eff_to` <= today). Changed ids ar
 from __future__ import annotations
 
 import argparse
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 
 # Documents whose status-4 flag was verified against the official text (see docs/kiem_tra_hieu_luc.md).
 ALLOWED_DOC_NUMS = ("45/2019/QH14", "145/2020/NĐ-CP", "84/2015/QH13")
@@ -76,7 +76,7 @@ def run(database_url: str, doc_nums: tuple[str, ...], apply: bool, revert: str |
             if not apply or not rows:
                 print("dry run: nothing written" if not apply else "nothing to do")
                 return
-            tag = datetime.now(timezone.utc).strftime("labor_eff_%Y%m%d_%H%M%S")
+            tag = datetime.now(UTC).strftime("labor_eff_%Y%m%d_%H%M%S")
             cur.execute(_BACKUP_DDL)
             cur.executemany(
                 "INSERT INTO legal_eff_fix_backup (id, doc_id, run_tag) VALUES (%s, %s, %s)",

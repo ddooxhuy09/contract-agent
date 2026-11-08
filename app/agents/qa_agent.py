@@ -1,7 +1,8 @@
 import asyncio
 import json
-from datetime import datetime, timezone
-from typing import Annotated, AsyncGenerator, List, Optional, TypedDict
+from datetime import datetime, UTC
+from typing import Annotated, TypedDict
+from collections.abc import AsyncGenerator
 
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage, trim_messages
 from langgraph.graph import StateGraph, START, END
@@ -48,15 +49,15 @@ _MAX_GENERATE_RETRIES = 2
 
 
 class QAState(TypedDict):
-    messages: Annotated[List[BaseMessage], add_messages]
+    messages: Annotated[list[BaseMessage], add_messages]
     contract_id: str
     provider: str
-    source_clauses: List[str]
+    source_clauses: list[str]
     needs_clarification: bool
     _has_context: bool
     _contract_context: str
     _legal_context: str
-    _valid_clause_numbers: List[str]
+    _valid_clause_numbers: list[str]
     # Self-correcting loop bookkeeping (reset each invocation via answer_question).
     query: str
     attempts: int
@@ -70,7 +71,7 @@ class QAState(TypedDict):
 
 
 def _now_iso() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 def _format_contract_context(docs) -> str:
@@ -149,7 +150,7 @@ def _route_after_retrieve(state: QAState) -> str:
     return "refusal"
 
 
-def _llm_rewrite_query(question: str, provider: str) -> Optional[str]:
+def _llm_rewrite_query(question: str, provider: str) -> str | None:
     """Bounded LLM query rewrite (plain text, no JSON). None on failure.
     Runs only on the last retrieval attempt, so cost stays capped."""
     prompt = QA_QUERY_REWRITE_PROMPT.format(question=question[:2000])
@@ -436,7 +437,7 @@ async def stream_answer_events(
         config=_qa_config(contract_id, checkpoint_id),
         stream_mode="updates",
     ):
-        for node, payload in update.items():
+        for node in update:
             label = _STEP_LABELS.get(node, f"Đang xử lý ({node})")
             yield f"event: step\ndata: {json.dumps({'node': node, 'label': label}, ensure_ascii=False)}\n\n"
 
@@ -458,12 +459,12 @@ async def stream_answer_events(
         yield f"event: error\ndata: {json.dumps({'message': _GENERATION_FAILED_ANSWER, 'recoverable': True}, ensure_ascii=False)}\n\n"
 
 
-async def get_state_history(contract_id: str) -> List[dict]:
+async def get_state_history(contract_id: str) -> list[dict]:
     """Time-travel debug view: every persisted checkpoint of the chat thread,
     newest-first, with the final message/answer produced at that point."""
     graph = _get_graph()
     config = {"configurable": {"thread_id": contract_id}}
-    out: List[dict] = []
+    out: list[dict] = []
     async for state in graph.aget_state_history(config):
         messages = state.values.get("messages", [])
         last = messages[-1] if messages else None
@@ -494,7 +495,7 @@ async def rewind_state(contract_id: str, checkpoint_id: str) -> dict:
     raise NotFoundError(f"checkpoint {checkpoint_id} not found for contract {contract_id}")
 
 
-async def get_conversation_history(contract_id: str) -> List[ChatHistoryItem]:
+async def get_conversation_history(contract_id: str) -> list[ChatHistoryItem]:
     """Reconstruct the UI-facing history (question/answer pairs) from the checkpointer's
     persisted message list — the "History" side of the memory-vs-history distinction,
     as opposed to the trimmed "Memory" that _generate_node feeds back to the LLM.
@@ -503,8 +504,8 @@ async def get_conversation_history(contract_id: str) -> List[ChatHistoryItem]:
     snapshot = await graph.aget_state({"configurable": {"thread_id": contract_id}})
     messages = snapshot.values.get("messages", []) if snapshot and snapshot.values else []
 
-    items: List[ChatHistoryItem] = []
-    pending_question: Optional[str] = None
+    items: list[ChatHistoryItem] = []
+    pending_question: str | None = None
     for msg in messages:
         if isinstance(msg, HumanMessage):
             pending_question = msg.content

@@ -70,14 +70,14 @@ async def lifespan(app: FastAPI):
     finally:
         try:
             await close_checkpointer()
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning("Checkpointer close failed: %s", e)
         close = getattr(container.graph, "close", None)
         if callable(close):
             try:
                 close()
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Graph repository close failed: %s", e)
 
 
 

@@ -239,7 +239,7 @@ class MucLucNode:
     path: str  # structural, without doc_id prefix
     parent_path: str | None
     is_leaf: bool
-    children: list["MucLucNode"] = field(default_factory=list)
+    children: list[MucLucNode] = field(default_factory=list)
 
 
 @dataclass
@@ -337,10 +337,6 @@ def graph_nodes_for_doc(index: MucLucIndex, doc_id: str) -> list[dict[str, Any]]
             }
         )
     return out
-
-
-def prefixed_ref(doc_id: str, structural_path: str) -> str:
-    return f"{doc_id}:{structural_path}"
 
 
 def sanitize_doc_id_for_ltree(doc_id: str) -> str:

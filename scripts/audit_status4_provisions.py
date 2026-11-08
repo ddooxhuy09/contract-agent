@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import argparse
 import json
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from pathlib import Path
 
 DEFAULT_DOC_NUMS = ("145/2020/NĐ-CP", "45/2019/QH14", "45/2019/NĐ-CP", "84/2015/QH13")
@@ -25,7 +25,7 @@ def audit(database_url: str, doc_nums: tuple[str, ...]) -> dict:
     import psycopg2
 
     conn = psycopg2.connect(database_url, connect_timeout=10)
-    result: dict = {"generated_at": datetime.now(timezone.utc).isoformat(), "documents": []}
+    result: dict = {"generated_at": datetime.now(UTC).isoformat(), "documents": []}
     try:
         conn.set_session(readonly=True)
         with conn.cursor() as cur:

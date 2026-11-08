@@ -1,6 +1,5 @@
 import json
 import re
-from typing import Optional
 
 from app.core.logging import logger
 
@@ -18,7 +17,7 @@ def _repair_json(text: str) -> str:
     return text
 
 
-def parse_json_object(raw: str) -> Optional[dict]:
+def parse_json_object(raw: str) -> dict | None:
     text = raw.strip()
     fenced = re.search(r"```(?:json)?\s*(.*?)```", text, re.DOTALL)
     if fenced:
@@ -38,7 +37,7 @@ def parse_json_object(raw: str) -> Optional[dict]:
     return None
 
 
-def _try_parse(text: str) -> Optional[dict]:
+def _try_parse(text: str) -> dict | None:
     try:
         result = json.loads(text)
     except (json.JSONDecodeError, TypeError):

@@ -11,7 +11,7 @@ single rolling document per contract keeps ordering deterministic without relyin
 store search ranking.
 """
 
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 
 from langgraph.store.base import BaseStore
 from langgraph.store.postgres import AsyncPostgresStore
@@ -57,7 +57,7 @@ def _namespace(contract_id: str) -> tuple[str, str, str]:
 
 
 def _now_iso() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 def _pair_to_text(pair: dict) -> str:

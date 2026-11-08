@@ -1,6 +1,5 @@
 import re
 import unicodedata
-from typing import List
 
 from langchain_core.documents import Document
 
@@ -35,7 +34,7 @@ def find_headings(text: str) -> list:
     return []
 
 
-def _split_text(text: str, chunk_size: int, chunk_overlap: int, separators: List[str] = None) -> List[str]:
+def _split_text(text: str, chunk_size: int, chunk_overlap: int, separators: list[str] = None) -> list[str]:
     """Recursively split text on the first separator that fits, applying overlap between chunks."""
     if len(text) <= chunk_size:
         return [text] if text else []
@@ -112,14 +111,14 @@ def _emit_article_parts(
     return chunk_index
 
 
-def chunk_by_clause(text: str, contract_id: str) -> List[Document]:
+def chunk_by_clause(text: str, contract_id: str) -> list[Document]:
     """Chunk contract text by Điều (article). Khoản stays inside the Điều unit."""
     settings = get_settings()
     max_chunk_size = settings.max_chunk_size
     chunk_overlap = settings.chunk_overlap
 
     text = unicodedata.normalize("NFC", text)
-    documents: List[Document] = []
+    documents: list[Document] = []
     chunk_index = 0
 
     matches = find_headings(text)

@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any
 import re
 
 from app.agents.json_parsing import parse_json_object
@@ -165,7 +165,7 @@ def _risk_from_judgement(
     legal_docs: list,
     scope_summary: str,
     as_of_date: str | None,
-) -> Optional[RiskItem]:
+) -> RiskItem | None:
     """Turn the parsed LLM judgement into a RiskItem (None when the clause is fine)."""
     severity = result["severity"]
     issue = (result.get("issue") or "").strip()
@@ -235,13 +235,8 @@ def evaluate_clause(
     contract_type: str | None = None,
     as_of_date: str | None = None,
     job_context: str | None = None,
-    skip_topics: list[str] | None = None,
-) -> Optional[RiskItem]:
-    """Retrieve law relevant to THIS clause specifically, then judge compliance against it.
-
-    ``skip_topics``: topic keys already covered by deterministic red-flags (prompt hint
-    only — callers that fully skip the clause never invoke this).
-    """
+) -> RiskItem | None:
+    """Retrieve law relevant to THIS clause specifically, then judge compliance against it."""
     clause_ref = f"Điều {clause.clause_number}"
     clause_text = _resolve_clause_text(clause, contract_id)
     summary_for_query = clause.summary or clause_text
@@ -254,20 +249,12 @@ def evaluate_clause(
     if not legal_docs:
         return _no_grounding_risk(clause, clause_ref, clause_text)
 
-    skip_note = ""
-    if skip_topics:
-        skip_note = (
-            "\n\nĐã có phân tích deterministic cho các chủ đề: "
-            + ", ".join(skip_topics)
-            + ". Chỉ nêu rủi ro *khác* các chủ đề đó; không lặp lại.\n"
-        )
-
     prompt = CLAUSE_RISK_PROMPT.format(
         clause_number=clause.clause_number,
         clause_title_suffix=f" - {clause.title}" if clause.title else "",
         clause_text=clause_text[:6000],
         clause_summary=(clause.summary or "")[:800],
-        legal_context=legal_context + skip_note,
+        legal_context=legal_context,
     )
 
     result = _judge(prompt, provider, clause.clause_number)

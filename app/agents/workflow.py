@@ -1,7 +1,7 @@
 import asyncio
 import operator
 import uuid
-from typing import Annotated, List, Tuple, TypedDict
+from typing import Annotated, TypedDict
 
 from langgraph.graph import StateGraph, START, END
 from langgraph.types import Command, Send, interrupt
@@ -30,9 +30,9 @@ class AnalysisState(TypedDict):
     contract_id: str
     provider: str
     analysis: ContractAnalysis | None
-    risks: Annotated[List[RiskItem], operator.add]
+    risks: Annotated[list[RiskItem], operator.add]
     # Clauses the judge could not assess: {"clause_ref", "status"} (unchecked_error | unparsable).
-    unchecked: Annotated[List[dict], operator.add]
+    unchecked: Annotated[list[dict], operator.add]
     attempts: int
     _extract_failed: bool
     # Human-in-the-loop (review) bookkeeping.
@@ -54,7 +54,6 @@ class ClauseState(TypedDict):
     contract_type: str | None
     as_of_date: str | None
     job_context: str | None
-    skip_topics: list[str]
 
 # Output schemas for the nested subgraphs. Limiting what each subgraph writes back
 # to the parent state is REQUIRED: without it, a subgraph echoes every channel it
@@ -67,8 +66,8 @@ class _ExtractOutput(TypedDict):
 
 
 class _EvaluateOutput(TypedDict):
-    risks: List[RiskItem]
-    unchecked: List[dict]
+    risks: list[RiskItem]
+    unchecked: list[dict]
 
 
 class _ReviewOutput(TypedDict):
@@ -104,7 +103,6 @@ async def _judge_clause_node(state: ClauseState) -> dict:
                 contract_type=state.get("contract_type"),
                 as_of_date=state.get("as_of_date"),
                 job_context=state.get("job_context"),
-                skip_topics=state.get("skip_topics") or [],
             )
             if risk:
                 logger.info("Judge result: contract_id=%s clause=%s severity=%s issue=%s",
@@ -149,6 +147,12 @@ def _with_coverage(analysis: ContractAnalysis | None, unchecked: list[dict]) -> 
     return analysis.model_copy(update={"coverage": coverage})
 
 
+def _as_of_date(analysis: ContractAnalysis | None) -> str | None:
+    """Date the law is judged against: signing date, else start date."""
+    eff = (analysis.execution_date or analysis.start_date) if analysis is not None else None
+    return str(eff) if eff else None
+
+
 def _require_clauses(analysis: ContractAnalysis | None, contract_id: str) -> ContractAnalysis:
     if analysis is None or not analysis.clauses:
         raise AnalysisFailedError(f"no clauses could be extracted: contract_id={contract_id}")
@@ -168,10 +172,7 @@ def _deterministic_node(state: AnalysisState) -> dict:
     text = state.get("contract_text") or ""
     if analysis is None and not text:
         return {"skip_llm_clauses": []}
-    eff = None
-    if analysis is not None:
-        eff = analysis.execution_date or analysis.start_date
-    as_of = str(eff) if eff else None
+    as_of = _as_of_date(analysis)
     cid = state.get("contract_id")
     risks: list[RiskItem] = []
     risks.extend(
@@ -274,8 +275,7 @@ def _build_evaluate_subgraph():
         clauses = (state.get("analysis").clauses if state.get("analysis") is not None else []) or []
         contract_type = state.get("analysis").contract_type if state.get("analysis") is not None else None
         analysis = state.get("analysis")
-        eff_date = analysis.execution_date or analysis.start_date if analysis is not None else None
-        as_of = str(eff_date) if eff_date else None
+        as_of = _as_of_date(analysis)
         job_ctx = extract_job_context(state.get("contract_text") or "", analysis)
         skip = {str(x) for x in (state.get("skip_llm_clauses") or [])}
         to_judge = [c for c in clauses if str(c.clause_number) not in skip]
@@ -299,7 +299,6 @@ def _build_evaluate_subgraph():
                     "contract_type": contract_type,
                     "as_of_date": as_of,
                     "job_context": job_ctx,
-                    "skip_topics": [],
                 },
             )
             for c in to_judge
@@ -393,7 +392,7 @@ def _run_config(thread_id: str | None = None) -> dict:
     return config
 
 
-async def run_analysis_workflow(contract_text: str, contract_id: str, provider: str = DEFAULT_PROVIDER) -> Tuple[ContractAnalysis, List[RiskItem]]:
+async def run_analysis_workflow(contract_text: str, contract_id: str, provider: str = DEFAULT_PROVIDER) -> tuple[ContractAnalysis, list[RiskItem]]:
     logger.info(f"Starting analysis workflow for contract: {contract_id} (provider={provider})")
 
     result = await _compiled_graph.ainvoke(
@@ -402,7 +401,7 @@ async def run_analysis_workflow(contract_text: str, contract_id: str, provider: 
     )
 
     analysis = _with_coverage(_require_clauses(result.get("analysis"), contract_id), result.get("unchecked") or [])
-    risks: List[RiskItem] = result["risks"]
+    risks: list[RiskItem] = result["risks"]
     logger.info(
         f"Analysis workflow completed for contract: {contract_id} "
         f"({len(risks)} risk item(s) across {len(analysis.clauses)} clause(s), "

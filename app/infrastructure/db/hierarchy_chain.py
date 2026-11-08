@@ -266,20 +266,3 @@ def ensure_chain_for_article(cur, doc_id: str, article_path: str) -> int:
     section_path = cur.fetchone()[0]
 
     return ensure_sub_section(cur, section_id, section_path, anc["sub_section"], doc_id)
-
-
-def fill_null_attributes(cur) -> None:
-    for table, cols in (
-        ("legal_parts", ("title", "content")),
-        ("legal_chapters", ("title", "content")),
-        ("legal_sections", ("title", "content")),
-        ("legal_sub_sections", ("title", "content")),
-        ("legal_articles", ("title", "content")),
-        ("legal_clauses", ("title", "content")),
-        ("legal_points", ("title", "content")),
-    ):
-        for col in cols:
-            cur.execute(
-                f"UPDATE {table} SET {col} = %s WHERE {col} IS NULL OR BTRIM({col}) = ''",
-                (KHONG_CO,),
-            )

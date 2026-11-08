@@ -69,7 +69,7 @@ def test_judge_retries_then_recovers(monkeypatch):
     monkeypatch.setattr(wf, "parse_contract", lambda text, contract_id, provider: _analysis())
     calls = {"n": 0}
 
-    def flaky_evaluate(clause, provider, *, contract_id=None, contract_type=None, as_of_date=None, job_context=None, skip_topics=None):
+    def flaky_evaluate(clause, provider, *, contract_id=None, contract_type=None, as_of_date=None, job_context=None):
         calls["n"] += 1
         if calls["n"] < 3:
             raise RuntimeError("rate limit")
@@ -88,7 +88,7 @@ def test_judge_retries_then_recovers(monkeypatch):
 def test_judge_gives_up_marks_clause_unchecked(monkeypatch):
     monkeypatch.setattr(wf, "parse_contract", lambda text, contract_id, provider: _analysis())
 
-    def always_fail(clause, provider, *, contract_id=None, contract_type=None, as_of_date=None, job_context=None, skip_topics=None):
+    def always_fail(clause, provider, *, contract_id=None, contract_type=None, as_of_date=None, job_context=None):
         raise RuntimeError("luôn lỗi")
 
     monkeypatch.setattr(wf, "evaluate_clause", always_fail)
@@ -150,7 +150,7 @@ def test_judge_ok_does_not_retry(monkeypatch):
     monkeypatch.setattr(wf, "parse_contract", lambda text, contract_id, provider: _analysis())
     calls = {"n": 0}
 
-    def ok_evaluate(clause, provider, *, contract_id=None, contract_type=None, as_of_date=None, job_context=None, skip_topics=None):
+    def ok_evaluate(clause, provider, *, contract_id=None, contract_type=None, as_of_date=None, job_context=None):
         calls["n"] += 1
         return None  # no issue -> no risk, no error -> no retry
 

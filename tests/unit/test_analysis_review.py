@@ -126,7 +126,7 @@ def test_resume_does_not_duplicate_risks_multicause(monkeypatch):
     )
     monkeypatch.setattr(wf, "parse_contract", lambda text, contract_id, provider: multi)
 
-    def each_clause_risk(clause, provider, *, contract_id=None, contract_type=None, as_of_date=None, job_context=None, skip_topics=None):
+    def each_clause_risk(clause, provider, *, contract_id=None, contract_type=None, as_of_date=None, job_context=None):
         return RiskItem(clause_ref=f"Điều {clause.clause_number}", issue=f"Rủi ro {clause.clause_number}", severity="warning")
 
     monkeypatch.setattr(wf, "evaluate_clause", each_clause_risk)

@@ -1,18 +1,18 @@
 from pydantic import BaseModel, Field
-from typing import Optional, List, Any
+from typing import Any
 
 
 class Party(BaseModel):
     name: str
     role: str
-    address: Optional[str] = None
-    tax_id: Optional[str] = None
-    representative: Optional[str] = None
+    address: str | None = None
+    tax_id: str | None = None
+    representative: str | None = None
 
 
 class Clause(BaseModel):
     clause_number: str
-    title: Optional[str] = None
+    title: str | None = None
     summary: str
 
 
@@ -21,90 +21,60 @@ class LegalCitation(BaseModel):
 
     title: str
     summary: str = ""
-    doc_number: Optional[str] = None
-    location: Optional[str] = None
-    article: Optional[str] = None
-    clause: Optional[str] = None
-    point: Optional[str] = None
-    quote: Optional[str] = None
-    source_url: Optional[str] = None
-    deep_link: Optional[str] = None
-    source_element_id: Optional[str] = None
-    evidence_path: Optional[str] = None
-    status: Optional[str] = None
-
-    @classmethod
-    def from_any(cls, data: dict) -> "LegalCitation | None":
-        if not isinstance(data, dict):
-            return None
-        title = (data.get("title") or data.get("label") or data.get("name") or "").strip()
-        if not title:
-            return None
-        summary = data.get("summary")
-        if summary is None:
-            points = data.get("points") or data.get("bullets") or []
-            if isinstance(points, list):
-                summary = " ".join(str(p).strip() for p in points if str(p).strip())
-            else:
-                summary = ""
-        return cls(
-            title=title,
-            summary=str(summary or "").strip(),
-            doc_number=data.get("doc_number"),
-            location=data.get("location"),
-            article=data.get("article"),
-            clause=data.get("clause"),
-            point=data.get("point"),
-            quote=data.get("quote"),
-            source_url=data.get("source_url") or data.get("url"),
-            deep_link=data.get("deep_link"),
-            source_element_id=data.get("source_element_id"),
-            evidence_path=data.get("evidence_path") or data.get("path"),
-            status=data.get("status") or data.get("eff_flag"),
-        )
+    doc_number: str | None = None
+    location: str | None = None
+    article: str | None = None
+    clause: str | None = None
+    point: str | None = None
+    quote: str | None = None
+    source_url: str | None = None
+    deep_link: str | None = None
+    source_element_id: str | None = None
+    evidence_path: str | None = None
+    status: str | None = None
 
 
 class RiskItem(BaseModel):
     clause_ref: str
     issue: str
     severity: str = Field(..., pattern="^(critical|warning|ok)$")
-    legal_basis: Optional[str] = None
-    recommendation: Optional[str] = None
+    legal_basis: str | None = None
+    recommendation: str | None = None
     # Structured fields (optional — older analyses may only have issue/legal_basis/recommendation)
-    title: Optional[str] = None
-    summary_topics: Optional[List[str]] = None
-    reasons: Optional[List[str]] = None
-    impact: Optional[List[str]] = None
-    legal_citations: Optional[List[LegalCitation]] = None
-    actions: Optional[List[str]] = None
-    revised_clause: Optional[str] = None
-    original_clause: Optional[str] = None
-    confidence: Optional[float] = Field(default=None, ge=0, le=1)
+    title: str | None = None
+    summary_topics: list[str] | None = None
+    reasons: list[str] | None = None
+    impact: list[str] | None = None
+    legal_citations: list[LegalCitation] | None = None
+    actions: list[str] | None = None
+    revised_clause: str | None = None
+    original_clause: str | None = None
+    confidence: float | None = Field(default=None, ge=0, le=1)
 
 
 class ContractAnalysis(BaseModel):
     contract_id: str
-    contract_type: Optional[str] = None
-    parties: List[Party] = []
-    execution_date: Optional[str] = None
-    start_date: Optional[str] = None
-    end_date: Optional[str] = None
-    duration: Optional[str] = None
-    contract_value: Optional[str] = None
-    payment_terms: Optional[str] = None
-    payment_method: Optional[str] = None
-    termination_clause: Optional[str] = None
-    penalty_clause: Optional[str] = None
-    indemnity: Optional[str] = None
-    force_majeure: Optional[str] = None
-    governing_law: Optional[str] = None
-    dispute_resolution: Optional[str] = None
-    confidentiality: Optional[str] = None
-    severability: Optional[str] = None
-    amendments: Optional[str] = None
-    clauses: List[Clause] = []
+    contract_type: str | None = None
+    parties: list[Party] = []
+    execution_date: str | None = None
+    start_date: str | None = None
+    end_date: str | None = None
+    duration: str | None = None
+    contract_value: str | None = None
+    payment_terms: str | None = None
+    payment_method: str | None = None
+    termination_clause: str | None = None
+    penalty_clause: str | None = None
+    indemnity: str | None = None
+    force_majeure: str | None = None
+    governing_law: str | None = None
+    dispute_resolution: str | None = None
+    confidentiality: str | None = None
+    severability: str | None = None
+    amendments: str | None = None
+    clauses: list[Clause] = []
     # Set by the analysis workflow: how many clauses were actually checked (see workflow._coverage).
-    coverage: Optional[dict] = None
+    coverage: dict | None = None
 
 
 class UploadResponse(BaseModel):
@@ -119,22 +89,22 @@ class UploadResponse(BaseModel):
 class AnalyzeResponse(BaseModel):
     contract_id: str
     analysis: Any
-    risks: List[Any]
+    risks: list[Any]
 
 
 class AnalyzeReviewResponse(BaseModel):
     contract_id: str
     status: str
     review_id: str
-    draft_analysis: Optional[Any] = None
-    draft_risks: List[Any] = []
+    draft_analysis: Any | None = None
+    draft_risks: list[Any] = []
 
 
 class ResumeAnalysisRequest(BaseModel):
     contract_id: str
     review_id: str
     approved: bool = True
-    edits: Optional[List[Any]] = None
+    edits: list[Any] | None = None
 
 
 class ResumeAnalysisResponse(BaseModel):
@@ -142,12 +112,12 @@ class ResumeAnalysisResponse(BaseModel):
     status: str
     approved: bool
     analysis: Any
-    risks: List[Any]
+    risks: list[Any]
 
 
 class ChatResponse(BaseModel):
     answer: str
-    source_clauses: List[str]
+    source_clauses: list[str]
     contract_id: str
     needs_clarification: bool = False
 
@@ -155,28 +125,28 @@ class ChatResponse(BaseModel):
 class ChatHistoryItem(BaseModel):
     question: str
     answer: str
-    source_clauses: List[str]
+    source_clauses: list[str]
     needs_clarification: bool = False
     created_at: str
 
 
 class ChatHistoryResponse(BaseModel):
     contract_id: str
-    messages: List[ChatHistoryItem]
+    messages: list[ChatHistoryItem]
 
 
 class ChatStateItem(BaseModel):
-    checkpoint_id: Optional[str] = None
-    next: List[str] = []
+    checkpoint_id: str | None = None
+    next: list[str] = []
     message_count: int = 0
     answer: str = ""
-    source_clauses: List[str] = []
+    source_clauses: list[str] = []
     needs_clarification: bool = False
 
 
 class ChatStatesResponse(BaseModel):
     contract_id: str
-    states: List[ChatStateItem]
+    states: list[ChatStateItem]
 
 
 class ChatRewindRequest(BaseModel):
@@ -185,10 +155,10 @@ class ChatRewindRequest(BaseModel):
 
 class ChatRewindResponse(BaseModel):
     contract_id: str
-    checkpoint_id: Optional[str] = None
+    checkpoint_id: str | None = None
     message_count: int = 0
     answer: str = ""
-    source_clauses: List[str] = []
+    source_clauses: list[str] = []
     needs_clarification: bool = False
 
 
@@ -201,4 +171,4 @@ class ContractSummary(BaseModel):
 
 
 class ContractListResponse(BaseModel):
-    contracts: List[ContractSummary]
+    contracts: list[ContractSummary]
