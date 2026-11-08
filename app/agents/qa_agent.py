@@ -9,7 +9,7 @@ from langgraph.graph.message import add_messages
 
 from app.agents.checkpointer import get_checkpointer
 from app.agents.json_parsing import parse_json_object
-from app.agents.llm_client import DEFAULT_PROVIDER, chat_completion, get_chat_model, rotate_api_key_on_daily_quota
+from app.agents.llm_client import DEFAULT_PROVIDER, chat_completion, get_chat_model, rotate_api_key_on_key_failure
 from app.agents.memory import load_qa_memory, save_qa_memory
 from app.core.logging import logger
 from app.core.prompts import (
@@ -230,8 +230,9 @@ async def _generate_node(state: QAState) -> dict:
         raw = (await chat_model.ainvoke(prompt_messages)).content
     except Exception as exc:
         logger.error("LLM invoke failed for contract %s, attempt %s: %s", state["contract_id"], attempts, exc)
-        # On a per-day quota error the graph retry is pointless on this key; move to the next one.
-        rotate_api_key_on_daily_quota(exc)
+        # When the key itself is the problem (per-day quota, no access to the model) the
+        # graph retry is pointless on it; move to the next key before retrying.
+        rotate_api_key_on_key_failure(exc)
         return {"generate_attempts": attempts, "_parse_ok": False}
     result = parse_json_object(raw)
     if result is None:

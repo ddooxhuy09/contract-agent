@@ -32,15 +32,32 @@ def _is_daily_quota(exc: BaseException) -> bool:
     return bool(re.search(r"per\s*day|perday|daily", text, re.I))
 
 
-def rotate_api_key_on_daily_quota(exc: BaseException) -> bool:
-    """Switch to the next configured key when this one is out of per-day quota.
+def _is_model_unavailable(exc: BaseException) -> bool:
+    """True when this key's project cannot serve the configured model at all.
 
-    Only the per-day limit is worth another key: it lasts hours, while a per-minute
-    limit clears on its own and is handled by the sleep in ``chat_completion``.
+    Google serves gemini-2.5-flash only to projects that already used it, so a key
+    created later answers 404 "no longer available to new users" even though the
+    model still shows up in that project's ListModels. Another key may work, so this
+    is worth moving on for, exactly like a per-day quota.
+    """
+    text = str(exc)
+    if "404" not in text and "NOT_FOUND" not in text:
+        return False
+    return "no longer available" in text.lower() or "is not found" in text.lower()
+
+
+def rotate_api_key_on_key_failure(exc: BaseException) -> bool:
+    """Switch to the next configured key when this one cannot serve the request.
+
+    Two failures are worth another key: the per-day quota, which lasts hours, and a
+    model the key's project has no access to at all. A per-minute limit clears on its
+    own and is handled by the sleep in ``chat_completion``.
     Returns True when a different key is now active.
     """
     global _key_index, _gemini_chat, _gemini_chat_json
-    if not _is_daily_quota(exc):
+    reason = "per-day quota exhausted" if _is_daily_quota(exc) else (
+        "model unavailable for this key" if _is_model_unavailable(exc) else "")
+    if not reason:
         return False
     keys = get_settings().gemini_api_keys
     if _key_index + 1 >= len(keys):
@@ -48,7 +65,7 @@ def rotate_api_key_on_daily_quota(exc: BaseException) -> bool:
     _key_index += 1
     _gemini_chat = None
     _gemini_chat_json = None
-    logger.warning("Gemini per-day quota exhausted; switching to key %s of %s", _key_index + 1, len(keys))
+    logger.warning("Gemini key %s: %s; switching to key %s of %s", _key_index, reason, _key_index + 1, len(keys))
     return True
 
 
@@ -144,7 +161,7 @@ def chat_completion(prompt: str, provider: str = DEFAULT_PROVIDER) -> str:
             return response.content
         except Exception as e:
             last_err = e
-            if attempt < 2 and rotate_api_key_on_daily_quota(e):
+            if attempt < 2 and rotate_api_key_on_key_failure(e):
                 model = get_chat_model(provider)
                 continue
             delay = _retry_delay_seconds(e)

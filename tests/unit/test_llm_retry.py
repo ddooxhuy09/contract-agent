@@ -52,19 +52,19 @@ def test_rotates_to_next_key_on_daily_quota(monkeypatch):
     monkeypatch.setattr(llm, "_key_index", 0)
     monkeypatch.setattr(llm, "_gemini_chat", object())
     assert llm.active_api_key() == "k1"
-    assert llm.rotate_api_key_on_daily_quota(per_day) is True
+    assert llm.rotate_api_key_on_key_failure(per_day) is True
     assert llm.active_api_key() == "k2"
     assert llm._gemini_chat is None  # cached client dropped so the new key is used
-    assert llm.rotate_api_key_on_daily_quota(per_day) is True
+    assert llm.rotate_api_key_on_key_failure(per_day) is True
     assert llm.active_api_key() == "k3"
     # Last key: nothing left to switch to.
-    assert llm.rotate_api_key_on_daily_quota(per_day) is False
+    assert llm.rotate_api_key_on_key_failure(per_day) is False
 
 
 def test_no_rotation_for_per_minute_limit(monkeypatch):
     monkeypatch.setattr(llm, "get_settings", lambda: _Keys(["k1", "k2"]))
     monkeypatch.setattr(llm, "_key_index", 0)
-    assert llm.rotate_api_key_on_daily_quota(Exception("429 requests per minute limit exceeded")) is False
+    assert llm.rotate_api_key_on_key_failure(Exception("429 requests per minute limit exceeded")) is False
     assert llm.active_api_key() == "k1"
 
 
@@ -78,3 +78,17 @@ def test_settings_collects_numbered_keys(monkeypatch):
                         ("GEMINI_API_KEY_2", "b"), ("GEMINI_API_KEY_3", "a")):
         monkeypatch.setenv(name, value)
     assert Settings(_env_file=None).gemini_api_keys == ["a", "b"]
+
+
+def test_rotates_when_key_has_no_access_to_the_model(monkeypatch):
+    # A key from a project created after the model was closed to new users.
+    not_found = Exception(
+        "404 models/gemini-2.5-flash is no longer available to new users. "
+        "Please update your code to use models/gemini-3.8-flash"
+    )
+    monkeypatch.setattr(llm, "get_settings", lambda: _Keys(["k1", "k2"]))
+    monkeypatch.setattr(llm, "_key_index", 0)
+    assert llm._is_model_unavailable(not_found) is True
+    assert llm._is_model_unavailable(Exception("404 contract not found")) is False
+    assert llm.rotate_api_key_on_key_failure(not_found) is True
+    assert llm.active_api_key() == "k2"

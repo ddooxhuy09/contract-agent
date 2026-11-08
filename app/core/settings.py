@@ -13,7 +13,7 @@ class Settings(BaseSettings):
 
     gemini_api_key: str = ""
     # Extra keys (GEMINI_API_KEY_1..3) let a long run continue on the next key once one
-    # hits its per-day quota; see app/agents/llm_client.rotate_api_key_on_daily_quota.
+    # hits its per-day quota; see app/agents/llm_client.rotate_api_key_on_key_failure.
     gemini_api_key_1: str = ""
     gemini_api_key_2: str = ""
     gemini_api_key_3: str = ""

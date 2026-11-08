@@ -66,4 +66,16 @@ docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docke
 ```
 19 ca còn lại, trong đó 7 ca risk với khoảng 8 lượt gọi model mỗi ca. Cần khoảng 80 request, tức hơn một ngày quota của 3 key.
 
+Lần thử chạy tiếp chiều 08/11 với 3 key mới không thêm được ca nào, dừng sạch tại MIX-013 lần nữa. Trạng thái 3 key đó với `gemini-2.5-flash`:
+
+| Key | Kết quả 1 request thử |
+|---|---|
+| 1 | 404 `NOT_FOUND` — "no longer available to new users" (project tạo sau khi Google đóng model cho người dùng mới), dù ListModels vẫn liệt kê model |
+| 2 | OK, nhưng hết quota ngày ngay sau đó |
+| 3 | 429 hết quota ngày, retry sau ~20h |
+
+Lỗi 404 ở key 1 không phải lỗi quota nên phần xoay key cũ không nhận ra, mọi ca sẽ fail trên key đầu danh sách; nay `rotate_api_key_on_key_failure` chuyển key cho cả hai loại lỗi "key này không chạy được" (hết quota ngày, không có quyền dùng model).
+
+`gemini-3.8-flash` thì cả 3 key đều không bị 404/429, tức còn quota ở pool riêng của model đó — nhưng đổi model giữa lần chạy thì 19 ca còn lại không còn so sánh được với 15 ca đã chạy trên `gemini-2.5-flash`.
+
 Lần chạy dở dang ngày 06/11 (`runs/gemini_full_laborscope_20261106/`, 12 bản ghi, 5 ca risk fail) giữ lại để tham khảo, chạy trên mã trước khi sửa parser, **không** gộp với lần này.
