@@ -5,6 +5,8 @@ import ContractProfile from "./ContractProfile";
 import ClauseIndex from "./ClauseIndex";
 import ChatTab from "./ChatTab";
 import AiDisclaimer from "./AiDisclaimer";
+import ReportActions from "./ReportActions";
+import UsageSummary from "./UsageSummary";
 import { parseIssue, normalizeRiskView, riskKey, sortRisks, dedupeRisks } from "../lib/riskDisplay";
 
 const NOT_SEEN = Symbol("not-seen");
@@ -18,6 +20,9 @@ export default function AnalysisResult({
   activeTab,
   onTabChange,
   onGoList,
+  onReanalyze,
+  busyText,
+  error,
   mainClassName,
 }) {
   const [openKey, setOpenKey] = useState(null);
@@ -114,13 +119,27 @@ export default function AnalysisResult({
           <button
             type="button"
             onClick={onGoList}
-            className="text-[0.6875rem] font-medium text-ink-muted hover:text-ink hidden sm:inline transition-colors shrink-0"
+            aria-label="Quay lại danh sách hợp đồng"
+            className="inline-flex items-center gap-0.5 text-[0.6875rem] font-medium text-ink-muted hover:text-ink transition-colors shrink-0"
           >
-            Hợp đồng
+            <span className="material-symbols-outlined !text-[1rem]">arrow_back</span>
+            <span className="hidden sm:inline">Hợp đồng</span>
           </button>
           <span className="text-ink-faint hidden sm:inline shrink-0 text-[0.6875rem]">/</span>
           <span className="text-[0.8125rem] font-medium text-ink truncate min-w-0">{filename}</span>
+          <ReportActions contractId={contractId} onReanalyze={onReanalyze} disabled={Boolean(busyText)} />
         </div>
+        {busyText && (
+          <p role="status" className="px-3 py-1.5 text-[0.75rem] font-medium text-ink bg-quiet-soft/60 border-t border-rule flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-quiet animate-pulse" />
+            {busyText}
+          </p>
+        )}
+        {error && (
+          <p role="alert" className="px-3 py-1.5 text-[0.75rem] font-medium text-stamp bg-stamp-soft/50 border-t border-rule">
+            {error}
+          </p>
+        )}
         {activeTab === "report" && <AiDisclaimer flush />}
       </header>
 
@@ -149,6 +168,7 @@ export default function AnalysisResult({
               onOpenIssueKey={openIssue}
               defaultOpen={false}
             />
+            <UsageSummary usage={analysis.usage} />
           </>
         )}
 

@@ -75,6 +75,8 @@ class ContractAnalysis(BaseModel):
     clauses: list[Clause] = []
     # Set by the analysis workflow: how many clauses were actually checked (see workflow._coverage).
     coverage: dict | None = None
+    # Set by AnalyzeContract: LLM requests, tokens and duration of the run that produced this result.
+    usage: dict | None = None
 
 
 class UploadResponse(BaseModel):

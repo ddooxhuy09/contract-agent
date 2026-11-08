@@ -1,9 +1,10 @@
+from typing import Literal
 from uuid import UUID
 
 import psycopg
 import psycopg2
-from fastapi import APIRouter, Depends, File, HTTPException, Request, UploadFile
-from fastapi.responses import StreamingResponse
+from fastapi import APIRouter, Depends, File, HTTPException, Query, Request, UploadFile
+from fastapi.responses import JSONResponse, Response, StreamingResponse
 from pydantic import BaseModel, EmailStr, Field
 
 from app.agents.llm_client import DEFAULT_PROVIDER, get_providers, resolve_provider
@@ -20,6 +21,7 @@ from app.application.use_cases.contracts import (
     RewindChat,
     UploadContract,
 )
+from app.application.use_cases.report import BuildContractReport, render_markdown
 from app.core.logging import logger
 from app.core.settings import get_settings
 from app.domain.errors import AnalysisFailedError, AuthError, ConflictError, NotFoundError, ValidationError
@@ -226,6 +228,26 @@ async def contracts(
         return ContractListResponse(**ListContracts(container.contracts).execute(user_id))
     except Exception as e:
         raise _http_error(e) from e
+
+
+@router.get("/contracts/{contract_id}/report")
+async def contract_report(
+    contract_id: str,
+    fmt: Literal["json", "md"] = Query("json", alias="format"),
+    user_id: UUID = Depends(get_current_user_id),
+    container: AppContainer = Depends(get_container_dep),
+):
+    """Downloadable report (findings + AI usage) of an analysed contract, as JSON or Markdown."""
+    try:
+        report = BuildContractReport(container.contracts).execute(contract_id, user_id)
+    except NotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e)) from e
+    except Exception as e:
+        raise _http_error(e) from e
+    headers = {"Content-Disposition": f'attachment; filename="contractlens-{contract_id[:8]}.{fmt}"'}
+    if fmt == "md":
+        return Response(render_markdown(report), media_type="text/markdown; charset=utf-8", headers=headers)
+    return JSONResponse(report, headers=headers)
 
 
 @router.post("/chat", response_model=ChatResponse)

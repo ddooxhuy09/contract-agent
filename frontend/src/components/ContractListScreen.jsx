@@ -42,6 +42,9 @@ function ContractRow({ contract, onOpen }) {
 export default function ContractListScreen({
   contracts,
   loading,
+  loadError,
+  onRetry,
+  onUpload,
   statusText,
   error,
   onOpenContract,
@@ -50,11 +53,19 @@ export default function ContractListScreen({
   return (
     <main className={mainClassName}>
       <div className="page-pad max-w-content mx-auto w-full animate-fade-in">
-        <div className="mb-4 sm:mb-5">
-          <h1 className="page-title">Hợp đồng của bạn</h1>
-          <p className="ui-text text-ink-muted mt-1">
-            Mở kết quả đã phân tích. Tải hợp đồng mới từ thanh bên.
-          </p>
+        <div className="mb-4 sm:mb-5 flex items-start justify-between gap-3">
+          <div>
+            <h1 className="page-title">Hợp đồng của bạn</h1>
+            <p className="ui-text text-ink-muted mt-1">Chọn một hợp đồng để xem kết quả đã phân tích.</p>
+          </div>
+          <button
+            type="button"
+            onClick={onUpload}
+            className="shrink-0 inline-flex items-center gap-1.5 px-3 py-2 bg-ink text-paper-raised text-[0.75rem] font-medium rounded-md hover:bg-ink/90 transition-colors"
+          >
+            <span className="material-symbols-outlined !text-[1rem]">add</span>
+            Tải hợp đồng mới
+          </button>
         </div>
 
         {error && <p className="mb-3 text-stamp text-[0.75rem] font-medium">{error}</p>}
@@ -68,12 +79,23 @@ export default function ContractListScreen({
 
         {loading ? (
           <p className="text-ink-muted text-center py-12 ui-text">Đang tải danh sách...</p>
+        ) : loadError && contracts.length === 0 ? (
+          <div role="alert" className="border border-stamp/25 bg-stamp-soft/40 rounded-md p-6 text-center">
+            <p className="ui-text text-stamp font-medium">{loadError}</p>
+            <button
+              type="button"
+              onClick={onRetry}
+              className="mt-3 px-3 py-1.5 rounded-md border border-rule bg-paper-raised text-[0.75rem] font-medium text-ink hover:bg-quiet-soft/50 transition-colors"
+            >
+              Thử lại
+            </button>
+          </div>
         ) : contracts.length === 0 ? (
           <div className="border border-dashed border-rule-strong rounded-md p-8 sm:p-10 flex flex-col items-center justify-center text-center bg-paper-raised">
             <span className="material-symbols-outlined text-ink-faint !text-[1.75rem] mb-2">folder_open</span>
             <h2 className="section-title mb-1">Chưa có hợp đồng nào</h2>
             <p className="ui-text text-ink-muted max-w-xs">
-              Bấm <span className="font-medium text-ink">Tải hợp đồng mới</span> trên thanh bên để bắt đầu.
+              Bấm <span className="font-medium text-ink">Tải hợp đồng mới</span> để bắt đầu.
             </p>
           </div>
         ) : (

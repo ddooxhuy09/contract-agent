@@ -112,3 +112,23 @@ def test_concurrent_key_failures_move_only_one_key(monkeypatch):
     # A failure of the key now in use does advance.
     assert llm.rotate_api_key_on_key_failure(per_day, "k2") is True
     assert llm.active_api_key() == "k3"
+
+
+def test_chat_completion_fails_fast_when_daily_quota_has_no_other_key(monkeypatch):
+    per_day = Exception("429 RESOURCE_EXHAUSTED: requests per day limit exceeded. Please retry in 5h.")
+    calls, sleeps = [], []
+
+    class _Model:
+        def invoke(self, prompt):
+            calls.append(prompt)
+            raise per_day
+
+    monkeypatch.setattr(llm, "get_settings", lambda: _Keys(["only-key"]))
+    monkeypatch.setattr(llm, "_key_index", 0)
+    monkeypatch.setattr(llm, "get_chat_model", lambda provider="gemini", **kw: _Model())
+    monkeypatch.setattr(llm.time, "sleep", sleeps.append)
+    try:
+        llm.chat_completion("hi")
+    except Exception as e:
+        assert e is per_day
+    assert len(calls) == 1 and sleeps == []

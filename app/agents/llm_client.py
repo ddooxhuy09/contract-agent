@@ -10,6 +10,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 
 from app.core.logging import logger
 from app.core.settings import get_settings
+from app.core.usage import UsageCallback
 
 DEFAULT_PROVIDER = "gemini"
 
@@ -130,6 +131,7 @@ def get_chat_model(provider: str = DEFAULT_PROVIDER, *, json_mode: bool = False)
                 timeout=120,
                 max_retries=0,  # we handle 429 sleep ourselves
                 response_mime_type="application/json",
+                callbacks=[UsageCallback(settings.gemini_model)],
             )
         return _gemini_chat_json
     if _gemini_chat is None:
@@ -140,6 +142,7 @@ def get_chat_model(provider: str = DEFAULT_PROVIDER, *, json_mode: bool = False)
             temperature=0,
             timeout=120,
             max_retries=0,
+            callbacks=[UsageCallback(settings.gemini_model)],
         )
     return _gemini_chat
 
@@ -174,7 +177,8 @@ def chat_completion(prompt: str, provider: str = DEFAULT_PROVIDER) -> str:
                 model = get_chat_model(provider)
                 continue
             delay = _retry_delay_seconds(e)
-            if delay is None or attempt >= 2:
+            # A per-day quota will not clear within a sleep: with no other key to move to, fail now.
+            if delay is None or attempt >= 2 or _is_daily_quota(e):
                 raise
             logger.warning(
                 "LLM rate-limited (attempt %s/3); sleeping %.1fs before retry",

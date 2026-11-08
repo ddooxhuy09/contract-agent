@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchModels } from "../api";
 import AiDisclaimer from "./AiDisclaimer";
+import AnalysisProgress from "./AnalysisProgress";
 import TermsModal from "./TermsModal";
 
 const ACCEPTED_EXTENSIONS = [".docx", ".pdf", ".png", ".jpg", ".jpeg"];
@@ -10,7 +11,7 @@ function isAccepted(file) {
   return ACCEPTED_EXTENSIONS.some((ext) => name.endsWith(ext));
 }
 
-export default function UploadScreen({ onSubmit, statusText, error, mainClassName }) {
+export default function UploadScreen({ onSubmit, statusText, phase, error, mainClassName }) {
   const [dragActive, setDragActive] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [localError, setLocalError] = useState(null);
@@ -104,14 +105,7 @@ export default function UploadScreen({ onSubmit, statusText, error, mainClassNam
             </>
           )}
 
-          {busy && (
-            <div className="absolute inset-0 bg-paper-raised/95 rounded-md flex flex-col items-center justify-center z-20 px-4">
-              <div className="w-full max-w-[14rem] h-1 bg-rule overflow-hidden rounded-full">
-                <div className="h-full w-1/3 bg-quiet animate-progress-sweep" />
-              </div>
-              <p className="mt-3 text-[0.75rem] font-medium text-ink text-center">{statusText}</p>
-            </div>
-          )}
+          {busy && <AnalysisProgress phase={phase} />}
         </div>
 
         {(localError || error) && (

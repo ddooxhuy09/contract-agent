@@ -53,6 +53,22 @@ export async function listContracts() {
   return handleResponse(res);
 }
 
+/** Download the report of an analysed contract ("json" or "md") as a file. */
+export async function downloadReport(contractId, format = "json") {
+  const res = await fetch(`${API_BASE}/api/v1/contracts/${contractId}/report?format=${format}`, {
+    headers: await authHeaders(),
+  });
+  if (!res.ok) await handleResponse(res); // throws with the server's message
+  const url = URL.createObjectURL(await res.blob());
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `contractlens-${contractId.slice(0, 8)}.${format}`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
 export async function fetchModels() {
   const res = await fetch(`${API_BASE}/api/v1/models`);
   return handleResponse(res);

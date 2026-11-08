@@ -1,7 +1,10 @@
+import time
 import uuid
+from datetime import UTC, datetime
 from uuid import UUID
 
 from app.core.logging import logger
+from app.core.usage import track_usage
 from app.domain.entities.contract import Contract, ContractChunk
 from app.domain.errors import NotFoundError, ValidationError
 from app.domain.ports.repositories import ContractChunkRepository, ContractRepository
@@ -160,8 +163,25 @@ class AnalyzeContract:
                 "draft_risks": draft["draft_risks"],
             }
 
-        analysis, risks = await self._pipeline.run(full_text, contract_id, provider)
+        started_at, clock = datetime.now(UTC), time.monotonic()
+        with track_usage() as usage:
+            analysis, risks = await self._pipeline.run(full_text, contract_id, provider)
         analysis_data = analysis.model_dump() if hasattr(analysis, "model_dump") else analysis
+        analysis_data["usage"] = {
+            **usage.summary(),
+            "started_at": started_at.isoformat(timespec="seconds"),
+            "duration_seconds": round(time.monotonic() - clock, 1),
+        }
+        logger.info(
+            "Analysis usage: contract_id=%s requests=%s failed=%s input_tokens=%s output_tokens=%s total_tokens=%s duration=%ss",
+            contract_id,
+            analysis_data["usage"]["requests"],
+            analysis_data["usage"]["failed_requests"],
+            analysis_data["usage"]["input_tokens"],
+            analysis_data["usage"]["output_tokens"],
+            analysis_data["usage"]["total_tokens"],
+            analysis_data["usage"]["duration_seconds"],
+        )
         risk_data = [r.model_dump() if hasattr(r, "model_dump") else r for r in risks]
         self._contracts.save_analysis(contract_id, analysis_data, risk_data)
         return {"contract_id": contract_id, "analysis": analysis_data, "risks": risk_data}
