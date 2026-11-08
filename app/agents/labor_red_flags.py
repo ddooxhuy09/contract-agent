@@ -1,8 +1,11 @@
 """Deterministic red-flag patterns for common illegal HĐLĐ clauses.
 
 Runs *before* per-clause LLM judging so covered Điều can skip Gemini/RAG.
-Merges all hits on the same contract Điều into one RiskItem with a single
-revised_clause that fixes every flagged issue (no extra LLM).
+Each flag is one independent violation with its own provision references
+(Điều + khoản, fetched exactly from the corpus), its own contract sentence and
+its own confidence. Flags that fall in the same contract Điều are merged into one
+RiskItem whose ``revised_clause`` is rebuilt sentence by sentence and then
+re-checked, so a half-fixed or still-illegal rewrite is never shown.
 """
 
 from __future__ import annotations
@@ -11,25 +14,45 @@ import re
 import unicodedata
 from collections import defaultdict
 from dataclasses import dataclass
+from typing import NamedTuple
 
-from app.agents.effectivity import citation_status_for_labor
-from app.agents.labor_code_resolver import (
-    fetch_article_meta,
-    resolve_labor_code_document,
+from app.agents.clause_text import (
+    join_segments,
+    lead_marker,
+    sentences_matching,
+    split_segments,
+    strip_signature_block,
 )
+from app.agents.effectivity import citation_status_for_labor
+from app.agents.labor_code_resolver import fetch_provision, resolve_labor_code_document
 from app.agents.labor_completeness import is_labor_contract
-from app.agents.legal_citations import format_path_location
-from app.schemas.contract import ContractAnalysis, LegalCitation, RiskItem
+from app.agents.legal_citations import (
+    build_source_deep_link,
+    evidence_confidence,
+    extract_article_title,
+    format_path_location,
+)
+from app.document.chunker import find_headings
+from app.schemas.contract import ContractAnalysis, LegalCitation, RiskFinding, RiskItem
 
 
 def _nfc(text: str) -> str:
     return unicodedata.normalize("NFC", text or "")
 
 
+class Ref(NamedTuple):
+    """One cited provision: Điều ``article`` [khoản ``khoan`` [điểm ``point``]]."""
+
+    article: int
+    khoan: int | None
+    support: str  # regex the fetched quote must match, else it does not support the finding
+    point: str | None = None
+
+
 @dataclass(frozen=True, slots=True)
 class RedFlag:
     key: str
-    clause_hint: str
+    clause_hint: str  # fallback only — the Điều is located from the contract text
     title: str
     severity: str
     topics: tuple[str, ...]
@@ -37,12 +60,25 @@ class RedFlag:
     reason: str
     impact: str
     action: str
-    article_hint: str
-    article_nums: tuple[int, ...]
-    # Persuasive statutory wording when DB quote is thin/missing (not a substitute for SoT).
+    refs: tuple[Ref, ...]
+    # Persuasive statutory wording used for QA grounding and when the corpus is unreachable.
     law_blurb: str
-    # (regex, replacement) applied in order on original_clause to build revised_clause.
-    revise_ops: tuple[tuple[re.Pattern[str], str], ...] = ()
+    # Compliant wording that replaces every contract sentence matching ``pattern``.
+    replacement: str
+    # Companion sentences deleted whenever this flag fires (e.g. the «thay vào đó» offset).
+    drop: tuple[re.Pattern[str], ...] = ()
+    ceiling: float = 0.9  # max confidence: lower when legality depends on facts outside the text
+
+    @property
+    def hint(self) -> str:
+        return ", ".join(_ref_label(r) for r in self.refs) + " BLLĐ"
+
+
+def _ref_label(ref: Ref) -> str:
+    out = f"Điều {ref.article}"
+    if ref.khoan:
+        out += f" khoản {ref.khoan}"
+    return out
 
 
 def _rx(pat: str) -> re.Pattern[str]:
@@ -64,27 +100,18 @@ _FLAGS: tuple[RedFlag, ...] = (
         ),
         reason="Hợp đồng bắt làm thêm và/hoặc tuyên bố không trả lương làm thêm giờ.",
         impact="Vi phạm quy định về làm thêm giờ và trả lương; rủi ro thanh tra / bồi thường.",
-        action="Bỏ thỏa thuận OT không lương; OT phải có thỏa thuận và trả đúng hệ số theo BLLĐ.",
-        article_hint="Điều 98, Điều 107 BLLĐ",
-        article_nums=(98, 107),
-        law_blurb=(
-            "Điều 98 & 107 BLLĐ. Người sử dụng lao động phải trả lương làm thêm giờ theo hệ số quy định; "
-            "tổ chức làm thêm giờ phải bảo đảm giới hạn thời gian và có sự đồng ý của người lao động theo luật."
+        action="Bỏ thỏa thuận OT không lương; OT phải có sự đồng ý của NLĐ và trả đúng hệ số theo BLLĐ.",
+        refs=(
+            Ref(98, 1, r"150\s*%|làm\s*thêm\s*giờ"),
+            Ref(107, 2, r"đồng\s*ý|làm\s*thêm\s*giờ"),
         ),
-        revise_ops=(
-            (
-                _rx(
-                    r"[^.]*?(?:trách\s*nhiệm\s*làm\s*thêm|làm\s*thêm\s*giờ)"
-                    r"[\s\S]{0,200}?(?:không\s*được\s*tính|không\s*trả)"
-                    r"[\s\S]{0,80}?lương\s*làm\s*thêm\s*giờ\.?"
-                ),
-                " Việc làm thêm giờ (nếu có) chỉ thực hiện khi có thỏa thuận và được trả lương "
-                "làm thêm giờ theo đúng hệ số quy định của Bộ luật Lao động. ",
-            ),
-            (
-                _rx(r"không\s*được\s*tính\s*thêm\s*tiền\s*lương\s*làm\s*thêm\s*giờ"),
-                "được trả lương làm thêm giờ theo quy định pháp luật",
-            ),
+        law_blurb=(
+            "Điều 98 khoản 1 & Điều 107 khoản 2 BLLĐ. Người sử dụng lao động phải trả lương làm thêm giờ "
+            "theo hệ số quy định; chỉ được yêu cầu làm thêm giờ khi có sự đồng ý của người lao động."
+        ),
+        replacement=(
+            "Việc làm thêm giờ (nếu có) chỉ thực hiện khi có sự đồng ý của NLĐ và được trả lương "
+            "làm thêm giờ theo đúng hệ số quy định của Bộ luật Lao động."
         ),
     ),
     RedFlag(
@@ -100,29 +127,14 @@ _FLAGS: tuple[RedFlag, ...] = (
         ),
         reason="Hai bên thỏa thuận Công ty không đóng BHXH/BHYT bắt buộc.",
         impact="Vi phạm nghĩa vụ tham gia BHXH bắt buộc; xử phạt và truy thu.",
-        action="Xóa thỏa thuận miễn đóng; thực hiện đóng BHXH/BHYT theo luật.",
-        article_hint="Điều 21 BLLĐ; Luật BHXH",
-        article_nums=(21,),
+        action="Xóa thỏa thuận miễn đóng; thực hiện đóng BHXH/BHYT/BHTN theo luật.",
+        refs=(Ref(168, 1, r"bảo\s*hiểm\s*xã\s*hội"),),
         law_blurb=(
-            "Điều 21 BLLĐ. Nội dung chủ yếu của hợp đồng lao động phải có chế độ bảo hiểm xã hội "
-            "và bảo hiểm y tế. Nghĩa vụ tham gia BHXH/BHYT bắt buộc không thể thỏa thuận loại trừ."
+            "Điều 168 khoản 1 BLLĐ. Người sử dụng lao động, người lao động phải tham gia bảo hiểm xã hội "
+            "bắt buộc, bảo hiểm y tế, bảo hiểm thất nghiệp; không thể thỏa thuận loại trừ."
         ),
-        revise_ops=(
-            (
-                _rx(
-                    r"(?:Nhằm[^.]*?,\s*)?hai\s*bên\s*thống\s*nhất\s*Công\s*ty\s*sẽ\s*"
-                    r"không\s*tham\s*gia\s*đóng\s*Bảo\s*hiểm[\s\S]{0,120}?bắt\s*buộc\.?"
-                ),
-                "Công ty thực hiện đóng BHXH, BHYT, BHTN bắt buộc theo quy định pháp luật.",
-            ),
-            (
-                _rx(
-                    r"Thay\s*vào\s*đó,\s*Công\s*ty\s*sẽ\s*hỗ\s*trợ\s*một\s*khoản\s*"
-                    r"tương\s*đương[\s\S]{0,160}?tiền\s*lương\s*hàng\s*tháng\s*của\s*NLĐ\.?"
-                ),
-                "",
-            ),
-        ),
+        replacement="Chế độ Bảo hiểm: Công ty thực hiện đóng BHXH, BHYT, BHTN bắt buộc theo quy định pháp luật.",
+        drop=(_rx(r"Thay\s*vào\s*đó[^.]{0,60}hỗ\s*trợ"),),
     ),
     RedFlag(
         key="retain_id_papers",
@@ -138,21 +150,14 @@ _FLAGS: tuple[RedFlag, ...] = (
         reason="Hợp đồng yêu cầu NLĐ giao bản gốc CCCD/bằng cấp cho Công ty giữ.",
         impact="Vi phạm cấm giữ giấy tờ gốc của NLĐ.",
         action="Xóa quy định giữ bản gốc; chỉ được yêu cầu bản sao khi cần thiết.",
-        article_hint="Điều 17 BLLĐ",
-        article_nums=(17,),
+        refs=(Ref(17, 1, r"giữ\s*bản\s*chính"),),
         law_blurb=(
-            "Điều 17 BLLĐ. Người sử dụng lao động không được giữ bản chính giấy tờ tùy thân, "
+            "Điều 17 khoản 1 BLLĐ. Người sử dụng lao động không được giữ bản chính giấy tờ tùy thân, "
             "văn bằng, chứng chỉ của người lao động khi giao kết hoặc thực hiện hợp đồng lao động."
         ),
-        revise_ops=(
-            (
-                _rx(
-                    r"(?:Để\s*đảm\s*bảo[\s\S]{0,80}?,\s*)?NLĐ\s*đồng\s*ý\s*bàn\s*giao\s*bản\s*gốc"
-                    r"[\s\S]{0,200}?lưu\s*giữ[\s\S]{0,120}?hợp\s*đồng\s*này\.?"
-                ),
-                "Công ty không giữ bản gốc giấy tờ tùy thân hay bằng cấp của NLĐ; "
-                "chỉ yêu cầu bản sao khi cần thiết theo quy định.",
-            ),
+        replacement=(
+            "Công ty không giữ bản gốc giấy tờ tùy thân hay bằng cấp của NLĐ; "
+            "chỉ yêu cầu bản sao khi cần thiết theo quy định."
         ),
     ),
     RedFlag(
@@ -167,24 +172,53 @@ _FLAGS: tuple[RedFlag, ...] = (
             r"tước\s*(?:quyền\s*)?lương|không\s*trả\s*lương\s*tháng\s*cuối"
         ),
         reason="Điều khoản tước lương tháng cuối khi NLĐ chấm dứt trước hạn.",
-        impact="Không được giữ lương đã làm việc; rủi ro tranh chấp và xử phạt.",
-        action="Xóa quy định tước lương; chỉ được thỏa thuận bồi thường đào tạo đúng luật (nếu có).",
-        article_hint="Điều 94, Điều 96 BLLĐ",
-        article_nums=(94, 96),
+        impact="Không được giữ lương đã làm việc; mức bồi thường khi chấm dứt trái luật đã bị luật giới hạn.",
+        action="Xóa quy định tước lương; chỉ áp dụng nghĩa vụ khi chấm dứt trái luật theo Điều 40 BLLĐ.",
+        refs=(
+            Ref(94, 1, r"đầy\s*đủ"),
+            Ref(40, 2, r"nửa\s*tháng\s*tiền\s*lương"),
+        ),
         law_blurb=(
-            "Điều 94 & 96 BLLĐ. Người lao động được trả đủ lương đúng hạn cho thời gian đã làm việc. "
-            "Không được tự ý giữ hoặc tước lương tháng cuối vì lý do đơn phương chấm dứt hợp đồng."
+            "Điều 94 khoản 1 & Điều 40 BLLĐ. Người lao động được trả đủ lương đúng hạn cho thời gian đã làm việc; "
+            "khi chấm dứt trái luật chỉ phải bồi thường nửa tháng lương và tiền lương những ngày không báo trước."
         ),
-        revise_ops=(
-            (
-                _rx(
-                    r"Trường\s*hợp\s*NLĐ\s*đơn\s*phương\s*chấm\s*dứt[\s\S]{0,200}?"
-                    r"không\s*(?:những\s*)?không\s*được\s*nhận\s*lương[\s\S]{0,80}?\.?"
-                ),
-                "Khi chấm dứt hợp đồng, Công ty thanh toán đầy đủ tiền lương và các khoản "
-                "NLĐ được hưởng theo pháp luật.",
-            ),
+        replacement=(
+            "Khi chấm dứt hợp đồng, Công ty thanh toán đầy đủ tiền lương và các khoản NLĐ được hưởng theo pháp luật."
         ),
+    ),
+    RedFlag(
+        key="training_cost_flat",
+        clause_hint="Điều 3",
+        title="Bồi thường chi phí đào tạo bằng số tháng lương cố định",
+        severity="critical",
+        topics=("Chi phí đào tạo", "Bồi thường"),
+        pattern=_rx(
+            r"bồi\s*thường[^.]{0,80}chi\s*phí\s*đào\s*tạo|"
+            r"chi\s*phí\s*đào\s*tạo[^.]{0,60}tương\s*đương\s*\d+\s*tháng"
+        ),
+        reason=(
+            "Buộc NLĐ bồi thường «chi phí đào tạo» bằng số tháng lương cố định, không gắn với hợp đồng đào tạo "
+            "nghề và chi phí thực tế có chứng từ."
+        ),
+        impact="Mức bồi thường tự áp đặt trái quy định; điều khoản có nguy cơ vô hiệu và bị khiếu nại.",
+        action=(
+            "Chỉ quy định hoàn trả chi phí đào tạo khi đã ký hợp đồng đào tạo nghề và theo chi phí thực tế "
+            "có chứng từ hợp lệ."
+        ),
+        refs=(
+            Ref(62, 1, r"hợp\s*đồng\s*đào\s*tạo"),
+            Ref(62, 3, r"chứng\s*từ\s*hợp\s*lệ"),
+            Ref(40, 3, r"chi\s*phí\s*đào\s*tạo"),
+        ),
+        law_blurb=(
+            "Điều 62 & Điều 40 khoản 3 BLLĐ. Chi phí đào tạo chỉ hoàn trả khi hai bên đã ký hợp đồng đào tạo nghề "
+            "và gồm các khoản chi có chứng từ hợp lệ."
+        ),
+        replacement=(
+            "Việc hoàn trả chi phí đào tạo (nếu có) chỉ áp dụng khi hai bên đã ký hợp đồng đào tạo nghề "
+            "theo Điều 62 Bộ luật Lao động và theo chi phí thực tế có chứng từ hợp lệ."
+        ),
+        ceiling=0.85,
     ),
     RedFlag(
         key="fine_deduct_wage",
@@ -200,22 +234,17 @@ _FLAGS: tuple[RedFlag, ...] = (
         reason="Công ty tự đặt hình thức kỷ luật phạt tiền và khấu trừ lương.",
         impact="Phạt tiền không phải hình thức kỷ luật hợp pháp; khấu trừ lương bị hạn chế chặt.",
         action="Xóa phạt tiền/khấu trừ kỷ luật; chỉ áp dụng hình thức kỷ luật theo BLLĐ.",
-        article_hint="Điều 127, Điều 129 BLLĐ",
-        article_nums=(127, 129),
-        law_blurb=(
-            "Điều 127 BLLĐ. Nghiêm cấm phạt tiền, cắt lương thay thế việc xử lý kỷ luật lao động. "
-            "Hình thức kỷ luật chỉ gồm khiển trách, kéo dài thời hạn nâng lương / cách chức, sa thải (Điều 124)."
+        refs=(
+            Ref(127, 2, r"phạt\s*tiền"),
+            Ref(102, 1, r"khấu\s*trừ"),
         ),
-        revise_ops=(
-            (
-                _rx(
-                    r"(?:Nếu\s*NLĐ[\s\S]{0,120}?,\s*)?Công\s*ty\s*có\s*quyền\s*áp\s*dụng\s*"
-                    r"hình\s*thức\s*kỷ\s*luật\s*phạt\s*tiền[\s\S]{0,220}?"
-                    r"tiền\s*lương\s*hàng\s*tháng\.?"
-                ),
-                "Việc xử lý kỷ luật lao động (nếu có) chỉ áp dụng các hình thức theo Bộ luật Lao động; "
-                "không dùng phạt tiền hay khấu trừ lương thay thế kỷ luật.",
-            ),
+        law_blurb=(
+            "Điều 127 khoản 2 BLLĐ. Nghiêm cấm phạt tiền, cắt lương thay việc xử lý kỷ luật lao động. "
+            "Hình thức kỷ luật chỉ gồm khiển trách, kéo dài thời hạn nâng lương, cách chức, sa thải (Điều 124)."
+        ),
+        replacement=(
+            "Việc xử lý kỷ luật lao động (nếu có) chỉ áp dụng các hình thức theo Bộ luật Lao động; "
+            "không dùng phạt tiền hay khấu trừ lương thay thế kỷ luật."
         ),
     ),
     RedFlag(
@@ -232,21 +261,15 @@ _FLAGS: tuple[RedFlag, ...] = (
         reason="Cho phép NSDLĐ đơn phương chấm dứt khi NLĐ kết hôn hoặc mang thai.",
         impact="Phân biệt đối xử / vi phạm bảo vệ thai sản; điều khoản vô hiệu, rủi ro bồi thường.",
         action="Xóa toàn bộ lý do chấm dứt liên quan kết hôn/mang thai.",
-        article_hint="Điều 137, Điều 141 BLLĐ",
-        article_nums=(137, 141),
+        refs=(
+            Ref(137, 3, r"kết\s*hôn|mang\s*thai"),
+            Ref(8, 1, r"phân\s*biệt\s*đối\s*xử"),
+        ),
         law_blurb=(
-            "Điều 137 & 141 BLLĐ. Người sử dụng lao động không được sa thải hoặc đơn phương chấm dứt "
-            "hợp đồng lao động đối với lao động nữ vì lý do kết hôn, mang thai, nghỉ thai sản."
+            "Điều 137 khoản 3 BLLĐ. Người sử dụng lao động không được sa thải hoặc đơn phương chấm dứt "
+            "hợp đồng lao động vì lý do kết hôn, mang thai, nghỉ thai sản, nuôi con dưới 12 tháng tuổi."
         ),
-        revise_ops=(
-            (
-                _rx(
-                    r"Công\s*ty\s*có\s*quyền\s*đơn\s*phương\s*chấm\s*dứt[\s\S]{0,220}?"
-                    r"(?:kết\s*hôn|mang\s*thai)[\s\S]{0,120}?hợp\s*đồng\.?"
-                ),
-                "Công ty không đơn phương chấm dứt hợp đồng vì lý do kết hôn, mang thai hoặc nghỉ thai sản.",
-            ),
-        ),
+        replacement="Công ty không đơn phương chấm dứt hợp đồng vì lý do kết hôn, mang thai hoặc nghỉ thai sản.",
     ),
     RedFlag(
         key="ban_lawsuit",
@@ -263,22 +286,17 @@ _FLAGS: tuple[RedFlag, ...] = (
         reason="Hạn chế quyền khởi kiện / trao quyền quyết định tranh chấp một phía cho Giám đốc.",
         impact="Điều khoản vô hiệu; NLĐ vẫn có quyền khởi kiện theo pháp luật.",
         action="Sửa điều khoản tranh chấp: thương lượng, hòa giải, Tòa án theo BLLĐ/BLTTDS.",
-        article_hint="Điều 179, Điều 187 BLLĐ",
-        article_nums=(179, 187),
-        law_blurb=(
-            "Điều 179 & 187 BLLĐ. Tranh chấp lao động được giải quyết theo thương lượng, hòa giải và Tòa án. "
-            "Không được thỏa thuận tước quyền khởi kiện của người lao động."
+        refs=(
+            Ref(179, 1, r"tranh\s*chấp\s*lao\s*động"),
+            Ref(187, 3, r"Tòa\s*án"),
         ),
-        revise_ops=(
-            (
-                _rx(
-                    r"Mọi\s*tranh\s*chấp[\s\S]{0,200}?"
-                    r"(?:quyết\s*định\s*cuối\s*cùng|không\s*được\s*(?:quyền\s*)?khởi\s*kiện)"
-                    r"[\s\S]{0,120}?Tòa\s*án\.?"
-                ),
-                "Mọi tranh chấp phát sinh từ Hợp đồng này được giải quyết trước hết bằng thương lượng; "
-                "nếu không được thì thông qua hòa giải hoặc Tòa án có thẩm quyền theo pháp luật Việt Nam.",
-            ),
+        law_blurb=(
+            "Điều 179 khoản 1 & Điều 187 khoản 3 BLLĐ. Tranh chấp lao động cá nhân do hòa giải viên, "
+            "hội đồng trọng tài hoặc Tòa án giải quyết; không thể thỏa thuận tước quyền khởi kiện."
+        ),
+        replacement=(
+            "Mọi tranh chấp phát sinh từ Hợp đồng này được giải quyết trước hết bằng thương lượng; "
+            "nếu không được thì thông qua hòa giải hoặc Tòa án có thẩm quyền theo pháp luật Việt Nam."
         ),
     ),
 )
@@ -303,98 +321,89 @@ def extract_clause_excerpt(text: str, clause_number: str | int) -> str | None:
     m = pat.search(body)
     if not m:
         return None
-    excerpt = re.sub(r"\s+", " ", m.group(0)).strip()
+    excerpt = strip_signature_block(m.group(0).replace("**", ""))
+    excerpt = re.sub(r"\s+", " ", excerpt).strip()
     return excerpt[:2500] if excerpt else None
 
 
-def _hydrate_citation(
-    flag: RedFlag,
-    *,
-    labor: dict | None,
-    doc_num: str,
-    doc_title: str,
-    as_of_date: str | None = None,
-) -> LegalCitation | None:
-    """Build a citation only when the Labor Code is ok to rely on (or mark unverified).
+def _locate_clause(flag: RedFlag, body: str) -> str:
+    """Number of the contract Điều whose text actually triggers ``flag`` (hint as fallback)."""
+    heads = find_headings(body)
+    for i, h in enumerate(heads):
+        end = heads[i + 1].start() if i + 1 < len(heads) else len(body)
+        if flag.pattern.search(body[h.start() : end]):
+            return h.group(1)
+    return clause_number_from_ref(flag.clause_hint)
 
-    Returns None when the resolved document is expired / not yet effective — never
-    present a dead instrument as living grounds for drafting.
-    """
-    eff = citation_status_for_labor(labor, as_of_date)
-    if labor and not eff.ok_to_cite:
-        return None
 
-    quotes: list[str] = []
-    path = None
-    article = None
-    location = None
-    for num in flag.article_nums:
-        meta = fetch_article_meta((labor or {}).get("doc_id"), num, limit=4) if labor else None
-        if not meta:
+def _violates(flag: RedFlag, segment: str) -> bool:
+    """``flag`` fires on ``segment`` unless the match is negated («không dùng phạt tiền…»)."""
+    for m in flag.pattern.finditer(segment):
+        if not re.search(r"\b(?:không|cấm|nghiêm\s*cấm)\b", segment[max(0, m.start() - 30) : m.start()], re.I):
+            return True
+    return False
+
+
+def rewrite_clause(original: str, flags: list[RedFlag]) -> str:
+    """Replace each violating *sentence* with compliant wording; everything else stays verbatim."""
+    out: list[tuple[str, str]] = []
+    emitted: set[str] = set()
+    for seg, sep in split_segments(_nfc(original)):
+        hit = [f for f in flags if f.pattern.search(seg)]
+        dropped = any(d.search(seg) for f in flags for d in f.drop)
+        if not hit and not dropped:
+            out.append((seg, sep))
             continue
-        q = (meta.get("quote") or "").strip()
-        if q:
-            quotes.append(q)
-        if not path and meta.get("path"):
-            path = meta["path"]
-            loc = format_path_location(path)
-            location = loc.get("location")
-            article = loc.get("article") or f"Điều {num}"
-    db_quote = "\n\n".join(quotes).strip() if quotes else ""
-    has_verbatim = len(db_quote) >= 80
-    if has_verbatim:
-        quote = db_quote[:2800]
-        summary = ""
-        blurb = (flag.law_blurb or "").strip()
-        if blurb and blurb not in quote and quote[:60] not in blurb:
-            summary = blurb if len(blurb) <= 180 else blurb[:177] + "…"
-    else:
-        quote = flag.law_blurb
-        summary = ""
+        reps = [f.replacement for f in hit if f.replacement not in emitted]
+        emitted.update(reps)
+        if reps:
+            out.append((lead_marker(seg) + " ".join(reps), sep))
+    return re.sub(r"[ \t]{2,}", " ", join_segments(out))
 
-    if not article and flag.article_nums:
-        article = f"Điều {flag.article_nums[0]}"
-    title = f"{article or flag.article_hint.split(',')[0].strip()} — {doc_title}"
-    status = eff.status_label if labor else "Chưa đối chiếu kho — chưa xác nhận hiệu lực"
-    return LegalCitation(
-        title=title,
-        summary=summary or (eff.detail if labor and eff.status_flag == 4 else ""),
-        doc_number=str(doc_num),
-        location=location,
-        article=article,
-        quote=quote,
-        evidence_path=path,
-        status=status,
-        source_url=(labor or {}).get("source_url") if labor else None,
-    )
+
+def revised_clause_problems(original: str | None, revised: str | None, *, check_facts: bool = True) -> list[str]:
+    """Re-check a rewritten clause (deterministic or LLM): empty list = safe to show.
+
+    ``check_facts`` also requires amounts/dates outside the violating sentences to survive;
+    it is for our own sentence-level rewrite (an LLM may legitimately change figures).
+    """
+    if not revised or not revised.strip():
+        return ["Không có điều khoản sửa đổi."]
+    orig, rev = _nfc(original or ""), _nfc(revised)
+    problems: list[str] = []
+    if orig and re.sub(r"\s+", "", orig) == re.sub(r"\s+", "", rev):
+        problems.append("Điều khoản sửa đổi không khác bản gốc.")
+    orig_segs = {re.sub(r"\s+", " ", s).strip() for s, _ in split_segments(orig)}
+    prev = ""
+    for seg, _ in split_segments(rev):
+        text = re.sub(r"\s+", " ", seg).strip()
+        for f in _FLAGS:
+            if _violates(f, text):
+                problems.append(f"Còn nội dung vi phạm «{f.key}»: «{text[:90]}»")
+        body = text[len(lead_marker(text)) :].lstrip("*_ ")
+        # A lowercase start is a fragment unless the previous segment ended mid-sentence («;» «,» «:»).
+        if text not in orig_segs and body and body[0].islower() and (not prev or prev[-1] in ".!?"):
+            problems.append(f"Câu bị cắt dở / sai ngữ pháp: «{text[:70]}»")
+        prev = text
+    # Lawful facts (amounts, dates) outside the violating sentences must survive the rewrite.
+    for seg, _ in split_segments(orig) if check_facts else []:
+        if any(f.pattern.search(seg) for f in _FLAGS):
+            continue
+        for num in re.findall(r"\d[\d./,]*\d|\d", seg):
+            if num not in rev:
+                problems.append(f"Mất nội dung hợp pháp ngoài phạm vi cần sửa: «{num}»")
+                break
+    return list(dict.fromkeys(problems))
 
 
 def revise_clause_text(original: str | None, flag_keys: list[str]) -> str | None:
-    """Apply deterministic edits for every flag on this Điều → one revised clause."""
+    """Rewrite ``original`` for the given flags; ``None`` when the result fails re-validation."""
     if not original or not flag_keys:
         return None
-    text = _nfc(original)
-    key_to_flag = {f.key: f for f in _FLAGS}
-    for key in flag_keys:
-        flag = key_to_flag.get(key)
-        if not flag:
-            continue
-        for pat, repl in flag.revise_ops:
-            text = pat.sub(repl, text)
-    text = re.sub(r"\s{2,}", " ", text).strip()
-    text = re.sub(r"\s+([,.;:])", r"\1", text)
-    # If edits barely changed text, append a compliant closing note
-    if text == _nfc(original).strip() or len(text) < 40:
-        bullets = []
-        for key in flag_keys:
-            flag = key_to_flag.get(key)
-            if flag:
-                bullets.append(f"- {flag.action}")
-        return (
-            f"{_nfc(original).strip()}\n\n"
-            f"[Đề xuất chỉnh sửa bắt buộc]\n" + "\n".join(bullets)
-        )
-    return text
+    by_key = {f.key: f for f in _FLAGS}
+    flags = [by_key[k] for k in flag_keys if k in by_key]
+    revised = rewrite_clause(original, flags)
+    return None if revised_clause_problems(original, revised) else revised
 
 
 def _short_title(flag: RedFlag) -> str:
@@ -404,6 +413,7 @@ def _short_title(flag: RedFlag) -> str:
         "no_bhxh": "Không đóng BHXH/BHYT",
         "retain_id_papers": "Giữ CCCD / bằng cấp gốc",
         "forfeit_wage_quit": "Tước lương tháng cuối",
+        "training_cost_flat": "Bồi thường chi phí đào tạo cố định",
         "fine_deduct_wage": "Phạt tiền / khấu trừ lương",
         "terminate_pregnancy": "Chấm dứt vì kết hôn / mang thai",
         "ban_lawsuit": "Cấm khởi kiện ra Tòa",
@@ -411,56 +421,130 @@ def _short_title(flag: RedFlag) -> str:
     return shorts.get(flag.key) or (flag.topics[0] if flag.topics else flag.title)
 
 
-def _merge_clause_hits(
-    hits: list[tuple[RedFlag, LegalCitation, str | None]],
-) -> list[RiskItem]:
-    """One RiskItem per contract Điều — combined reasons/actions/cites + revised_clause."""
-    by_num: dict[str, list[tuple[RedFlag, LegalCitation, str | None]]] = defaultdict(list)
-    for item in hits:
-        num = clause_number_from_ref(item[0].clause_hint) or "?"
-        by_num[num].append(item)
+def _hydrate_citation(
+    flag: RedFlag,
+    ref: Ref,
+    *,
+    labor: dict | None,
+    doc_num: str,
+    doc_title: str,
+    as_of_date: str | None = None,
+) -> tuple[LegalCitation | None, list[str]]:
+    """Cite exactly ``ref`` from the corpus; return (citation, problems).
 
-    out: list[RiskItem] = []
-    for num in sorted(by_num.keys(), key=lambda x: int(x) if x.isdigit() else 99):
-        group = by_num[num]
-        flags = [g[0] for g in group]
-        cites = [g[1] for g in group if g[1] is not None]
-        original = next((g[2] for g in group if g[2]), None)
-        keys = [f.key for f in flags]
-        shorts = [_short_title(f) for f in flags]
-        title = shorts[0] if len(shorts) == 1 else " · ".join(shorts)
-        if len(title) > 100:
-            title = title[:97].rstrip(" ·") + "…"
-        reasons = [f.reason for f in flags]
-        actions = list(dict.fromkeys(f.action for f in flags))
-        impact = list(dict.fromkeys(f.impact for f in flags))
-        # Topic chips = short violation labels (what was violated), not filler tags
-        topics = list(dict.fromkeys(shorts))
-        revised = revise_clause_text(original, keys)
-        rec_parts = [f"- {a}" for a in actions]
-        if revised:
-            rec_parts.append(f"«{revised}»")
-        severity = "critical" if any(f.severity == "critical" for f in flags) else "warning"
-        basis = "; ".join(dict.fromkeys(f.article_hint for f in flags))
-        out.append(
-            RiskItem(
-                clause_ref=f"Điều {num}",
+    ``None`` when the resolved document is expired / not yet effective — never
+    present a dead instrument as living grounds for drafting.
+    """
+    eff = citation_status_for_labor(labor, as_of_date)
+    if labor and not eff.ok_to_cite:
+        return None, []
+
+    label = _ref_label(ref)
+    prov = fetch_provision(labor.get("doc_id"), ref.article, ref.khoan, ref.point) if labor else None
+    status = eff.status_label if labor else "Chưa đối chiếu kho — chưa xác nhận hiệu lực"
+    title = f"{label} — {doc_title}"
+    if not prov:
+        note = f"{label}: không tìm thấy bản còn hiệu lực trong kho pháp điển — chỉ có tóm tắt, chưa đối chiếu nguyên văn."
+        return (
+            LegalCitation(
                 title=title,
-                issue=" ".join(reasons),
-                severity=severity,
-                summary_topics=topics,
-                reasons=reasons,
-                impact=impact,
-                actions=actions,
-                legal_basis=basis,
-                legal_citations=cites,
-                recommendation="\n".join(rec_parts),
-                original_clause=original,
-                revised_clause=revised,
-                confidence=0.9,
+                summary=flag.law_blurb if ref is flag.refs[0] else f"{label} BLLĐ (chưa đối chiếu nguyên văn).",
+                doc_number=str(doc_num),
+                article=f"Điều {ref.article}",
+                clause=f"Khoản {ref.khoan}" if ref.khoan else None,
+                status=status,
+                source_url=(labor or {}).get("source_url"),
+            ),
+            [note],
+        )
+
+    loc = format_path_location(prov["path"])
+    problems: list[str] = []
+    if ref.support and not re.search(ref.support, prov["quote"], re.I):
+        problems.append(f"{label}: nội dung trích không nêu rõ căn cứ cho kết luận.")
+    source_url = (labor or {}).get("source_url")
+    return (
+        LegalCitation(
+            title=title,
+            doc_number=str(doc_num),
+            location=loc["location"],
+            article=loc["article"],
+            clause=loc["clause"],
+            point=loc["point"],
+            quote=prov["quote"],
+            evidence_path=prov["path"],
+            status=status,
+            source_url=source_url,
+            deep_link=build_source_deep_link(source_url, None, extract_article_title(prov["quote"]) or prov["quote"]),
+        ),
+        problems,
+    )
+
+
+def _build_item(
+    num: str,
+    group: list[tuple[RedFlag, list[LegalCitation], list[str], list[str]]],
+    original: str | None,
+) -> RiskItem:
+    """One RiskItem per contract Điều: merged view + one RiskFinding per violation."""
+    flags = [g[0] for g in group]
+    shorts = [_short_title(f) for f in flags]
+    title = shorts[0] if len(shorts) == 1 else " · ".join(shorts)
+    if len(title) > 100:
+        title = title[:97].rstrip(" ·") + "…"
+
+    findings: list[RiskFinding] = []
+    cites_all: list[LegalCitation] = []
+    notes_all: list[str] = []
+    for flag, cites, problems, violated in group:
+        conf, cnotes = evidence_confidence(cites, flag.ceiling)
+        notes = list(dict.fromkeys([*problems, *cnotes]))
+        conf = max(0.3, conf - 0.1 * len(problems))
+        findings.append(
+            RiskFinding(
+                key=flag.key,
+                title=_short_title(flag),
+                severity=flag.severity,
+                reason=flag.reason,
+                violated_text=" … ".join(violated) or None,
+                legal_citations=cites or None,
+                confidence=round(conf, 2),
+                confidence_notes=notes or None,
             )
         )
-    return out
+        for c in cites:
+            if not any(c.title == x.title for x in cites_all):
+                cites_all.append(c)
+        notes_all += [f"{_short_title(flag)}: {n}" for n in notes]
+
+    revised = rewrite_clause(original, flags) if original else None
+    rproblems = revised_clause_problems(original, revised) if original else ["Không có văn bản gốc."]
+    if rproblems:
+        notes_all.append("Điều khoản sửa đổi tự động không qua kiểm tra nên không hiển thị: " + "; ".join(rproblems))
+        revised = None
+
+    actions = list(dict.fromkeys(f.action for f in flags))
+    rec_parts = [f"- {a}" for a in actions]
+    rec_parts.append(f"«{revised}»" if revised else "- Cần soạn lại điều khoản này thủ công theo các căn cứ trên.")
+    reasons = [f.reason for f in flags]
+    return RiskItem(
+        clause_ref=f"Điều {num}",
+        title=title,
+        issue=" ".join(reasons),
+        severity="critical" if any(f.severity == "critical" for f in flags) else "warning",
+        summary_topics=list(dict.fromkeys(shorts)),
+        reasons=reasons,
+        impact=list(dict.fromkeys(f.impact for f in flags)),
+        actions=actions,
+        legal_basis="; ".join(dict.fromkeys(f.hint for f in flags)),
+        legal_citations=cites_all or None,
+        recommendation="\n".join(rec_parts),
+        original_clause=original,
+        revised_clause=revised,
+        confidence=min(f.confidence for f in findings if f.confidence is not None),
+        confidence_notes=list(dict.fromkeys(notes_all)) or None,
+        findings=findings,
+    )
 
 
 def check_labor_red_flags(
@@ -486,34 +570,43 @@ def check_labor_red_flags(
         except Exception:
             chunk_repo = None
 
-    hits: list[tuple[RedFlag, LegalCitation, str | None]] = []
+    by_num: dict[str, list[tuple[RedFlag, list[LegalCitation], list[str], list[str]]]] = defaultdict(list)
+    originals: dict[str, str | None] = {}
     for flag in _FLAGS:
         if not flag.pattern.search(body):
             continue
-        cite = _hydrate_citation(
-            flag,
-            labor=labor,
-            doc_num=doc_num,
-            doc_title=doc_title,
-            as_of_date=as_of_date,
-        )
-        num = clause_number_from_ref(flag.clause_hint)
-        original = None
-        if chunk_repo is not None and num and contract_id:
-            try:
-                original = chunk_repo.get_text_by_clause(contract_id, num)
-            except Exception:
-                original = None
-        if not original and num:
-            original = extract_clause_excerpt(body, num)
-        if not original and analysis:
-            for cl in analysis.clauses or []:
-                if str(cl.clause_number) == num:
-                    original = (cl.summary or "").strip() or None
-                    break
-        hits.append((flag, cite, original))
+        num = _locate_clause(flag, body) or "?"
+        if num not in originals:
+            original = None
+            if chunk_repo is not None and num.isdigit() and contract_id:
+                try:
+                    original = chunk_repo.get_text_by_clause(contract_id, num)
+                except Exception:
+                    original = None
+            if not original and num.isdigit():
+                original = extract_clause_excerpt(body, num)
+            if not original and analysis:
+                original = next(
+                    ((cl.summary or "").strip() or None for cl in analysis.clauses or [] if str(cl.clause_number) == num),
+                    None,
+                )
+            originals[num] = strip_signature_block(original) if original else None
+        cites: list[LegalCitation] = []
+        problems: list[str] = []
+        for ref in flag.refs:
+            cite, probs = _hydrate_citation(
+                flag, ref, labor=labor, doc_num=doc_num, doc_title=doc_title, as_of_date=as_of_date
+            )
+            if cite is not None:
+                cites.append(cite)
+            problems += probs
+        violated = sentences_matching(originals[num] or body, flag.pattern)
+        by_num[num].append((flag, cites, problems, violated))
 
-    return _merge_clause_hits(hits)
+    return [
+        _build_item(num, by_num[num], originals[num])
+        for num in sorted(by_num, key=lambda x: int(x) if x.isdigit() else 99)
+    ]
 
 
 def skip_llm_clause_numbers(red_flag_risks: list[RiskItem]) -> list[str]:
@@ -552,11 +645,7 @@ def matching_law_blurbs(text: str, *, limit: int = 4) -> list[str]:
                 soft = True
             if not soft:
                 continue
-        label = flag.article_hint or flag.title
-        out.append(f"[BLLĐ · {label}] {flag.law_blurb}")
+        out.append(f"[BLLĐ · {flag.hint}] {flag.law_blurb}")
         if len(out) >= limit:
             break
     return out
-
-
-

@@ -1,5 +1,6 @@
 import asyncio
 import operator
+import re
 import uuid
 from typing import Annotated, TypedDict
 
@@ -11,6 +12,8 @@ from app.core.logging import logger
 from app.domain.errors import AnalysisFailedError
 from app.domain.errors import NotFoundError
 from app.agents.clause_parser import parse_contract
+from app.agents.effectivity import legal_timeline, stamp_legal_basis
+from app.core.dates import parse_vn_date
 from app.agents.risk_flagger import JudgeUnparsable, evaluate_clause
 from app.agents.llm_client import DEFAULT_PROVIDER
 
@@ -68,6 +71,7 @@ class _ExtractOutput(TypedDict):
 class _EvaluateOutput(TypedDict):
     risks: list[RiskItem]
     unchecked: list[dict]
+    skip_llm_clauses: list[str]
 
 
 class _ReviewOutput(TypedDict):
@@ -127,10 +131,35 @@ def _unchecked(clause: Clause, status: str) -> dict:
     return {"clause_ref": f"Điều {clause.clause_number}", "status": status}
 
 
-def _with_coverage(analysis: ContractAnalysis | None, unchecked: list[dict]) -> ContractAnalysis | None:
+def _detection_summary(analysis: ContractAnalysis, risks: list[RiskItem], skipped: list[str]) -> dict:
+    """What the findings say about detection — separate from how many clauses were scanned."""
+    nums = {str(c.clause_number) for c in analysis.clauses}
+    flagged = {m.group(1) for r in risks if (m := re.search(r"(\d+)", r.clause_ref or ""))} & nums
+    confs = [r.confidence for r in risks if r.confidence is not None]
+    return {
+        "so_rui_ro": len(risks),
+        "so_dieu_co_rui_ro": len(flagged),
+        "dieu_chua_phat_hien_rui_ro": sorted(nums - flagged, key=lambda x: (not x.isdigit(), int(x) if x.isdigit() else 0)),
+        "dieu_chi_kiem_bang_quy_tac": sorted({str(x) for x in skipped or []}, key=lambda x: int(x) if x.isdigit() else 0),
+        "do_tin_cay_trung_binh": round(sum(confs) / len(confs), 2) if confs else None,
+        "so_rui_ro_do_tin_cay_thap": sum(1 for c in confs if c < 0.7),
+        "luu_y": (
+            "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. "
+            "Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        ),
+    }
+
+
+def _with_coverage(
+    analysis: ContractAnalysis | None,
+    unchecked: list[dict],
+    risks: list[RiskItem] | None = None,
+    skipped: list[str] | None = None,
+) -> ContractAnalysis | None:
     """Copy of ``analysis`` carrying how many clauses were really checked.
 
     ``risks == []`` must never be read as "clean" for a clause listed in ``unchecked``.
+    ``ty_le_da_kiem`` is clause *coverage* only; detection quality is reported under ``phat_hien``.
     """
     if analysis is None:
         return None
@@ -143,14 +172,40 @@ def _with_coverage(analysis: ContractAnalysis | None, unchecked: list[dict]) -> 
         "chua_kiem": len(failed),
         "ty_le_da_kiem": round(checked / total, 4) if total else 0.0,
         "chua_kiem_chi_tiet": failed,
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
     }
+    if risks is not None:
+        coverage["phat_hien"] = _detection_summary(analysis, risks, skipped or [])
     return analysis.model_copy(update={"coverage": coverage})
+
+
+def _finalize(
+    analysis: ContractAnalysis | None,
+    unchecked: list[dict],
+    risks: list[RiskItem],
+    contract_text: str,
+    skipped: list[str] | None,
+) -> tuple[ContractAnalysis | None, list[RiskItem]]:
+    """Coverage + legal-date basis + Điều 21 checklist, and citation statuses stamped with their date."""
+    analysis = _with_coverage(analysis, unchecked, risks, skipped)
+    if analysis is None:
+        return None, risks
+    from app.agents.labor_completeness import assess_mandatory_fields, is_labor_contract, required_content_table
+
+    timeline = legal_timeline(analysis.execution_date, analysis.start_date, analysis.end_date)
+    update: dict = {"legal_as_of": timeline}
+    if is_labor_contract(analysis, contract_text):
+        update["required_content"] = required_content_table(assess_mandatory_fields(contract_text, analysis))
+    return analysis.model_copy(update=update), stamp_legal_basis(risks, timeline)
 
 
 def _as_of_date(analysis: ContractAnalysis | None) -> str | None:
     """Date the law is judged against: signing date, else start date."""
     eff = (analysis.execution_date or analysis.start_date) if analysis is not None else None
-    return str(eff) if eff else None
+    if not eff:
+        return None
+    parsed = parse_vn_date(eff)
+    return parsed.isoformat() if parsed else str(eff)
 
 
 def _require_clauses(analysis: ContractAnalysis | None, contract_id: str) -> ContractAnalysis:
@@ -201,12 +256,17 @@ async def _review_node(state: AnalysisState) -> dict:
     if not state.get("review_mode"):
         return {}
     analysis = state.get("analysis")
+    draft, draft_risks = _finalize(
+        analysis,
+        state.get("unchecked") or [],
+        state.get("risks", []),
+        state.get("contract_text") or "",
+        state.get("skip_llm_clauses"),
+    )
     payload = {
         "contract_id": state["contract_id"],
-        "draft_analysis": (
-            _with_coverage(analysis, state.get("unchecked") or []).model_dump() if analysis is not None else None
-        ),
-        "draft_risks": [r.model_dump() if hasattr(r, "model_dump") else r for r in state.get("risks", [])],
+        "draft_analysis": draft.model_dump() if draft is not None else None,
+        "draft_risks": [r.model_dump() if hasattr(r, "model_dump") else r for r in draft_risks],
     }
     decision = interrupt(payload)
     edits = decision.get("edits")
@@ -400,8 +460,13 @@ async def run_analysis_workflow(contract_text: str, contract_id: str, provider: 
         config=_run_config(),
     )
 
-    analysis = _with_coverage(_require_clauses(result.get("analysis"), contract_id), result.get("unchecked") or [])
-    risks: list[RiskItem] = result["risks"]
+    analysis, risks = _finalize(
+        _require_clauses(result.get("analysis"), contract_id),
+        result.get("unchecked") or [],
+        result["risks"],
+        result.get("contract_text") or contract_text,
+        result.get("skip_llm_clauses"),
+    )
     logger.info(
         f"Analysis workflow completed for contract: {contract_id} "
         f"({len(risks)} risk item(s) across {len(analysis.clauses)} clause(s), "
@@ -457,8 +522,13 @@ async def resume_analysis_review(
         Command(resume={"approved": approved, "edits": edits or []}),
         config=config,
     )
-    analysis = _with_coverage(_require_clauses(result.get("analysis"), contract_id), result.get("unchecked") or [])
-    risks = result["risks"]
+    analysis, risks = _finalize(
+        _require_clauses(result.get("analysis"), contract_id),
+        result.get("unchecked") or [],
+        result["risks"],
+        result.get("contract_text") or "",
+        result.get("skip_llm_clauses"),
+    )
     if result.get("_edited_risks") is not None:
         risks = [RiskItem(**r) for r in result["_edited_risks"]]
     approved_flag = bool(result.get("_approved"))

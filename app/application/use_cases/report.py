@@ -69,11 +69,55 @@ def _risk_lines(risk: dict) -> list[str]:
     for cite in risk.get("legal_citations") or []:
         where = " · ".join(p for p in (cite.get("doc_number"), cite.get("location"), cite.get("status")) if p)
         lines.append(f"  - {cite.get('title', '')}" + (f" ({where})" if where else ""))
+    if risk.get("confidence") is not None:
+        lines.append(f"- **Độ tin cậy:** {risk['confidence']:.2f}")
+        lines += _bullets(risk.get("confidence_notes"))
+    for finding in risk.get("findings") or []:
+        lines.append(f"- **Vi phạm riêng — {finding.get('title', '')}** (tin cậy {finding.get('confidence', '?')})")
+        if finding.get("violated_text"):
+            lines.append(f"  - Trích HĐ: «{finding['violated_text']}»")
+        for cite in finding.get("legal_citations") or []:
+            lines.append(f"  - {cite.get('title', '')}" + (f" — {cite['location']}" if cite.get("location") else ""))
     if risk.get("recommendation"):
         lines.append(f"- **Khuyến nghị:** {risk['recommendation']}")
     if risk.get("revised_clause"):
         lines += ["- **Đề xuất sửa:**", "", f"  > {risk['revised_clause']}"]
     return [*lines, ""]
+
+
+_STATUS_LABEL = {"co": "Đã có", "chua_day_du": "Chưa đầy đủ", "thieu": "Thiếu", "khong_ap_dung": "Không áp dụng"}
+
+
+def _scope_lines(analysis: dict) -> list[str]:
+    """Which date the law was checked at, what the coverage figure means, and the Điều 21 checklist."""
+    lines: list[str] = []
+    timeline = analysis.get("legal_as_of") or {}
+    if timeline:
+        lines += ["## Cơ sở đối chiếu pháp luật", "", f"- {timeline.get('ghi_chu', '')}"]
+        if timeline.get("thay_doi_sau_ky"):
+            lines.append(f"- {timeline['thay_doi_sau_ky']}")
+        lines.append("")
+    coverage = analysis.get("coverage") or {}
+    found = coverage.get("phat_hien")
+    if found:
+        lines += [
+            "## Phạm vi và độ tin cậy của phân tích",
+            "",
+            f"- {coverage.get('pham_vi', '')}",
+            f"- Rủi ro phát hiện: {found['so_rui_ro']} (tại {found['so_dieu_co_rui_ro']} Điều); "
+            f"độ tin cậy trung bình: {found['do_tin_cay_trung_binh']}; rủi ro tin cậy thấp (<0.7): {found['so_rui_ro_do_tin_cay_thap']}",
+            f"- {found['luu_y']}",
+            "",
+        ]
+    if analysis.get("required_content"):
+        lines += ["## Nội dung bắt buộc (Điều 21 BLLĐ)", "", "| Nội dung | Căn cứ | Trạng thái | Còn thiếu |", "|---|---|---|---|"]
+        for item in analysis["required_content"]:
+            missing = "; ".join(item.get("con_thieu") or []) or "—"
+            lines.append(
+                f"| {item['noi_dung']} | {item['can_cu']} | {_STATUS_LABEL.get(item['trang_thai'], item['trang_thai'])} | {missing} |"
+            )
+        lines.append("")
+    return lines
 
 
 def render_markdown(report: dict) -> str:
@@ -93,6 +137,9 @@ def render_markdown(report: dict) -> str:
            if summary["clauses_checked"] is not None else ""),
         f"- {_SEVERITY_LABEL['critical']}: {sev['critical']} · {_SEVERITY_LABEL['warning']}: {sev['warning']}",
         "",
+    ]
+    lines += _scope_lines(report.get("analysis") or {})
+    lines += [
         "## Mức sử dụng AI",
         "",
     ]

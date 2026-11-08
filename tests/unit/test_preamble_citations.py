@@ -118,8 +118,8 @@ def test_preamble_ok_when_docs_valid():
     assert risks == []
 
 
-def test_preamble_warns_when_partial_effect():
-    """status_flag=4 is still citable but must warn drafters to check amendments."""
+def test_preamble_partial_effect_alone_is_not_a_risk():
+    """status_flag=4 still in force: no concrete defect in the contract → no warning (false positive)."""
     text = SAMPLE.read_text(encoding="utf-8")
 
     def fake_lookup(doc_num: str):
@@ -138,11 +138,27 @@ def test_preamble_warns_when_partial_effect():
 
     with patch("app.agents.preamble_citations._lookup_doc", side_effect=fake_lookup):
         risks = check_preamble_citations(text, as_of_date="2026-07-15")
+    assert risks == []
+
+
+def test_preamble_partial_effect_is_context_next_to_a_real_problem():
+    text = SAMPLE.read_text(encoding="utf-8")
+
+    def fake_lookup(doc_num: str):
+        expired = doc_num.startswith("91/")
+        return {
+            "doc_id": doc_num, "doc_num": doc_num, "title": "Bộ luật Lao động" if not expired else "Bộ luật Dân sự",
+            "doc_type": "Bộ luật", "status_flag": 2 if expired else 4,
+            "eff_flag": "Hết hiệu lực toàn bộ" if expired else "Hết hiệu lực một phần",
+            "eff_from": "2021-01-01", "eff_to": None,
+            "issue_date": "2019-11-20" if not expired else "2015-11-24", "source_url": None,
+        }
+
+    with patch("app.agents.preamble_citations._lookup_doc", side_effect=fake_lookup):
+        risks = check_preamble_citations(text, as_of_date="2026-07-15")
     assert len(risks) == 1
-    assert risks[0].severity == "warning"
-    assert any("một phần" in r.lower() or "sửa đổi" in r.lower() for r in (risks[0].reasons or []))
-    assert risks[0].legal_citations
-    assert any("Đã đối chiếu" in (c.status or "") for c in risks[0].legal_citations)
+    assert risks[0].severity == "critical"
+    assert any("một phần" in r.lower() for r in risks[0].reasons or [])
 
 
 def test_lookup_doc_maps_row_and_passes_spelling_variants(monkeypatch):

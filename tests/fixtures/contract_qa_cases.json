@@ -1,0 +1,59 @@
+[
+  {
+    "id": "unpaid_overtime",
+    "question": "Điều 2 làm thêm giờ không trả lương có đúng luật không?",
+    "expected_red_flags": ["ot_unpaid"],
+    "expected_source_clauses": ["2"],
+    "required_query_terms": ["làm thêm giờ", "Bộ luật Lao động"]
+  },
+  {
+    "id": "mandatory_insurance",
+    "question": "Công ty có được thỏa thuận không đóng BHXH và BHYT bắt buộc không?",
+    "expected_red_flags": ["no_bhxh"],
+    "expected_source_clauses": ["3"],
+    "required_query_terms": ["bảo hiểm xã hội", "Bộ luật Lao động"]
+  },
+  {
+    "id": "retain_identity_documents",
+    "question": "Công ty có được giữ bản gốc CCCD và bằng cấp của người lao động không?",
+    "expected_red_flags": ["retain_id_papers"],
+    "expected_source_clauses": ["3"],
+    "required_query_terms": ["không được giữ bản chính", "Bộ luật Lao động"]
+  },
+  {
+    "id": "withhold_final_wage",
+    "question": "Công ty có được giữ lương tháng cuối nếu người lao động nghỉ trước hạn không?",
+    "expected_red_flags": ["forfeit_wage_quit"],
+    "expected_source_clauses": ["3"],
+    "required_query_terms": ["tiền lương", "Bộ luật Lao động"]
+  },
+  {
+    "id": "fine_and_deduct_wage",
+    "question": "Điều khoản phạt tiền và khấu trừ trực tiếp vào lương có hợp pháp không?",
+    "expected_red_flags": ["fine_deduct_wage"],
+    "expected_source_clauses": ["4"],
+    "required_query_terms": ["cấm phạt tiền", "Bộ luật Lao động"]
+  },
+  {
+    "id": "pregnancy_termination",
+    "question": "Công ty có được đơn phương chấm dứt hợp đồng vì người lao động mang thai không?",
+    "expected_red_flags": ["terminate_pregnancy"],
+    "expected_source_clauses": ["4"],
+    "required_query_terms": ["mang thai", "đơn phương chấm dứt", "Bộ luật Lao động"]
+  },
+  {
+    "id": "ban_lawsuit",
+    "question": "Công ty có được cấm người lao động khởi kiện ra Tòa án không?",
+    "expected_red_flags": ["ban_lawsuit"],
+    "expected_source_clauses": ["5"],
+    "required_query_terms": ["tranh chấp lao động", "Tòa án", "Bộ luật Lao động"]
+  },
+  {
+    "id": "mandatory_contract_contents",
+    "question": "Hợp đồng lao động này còn thiếu những nội dung bắt buộc nào?",
+    "expected_red_flags": [],
+    "expected_source_clauses": [],
+    "expected_missing_fields": ["employee_residence", "pay_raise", "employee_identity", "job_and_workplace", "wage", "working_hours_rest"],
+    "expected_not_applicable_fields": ["ppe"]
+  }
+]

@@ -114,3 +114,36 @@ def fetch_article_meta(
     except Exception as e:
         logger.warning("fetch_article_meta failed: %s", e)
         return None
+
+
+def fetch_provision(
+    doc_id: str | None,
+    article: int,
+    khoan: int | None = None,
+    point: str | None = None,
+) -> dict[str, str] | None:
+    """Exact text of Điều N [khoản K [điểm p]] — the cited level only, never the whole Điều.
+
+    ``fetch_article_meta`` took the first rows ordered by depth, so it returned an
+    arbitrary khoản (Điều 98 → khoản 2) and concatenated unrelated chunks.
+    """
+    if not doc_id or article <= 0:
+        return None
+    regex = rf"\.D{article}"
+    if khoan:
+        regex += rf"\.K{khoan}"
+        regex += rf"\.{point}$" if point else r"(\.|$)"
+    else:
+        regex += r"(\.|$)"
+    try:
+        from app.infrastructure.retrieval.context import get_legal_chunks
+
+        rows = get_legal_chunks().find_article_chunks(doc_id, regex, 12)
+    except Exception as e:
+        logger.warning("fetch_provision failed: %s", e)
+        return None
+    if not rows:
+        return None
+    from app.agents.legal_citations import build_provision
+
+    return build_provision([(r[0], r[1]) for r in rows if r and r[0]], khoan, point)

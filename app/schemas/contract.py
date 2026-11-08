@@ -6,7 +6,8 @@ class Party(BaseModel):
     name: str
     role: str
     address: str | None = None
-    tax_id: str | None = None
+    tax_id: str | None = None  # MST / mã số doanh nghiệp only — never a personal ID number
+    id_number: str | None = None  # CCCD / CMND / hộ chiếu of an individual
     representative: str | None = None
 
 
@@ -34,6 +35,19 @@ class LegalCitation(BaseModel):
     status: str | None = None
 
 
+class RiskFinding(BaseModel):
+    """One independent violation inside a RiskItem (a Điều can hold several)."""
+
+    key: str
+    title: str
+    severity: str = Field(..., pattern="^(critical|warning|ok)$")
+    reason: str
+    violated_text: str | None = None  # the contract sentence(s) that trigger it
+    legal_citations: list[LegalCitation] | None = None
+    confidence: float | None = Field(default=None, ge=0, le=1)
+    confidence_notes: list[str] | None = None
+
+
 class RiskItem(BaseModel):
     clause_ref: str
     issue: str
@@ -50,6 +64,10 @@ class RiskItem(BaseModel):
     revised_clause: str | None = None
     original_clause: str | None = None
     confidence: float | None = Field(default=None, ge=0, le=1)
+    # Why the confidence is what it is (evidence checks that raised or lowered it).
+    confidence_notes: list[str] | None = None
+    # Per-violation breakdown (deterministic engine); the fields above stay the merged view.
+    findings: list[RiskFinding] | None = None
 
 
 class ContractAnalysis(BaseModel):
@@ -75,6 +93,10 @@ class ContractAnalysis(BaseModel):
     clauses: list[Clause] = []
     # Set by the analysis workflow: how many clauses were actually checked (see workflow._coverage).
     coverage: dict | None = None
+    # Set by the analysis workflow: which date the law was checked at and why (signing vs today).
+    legal_as_of: dict | None = None
+    # Điều 21 BLLĐ checklist: per mandatory item co / chua_day_du / thieu / khong_ap_dung.
+    required_content: list[dict] | None = None
     # Set by AnalyzeContract: LLM requests, tokens and duration of the run that produced this result.
     usage: dict | None = None
 

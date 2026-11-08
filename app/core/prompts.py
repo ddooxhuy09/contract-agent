@@ -106,7 +106,9 @@ Chỉ lấy thông tin được nêu rõ trong văn bản. Không suy luận.
 ## Quy tắc field
 - Ngày giữ nguyên cách viết trong nguồn (vd. 15/07/2026).
 - Số tiền / lương giữ nguyên cách viết trong nguồn.
-- Các điều khoản dạng văn (chấm dứt, phạt, bồi thường…): trích sát nghĩa hoặc gần nguyên văn, tiếng Việt; không bịa.
+- Các điều khoản dạng văn (chấm dứt, phạt, bồi thường…): chỉ trích NGUYÊN VĂN 1-2 câu đúng chủ đề của field đó,
+  không chép cả Điều và không chép câu thuộc chủ đề khác (vd. hỗ trợ bảo hiểm KHÔNG phải điều khoản thanh toán).
+- tax_id chỉ là mã số thuế / mã số doanh nghiệp của tổ chức; số CCCD/CMND/hộ chiếu của cá nhân ghi vào id_number.
 - Không có trong văn bản → null (hoặc [] với parties).
 
 ## Output
@@ -118,16 +120,17 @@ Chỉ một JSON object (không markdown, không giải thích ngoài JSON):
       "name": "tên đầy đủ",
       "role": "vai trò trong HĐ bằng tiếng Việt (vd. Người sử dụng lao động, Bên A)",
       "address": "địa chỉ | null",
-      "tax_id": "MST/CCCD/CMND | null",
+      "tax_id": "mã số thuế / mã số doanh nghiệp (không phải CCCD) | null",
+      "id_number": "số CCCD/CMND/hộ chiếu của cá nhân | null",
       "representative": "người đại diện | null"
     }}
   ],
   "execution_date": "ngày ký như trong nguồn | null",
   "start_date": "ngày hiệu lực/bắt đầu | null",
   "end_date": "ngày kết thúc | null",
-  "duration": "thời hạn bằng lời nếu không có ngày (vd. 12 tháng) | null",
+  "duration": "thời hạn bằng lời nếu nguồn nêu rõ (vd. 12 tháng); không tự tính | null",
   "contract_value": "giá trị HĐ / mức lương như viết | null",
-  "payment_terms": "điều khoản thanh toán | null",
+  "payment_terms": "thời hạn / kỳ hạn thanh toán (vd. trả lương vào ngày 5 hàng tháng) | null",
   "payment_method": "phương thức thanh toán | null",
   "termination_clause": "nội dung chấm dứt | null",
   "penalty_clause": "nội dung phạt | null",

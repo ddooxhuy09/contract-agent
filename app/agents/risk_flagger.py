@@ -2,8 +2,10 @@ from typing import Any
 import re
 
 from app.agents.json_parsing import parse_json_object
+from app.agents.labor_red_flags import revised_clause_problems
 from app.agents.legal_citations import (
     citations_to_legal_basis_line,
+    evidence_confidence,
     ground_citations,
     resolve_legal_citations,
 )
@@ -181,7 +183,17 @@ def _risk_from_judgement(
         if m and len(m.group(1).strip()) > 40:
             revised = m.group(1).strip()
 
+    notes: list[str] = []
+    if revised:
+        # A rewrite that still carries an illegal term, or is cut mid-sentence, is worse than none.
+        problems = revised_clause_problems(clause_text, revised, check_facts=False)
+        if problems:
+            notes.append("Điều khoản sửa đổi do AI không qua kiểm tra nên không hiển thị: " + "; ".join(problems))
+            revised = None
+
     recommendation = (result.get("recommendation") or "").strip() or None
+    if recommendation and not revised:
+        recommendation = re.sub(r"\s*«[^»]*»", "", recommendation).strip() or None
     if not recommendation:
         recommendation = _build_recommendation_fallback(actions, revised)
 
@@ -210,6 +222,12 @@ def _risk_from_judgement(
             "Lý do:",
         ] + [f"- {r}" for r in reasons])
 
+    confidence = _parse_confidence(result.get("confidence"))
+    if confidence is not None:
+        # The model's own confidence is only a ceiling; weak or inconsistent evidence lowers it.
+        confidence, evidence_notes = evidence_confidence(citations, confidence)
+        notes += evidence_notes
+
     return RiskItem(
         clause_ref=clause_ref,
         issue=issue,
@@ -223,7 +241,8 @@ def _risk_from_judgement(
         actions=actions or None,
         revised_clause=revised,
         original_clause=clause_text or None,
-        confidence=_parse_confidence(result.get("confidence")),
+        confidence=round(confidence, 2) if confidence is not None else None,
+        confidence_notes=notes or None,
     )
 
 

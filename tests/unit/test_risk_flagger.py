@@ -171,8 +171,44 @@ def test_full_risk_item_fields(env):
         "actions": ["Làm A"],
         "revised_clause": "Điều khoản mới",
         "original_clause": CLAUSE_BODY,
-        "confidence": 0.8,
+        # The model said 80 but nothing was grounded in the corpus → capped, with the reason kept.
+        "confidence": 0.45,
+        "confidence_notes": ["Không có căn cứ pháp lý đã xác minh trong kho."],
+        "findings": None,
     }
+
+
+def test_confidence_keeps_model_value_when_citation_is_consistent(env, monkeypatch):
+    cite = LegalCitation(
+        title="Điều 36 — BLLĐ", article="Điều 36", clause="Khoản 1", location="Chương 3 > Mục 3 > Điều 36 > Khoản 1",
+        evidence_path="139264.C3.M3.D36.K1", quote="Điều 36. Quyền đơn phương\n1. Người sử dụng lao động có quyền",
+    )
+    monkeypatch.setattr(rf, "ground_citations", lambda *a, **k: [cite])
+    env.llm_outputs.append(_llm(confidence=0.9))
+    assert rf.evaluate_clause(CLAUSE, contract_id="c1").confidence == 0.9
+
+
+def test_confidence_drops_when_citation_is_inconsistent(env, monkeypatch):
+    bad = LegalCitation(  # article/clause disagree with the evidence path
+        title="Điều 98 — BLLĐ", article="Điều 98", clause="Khoản 2", evidence_path="139264.C6.D98.K1",
+        quote="Điều 98. Tiền lương\n1. Người lao động làm thêm giờ",
+    )
+    monkeypatch.setattr(rf, "ground_citations", lambda *a, **k: [bad])
+    env.llm_outputs.append(_llm(confidence=0.9))
+    risk = rf.evaluate_clause(CLAUSE, contract_id="c1")
+    assert risk.confidence < 0.9
+    assert any("khoản" in n.lower() for n in risk.confidence_notes)
+
+
+def test_llm_revised_clause_still_containing_illegal_term_is_dropped(env):
+    env.llm_outputs.append(_llm(
+        recommendation="Sửa thành «Công ty có quyền áp dụng hình thức kỷ luật phạt tiền 500.000 VNĐ mỗi lần.»",
+        revised_clause="Công ty có quyền áp dụng hình thức kỷ luật phạt tiền 500.000 VNĐ mỗi lần.",
+    ))
+    risk = rf.evaluate_clause(CLAUSE, contract_id="c1")
+    assert risk.revised_clause is None
+    assert "phạt tiền" not in (risk.recommendation or "")
+    assert any("không qua kiểm tra" in n for n in risk.confidence_notes)
 
 
 def test_revised_clause_taken_from_recommendation_guillemets(env):

@@ -337,7 +337,7 @@ def ground_citations(
             continue
         path = str(meta.get("path") or "")
         location = format_path_location(path)
-        quote_text = _clean_quote(content)
+        quote_text = _clean_quote(trim_to_provision(content, khoan_of_path(path)))
         if not quote_text:
             continue
         key = _article_key(meta, location)
@@ -372,3 +372,95 @@ def ground_citations(
         if len(grounded) >= max_citations:
             break
     return grounded or parsed
+
+
+# ---------------------------------------------------------------------------
+# Precise provision extraction + citation self-checks
+# ---------------------------------------------------------------------------
+
+_KHOAN_IN_PATH = re.compile(r"\.K(\d+)(?:\.|$)")
+_MAX_QUOTE_CHARS = 1200
+
+
+def khoan_of_path(path: str | None) -> int | None:
+    m = _KHOAN_IN_PATH.search(path or "")
+    return int(m.group(1)) if m else None
+
+
+def trim_to_provision(text: str | None, khoan: int | None = None, *, max_chars: int = _MAX_QUOTE_CHARS) -> str:
+    """Cut a corpus chunk down to its own Điều heading + khoản.
+
+    Chunks run on into the next khoản and even the next Điều's ``## Điều N`` heading;
+    quoting them verbatim is what produced long, repeated evidence.
+    """
+    cleaned = re.sub(r"<!--.*?-->", " ", text or "", flags=re.DOTALL).replace("**", "").replace("__", "")
+    out: list[str] = []
+    for raw in cleaned.splitlines():
+        line = raw.strip()
+        if not line:
+            continue
+        if out and re.match(r"^(?:#+\s*)?Điều\s+\d+\s*\.", line):
+            break  # next article
+        m = re.match(r"^(\d+)\.\s", line)
+        if khoan and m and int(m.group(1)) > khoan:
+            break  # next khoản
+        out.append(line)
+    quote = "\n".join(out)
+    if len(quote) > max_chars:
+        cut = quote[:max_chars]
+        nl = cut.rfind("\n")
+        quote = (cut[:nl] if nl > max_chars // 2 else cut.rsplit(" ", 1)[0]).rstrip() + " …"
+    return quote
+
+
+def build_provision(rows: list[tuple], khoan: int | None = None, point: str | None = None) -> dict[str, str] | None:
+    """Merge the chunks of one khoản/điểm into ``{"quote", "path"}`` (path = the cited level)."""
+    lines: list[str] = []
+    for text, _path in rows:
+        for line in trim_to_provision(text, khoan, max_chars=10**6).splitlines():
+            if line not in lines:
+                lines.append(line)
+    if not lines:
+        return None
+    path = str(rows[0][1])
+    if khoan and not point:
+        path = re.sub(rf"(\.K{khoan})\..*$", r"\1", path)  # cite the khoản, not its first điểm
+    return {"quote": trim_to_provision("\n".join(lines), khoan), "path": path}
+
+
+def citation_issues(c: LegalCitation) -> list[str]:
+    """Consistency of article / clause / location / evidence_path / quote (empty = consistent)."""
+    if not c.evidence_path:
+        return ["chưa có evidence_path trong kho pháp điển nên chưa xác minh được vị trí trích dẫn"]
+    loc = format_path_location(c.evidence_path)
+    issues: list[str] = []
+    for name in ("article", "clause", "point", "location"):
+        have, want = getattr(c, name), loc.get(name)
+        if have and want and have != want:
+            issues.append(f"{name} «{have}» không khớp evidence_path ({want})")
+    quote = c.quote or ""
+    art = re.search(r"\d+", loc["article"] or "")
+    head = re.match(r"\s*Điều\s+(\d+)", quote)
+    if head and art and head.group(1) != art.group(0):
+        issues.append("quote thuộc Điều khác với article")
+    if len(re.findall(r"(?:^|\n)\s*#*\s*Điều\s+\d+\s*\.", quote)) > 1:
+        issues.append("quote ghép nhiều Điều hoặc lặp tiêu đề")
+    k = re.search(r"\d+", loc["clause"] or "")
+    if k and quote and not re.search(rf"(?:^|\n)\s*{k.group(0)}\.\s", quote):
+        issues.append(f"quote không chứa nội dung khoản {k.group(0)}")
+    if len(quote) > _MAX_QUOTE_CHARS + 20:
+        issues.append("quote quá dài")
+    return issues
+
+
+def evidence_confidence(citations: list[LegalCitation] | None, ceiling: float) -> tuple[float, list[str]]:
+    """Cap a confidence by evidence quality: no citation / inconsistent citation → lower."""
+    if not citations:
+        return min(ceiling, 0.45), ["Không có căn cứ pháp lý đã xác minh trong kho."]
+    cap, notes = ceiling, []
+    for c in citations:
+        issues = citation_issues(c)
+        if issues:
+            cap -= 0.1
+            notes += [f"{c.article or c.title}: {i}" for i in issues]
+    return max(0.3, min(cap, ceiling)), notes

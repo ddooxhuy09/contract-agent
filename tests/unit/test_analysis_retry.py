@@ -141,9 +141,14 @@ def test_all_clauses_checked_gives_full_coverage(monkeypatch):
     monkeypatch.setattr(wf, "evaluate_clause", lambda *a, **k: None)
 
     analysis, _ = asyncio.run(wf.run_analysis_workflow(_CONTRACT_TEXT, "c-test"))
-    assert analysis.coverage == {
+    cov = analysis.coverage
+    assert {k: cov[k] for k in ("tong_so_dieu", "da_kiem", "chua_kiem", "ty_le_da_kiem", "chua_kiem_chi_tiet")} == {
         "tong_so_dieu": 1, "da_kiem": 1, "chua_kiem": 0, "ty_le_da_kiem": 1.0, "chua_kiem_chi_tiet": [],
     }
+    # Full clause coverage must not be presented as proof that nothing was missed.
+    assert cov["phat_hien"]["so_rui_ro"] == 0
+    assert cov["phat_hien"]["dieu_chua_phat_hien_rui_ro"] == ["1"]
+    assert "không đo" in cov["pham_vi"]
 
 
 def test_judge_ok_does_not_retry(monkeypatch):

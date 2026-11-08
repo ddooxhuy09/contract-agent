@@ -28,15 +28,14 @@ def test_sample_is_labor_contract():
 def test_sample_missing_mandatory_fields():
     text = SAMPLE.read_text(encoding="utf-8")
     missing_keys = {f.key for f in missing_mandatory_fields(text)}
-    # Present-ish: employer, employee id core, job, term, hours
     assert "employer_identity" not in missing_keys
-    assert "employee_identity" not in missing_keys  # has name + DOB + CCCD
-    assert "job_and_workplace" not in missing_keys
     assert "term" not in missing_keys
+    # Partly present is reported as such (name + DOB + CCCD but no giới tính; đơn vị but no địa điểm)
+    assert {"employee_identity", "job_and_workplace", "wage", "working_hours_rest"} <= missing_keys
     # SAI: NLĐ thiếu nơi cư trú / địa chỉ hiện tại
     assert "employee_residence" in missing_keys
     assert "pay_raise" in missing_keys
-    assert "ppe" in missing_keys
+    assert "ppe" not in missing_keys  # AI research job: «không áp dụng», not a gap
 
 
 def test_employee_residence_not_satisfied_by_employer_address():

@@ -1,5 +1,6 @@
 import re
 import unicodedata
+from datetime import date
 
 from pydantic import ValidationError
 
@@ -9,6 +10,7 @@ from app.core.prompts import EXTRACTION_PROMPT
 from app.agents.llm_client import chat_completion, DEFAULT_PROVIDER
 from app.agents.json_parsing import parse_json_object
 from app.document.chunker import find_headings
+from app.agents.clause_text import sentences_matching
 
 # Fields the LLM fallback is allowed to fill in when the rule-based regexes came up empty.
 # "parties" and "clauses" are handled separately (list-shaped, not simple None-checks).
@@ -25,15 +27,16 @@ def _normalize(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
-def _extract_line_around(text: str, keyword: str, context_lines: int = 2) -> str | None:
-    lines = text.split("\n")
-    for i, line in enumerate(lines):
-        if re.search(keyword, line, re.IGNORECASE):
-            start = max(0, i)
-            end = min(len(lines), i + context_lines + 1)
-            result = "\n".join(lines[start:end])
-            result = re.sub(r"\n(?:Điều|ĐIỀU)\s+\d+.*$", "", result)
-            return _normalize(result).strip()
+def _first_sentence(text: str, keywords: list[str], accept=None, min_len: int = 10) -> str | None:
+    """First sentence / list item mentioning one of ``keywords`` (in priority order).
+
+    DOCX paragraphs put a whole Điều on one line, so a line-based snippet pulled in
+    unrelated duties (confidentiality field holding the insurance and training-cost items).
+    """
+    for kw in keywords:
+        for hit in sentences_matching(text, kw, accept):
+            if len(hit) >= min_len:
+                return hit
     return None
 
 
@@ -111,7 +114,7 @@ def _extract_party_a(text: str, match, parties: list[Party]):
     if m:
         name = m.group(1).strip()
 
-    m = re.search(r"Mã\s+số\s+thuế\s*[:\t]+\s*(\d+)", block, re.IGNORECASE)
+    m = re.search(r"Mã\s+số\s+(?:thuế|doanh\s+nghiệp)\s*[:\t]+\s*(\d+)", block, re.IGNORECASE)
     if m:
         tax_id = m.group(1).strip()
 
@@ -134,7 +137,7 @@ def _extract_party_b(text: str, match, parties: list[Party]):
 
     name = None
     address = None
-    tax_id = None
+    id_number = None
 
     tail_start = max(0, len(text) * 3 // 4)
     tail = text[tail_start:]
@@ -146,7 +149,7 @@ def _extract_party_b(text: str, match, parties: list[Party]):
 
     m = _CMND_RE.search(text)
     if m:
-        tax_id = m.group(1).strip()
+        id_number = m.group(1).strip()  # personal ID — never the tax_id field
 
     m = _ADDRESS_RE.search(tail)
     if not m:
@@ -157,7 +160,7 @@ def _extract_party_b(text: str, match, parties: list[Party]):
         address = re.sub(r"^[:\|\s]+", "", address)
 
     if name:
-        parties.append(Party(name=name, role=role, address=address, tax_id=tax_id))
+        parties.append(Party(name=name, role=role, address=address, id_number=id_number))
 
 
 # ============================================================
@@ -167,19 +170,20 @@ def _extract_party_b(text: str, match, parties: list[Party]):
 _DATE_VI = r"\d{1,2}\s*(?:/|\.|\-|tháng)\s*\d{1,2}\s*(?:/|\.|\-|năm|$)\s*\d{2,4}"
 
 _EXECUTION_PATTERNS = [
-    r"(?:Hôm\s+nay|hôm\s+nay),\s*ngày\s+(" + _DATE_VI + ")",
+    r"(?:Hôm\s+nay|hôm\s+nay),?\s*ngày\s+(" + _DATE_VI + ")",
     r"(?:ngày\s+ký|ký\s+kết|ngày\s+lập)\s*[:\-–]?\s*(" + _DATE_VI + ")",
 ]
 
 _START_DATE_PATTERNS = [
     r"Từ\s+ngày\s*[:\|\t]+\s*(" + _DATE_VI + ")",
+    r"[Tt]ừ\s+ngày\s+(" + _DATE_VI + ")",
     r"(?:có\s+hiệu\s+lực|hiệu\s+lực)\s+(?:từ|kể\s+từ)\s+(?:ngày\s+)?(" + _DATE_VI + ")",
     r"bắt\s+đầu\s+(?:từ|kể\s+từ)\s+(?:ngày\s+)?(" + _DATE_VI + ")",
 ]
 
 _END_DATE_PATTERNS = [
     r"Đến\s+ngày\s*[:\|\t]+\s*(" + _DATE_VI + ")",
-    r"(?:đến|cho\s+đến)\s+(?:ngày\s+)?(" + _DATE_VI + ")",
+    r"(?:đến|cho\s+đến)\s+(?:hết\s+)?(?:ngày\s+)?(" + _DATE_VI + ")",
     r"kết\s+thúc\s+(?:vào|ngày)\s+(" + _DATE_VI + ")",
 ]
 
@@ -206,11 +210,7 @@ def _extract_dates(text: str) -> dict:
 
 
 def _extract_force_majeure(text: str) -> str | None:
-    for kw in [r"bất\s+khả\s+kháng", r"force\s*majeure", r"sự\s+kiện\s+bất\s+khả\s+kháng"]:
-        ctx = _extract_line_around(text, kw, context_lines=1)
-        if ctx and len(ctx) > 10:
-            return ctx
-    return None
+    return _first_sentence(text, [r"bất\s+khả\s+kháng", r"force\s*majeure"])
 
 
 # ============================================================
@@ -238,13 +238,11 @@ def _extract_finance(text: str) -> dict:
 
     method = _find_first_match(text, _PAYMENT_METHOD_PATTERNS)
     if not method:
-        ctx = _extract_line_around(text, r"trả\s+lương\s+vào\s+ngày", context_lines=0)
-        if ctx:
-            method = ctx
+        method = _first_sentence(text, [r"trả\s+lương\s+vào\s+ngày"])
 
     terms = _find_first_match(text, _PAYMENT_TERMS_PATTERNS)
     if not terms:
-        terms = _extract_line_around(text, r"thanh\s+toán\s+đầy\s+đủ", context_lines=0)
+        terms = _first_sentence(text, [r"thanh\s+toán\s+đầy\s+đủ"])
 
     return {
         "contract_value": value,
@@ -259,40 +257,29 @@ def _extract_finance(text: str) -> dict:
 
 
 def _extract_termination(text: str) -> str | None:
-    for kw in [r"(?:Tạm\s+hoãn|tạm\s+hoãn).*chấm\s+dứt", r"chấm\s+dứt\s+hợp\s+đồng\s+lao\s+động", r"đơn\s+phương\s+chấm\s+dứt"]:
-        ctx = _extract_line_around(text, kw, context_lines=1)
-        if ctx and len(ctx) > 15 and "bồi thường" not in ctx.lower():
-            return ctx
-    return None
+    return _first_sentence(
+        text,
+        [r"(?:Tạm\s+hoãn|tạm\s+hoãn).*chấm\s+dứt", r"chấm\s+dứt\s+hợp\s+đồng\s+lao\s+động", r"đơn\s+phương\s+chấm\s+dứt"],
+        accept=lambda s: "bồi thường" not in s.lower(),
+        min_len=15,
+    )
 
 
 def _extract_penalty(text: str) -> dict:
-    penalty = None
-    for kw in [r"phạt\s+vi\s+phạm", r"mức\s+phạt", r"tiền\s+phạt"]:
-        ctx = _extract_line_around(text, kw, context_lines=1)
-        if ctx and len(ctx) > 10:
-            penalty = ctx
-            break
-
-    indemnity = None
-    for kw in [r"bồi\s+thường", r"bồi\s+hoàn", r"BỒI\s+THƯỜNG"]:
-        ctx = _extract_line_around(text, kw, context_lines=1)
-        if ctx and len(ctx) > 10 and (not penalty or ctx != penalty):
-            indemnity = ctx
-            break
+    penalty = _first_sentence(text, [r"phạt\s+vi\s+phạm", r"mức\s+phạt", r"tiền\s+phạt", r"phạt\s+tiền"])
+    indemnity = _first_sentence(
+        text, [r"bồi\s+thường", r"bồi\s+hoàn"], accept=lambda s: not penalty or s != penalty
+    )
 
     return {"penalty_clause": penalty, "indemnity": indemnity}
 
 
 def _extract_dispute(text: str) -> str | None:
-    for kw in [
-        r"(?:trọng\s+tài|tòa\s+án)\s+có\s+thẩm\s+quyền",
-        r"giải\s+quyết\s+tranh\s+chấp",
-    ]:
-        ctx = _extract_line_around(text, kw, context_lines=1)
-        if ctx and len(ctx) > 15:
-            return ctx
-    return None
+    return _first_sentence(
+        text,
+        [r"(?:trọng\s+tài|tòa\s+án)\s+có\s+thẩm\s+quyền", r"giải\s+quyết\s+tranh\s+chấp", r"tranh\s+chấp"],
+        min_len=15,
+    )
 
 
 # ============================================================
@@ -301,46 +288,30 @@ def _extract_dispute(text: str) -> str | None:
 
 
 def _extract_governing_law(text: str) -> str | None:
-    for kw in [
-        r"pháp\s+luật\s+lao\s+động",
-        r"luật\s+áp\s+dụng",
-        r"pháp\s+luật\s+(?:áp\s+dụng|điều\s+chỉnh|hiện\s+hành)",
-    ]:
-        ctx = _extract_line_around(text, kw, context_lines=0)
-        if ctx and len(ctx) > 10:
-            return ctx
-    return None
+    return _first_sentence(
+        text,
+        [
+            r"pháp\s+luật\s+lao\s+động",
+            r"luật\s+áp\s+dụng",
+            r"pháp\s+luật\s+(?:áp\s+dụng|điều\s+chỉnh|hiện\s+hành)",
+        ],
+    )
 
 
 def _extract_confidentiality(text: str) -> str | None:
-    for kw in [r"bảo\s+mật", r"bí\s+mật", r"confidential"]:
-        ctx = _extract_line_around(text, kw, context_lines=0)
-        if ctx and len(ctx) > 5:
-            return ctx
-    return None
+    return _first_sentence(text, [r"bảo\s+mật", r"bí\s+mật", r"confidential"], min_len=5)
 
 
 def _extract_severability(text: str) -> str | None:
-    for kw in [
-        r"độc\s+lập\s+của\s+điều\s+khoản",
-        r"vô\s+hiệu\s+(?:từng|một)\s+phần",
-        r"severab",
-    ]:
-        ctx = _extract_line_around(text, kw, context_lines=0)
-        if ctx and len(ctx) > 10:
-            return ctx
-    return None
+    return _first_sentence(
+        text, [r"độc\s+lập\s+của\s+điều\s+khoản", r"vô\s+hiệu\s+(?:từng|một)\s+phần", r"severab"]
+    )
 
 
 def _extract_amendments(text: str) -> str | None:
-    for kw in [
-        r"sửa\s+đổi(?:\s+bổ\s+sung)?",
-        r"phụ\s+lục\s+(?:sửa|hợp\s+đồng)",
-    ]:
-        ctx = _extract_line_around(text, kw, context_lines=1)
-        if ctx and len(ctx) > 15:
-            return ctx
-    return None
+    return _first_sentence(
+        text, [r"sửa\s+đổi(?:\s+bổ\s+sung)?", r"phụ\s+lục\s+(?:sửa|hợp\s+đồng)"], min_len=15
+    )
 
 
 # ============================================================
@@ -356,7 +327,7 @@ _CONTRACT_TYPE_RE = re.compile(
 def _extract_contract_type(text: str) -> str | None:
     m = _CONTRACT_TYPE_RE.search(text)
     if m:
-        ct = m.group("type").strip()
+        ct = re.sub(r"\s+Số\s*:.*$", "", m.group("type").strip("*_ "), flags=re.I).strip("*_ ")  # drop «Số: 204/…» that follows the title
         if 3 < len(ct) < 120:
             return f"Hợp đồng {ct}"
     for kw in ["HỢP ĐỒNG LAO ĐỘNG", "HỢP ĐỒNG THƯƠNG MẠI", "HỢP ĐỒNG MUA BÁN",
@@ -409,6 +380,65 @@ def _extract_clauses(text: str) -> list[Clause]:
 _LLM_GAPFILL_CHAR_LIMIT = 12000
 
 
+def _vn_date(value: str | None) -> date | None:
+    m = re.search(r"(\d{1,2})\D+(\d{1,2})\D+(\d{4})", value or "")
+    if not m:
+        return None
+    try:
+        return date(int(m.group(3)), int(m.group(2)), int(m.group(1)))
+    except ValueError:
+        return None
+
+
+def _duration(start: str | None, end: str | None) -> str | None:
+    """Term in words from the two dates (end date inclusive), e.g. «6 tháng»."""
+    a, b = _vn_date(start), _vn_date(end)
+    if not a or not b or b < a:
+        return None
+    days = (b - a).days + 1
+    months = round(days / 30.4375)
+    return f"{months} tháng" if months and abs(days / 30.4375 - months) < 0.25 else f"{days} ngày"
+
+
+# Topic every LLM-filled free-text field must stay on; off-topic sentences are cut so a field
+# never carries a whole Điều (payment_terms holding the insurance support, confidentiality
+# holding the insurance + training-cost items…).
+_FIELD_TOPIC: dict[str, tuple[str, str | None]] = {
+    "payment_terms": (r"thanh\s+toán|trả\s+lương|thù\s+lao", r"bảo\s+hiểm|BHXH|BHYT|hỗ\s+trợ"),
+    "payment_method": (r"thanh\s+toán|trả\s+lương|chuyển\s+khoản|tiền\s+mặt", None),
+    "termination_clause": (r"chấm\s+dứt|thanh\s+lý", None),
+    "penalty_clause": (r"phạt|vi\s+phạm|kỷ\s+luật", None),
+    "indemnity": (r"bồi\s+thường|bồi\s+hoàn", None),
+    "force_majeure": (r"bất\s+khả\s+kháng|force\s*majeure", None),
+    "dispute_resolution": (r"tranh\s+chấp|tòa\s+án|trọng\s+tài|khởi\s+kiện", None),
+    "confidentiality": (r"bảo\s+mật|bí\s+mật|confidential", None),
+    "severability": (r"vô\s+hiệu|độc\s+lập|severab", None),
+    "amendments": (r"sửa\s+đổi|bổ\s+sung|phụ\s+lục", None),
+}
+_FIELD_MAX_CHARS = 500
+
+
+def _clean_llm_field(field: str, value, text: str):
+    if not isinstance(value, str) or field not in _FIELD_TOPIC:
+        return value
+    topic, reject = _FIELD_TOPIC[field]
+    reject_rx = re.compile(reject, re.I) if reject else None
+    kept = sentences_matching(value, topic, accept=lambda s: not (reject_rx and reject_rx.search(s)))
+    return " ".join(kept[:2])[:_FIELD_MAX_CHARS] or None
+
+
+def _fix_party_ids(parties: list[dict]) -> list[dict]:
+    """A personal ID number (CCCD/CMND) is never a tax id."""
+    for p in parties:
+        person = re.match(r"(?i)^(ông|bà|anh|chị)\b", str(p.get("name") or "")) or re.match(
+            r"(?i)^người\s+lao\s+động", str(p.get("role") or "")
+        )
+        if person and p.get("tax_id"):
+            p["id_number"] = p.get("id_number") or p["tax_id"]
+            p["tax_id"] = None
+    return parties
+
+
 def _extract_with_llm(text: str, contract_id: str, provider: str) -> dict | None:
     """LLM fallback for whatever the regexes above missed. Runs once per upload (not
     per-clause), so cost stays bounded even though it's a full-contract call.
@@ -446,8 +476,10 @@ def _fill_gaps_with_llm(analysis: ContractAnalysis, text: str, contract_id: str,
     # trusted over the LLM's guess, since it's a deterministic hit on the actual text.
     for field in _LLM_FILLABLE_FIELDS:
         if not data.get(field) and llm_result.get(field):
-            data[field] = llm_result[field]
-            filled_fields.append(field)
+            value = _clean_llm_field(field, llm_result[field], text)
+            if value:
+                data[field] = value
+                filled_fields.append(field)
 
     if not data.get("parties") and llm_result.get("parties"):
         # The prompt tells the model to answer null for anything absent from the text, so an
@@ -459,11 +491,14 @@ def _fill_gaps_with_llm(analysis: ContractAnalysis, text: str, contract_id: str,
         if dropped:
             logger.info(f"Contract {contract_id}: dropped {dropped} LLM party entries without a name or role")
         if usable:
-            data["parties"] = usable
+            data["parties"] = _fix_party_ids(usable)
             filled_fields.append(f"parties(x{len(usable)})")
     if not data.get("contract_type") and llm_result.get("contract_type"):
         data["contract_type"] = llm_result["contract_type"]
         filled_fields.append("contract_type")
+
+    if not data.get("duration"):
+        data["duration"] = _duration(data.get("start_date"), data.get("end_date"))
 
     if filled_fields:
         logger.info(f"LLM extraction fallback filled gaps for contract {contract_id}: {', '.join(filled_fields)}")
@@ -494,7 +529,7 @@ def parse_contract(text: str, contract_id: str, provider: str = DEFAULT_PROVIDER
         execution_date=dates.get("execution_date"),
         start_date=dates.get("start_date"),
         end_date=dates.get("end_date"),
-        duration=None,
+        duration=_duration(dates.get("start_date"), dates.get("end_date")),
         contract_value=finance.get("contract_value"),
         payment_terms=finance.get("payment_terms"),
         payment_method=finance.get("payment_method"),

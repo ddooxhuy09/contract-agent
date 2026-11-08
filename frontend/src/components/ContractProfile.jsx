@@ -53,8 +53,11 @@ export default function ContractProfile({ analysis, defaultOpen = true }) {
                       {party.role || `Bên ${idx + 1}`}
                     </p>
                     <p className="ui-text font-medium text-ink">{party.name}</p>
+                    {party.id_number && (
+                      <p className="text-[0.6875rem] text-ink-muted mt-1">CCCD/CMND: {party.id_number}</p>
+                    )}
                     {party.tax_id && (
-                      <p className="text-[0.6875rem] text-ink-muted mt-1">MST/CCCD: {party.tax_id}</p>
+                      <p className="text-[0.6875rem] text-ink-muted mt-1">MST: {party.tax_id}</p>
                     )}
                     {party.representative && (
                       <p className="text-[0.6875rem] text-ink-muted">Đại diện: {party.representative}</p>

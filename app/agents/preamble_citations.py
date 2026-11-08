@@ -245,15 +245,12 @@ def check_preamble_citations(
                     f"không khớp tiêu đề trong kho («{row['title'][:80]}»)."
                 )
 
-    # Partial-effect instruments are still citable but must be called out for drafters
-    problems.extend(soft_notes)
-
+    # A partly-amended instrument that is still in force is not a defect by itself: the
+    # preamble cites the whole act and nothing says which provision is affected. It is
+    # only context next to a real problem (expired / unknown number / wrong date).
     if not problems:
         return []
-
-    # Soft-only notes (status 4) stay warning; hard expire stays critical if set
-    if soft_notes and not any("Không nên nêu" in p or "không tìm thấy" in p.lower() for p in problems):
-        severity = "warning"
+    problems.extend(soft_notes)
 
     return [
         RiskItem(
