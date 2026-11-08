@@ -1,18 +1,11 @@
-from functools import lru_cache
-
 from langchain_google_genai import ChatGoogleGenerativeAI
 
-from app.core.settings import get_settings
+from app.agents.llm_client import get_chat_model
 
 
-@lru_cache
 def _model() -> ChatGoogleGenerativeAI:
-    settings = get_settings()
-    return ChatGoogleGenerativeAI(
-        model=settings.gemini_model,
-        google_api_key=settings.gemini_api_key,
-        temperature=0,
-    )
+    # Shared with the agents so key rotation on a per-day quota applies here too.
+    return get_chat_model()
 
 
 class GeminiChatModel:

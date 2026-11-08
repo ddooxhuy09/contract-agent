@@ -39,7 +39,8 @@ def settings_summary():
     names = ("gemini_model", "embedding_model", "embedding_dim", "embedding_device", "embedding_normalize",
              "embedding_max_seq_length", "top_k_retrieval", "similarity_threshold", "legal_expand_backend")
     return {**{n: getattr(s, n) for n in names}, "provider": "gemini", "temperature": 0,
-            "gemini_key_configured": bool(s.gemini_api_key), "database_host": u.hostname,
+            "gemini_key_configured": bool(s.gemini_api_keys), "gemini_keys_configured": len(s.gemini_api_keys),
+            "database_host": u.hostname,
             "database_name": u.path.lstrip("/"), "llm_timeout_seconds": 120,
             "llm_sdk_max_retries": 0, "application_chat_completion_max_attempts": 3}
 
@@ -48,7 +49,7 @@ def error_info(exc):
     from app.core.settings import get_settings
     s = get_settings()
     message = str(exc)
-    for secret in (s.gemini_api_key, s.neo4j_password, urlsplit(s.database_url).password):
+    for secret in (*s.gemini_api_keys, s.neo4j_password, urlsplit(s.database_url).password):
         if secret:
             message = message.replace(secret, "[REDACTED]")
     return {"type": type(exc).__name__, "message": message[:4000]}

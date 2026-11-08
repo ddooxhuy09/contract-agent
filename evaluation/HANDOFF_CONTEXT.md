@@ -4,7 +4,9 @@ Updated: 2026-11-03 (Asia/Bangkok)
 
 ## Continue from here
 
-The active user instruction is: **do not call Gemini; work on and test RAG first**. Do not run generation, call an LLM provider, or use a Gemini credential unless the user explicitly changes this instruction. Keep the current retrieval-only results separate from the earlier generation run.
+Update 2026-11-06/08: the user **authorized a generation run** on the current config (`RAG_LABOR_SCOPE=true`). The earlier "do not call Gemini" instruction no longer applies to `run_benchmark --enable-llm`; it still applies to `rag_only.py`, which refuses to start with any Gemini key set. Keep retrieval-only results separate from generation runs.
+
+Generation run `gemini_full_laborscope_20261106/` stopped at 8 scored cases on the free-tier per-day limit (20 requests/key). The quota-failed MIX-019 record was moved to `quota_failed_MIX-019.jsonl` so `--resume` re-runs it. `GEMINI_API_KEY_1..3` were then added and the client now rotates keys on a per-day 429, so resume that run with `--resume` into the same directory.
 
 The ranking issue is resolved. An offline ablation over the saved candidate pool showed that graph expansion added no gold evidence in this set; the old order ranked instrument level before role/score and buried seeds. Production now keeps seeds in hybrid-search order and places expansion after them. The seed-first run is `rag_only_seed_first_20261026/`: final R@5 0.147 → 0.201, MRR 0.185 → 0.260, coverage unchanged.
 
@@ -119,7 +121,7 @@ docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docke
 For any new retrieval worker, keep Gemini disabled:
 
 ```powershell
-docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docker-compose.eval.yml run --rm --no-deps -e GEMINI_API_KEY= worker python -m evaluation.rag_only --output-dir /workspace/evaluation_results/<new_run_name>
+docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docker-compose.eval.yml run --rm --no-deps -e GEMINI_API_KEY= -e GEMINI_API_KEY_1= -e GEMINI_API_KEY_2= -e GEMINI_API_KEY_3= worker python -m evaluation.rag_only --output-dir /workspace/evaluation_results/<new_run_name>
 python -m evaluation.score_rag_only evaluation_results/<new_run_name>
 ```
 

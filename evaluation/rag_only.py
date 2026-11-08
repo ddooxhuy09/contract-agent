@@ -92,8 +92,9 @@ async def run(args):
     if os.environ.get("CONTRACTLENS_EVAL_ISOLATED") != "1":
         raise RuntimeError("RAG fixture indexing requires the dedicated isolated corpus clone.")
     from app.core.settings import get_settings
-    if get_settings().gemini_api_key:
-        raise RuntimeError("Start this worker with GEMINI_API_KEY empty. This RAG run must not have a usable Gemini credential.")
+    if get_settings().gemini_api_keys:
+        raise RuntimeError("Start this worker with GEMINI_API_KEY and GEMINI_API_KEY_1..3 empty. "
+                           "This RAG run must not have a usable Gemini credential.")
     from app.infrastructure.embeddings.hf_embedder import HuggingFaceEmbedder
     from app.infrastructure.vector.pg_search import PgContractVectorSearch, PgLegalVectorSearch
     from app.infrastructure.db.legal_repository import PgLegalChunkRepository

@@ -12,7 +12,18 @@ class Settings(BaseSettings):
     )
 
     gemini_api_key: str = ""
+    # Extra keys (GEMINI_API_KEY_1..3) let a long run continue on the next key once one
+    # hits its per-day quota; see app/agents/llm_client.rotate_api_key_on_daily_quota.
+    gemini_api_key_1: str = ""
+    gemini_api_key_2: str = ""
+    gemini_api_key_3: str = ""
     gemini_model: str = "gemini-2.5-flash"
+
+    @property
+    def gemini_api_keys(self) -> list[str]:
+        """Configured Gemini keys in use order, de-duplicated, blanks dropped."""
+        candidates = (self.gemini_api_key, self.gemini_api_key_1, self.gemini_api_key_2, self.gemini_api_key_3)
+        return list(dict.fromkeys(key for key in (c.strip() for c in candidates) if key))
 
     # BAAI/bge-m3 via LangChain HuggingFaceEmbeddings
     embedding_model: str = "BAAI/bge-m3"

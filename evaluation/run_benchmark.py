@@ -26,6 +26,22 @@ def write_json(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2, default=str) + "\n", encoding="utf-8")
 
 
+def quota_exhausted(pred) -> bool:
+    """True when this case failed only because every Gemini key is out of per-day quota.
+
+    Recording such a case would mark a quota stop as a system failure and make
+    ``--resume`` skip it, so the caller drops the record and stops the run instead.
+    """
+    from app.agents.llm_client import _is_daily_quota, keys_remaining
+    if pred.get("execution_status") == "completed":
+        return False
+    errors = [pred.get("error") or {}]
+    errors += [event["error"] for event in pred.get("trace") or []
+               if isinstance(event, dict) and event.get("error")]
+    blob = json.dumps(errors, ensure_ascii=False, default=str)
+    return _is_daily_quota(Exception(blob)) and keys_remaining() == 0
+
+
 def fingerprints():
     from app.core.settings import get_settings
     import psycopg2
@@ -114,6 +130,12 @@ async def run(args):
                 continue
             print(f"RUN {case['id']} task={case['task']} difficulty={case['difficulty']['level']}", flush=True)
             pred = await runtime.run(case)
+            if quota_exhausted(pred):
+                remaining = sum(1 for c in cases if c["id"] not in done and c["id"] != case["id"])
+                metadata["stopped_on_quota"] = {"case": case["id"], "at": now(), "cases_left": remaining + 1}
+                print(f"STOP {case['id']}: all Gemini keys are out of per-day quota; "
+                      f"{remaining + 1} cases left, re-run with --resume when quota resets", flush=True)
+                break
             predictions.append(pred)
             with predictions_path.open("a", encoding="utf-8") as file:
                 file.write(json.dumps(pred, ensure_ascii=False, default=str) + "\n")

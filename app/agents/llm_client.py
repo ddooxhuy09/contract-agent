@@ -14,6 +14,47 @@ DEFAULT_PROVIDER = "gemini"
 
 _gemini_chat: ChatGoogleGenerativeAI | None = None
 _gemini_chat_json: ChatGoogleGenerativeAI | None = None
+_key_index = 0
+
+
+def active_api_key() -> str:
+    """The key currently in use, from GEMINI_API_KEY / GEMINI_API_KEY_1..3."""
+    keys = get_settings().gemini_api_keys
+    if not keys:
+        return ""
+    return keys[min(_key_index, len(keys) - 1)]
+
+
+def _is_daily_quota(exc: BaseException) -> bool:
+    text = str(exc)
+    if "429" not in text and "RESOURCE_EXHAUSTED" not in text:
+        return False
+    return bool(re.search(r"per\s*day|perday|daily", text, re.I))
+
+
+def rotate_api_key_on_daily_quota(exc: BaseException) -> bool:
+    """Switch to the next configured key when this one is out of per-day quota.
+
+    Only the per-day limit is worth another key: it lasts hours, while a per-minute
+    limit clears on its own and is handled by the sleep in ``chat_completion``.
+    Returns True when a different key is now active.
+    """
+    global _key_index, _gemini_chat, _gemini_chat_json
+    if not _is_daily_quota(exc):
+        return False
+    keys = get_settings().gemini_api_keys
+    if _key_index + 1 >= len(keys):
+        return False
+    _key_index += 1
+    _gemini_chat = None
+    _gemini_chat_json = None
+    logger.warning("Gemini per-day quota exhausted; switching to key %s of %s", _key_index + 1, len(keys))
+    return True
+
+
+def keys_remaining() -> int:
+    """Configured keys not yet used in this process (0 = the last key is active)."""
+    return max(0, len(get_settings().gemini_api_keys) - 1 - _key_index)
 
 
 def get_providers() -> dict[str, dict[str, str]]:
@@ -63,7 +104,7 @@ def get_chat_model(provider: str = DEFAULT_PROVIDER, *, json_mode: bool = False)
             settings = get_settings()
             _gemini_chat_json = ChatGoogleGenerativeAI(
                 model=settings.gemini_model,
-                google_api_key=settings.gemini_api_key,
+                google_api_key=active_api_key(),
                 temperature=0,
                 timeout=120,
                 max_retries=0,  # we handle 429 sleep ourselves
@@ -74,7 +115,7 @@ def get_chat_model(provider: str = DEFAULT_PROVIDER, *, json_mode: bool = False)
         settings = get_settings()
         _gemini_chat = ChatGoogleGenerativeAI(
             model=settings.gemini_model,
-            google_api_key=settings.gemini_api_key,
+            google_api_key=active_api_key(),
             temperature=0,
             timeout=120,
             max_retries=0,
@@ -103,6 +144,9 @@ def chat_completion(prompt: str, provider: str = DEFAULT_PROVIDER) -> str:
             return response.content
         except Exception as e:
             last_err = e
+            if attempt < 2 and rotate_api_key_on_daily_quota(e):
+                model = get_chat_model(provider)
+                continue
             delay = _retry_delay_seconds(e)
             if delay is None or attempt >= 2:
                 raise

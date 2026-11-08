@@ -17,12 +17,14 @@ Test của phần chấm điểm: `tests/evaluation/test_scoring.py`.
 
 This package records ContractLens retrieval and generation behavior. The current QA change removes the unconditional labor-law hint from mixed-topic questions. Benchmark gold is read only after retrieval finishes.
 
-**Current instruction: do not call Gemini.** The active experiment is `rag_only/`; generation in `run_benchmark.py` is disabled by default. No resumption or scheduled Gemini call has been configured.
+**Gemini:** the RAG-only runs must have no usable credential — `rag_only.py` refuses to start if any of `GEMINI_API_KEY`, `GEMINI_API_KEY_1..3` is set, so blank all four on the worker. Generation in `run_benchmark.py` stays off unless `--enable-llm` is passed, and the user authorizes each generation run.
+
+Multiple keys exist so a generation run survives the free-tier per-day limit (20 requests/key/model): on a per-day 429 the client moves to the next key (`app/agents/llm_client.rotate_api_key_on_daily_quota`); a per-minute 429 just sleeps and retries. One key is not enough for all 34 cases.
 
 ## RAG-only (current task)
 
 ```powershell
-docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docker-compose.eval.yml run --rm --no-deps -e GEMINI_API_KEY= worker python -m evaluation.rag_only --output-dir /workspace/evaluation_results/runs/rag_only_no_labor_hint
+docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docker-compose.eval.yml run --rm --no-deps -e GEMINI_API_KEY= -e GEMINI_API_KEY_1= -e GEMINI_API_KEY_2= -e GEMINI_API_KEY_3= worker python -m evaluation.rag_only --output-dir /workspace/evaluation_results/runs/rag_only_no_labor_hint
 python -m evaluation.score_rag_only evaluation_results/runs/rag_only_no_labor_hint
 ```
 
@@ -41,7 +43,7 @@ python -m evaluation.rerank_ablation
 Production now keeps seeds in hybrid-search order and places graph expansion after them. The confirming run is `rag_only_seed_first_20261026/`:
 
 ```powershell
-MSYS_NO_PATHCONV=1 docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docker-compose.eval.yml run --rm --no-deps -e GEMINI_API_KEY= worker python -m evaluation.rag_only --output-dir /workspace/evaluation_results/runs/rag_only_seed_first_20261026
+MSYS_NO_PATHCONV=1 docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docker-compose.eval.yml run --rm --no-deps -e GEMINI_API_KEY= -e GEMINI_API_KEY_1= -e GEMINI_API_KEY_2= -e GEMINI_API_KEY_3= worker python -m evaluation.rag_only --output-dir /workspace/evaluation_results/runs/rag_only_seed_first_20261026
 python -m evaluation.score_rag_only evaluation_results/runs/rag_only_seed_first_20261026
 ```
 
