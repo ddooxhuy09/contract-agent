@@ -26,7 +26,7 @@ _SECTION_PATTERNS = (
 )
 
 
-def _find_headings(text: str) -> list:
+def find_headings(text: str) -> list:
     """Return heading matches (group 1 = clause label), preferring Điều, then Mục, then Khoản."""
     for pattern in (_LINE_ARTICLE_PATTERN, *_SECTION_PATTERNS, _ARTICLE_PATTERN):
         matches = list(pattern.finditer(text))
@@ -122,7 +122,7 @@ def chunk_by_clause(text: str, contract_id: str) -> List[Document]:
     documents: List[Document] = []
     chunk_index = 0
 
-    matches = _find_headings(text)
+    matches = find_headings(text)
     if not matches:
         for idx, chunk in enumerate(_split_text(text, max_chunk_size, chunk_overlap)):
             if chunk.strip():

@@ -1,11 +1,15 @@
 import re
 import unicodedata
 from typing import List, Optional
+
+from pydantic import ValidationError
+
 from app.schemas.contract import ContractAnalysis, Party, Clause
 from app.core.logging import logger
 from app.core.prompts import EXTRACTION_PROMPT
 from app.agents.llm_client import chat_completion, DEFAULT_PROVIDER
 from app.agents.json_parsing import parse_json_object
+from app.document.chunker import find_headings
 
 # Fields the LLM fallback is allowed to fill in when the rule-based regexes came up empty.
 # "parties" and "clauses" are handled separately (list-shaped, not simple None-checks).
@@ -367,18 +371,19 @@ def _extract_contract_type(text: str) -> Optional[str]:
 #  Trích xuất điều khoản
 # ============================================================
 
-_CLAUSE_SPLIT_RE = re.compile(
-    r"(?:^|\n)\s*(Điều|ĐIỀU)\s+(\d+)\s*[\.:\)\-\–]\s*",
-    re.MULTILINE,
-)
-
-
 def _extract_clauses(text: str) -> List[Clause]:
+    """Split the contract into clause units.
+
+    Heading detection is shared with the chunker, which already accepts "Điều 1" with
+    the title on the next line and falls back to "Mục X" / "Khoản X" when a document
+    has no Điều at all. This parser used to require punctuation after the number and
+    had no fallback, so such contracts yielded no clauses and the whole analysis failed.
+    """
     clauses = []
-    splits = list(_CLAUSE_SPLIT_RE.finditer(text))
+    splits = find_headings(text)
 
     for i, match in enumerate(splits):
-        number = match.group(2)
+        number = match.group(1)
         header_end = match.end()
         next_start = splits[i + 1].start() if i + 1 < len(splits) else len(text)
         content = text[header_end:next_start].strip()
@@ -446,8 +451,17 @@ def _fill_gaps_with_llm(analysis: ContractAnalysis, text: str, contract_id: str,
             filled_fields.append(field)
 
     if not data.get("parties") and llm_result.get("parties"):
-        data["parties"] = llm_result["parties"]
-        filled_fields.append(f"parties(x{len(llm_result['parties'])})")
+        # The prompt tells the model to answer null for anything absent from the text, so an
+        # anonymised contract yields parties with no name. Party needs name and role, and one
+        # such entry used to fail validation for the whole analysis.
+        usable = [p for p in llm_result["parties"]
+                  if isinstance(p, dict) and str(p.get("name") or "").strip() and str(p.get("role") or "").strip()]
+        dropped = len(llm_result["parties"]) - len(usable)
+        if dropped:
+            logger.info(f"Contract {contract_id}: dropped {dropped} LLM party entries without a name or role")
+        if usable:
+            data["parties"] = usable
+            filled_fields.append(f"parties(x{len(usable)})")
     if not data.get("contract_type") and llm_result.get("contract_type"):
         data["contract_type"] = llm_result["contract_type"]
         filled_fields.append("contract_type")
@@ -457,7 +471,13 @@ def _fill_gaps_with_llm(analysis: ContractAnalysis, text: str, contract_id: str,
     else:
         logger.info(f"LLM extraction fallback found nothing new for contract {contract_id} (rule-based already complete)")
 
-    return ContractAnalysis(**data)
+    try:
+        return ContractAnalysis(**data)
+    except ValidationError as exc:
+        # Keep the rule-based analysis: a gap-fill value the schema rejects must not throw
+        # away clauses that were extracted from the real text.
+        logger.error(f"Contract {contract_id}: LLM gap-fill rejected by schema, keeping rule-based analysis: {exc}")
+        return analysis
 
 
 def parse_contract(text: str, contract_id: str, provider: str = DEFAULT_PROVIDER) -> ContractAnalysis:
