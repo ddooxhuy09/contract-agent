@@ -1,0 +1,136 @@
+[
+  {
+    "id": "MIX-017",
+    "categories": [
+      "Invalid/Unverified Ground Truth",
+      "Retrieval Missing Evidence",
+      "Wrong Article/Clause/Point"
+    ],
+    "details": "Last actual retrieval attempt; graph stage is ranked before final filtering/truncation. LLM stage includes only full chunks confirmed in the actual prompt."
+  },
+  {
+    "id": "TEMP-006",
+    "categories": [
+      "Invalid/Unverified Ground Truth",
+      "Unsupported Capability",
+      "Retrieval Missing Evidence"
+    ],
+    "details": "Last actual retrieval attempt; graph stage is ranked before final filtering/truncation. LLM stage includes only full chunks confirmed in the actual prompt."
+  },
+  {
+    "id": "MIX-018",
+    "categories": [
+      "Invalid/Unverified Ground Truth",
+      "Retrieval Missing Evidence",
+      "Wrong Legal Document"
+    ],
+    "details": "Last actual retrieval attempt; graph stage is ranked before final filtering/truncation. LLM stage includes only full chunks confirmed in the actual prompt."
+  },
+  {
+    "id": "TEMP-014",
+    "categories": [
+      "Invalid/Unverified Ground Truth",
+      "Unsupported Capability",
+      "Retrieval Missing Evidence",
+      "Wrong Legal Document"
+    ],
+    "details": "Last actual retrieval attempt; graph stage is ranked before final filtering/truncation. LLM stage includes only full chunks confirmed in the actual prompt."
+  },
+  {
+    "id": "MIX-007",
+    "categories": [
+      "Invalid/Unverified Ground Truth",
+      "Retrieval Missing Evidence",
+      "Wrong Article/Clause/Point"
+    ],
+    "details": "Last actual retrieval attempt; graph stage is ranked before final filtering/truncation. LLM stage includes only full chunks confirmed in the actual prompt."
+  },
+  {
+    "id": "MIX-006",
+    "categories": [
+      "Invalid/Unverified Ground Truth"
+    ],
+    "details": "Last actual retrieval attempt; graph stage is ranked before final filtering/truncation. LLM stage includes only full chunks confirmed in the actual prompt."
+  },
+  {
+    "id": "MIX-012",
+    "categories": [
+      "Invalid/Unverified Ground Truth",
+      "Retrieval Missing Evidence",
+      "Wrong Legal Document",
+      "Incorrect Risk Classification"
+    ],
+    "details": "Last actual retrieval attempt; graph stage is ranked before final filtering/truncation. LLM stage includes only full chunks confirmed in the actual prompt."
+  },
+  {
+    "id": "TEMP-009",
+    "categories": [
+      "Invalid/Unverified Ground Truth",
+      "Unsupported Capability",
+      "Retrieval Missing Evidence"
+    ],
+    "details": "Last actual retrieval attempt; graph stage is ranked before final filtering/truncation. LLM stage includes only full chunks confirmed in the actual prompt."
+  },
+  {
+    "id": "MIX-019",
+    "categories": [
+      "Invalid/Unverified Ground Truth",
+      "Retrieval Missing Evidence",
+      "Wrong Legal Document"
+    ],
+    "details": "Last actual retrieval attempt; graph stage is ranked before final filtering/truncation. LLM stage includes only full chunks confirmed in the actual prompt."
+  },
+  {
+    "id": "MIX-005",
+    "categories": [
+      "Invalid/Unverified Ground Truth",
+      "Retrieval Missing Evidence",
+      "Wrong Legal Document"
+    ],
+    "details": "Last actual retrieval attempt; graph stage is ranked before final filtering/truncation. LLM stage includes only full chunks confirmed in the actual prompt."
+  },
+  {
+    "id": "MIX-003",
+    "categories": [
+      "Invalid/Unverified Ground Truth"
+    ],
+    "details": "Last actual retrieval attempt; graph stage is ranked before final filtering/truncation. LLM stage includes only full chunks confirmed in the actual prompt."
+  },
+  {
+    "id": "MIX-004",
+    "categories": [
+      "Invalid/Unverified Ground Truth",
+      "Retrieval Missing Evidence",
+      "Wrong Article/Clause/Point"
+    ],
+    "details": "Last actual retrieval attempt; graph stage is ranked before final filtering/truncation. LLM stage includes only full chunks confirmed in the actual prompt."
+  },
+  {
+    "id": "MIX-008",
+    "categories": [
+      "Invalid/Unverified Ground Truth",
+      "Retrieval Missing Evidence",
+      "Wrong Article/Clause/Point",
+      "Incorrect Risk Classification"
+    ],
+    "details": "Last actual retrieval attempt; graph stage is ranked before final filtering/truncation. LLM stage includes only full chunks confirmed in the actual prompt."
+  },
+  {
+    "id": "TEMP-011",
+    "categories": [
+      "Invalid/Unverified Ground Truth",
+      "Unsupported Capability",
+      "Retrieval Missing Evidence"
+    ],
+    "details": "Last actual retrieval attempt; graph stage is ranked before final filtering/truncation. LLM stage includes only full chunks confirmed in the actual prompt."
+  },
+  {
+    "id": "MIX-020",
+    "categories": [
+      "Invalid/Unverified Ground Truth",
+      "Retrieval Missing Evidence",
+      "Wrong Legal Document"
+    ],
+    "details": "Last actual retrieval attempt; graph stage is ranked before final filtering/truncation. LLM stage includes only full chunks confirmed in the actual prompt."
+  }
+]

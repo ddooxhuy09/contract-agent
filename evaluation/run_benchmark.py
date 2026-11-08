@@ -131,10 +131,11 @@ async def run(args):
             print(f"RUN {case['id']} task={case['task']} difficulty={case['difficulty']['level']}", flush=True)
             pred = await runtime.run(case)
             if quota_exhausted(pred):
-                remaining = sum(1 for c in cases if c["id"] not in done and c["id"] != case["id"])
-                metadata["stopped_on_quota"] = {"case": case["id"], "at": now(), "cases_left": remaining + 1}
+                # This case is not recorded, so it counts as left along with the untouched ones.
+                left = len(cases) - len(predictions)
+                metadata["stopped_on_quota"] = {"case": case["id"], "at": now(), "cases_left": left}
                 print(f"STOP {case['id']}: all Gemini keys are out of per-day quota; "
-                      f"{remaining + 1} cases left, re-run with --resume when quota resets", flush=True)
+                      f"{left} cases left, re-run with --resume when quota resets", flush=True)
                 break
             predictions.append(pred)
             with predictions_path.open("a", encoding="utf-8") as file:

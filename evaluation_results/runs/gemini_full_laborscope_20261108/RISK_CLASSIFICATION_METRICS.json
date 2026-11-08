@@ -1,0 +1,89 @@
+{
+  "repository_labels": [
+    "critical",
+    "warning",
+    "ok"
+  ],
+  "risk_task_count": 6,
+  "gold_labeled_cases": 6,
+  "comparable_cases": 6,
+  "unobservable_or_failed_labeled_cases": 0,
+  "severity_accuracy": {
+    "value": 0.6666666666666666,
+    "sample_count": 6
+  },
+  "end_to_end_correct_detection_fraction": {
+    "value": 0.6666666666666666,
+    "sample_count": 6,
+    "note": "Unavailable/failed outputs count as no correct detection. This is operational coverage, not conditional classifier accuracy."
+  },
+  "confusion_matrix": {
+    "critical": {
+      "critical": 4,
+      "warning": 1,
+      "ok": 0
+    },
+    "warning": {
+      "critical": 0,
+      "warning": 0,
+      "ok": 0
+    },
+    "ok": {
+      "critical": 0,
+      "warning": 1,
+      "ok": 0
+    }
+  },
+  "by_severity": {
+    "critical": {
+      "precision": 1.0,
+      "recall": 0.8,
+      "f1": 0.8888888888888888,
+      "support": 5,
+      "predicted": 4
+    },
+    "warning": {
+      "precision": 0.0,
+      "recall": null,
+      "f1": 0.0,
+      "support": 0,
+      "predicted": 2
+    },
+    "ok": {
+      "precision": null,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 1,
+      "predicted": 0
+    }
+  },
+  "macro_f1": {
+    "value": 0.2962962962962963,
+    "sample_count": 6,
+    "note": "Mean over classes with nonzero gold or predicted support; absent classes remain null."
+  },
+  "critical_risk_recall": {
+    "value": 0.8,
+    "sample_count": 5,
+    "note": "Only comparable observed labels; unavailable outputs are not forced into classification metrics."
+  },
+  "false_negative_rate": {
+    "value": 0.2,
+    "sample_count": 5
+  },
+  "end_to_end_critical_detection_fraction": {
+    "value": 0.8,
+    "sample_count": 5,
+    "note": "Operational fraction with a confirmed detection across all gold-critical cases, including cases blocked from execution; not conditional classifier recall."
+  },
+  "citation_correctness": {
+    "value": null,
+    "sample_count": 0,
+    "reason": "Requires reviewed citation support."
+  },
+  "evidence_span_accuracy": {
+    "value": null,
+    "sample_count": 0,
+    "reason": "Output does not expose a comparable normalized predicted input span."
+  }
+}
