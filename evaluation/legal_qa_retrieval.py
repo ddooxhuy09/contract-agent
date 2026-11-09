@@ -199,11 +199,14 @@ def bootstrap_ci(values: list[float], n_boot: int = 1000, seed: int = 0) -> list
 
 
 def make_searcher(mode: str):
+    from app.core.settings import get_settings
     from app.infrastructure.embeddings.hf_embedder import HuggingFaceEmbedder
     from app.infrastructure.vector.pg_search import PgLegalVectorSearch
 
     search = PgLegalVectorSearch(HuggingFaceEmbedder())
     if mode == "hybrid":
+        # The app default is now vector-only; this benchmark mode must keep measuring the real hybrid.
+        get_settings().legal_retrieval_mode = "hybrid"
         return lambda q, n: search.search(q, k=n, min_score=0.0)
     if mode == "vector":
         return lambda q, n: search._vector_search(q, n, None, None, None)

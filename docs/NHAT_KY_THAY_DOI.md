@@ -110,3 +110,9 @@ Số liệu chính để quyết định: **exact provision recall của `final_
 - Số liệu phụ, chỉ báo cáo, **không** tham gia quyết định: MRR, cross-document coverage, độ trễ, danh sách ca đổi điểm.
 - Quy tắc không đổi sau khi xem kết quả. Nếu một trong hai lần chạy lỗi hoặc thiếu ca (không đủ 34/34 hoàn tất), dừng và báo cáo, không quyết định.
 - Bối cảnh từ benchmark pháp luật chung (test, n=556): vector MRR@10 0,6816, hybrid cũ 0,6420, khác biệt có ý nghĩa; đây là lý do thử vector-only, không thay cho quy tắc trên.
+
+### Kết quả RAG-only v04 và quyết định (2026-11-09)
+- Chạy tại commit `087256a` (mã sạch), 34/34 mỗi cấu hình: exact provision recall 0,2990 cả hai; MRR 0,3000 cả hai; cross-document coverage hybrid 0,4461, vector 0,4608. Chi tiết và danh sách 6 ca đổi: `evaluation_results/reports/RAG_V04_HYBRID_VS_VECTOR.md`.
+- Theo quy tắc khai báo trước (vector không thấp hơn hybrid quá 1 ca): **đổi mặc định sang vector-only** (`legal_retrieval_mode = "vector"`). Hoàn tác: `LEGAL_RETRIEVAL_MODE=hybrid`. pytest: 311 passed, 1 skipped.
+- `evaluation/legal_qa_retrieval.py`: chế độ `--mode hybrid` nay tự đặt `legal_retrieval_mode=hybrid`, vì nếu không nó sẽ âm thầm chạy vector-only theo mặc định mới và benchmark hybrid mất ý nghĩa. Không ảnh hưởng kết quả test đã chạy (chạy khi mặc định còn là hybrid).
+- Lưu ý: V3 (OR + chỉ chunk có Điều + RRF 0,7/0,3) vẫn tắt; không bật.

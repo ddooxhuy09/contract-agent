@@ -65,7 +65,7 @@ class Settings(BaseSettings):
     rag_labor_scope: bool = True  # extra search inside the core labor-law instruments for labor queries
 
     # Legal retrieval variants (docs/NHAT_KY_THAY_DOI.md, "V1-V3"); defaults keep the original behaviour.
-    legal_retrieval_mode: str = "hybrid"  # hybrid = vector + FTS (RRF); vector = vector search only (FTS leg off)
+    legal_retrieval_mode: str = "vector"  # vector = vector search only (FTS leg off); hybrid = vector + FTS (RRF)
     legal_fts_query: str = "plain"  # plain = plainto_tsquery (AND of all words); or = to_tsquery over OR-joined words
     legal_article_chunks_only: bool = False  # drop chunks whose path has no Điều token (e.g. PREAMBLE)
     legal_rrf_weight_vector: float = 1.0

@@ -24,5 +24,5 @@ def test_legal_retrieval_variants_default_to_original_behaviour():
     assert (s.legal_rrf_weight_vector, s.legal_rrf_weight_fts) == (1.0, 1.0)
 
 
-def test_legal_retrieval_mode_defaults_to_hybrid():
-    assert Settings(_env_file=None).legal_retrieval_mode == "hybrid"
+def test_legal_retrieval_mode_defaults_to_vector():
+    assert Settings(_env_file=None).legal_retrieval_mode == "vector"
