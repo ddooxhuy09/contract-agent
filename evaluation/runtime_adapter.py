@@ -38,7 +38,8 @@ def settings_summary():
     u = urlsplit(s.database_url)
     names = ("gemini_model", "embedding_model", "embedding_dim", "embedding_device", "embedding_normalize",
              "embedding_max_seq_length", "top_k_retrieval", "similarity_threshold", "legal_expand_backend",
-             "rag_labor_scope")
+             "rag_labor_scope", "legal_retrieval_mode", "legal_fts_query", "legal_article_chunks_only",
+             "legal_rrf_weight_vector", "legal_rrf_weight_fts")
     return {**{n: getattr(s, n) for n in names}, "provider": "gemini", "temperature": 0,
             "gemini_key_configured": bool(s.gemini_api_keys), "gemini_keys_configured": len(s.gemini_api_keys),
             "database_host": u.hostname,

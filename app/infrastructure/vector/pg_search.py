@@ -124,11 +124,12 @@ class PgLegalVectorSearch:
             # Typical: dump embeddings dim ≠ query dim (768 vs 1024) or embedder not ready.
             logger.error("Legal vector search failed (falling back to FTS): %s", e)
             vector_hits = []
-        try:
-            fts_hits = self._fts_search(query, fetch_n, doc_type_hint, doc_ids, doc_nums)
-        except Exception as e:
-            logger.error("Legal FTS search failed: %s", e)
-            fts_hits = []
+        fts_hits: list[RetrievedChunk] = []
+        if settings.legal_retrieval_mode != "vector":
+            try:
+                fts_hits = self._fts_search(query, fetch_n, doc_type_hint, doc_ids, doc_nums)
+            except Exception as e:
+                logger.error("Legal FTS search failed: %s", e)
         if not vector_hits and not fts_hits:
             logger.warning(
                 "Legal search empty: query=%r hint=%r doc_ids=%s",

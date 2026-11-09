@@ -96,3 +96,17 @@ Về dấu `*` (dirty) trong `RESULTS.md`: `git status` toàn repo luôn có fil
 - Sửa: khoá đặt tên theo `mode` + `variant` (biến thể `none` giữ tên cũ `<mode>.lock`). Không dùng `--rerun-test`, không xoá hay sửa file khoá nào, không đổi logic truy xuất. Thay đổi làm sau khi đã thấy kết quả test của 3 cấu hình kia nhưng không ảnh hưởng đến chúng; V3 chạy tại commit chứa sửa lỗi này (khác `ae9e230` chỉ ở tên khoá).
 - Kết quả test (n=556): `evaluation_results/legal_qa/TEST_KET_QUA.md`. MRR@10: fts 0,0068; vector 0,6816; hybrid cũ 0,6420; hybrid+V3 0,6857. V3 − vector = +0,0042 (CI95 [−0,0061; +0,0139]), không hơn vector rõ ràng; V3 − hybrid cũ = +0,0437 (CI95 [+0,0290; +0,0571]).
 - Mặc định của ứng dụng **chưa đổi** (V3 chậm ~4,2 s/truy vấn). Vì chưa đổi hành vi retrieval của ứng dụng nên chưa cần chạy lại RAG-only v04; nếu sau này bật V3 hoặc đổi sang vector-only thì phải chạy lại.
+
+## 2026-11-09: chọn retrieval mặc định bằng RAG-only v04 (khai báo trước khi chạy)
+Mục đích: kiểm tra "không làm hỏng" phần hợp đồng, **không phải bằng chứng chính**. v04 có nhãn nháp tổng hợp, n=34.
+
+Hai cấu hình, chạy trong worker cách ly `contractlens-eval-01a154eb` (bản sao DB/Neo4j, không Gemini, `rag_only.py`), cùng commit, cùng ngày:
+- (a) hiện tại: `LEGAL_RETRIEVAL_MODE=hybrid` (vector + FTS bằng RRF). Cờ V1-V3 giữ mặc định (tắt).
+- (b) vector-only: `LEGAL_RETRIEVAL_MODE=vector` (cùng hàm `search()`, chỉ tắt nhánh FTS; ngưỡng tương đồng và nhánh còn lại giữ nguyên).
+Hai lần chạy khác nhau duy nhất ở cờ này.
+
+Số liệu chính để quyết định: **exact provision recall của `final_retrieval`** (`RETRIEVAL_METRICS.json`, trung bình trên 34 ca), đổi ra "số ca tương đương" = recall × 34.
+- **Quy tắc:** nếu `recall(b) × 34 ≥ recall(a) × 34 − 1` (vector-only không thấp hơn hybrid quá 1 ca) thì **đổi mặc định ứng dụng sang vector-only** (`legal_retrieval_mode = "vector"`) và chạy pytest sau khi đổi. Ngược lại giữ nguyên `hybrid` và ghi lý do.
+- Số liệu phụ, chỉ báo cáo, **không** tham gia quyết định: MRR, cross-document coverage, độ trễ, danh sách ca đổi điểm.
+- Quy tắc không đổi sau khi xem kết quả. Nếu một trong hai lần chạy lỗi hoặc thiếu ca (không đủ 34/34 hoàn tất), dừng và báo cáo, không quyết định.
+- Bối cảnh từ benchmark pháp luật chung (test, n=556): vector MRR@10 0,6816, hybrid cũ 0,6420, khác biệt có ý nghĩa; đây là lý do thử vector-only, không thay cho quy tắc trên.
