@@ -83,3 +83,9 @@ Quy tắc chọn, khai báo trước:
 - Chưa chạy test. Chỉ chạy test một lần sau khi được duyệt, cho: `fts`, `vector`, `hybrid` cũ, biến thể được chọn.
 
 Về dấu `*` (dirty) trong `RESULTS.md`: `git status` toàn repo luôn có file không liên quan (`docs/dfd.md`, báo cáo gemini, `.serena/`, ...). Không stash hay xoá chúng. `git_info()` sẽ chỉ tính dirty trên mã ảnh hưởng kết quả: `app/` và `evaluation/legal_qa_retrieval.py` (kể cả file chưa theo dõi), và ghi rõ phạm vi này vào `metrics.json`.
+
+### Kết quả dev 3 biến thể (2026-11-09)
+- Chạy 7 cấu hình trên dev `--only-covered` (n=216) tại commit `551e9e2`; bảng và so sánh ghép cặp: `evaluation_results/legal_qa/DEV_BIEN_THE.md`.
+- Chọn **V3** (MRR@10 0,7112 cao nhất trong V1-V3). V3 không hơn vector rõ ràng (chênh +0,0088, CI95 [−0,0015; +0,0200]); hơn hybrid cũ (+0,0332, CI95 [+0,0180; +0,0504]).
+- V3 (và mọi biến thể OR) chậm: median 3,9 s so với 0,25 s của hybrid cũ. Chưa xử lý, chưa đổi mặc định của ứng dụng.
+- Không thêm biến thể thứ tư. Chưa chạy test.

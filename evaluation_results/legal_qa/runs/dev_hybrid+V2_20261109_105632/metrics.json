@@ -1,0 +1,88 @@
+{
+  "created_at": "2026-11-09T11:10:07",
+  "split": "dev",
+  "mode": "hybrid",
+  "variant": "V2",
+  "settings_overrides": {
+    "legal_fts_query": "or",
+    "legal_article_chunks_only": true
+  },
+  "k": 10,
+  "fetch_factor": 3,
+  "limit": 0,
+  "only_covered": true,
+  "git": {
+    "commit": "551e9e21923d7c7734c56992da1914e89431866f",
+    "dirty": false,
+    "dirty_scope": [
+      "app",
+      "evaluation/legal_qa_retrieval.py"
+    ]
+  },
+  "dataset_sha256": "b9ec964eb33fd64799b410e3d2fc7d9ce20409d472a2c34ade5621063da2604f",
+  "llm_calls": 0,
+  "latency_ms": {
+    "median": 3713.8,
+    "p95": 6061.8
+  },
+  "all_cases": {
+    "n": 216,
+    "recall@1": 0.6389,
+    "recall@1_ci95": [
+      0.5741,
+      0.7037
+    ],
+    "recall@3": 0.7083,
+    "recall@3_ci95": [
+      0.6481,
+      0.7639
+    ],
+    "recall@5": 0.7546,
+    "recall@5_ci95": [
+      0.6944,
+      0.8056
+    ],
+    "recall@10": 0.787,
+    "recall@10_ci95": [
+      0.7269,
+      0.838
+    ],
+    "mrr@10": 0.6779,
+    "mrr@10_ci95": [
+      0.6166,
+      0.7361
+    ],
+    "doc_recall@10": 0.875,
+    "errors": 0
+  },
+  "covered_cases_only": {
+    "n": 216,
+    "recall@1": 0.6389,
+    "recall@1_ci95": [
+      0.5741,
+      0.7037
+    ],
+    "recall@3": 0.7083,
+    "recall@3_ci95": [
+      0.6481,
+      0.7639
+    ],
+    "recall@5": 0.7546,
+    "recall@5_ci95": [
+      0.6944,
+      0.8056
+    ],
+    "recall@10": 0.787,
+    "recall@10_ci95": [
+      0.7269,
+      0.838
+    ],
+    "mrr@10": 0.6779,
+    "mrr@10_ci95": [
+      0.6166,
+      0.7361
+    ],
+    "doc_recall@10": 0.875,
+    "errors": 0
+  }
+}
