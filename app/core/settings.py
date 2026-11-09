@@ -20,8 +20,8 @@ class Settings(BaseSettings):
     gemini_api_key_3: str = ""
     gemini_model: str = "gemini-2.5-flash"
 
-    # LLM_PROVIDER=groq sends every chat call to Groq instead of Gemini (default stays Gemini).
-    llm_provider: str = "gemini"
+    # LLM_PROVIDER: "groq" (default, the configuration evaluated) or "gemini". Groq key: GROQ_API_KEY or GROG_KEY.
+    llm_provider: str = "groq"
     groq_api_key: str = Field("", validation_alias=AliasChoices("GROG_KEY", "GROQ_API_KEY"))
     groq_model: str = "openai/gpt-oss-120b"
 

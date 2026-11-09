@@ -1,6 +1,6 @@
 # ContractLens — AI rà soát hợp đồng lao động tiếng Việt
 
-Stack: FastAPI · Postgres/pgvector · Neo4j · Gemini · BAAI/bge-m3 · React (Vite)
+Stack: FastAPI · Postgres/pgvector · Neo4j · Groq (gpt-oss-120b) / Gemini · BAAI/bge-m3 · React (Vite)
 
 Phạm vi: hợp đồng lao động. Đây không phải tư vấn pháp lý; xem [`docs/PHAM_VI.md`](docs/PHAM_VI.md).
 
@@ -8,7 +8,7 @@ Phạm vi: hợp đồng lao động. Đây không phải tư vấn pháp lý; x
 
 - Chưa đo được độ chính xác của câu trả lời hỏi đáp. Bộ gold set có chuyên gia kiểm đang được xây dựng (`evaluation/gold/`); số đo đầu ra ở `evaluation_results/RESULTS_TUAN.md` kèm cỡ mẫu và khoảng tin cậy. Chưa kiểm chứng trên hợp đồng ngoài bộ dữ liệu.
 - Điều khoản mà mô hình không đánh giá được (lỗi, hết quota, JSON hỏng) được báo là "chưa kiểm" trong `analysis.coverage`, không phải "ổn".
-- Chỉ dùng một nhà cung cấp LLM (Gemini). Tham số `provider` của API chỉ có một giá trị.
+- Một nhà cung cấp LLM mỗi lần chạy, chọn bằng `LLM_PROVIDER`: mặc định `groq` (model `openai/gpt-oss-120b`, cấu hình đã dùng để đánh giá), tuỳ chọn `gemini`. Tham số `provider` của API chỉ có một giá trị.
 - Không hỗ trợ `.doc` (chuyển sang `.docx`) và PDF dạng ảnh quét không có lớp chữ (tải ảnh `.png/.jpg` để dùng OCR). Giới hạn tải lên 10 MB.
 - Bước duyệt thủ công (`review_mode`, `POST /analyze/resume`) chỉ có ở API, giao diện chưa dùng. API không nhận ngày hiệu lực (`as_of`); ngày áp dụng luật lấy từ ngày ký trong hợp đồng.
 - Hiệu lực luật: văn bản có trạng thái "hết hiệu lực một phần" mặc định bị loại khỏi truy xuất; chỉ Bộ luật Lao động 2019, Nghị định 145/2020 và Luật An toàn vệ sinh lao động 2015 đã được bật lại (xem [`docs/kiem_tra_hieu_luc.md`](docs/kiem_tra_hieu_luc.md)).
@@ -21,7 +21,7 @@ Cần [Docker Desktop](https://www.docker.com/products/docker-desktop/). Không 
 ```powershell
 # 1) Cấu hình
 copy .env.example .env
-# Điền GEMINI_API_KEY (hoặc GEMINI_API_KEY_1..3) và JWT_SECRET (không để giá trị mặc định)
+# Điền GROQ_API_KEY (hoặc GROG_KEY) và JWT_SECRET; muốn dùng Gemini thì đặt LLM_PROVIDER=gemini và điền GEMINI_API_KEY (không để giá trị mặc định)
 
 # 2) Build & chạy toàn bộ stack
 docker compose up --build -d
@@ -87,8 +87,9 @@ cd frontend && npm install && npm run dev      # lint: npm run lint, build: npm 
 
 | Nhóm | Biến |
 |---|---|
-| Bắt buộc | `GEMINI_API_KEY` (hoặc `GEMINI_API_KEY_1`), `JWT_SECRET` (khác giá trị mặc định, nếu không app không khởi động) |
-| LLM dự phòng | `GEMINI_API_KEY_1`, `GEMINI_API_KEY_2`, `GEMINI_API_KEY_3`: key bổ sung. Khi key đang dùng hết quota theo ngày, client chuyển sang key kế tiếp (`app/agents/llm_client.py`). Quota theo phút vẫn chờ rồi thử lại trên cùng key. |
+| Bắt buộc | `GROQ_API_KEY` (hoặc `GROG_KEY`; hoặc `GEMINI_API_KEY` khi `LLM_PROVIDER=gemini`), `JWT_SECRET` (khác giá trị mặc định, nếu không app không khởi động) |
+| LLM | `LLM_PROVIDER` (`groq` mặc định | `gemini`), `GROQ_MODEL` (mặc định `openai/gpt-oss-120b`) |
+| LLM dự phòng (Gemini) | `GEMINI_API_KEY_1`, `GEMINI_API_KEY_2`, `GEMINI_API_KEY_3`: key bổ sung. Khi key đang dùng hết quota theo ngày, client chuyển sang key kế tiếp (`app/agents/llm_client.py`). Quota theo phút vẫn chờ rồi thử lại trên cùng key. |
 | LLM / embedding | `GEMINI_MODEL`, `EMBEDDING_MODEL`, `EMBEDDING_DIM`, `EMBEDDING_DEVICE`, `EMBEDDING_TRUST_REMOTE_CODE`, `EMBEDDING_NORMALIZE`, `EMBEDDING_MAX_SEQ_LENGTH`, `HF_TOKEN` |
 | Database | `DATABASE_URL`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `POSTGRES_PORT`, `NEO4J_URI`, `NEO4J_USER`, `NEO4J_PASSWORD` |
 | Auth / API | `JWT_ALGORITHM`, `JWT_EXPIRE_MINUTES`, `CORS_ORIGINS`, `UPLOAD_DIR`, `MAX_UPLOAD_MB`, `LOGIN_MAX_FAILURES`, `LOGIN_WINDOW_SECONDS`, `API_PORT`, `FRONTEND_PORT`, `VITE_API_BASE_URL` |

@@ -36,7 +36,7 @@ def settings_summary():
     from app.core.settings import get_settings
     s = get_settings()
     u = urlsplit(s.database_url)
-    names = ("gemini_model", "embedding_model", "embedding_dim", "embedding_device", "embedding_normalize",
+    names = ("llm_provider", "groq_model", "gemini_model", "embedding_model", "embedding_dim", "embedding_device", "embedding_normalize",
              "embedding_max_seq_length", "top_k_retrieval", "similarity_threshold", "legal_expand_backend",
              "rag_labor_scope", "legal_retrieval_mode", "legal_fts_query", "legal_article_chunks_only",
              "legal_rrf_weight_vector", "legal_rrf_weight_fts")

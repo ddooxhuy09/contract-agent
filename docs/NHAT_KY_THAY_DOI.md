@@ -128,3 +128,10 @@ Số liệu chính để quyết định: **exact provision recall của `final_
 - 48 ca mẫu của bộ bơm lỗi chạy bằng **Groq (openai/gpt-oss-120b)**. Mỗi bản ghi trong `evaluation_results/injection/full/` có trường `llm`. Hai ca đã chạy bằng Gemini (OT-02, OT-08) chuyển sang `full_gemini_pilot/`, không trộn vào chỉ số.
 - Cách chấm, mẫu, seed không đổi. Kết quả này là của Groq judge, không so sánh trực tiếp với run Gemini khác.
 - Chạy thử 2 ca trước để tiết kiệm token; dừng khi gặp giới hạn.
+
+## 2026-11-09: cấu hình demo mặc định chuyển sang Groq
+- `LLM_PROVIDER` mặc định `groq`, model `openai/gpt-oss-120b` (`groq_model`), để demo dùng đúng cấu hình đã đánh giá ở bộ bơm lỗi (48 ca). Gemini vẫn dùng được: `LLM_PROVIDER=gemini` cùng `GEMINI_API_KEY`.
+- Key Groq đọc từ `GROQ_API_KEY` hoặc `GROG_KEY`. `.env.example` chỉ có tên biến, không có key. README cập nhật.
+- Nhãn nhà cung cấp trả về qua `get_providers()` hiển thị model đang dùng; id nội bộ `gemini` giữ nguyên để không đổi API.
+- **Lưu ý:** run `gemini_full_laborscope_20261108` còn 19 ca chưa chạy; muốn tiếp tục phải đặt `LLM_PROVIDER=gemini`, nếu không sẽ chạy bằng Groq và làm lẫn cấu hình đánh giá.
+- `settings_summary()` của harness đánh giá ghi thêm `llm_provider`, `groq_model`.

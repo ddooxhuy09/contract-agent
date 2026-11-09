@@ -91,8 +91,8 @@ def get_providers() -> dict[str, dict[str, str]]:
         "gemini": {
             "public_id": "standard",
             "alias": "Chuẩn",
-            "label": "Gemini 2.5 Flash",
-            "model": settings.gemini_model,
+            "label": f"Groq {settings.groq_model}" if _use_groq() else "Gemini 2.5 Flash",
+            "model": settings.groq_model if _use_groq() else settings.gemini_model,
         },
     }
 
