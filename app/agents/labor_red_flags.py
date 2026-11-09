@@ -331,7 +331,7 @@ def _locate_clause(flag: RedFlag, body: str) -> str:
     heads = find_headings(body)
     for i, h in enumerate(heads):
         end = heads[i + 1].start() if i + 1 < len(heads) else len(body)
-        if flag.pattern.search(body[h.start() : end]):
+        if _violates(flag, body[h.start() : end]):
             return h.group(1)
     return clause_number_from_ref(flag.clause_hint)
 
@@ -339,7 +339,8 @@ def _locate_clause(flag: RedFlag, body: str) -> str:
 def _violates(flag: RedFlag, segment: str) -> bool:
     """``flag`` fires on ``segment`` unless the match is negated («không dùng phạt tiền…»)."""
     for m in flag.pattern.finditer(segment):
-        if not re.search(r"\b(?:không|cấm|nghiêm\s*cấm)\b", segment[max(0, m.start() - 30) : m.start()], re.I):
+        before = re.split(r"[.\n]", segment[max(0, m.start() - 30) : m.start()])[-1]  # same sentence only
+        if not re.search(r"\b(?:không|cấm|nghiêm\s*cấm)\b", before, re.I):
             return True
     return False
 
@@ -349,7 +350,7 @@ def rewrite_clause(original: str, flags: list[RedFlag]) -> str:
     out: list[tuple[str, str]] = []
     emitted: set[str] = set()
     for seg, sep in split_segments(_nfc(original)):
-        hit = [f for f in flags if f.pattern.search(seg)]
+        hit = [f for f in flags if _violates(f, seg)]
         dropped = any(d.search(seg) for f in flags for d in f.drop)
         if not hit and not dropped:
             out.append((seg, sep))
@@ -573,7 +574,7 @@ def check_labor_red_flags(
     by_num: dict[str, list[tuple[RedFlag, list[LegalCitation], list[str], list[str]]]] = defaultdict(list)
     originals: dict[str, str | None] = {}
     for flag in _FLAGS:
-        if not flag.pattern.search(body):
+        if not _violates(flag, body):
             continue
         num = _locate_clause(flag, body) or "?"
         if num not in originals:
@@ -600,7 +601,7 @@ def check_labor_red_flags(
             if cite is not None:
                 cites.append(cite)
             problems += probs
-        violated = sentences_matching(originals[num] or body, flag.pattern)
+        violated = sentences_matching(originals[num] or body, flag.pattern, accept=lambda s, f=flag: _violates(f, s))
         by_num[num].append((flag, cites, problems, violated))
 
     return [
