@@ -40,6 +40,13 @@ LOCK_DIR = OUT / "test_locks"
 RESULTS_MD = OUT / "RESULTS.md"
 ARTICLE_TOKEN = re.compile(r"^D(\d+)$", re.IGNORECASE)
 KS = (1, 3, 5, 10)
+# Biến thể truy xuất khai báo trước (docs/NHAT_KY_THAY_DOI.md). Mỗi biến thể là cờ ghi đè Settings; "none" = hành vi cũ.
+_V1 = {"legal_fts_query": "or"}
+_V2 = {**_V1, "legal_article_chunks_only": True}
+_V3 = {**_V2, "legal_rrf_weight_vector": 0.7, "legal_rrf_weight_fts": 0.3}
+VARIANTS = {"none": {}, "V1": _V1, "V2": _V2, "V3": _V3}
+# Chỉ tính "dirty" trên mã ảnh hưởng kết quả; file không liên quan trong repo không làm gắn dấu *.
+DIRTY_PATHS = ("app", "evaluation/legal_qa_retrieval.py")
 
 
 # ---------- tiện ích ----------
@@ -70,8 +77,9 @@ def git_info() -> dict:
             return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True, check=True).stdout.strip()
         except Exception:
             return None
-    status = run("status", "--porcelain")
-    return {"commit": run("rev-parse", "HEAD"), "dirty": bool(status) if status is not None else None}
+    status = run("status", "--porcelain", "--", *DIRTY_PATHS)
+    return {"commit": run("rev-parse", "HEAD"), "dirty": bool(status) if status is not None else None,
+            "dirty_scope": list(DIRTY_PATHS)}
 
 
 def write_json(path: Path, data) -> None:
@@ -227,10 +235,15 @@ def cmd_run(args) -> None:
     if args.limit:
         selected = random.Random(0).sample(selected, min(args.limit, len(selected)))
 
+    from app.core.settings import get_settings
+
+    for key, value in VARIANTS[args.variant].items():
+        setattr(get_settings(), key, value)
+    label = args.mode if args.variant == "none" else f"{args.mode}+{args.variant}"
     searcher = make_searcher(args.mode)
     searcher("khởi động", 1)  # nạp mô hình embedding, không tính vào độ trễ
 
-    run_dir = OUT / "runs" / f"{args.split}_{args.mode}_{datetime.now():%Y%m%d_%H%M%S}"
+    run_dir = OUT / "runs" / f"{args.split}_{label}_{datetime.now():%Y%m%d_%H%M%S}"
     run_dir.mkdir(parents=True, exist_ok=False)
     rows, latencies = [], []
     with (run_dir / "predictions.jsonl").open("w", encoding="utf-8") as out:
@@ -276,7 +289,7 @@ def cmd_run(args) -> None:
     covered = [r for r in rows if r["coverage"] == "article_searchable"]
     metrics = {
         "created_at": datetime.now().isoformat(timespec="seconds"), "split": args.split, "mode": args.mode,
-        "k": args.k, "fetch_factor": args.fetch_factor, "limit": args.limit, "only_covered": args.only_covered,
+        "variant": args.variant, "settings_overrides": VARIANTS[args.variant], "k": args.k, "fetch_factor": args.fetch_factor, "limit": args.limit, "only_covered": args.only_covered,
         "git": git_info(), "dataset_sha256": split["dataset_sha256"], "llm_calls": 0,
         "latency_ms": {"median": round(statistics.median(latencies), 1),
                        "p95": round(sorted(latencies)[int(0.95 * (len(latencies) - 1))], 1)} if latencies else None,
@@ -288,7 +301,7 @@ def cmd_run(args) -> None:
         write_json(lock, {"run_dir": str(run_dir.relative_to(ROOT)), "git": metrics["git"], "at": metrics["created_at"]})
 
     a = metrics["all_cases"]
-    line = (f"| {metrics['created_at']} | {args.split} | {args.mode} | {a['n']} | {a['recall@1']} | {a['recall@5']} "
+    line = (f"| {metrics['created_at']} | {args.split} | {label} | {a['n']} | {a['recall@1']} | {a['recall@5']} "
             f"{a['recall@5_ci95']} | {a['recall@10']} | {a['mrr@10']} | {a['doc_recall@10']} | "
             f"{(metrics['git']['commit'] or '')[:8]}{'*' if metrics['git']['dirty'] else ''} | {run_dir.name} |\n")
     if not RESULTS_MD.exists():
@@ -301,6 +314,20 @@ def cmd_run(args) -> None:
         f.write(line)
     print(json.dumps(metrics, ensure_ascii=False, indent=2))
     print(f"Đã lưu {run_dir}")
+
+
+def cmd_compare(args) -> None:
+    """Chênh MRR@10 ghép cặp (other - base) trên các qid chung, bootstrap 95%."""
+    def rr(run_dir: str) -> dict[str, float]:
+        path = Path(run_dir) / "predictions.jsonl"
+        rows = (json.loads(line) for line in path.open(encoding="utf-8"))
+        return {r["qid"]: (1.0 / r["rank"] if r["rank"] else 0.0) for r in rows}
+    base, other = rr(args.base), rr(args.other)
+    qids = sorted(set(base) & set(other))
+    diffs = [other[q] - base[q] for q in qids]
+    print(json.dumps({"n": len(qids), "mrr_base": round(sum(base[q] for q in qids) / len(qids), 4),
+                      "mrr_other": round(sum(other[q] for q in qids) / len(qids), 4),
+                      "diff": round(sum(diffs) / len(diffs), 4), "diff_ci95": bootstrap_ci(diffs)}, ensure_ascii=False))
 
 
 def main() -> None:
@@ -319,8 +346,12 @@ def main() -> None:
     r.add_argument("--limit", type=int, default=0, help="chỉ dùng cho dev, để chạy thử nhanh")
     r.add_argument("--only-covered", action="store_true", help="chỉ chạy câu có điều luật gold tìm kiếm được")
     r.add_argument("--rerun-test", action="store_true")
+    r.add_argument("--variant", choices=list(VARIANTS), default="none", help="biến thể truy xuất đã khai báo (V1-V3)")
+    c = sub.add_parser("compare")
+    c.add_argument("--base", required=True)
+    c.add_argument("--other", required=True)
     args = p.parse_args()
-    {"coverage": cmd_coverage, "split": cmd_split, "run": cmd_run}[args.cmd](args)
+    {"coverage": cmd_coverage, "split": cmd_split, "run": cmd_run, "compare": cmd_compare}[args.cmd](args)
 
 
 if __name__ == "__main__":

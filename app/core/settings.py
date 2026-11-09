@@ -64,6 +64,12 @@ class Settings(BaseSettings):
     # Retrieval experiments (see evaluation_results/reports/LABOR_EFFECTIVITY_RAG_RUN.md).
     rag_labor_scope: bool = True  # extra search inside the core labor-law instruments for labor queries
 
+    # Legal retrieval variants (docs/NHAT_KY_THAY_DOI.md, "V1-V3"); defaults keep the original behaviour.
+    legal_fts_query: str = "plain"  # plain = plainto_tsquery (AND of all words); or = to_tsquery over OR-joined words
+    legal_article_chunks_only: bool = False  # drop chunks whose path has no Điều token (e.g. PREAMBLE)
+    legal_rrf_weight_vector: float = 1.0
+    legal_rrf_weight_fts: float = 1.0
+
     # GraphRAG hierarchy expand: neo4j | postgres | both (merge, prefer neo4j then fill gaps)
     legal_expand_backend: str = "neo4j"
 

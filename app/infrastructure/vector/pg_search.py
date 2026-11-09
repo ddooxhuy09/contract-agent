@@ -1,3 +1,4 @@
+import re
 import threading
 
 from app.core.logging import logger
@@ -139,6 +140,7 @@ class PgLegalVectorSearch:
         fused = rrf_fuse(
             [vector_hits, fts_hits],
             key_fn=lambda c: _chunk_key(c.metadata) or c.content[:80],
+            weights=[settings.legal_rrf_weight_vector, settings.legal_rrf_weight_fts],
         )
         results: list[RetrievedChunk] = []
         for chunk, rrf_score in fused:
@@ -179,6 +181,8 @@ class PgLegalVectorSearch:
             "(d.status_flag IS NULL OR d.status_flag IS DISTINCT FROM 2)",
         ]
         params: list = [list(_EXCLUDE_TYPES)]
+        if get_settings().legal_article_chunks_only:
+            clauses.append("c.path::text ~ '(^|[.])[Dd][0-9]+([.]|$)'")
         if doc_ids:
             clauses.append("c.doc_id = ANY(%s)")
             params.append(doc_ids)
@@ -232,6 +236,12 @@ class PgLegalVectorSearch:
         q = (query or "").strip()
         if not q:
             return []
+        tsquery_fn, q_text = "plainto_tsquery", q
+        if get_settings().legal_fts_query == "or":
+            words = list(dict.fromkeys(re.findall(r"\w+", q.lower())))
+            if not words:
+                return []
+            tsquery_fn, q_text = "to_tsquery", " | ".join(words)
         where_sql, params = self._base_where(doc_type_hint, doc_ids, doc_nums)
         # FTS does not require embedding but we keep same filters for consistency
         where_sql = where_sql.replace("c.embedding IS NOT NULL", "c.tsv IS NOT NULL")
@@ -240,18 +250,18 @@ class PgLegalVectorSearch:
                 cur.execute(
                     f"""
                     SELECT c.chunk_text, c.path::text, c.doc_id, c.chunk_type, d.doc_num, d.title,
-                           ts_rank_cd(c.tsv, plainto_tsquery('simple', %s)) AS score,
+                           ts_rank_cd(c.tsv, {tsquery_fn}('simple', %s)) AS score,
                            d.eff_from, d.eff_to, d.status_flag, d.eff_flag,
                             c.root_path::text,
                             d.doc_type, d.issue_date, c.source_element_id, d.source_url
                     FROM legal_embeddings c
                     JOIN legal_documents d ON d.doc_id = c.doc_id
                     WHERE {where_sql}
-                      AND c.tsv @@ plainto_tsquery('simple', %s)
+                      AND c.tsv @@ {tsquery_fn}('simple', %s)
                     ORDER BY score DESC
                     LIMIT %s
                     """,
-                    [q, *params, q, n],
+                    [q_text, *params, q_text, n],
                 )
                 rows = cur.fetchall()
         return [_row_to_chunk(r) for r in rows]
