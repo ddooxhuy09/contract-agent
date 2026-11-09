@@ -60,3 +60,8 @@ Nguồn: 10 nhận xét về kết quả phân tích hợp đồng `CÔNG TY C�
 - **Trích xuất:** `Party.id_number` tách khỏi `tax_id`; `duration` tính từ ngày; mỗi trường LLM bù bị cắt đúng chủ đề; `parse_vn_date` sửa lỗi "15 tháng 07 năm 2026" âm thầm thành ngày hôm nay.
 - **Báo cáo:** `coverage.pham_vi`/`phat_hien` (độ phủ điều khoản không phải chất lượng phát hiện), `legal_as_of` (đối chiếu luật tại ngày ký), độ tin cậy theo chất lượng chứng cứ thay cho 0,9 cố định, `confidence_notes`. Chỉ thêm trường tùy chọn vào schema.
 - **Giới hạn chưa đóng:** Điều 1 chưa được LLM chấm lại vì hết quota Gemini ngày; đường LLM mới kiểm bằng LLM giả; Điều bị quy tắc cờ critical vẫn bỏ qua LLM; phát hiện thiếu Điều 21 dựa trên mẫu câu; chưa có số liệu đo recall/precision.
+## 2026-11-09: benchmark truy xuất pháp luật chung (dev)
+- Đã chạy `coverage`, đóng băng `split` (commit `2a41124`, tag `legalqa-split-frozen`) và chạy dev cho `fts`, `vector`, `hybrid` với `--only-covered`. Không chạy test.
+- **Không sửa code truy xuất, không sửa `norm_doc` / `article_from_path`.** Coverage thấp (772/3.196 câu tìm được) do văn bản gold hết hiệu lực (`status_flag=2`) hoặc chunk `is_effective=false` bị lọc, không do chuẩn hoá số hiệu. Chi tiết: `evaluation_results/legal_qa/PHAN_TICH_LOI_DEV.md`.
+- Phát hiện chưa xử lý, chờ quyết định: FTS dùng `plainto_tsquery` (AND toàn câu) nên rỗng ở 50/216 câu và chen hit nhiễu vào rank 2 khi RRF; chunk mở đầu không có Điều chiếm chỗ trong top 10.
+- Nguồn `data/dataset.csv` chưa xác định (xem `NGUON_DATASET.md`).

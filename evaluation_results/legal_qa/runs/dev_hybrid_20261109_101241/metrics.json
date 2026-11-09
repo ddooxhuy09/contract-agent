@@ -1,0 +1,79 @@
+{
+  "created_at": "2026-11-09T10:13:06",
+  "split": "dev",
+  "mode": "hybrid",
+  "k": 10,
+  "fetch_factor": 3,
+  "limit": 50,
+  "only_covered": true,
+  "git": {
+    "commit": "2a411241a9637f13f7315fdd4af017d39da4bab8",
+    "dirty": true
+  },
+  "dataset_sha256": "b9ec964eb33fd64799b410e3d2fc7d9ce20409d472a2c34ade5621063da2604f",
+  "llm_calls": 0,
+  "latency_ms": {
+    "median": 446.1,
+    "p95": 777.4
+  },
+  "all_cases": {
+    "n": 50,
+    "recall@1": 0.62,
+    "recall@1_ci95": [
+      0.48,
+      0.76
+    ],
+    "recall@3": 0.74,
+    "recall@3_ci95": [
+      0.62,
+      0.86
+    ],
+    "recall@5": 0.74,
+    "recall@5_ci95": [
+      0.62,
+      0.86
+    ],
+    "recall@10": 0.74,
+    "recall@10_ci95": [
+      0.62,
+      0.86
+    ],
+    "mrr@10": 0.6633,
+    "mrr@10_ci95": [
+      0.5367,
+      0.7867
+    ],
+    "doc_recall@10": 0.88,
+    "errors": 0
+  },
+  "covered_cases_only": {
+    "n": 50,
+    "recall@1": 0.62,
+    "recall@1_ci95": [
+      0.48,
+      0.76
+    ],
+    "recall@3": 0.74,
+    "recall@3_ci95": [
+      0.62,
+      0.86
+    ],
+    "recall@5": 0.74,
+    "recall@5_ci95": [
+      0.62,
+      0.86
+    ],
+    "recall@10": 0.74,
+    "recall@10_ci95": [
+      0.62,
+      0.86
+    ],
+    "mrr@10": 0.6633,
+    "mrr@10_ci95": [
+      0.5367,
+      0.7867
+    ],
+    "doc_recall@10": 0.88,
+    "errors": 0
+  }
+}
