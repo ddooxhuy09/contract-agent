@@ -116,3 +116,9 @@ Số liệu chính để quyết định: **exact provision recall của `final_
 - Theo quy tắc khai báo trước (vector không thấp hơn hybrid quá 1 ca): **đổi mặc định sang vector-only** (`legal_retrieval_mode = "vector"`). Hoàn tác: `LEGAL_RETRIEVAL_MODE=hybrid`. pytest: 311 passed, 1 skipped.
 - `evaluation/legal_qa_retrieval.py`: chế độ `--mode hybrid` nay tự đặt `legal_retrieval_mode=hybrid`, vì nếu không nó sẽ âm thầm chạy vector-only theo mặc định mới và benchmark hybrid mất ý nghĩa. Không ảnh hưởng kết quả test đã chạy (chạy khi mặc định còn là hybrid).
 - Lưu ý: V3 (OR + chỉ chunk có Điều + RRF 0,7/0,3) vẫn tắt; không bật.
+
+## 2026-11-09: bộ bơm lỗi hợp đồng (evaluation/injection)
+- Bộ đóng băng ở `e268fcb`, tag `injection-frozen`, trước khi chạy hệ thống. `_FLAGS` có 8 luật đỏ (yêu cầu ghi 7) nên bộ gồm 80 ca (8 × 10). `data/demo_contracts` không có hợp đồng sạch nên nền được soạn mới (`base_contract.txt`).
+- Rule-only (80 ca): precision 0,53, recall 0,40, F1 0,46, 14/40 ca hợp lệ bị báo nhầm. Recall bị chặn bởi thiết kế bộ ca (3/5 ca vi phạm cố ý viết khác mẫu regex). Báo cáo: `evaluation_results/injection/BAO_CAO.md`.
+- Pipeline đầy đủ (Gemini): mới 2/48 ca mẫu, dừng vì hết quota ngày. Không có kết luận định lượng. Resume: `python -m evaluation.injection.run full`.
+- Không sửa `app/agents/labor_red_flags.py`.

@@ -1,0 +1,81 @@
+{
+ "case_id": "OT-08",
+ "slot_unchecked": false,
+ "unchecked_clauses": [
+  "10",
+  "7"
+ ],
+ "slot_flagged": true,
+ "other_clause_flags": [
+  "",
+  "1",
+  "11",
+  "3",
+  "5",
+  "6",
+  "8",
+  "9"
+ ],
+ "risks": [
+  {
+   "clause_ref": "Hợp đồng (toàn văn)",
+   "severity": "warning",
+   "title": "Thiếu địa chỉ / nơi cư trú NLĐ và nội dung bắt buộc khác",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 1",
+   "severity": "warning",
+   "title": "Thiếu chi tiết về công việc và địa điểm làm việc",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 2",
+   "severity": "critical",
+   "title": "Thiếu giới hạn thời giờ làm việc và làm thêm giờ theo quy định pháp luật",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 3",
+   "severity": "warning",
+   "title": "Thiếu thông tin về mức lương theo công việc/chức danh",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 5",
+   "severity": "warning",
+   "title": "Điều khoản về giấy tờ người lao động chưa rõ ràng",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 6",
+   "severity": "warning",
+   "title": "Thiếu nội dung bắt buộc của hợp đồng đào tạo nghề",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 8",
+   "severity": "critical",
+   "title": "Thời hạn báo trước khi người lao động đơn phương chấm dứt hợp đồng chưa đúng luật",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 9",
+   "severity": "warning",
+   "title": "Chưa đầy đủ chế độ bảo vệ lao động nữ và quy định chấm dứt hợp đồng",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 11",
+   "severity": "warning",
+   "title": "Làm rõ việc áp dụng pháp luật lao động cho các vấn đề chưa thỏa thuận",
+   "keys": []
+  }
+ ],
+ "coverage": {
+  "tong_so_dieu": 11,
+  "da_kiem": 9,
+  "chua_kiem": 2
+ },
+ "commit": "e268fcb0af37c7b7d4fdd2fff692ed34f2b94b57"
+}

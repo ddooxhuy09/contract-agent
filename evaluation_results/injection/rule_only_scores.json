@@ -1,0 +1,108 @@
+{
+ "per_rule": {
+  "ot_unpaid": {
+   "tp": 2,
+   "fp": 1,
+   "fn": 3,
+   "precision": 0.6666666666666666,
+   "recall": 0.4,
+   "f1": 0.5,
+   "near_miss_false_positive": 1,
+   "near_miss_n": 5
+  },
+  "no_bhxh": {
+   "tp": 2,
+   "fp": 3,
+   "fn": 3,
+   "precision": 0.4,
+   "recall": 0.4,
+   "f1": 0.4000000000000001,
+   "near_miss_false_positive": 3,
+   "near_miss_n": 5
+  },
+  "retain_id_papers": {
+   "tp": 2,
+   "fp": 3,
+   "fn": 3,
+   "precision": 0.4,
+   "recall": 0.4,
+   "f1": 0.4000000000000001,
+   "near_miss_false_positive": 3,
+   "near_miss_n": 5
+  },
+  "training_cost_flat": {
+   "tp": 2,
+   "fp": 1,
+   "fn": 3,
+   "precision": 0.6666666666666666,
+   "recall": 0.4,
+   "f1": 0.5,
+   "near_miss_false_positive": 1,
+   "near_miss_n": 5
+  },
+  "fine_deduct_wage": {
+   "tp": 2,
+   "fp": 2,
+   "fn": 3,
+   "precision": 0.5,
+   "recall": 0.4,
+   "f1": 0.4444444444444445,
+   "near_miss_false_positive": 2,
+   "near_miss_n": 5
+  },
+  "forfeit_wage_quit": {
+   "tp": 2,
+   "fp": 1,
+   "fn": 3,
+   "precision": 0.6666666666666666,
+   "recall": 0.4,
+   "f1": 0.5,
+   "near_miss_false_positive": 1,
+   "near_miss_n": 5
+  },
+  "terminate_pregnancy": {
+   "tp": 2,
+   "fp": 2,
+   "fn": 3,
+   "precision": 0.5,
+   "recall": 0.4,
+   "f1": 0.4444444444444445,
+   "near_miss_false_positive": 2,
+   "near_miss_n": 5
+  },
+  "ban_lawsuit": {
+   "tp": 2,
+   "fp": 1,
+   "fn": 3,
+   "precision": 0.6666666666666666,
+   "recall": 0.4,
+   "f1": 0.5,
+   "near_miss_false_positive": 1,
+   "near_miss_n": 5
+  }
+ },
+ "micro": {
+  "tp": 16,
+  "fp": 14,
+  "fn": 24,
+  "precision": 0.5333333333333333,
+  "recall": 0.4,
+  "f1": 0.4571428571428572
+ },
+ "near_miss_any_rule_fired": 14,
+ "near_miss_n": 40,
+ "micro_ci95": {
+  "precision": [
+   0.3571,
+   0.7308
+  ],
+  "recall": [
+   0.25,
+   0.5556
+  ],
+  "f1": [
+   0.3,
+   0.5977
+  ]
+ }
+}

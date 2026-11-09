@@ -1,0 +1,92 @@
+{
+ "case_id": "OT-02",
+ "slot_unchecked": false,
+ "unchecked_clauses": [],
+ "slot_flagged": true,
+ "other_clause_flags": [
+  "",
+  "1",
+  "10",
+  "11",
+  "3",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9"
+ ],
+ "risks": [
+  {
+   "clause_ref": "Hợp đồng (toàn văn)",
+   "severity": "warning",
+   "title": "Thiếu địa chỉ / nơi cư trú NLĐ và nội dung bắt buộc khác",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 1",
+   "severity": "warning",
+   "title": "Thiếu chi tiết về công việc và địa điểm làm việc",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 2",
+   "severity": "critical",
+   "title": "Vi phạm quy định về thanh toán tiền lương làm thêm giờ",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 3",
+   "severity": "warning",
+   "title": "Điều khoản tiền lương chưa đầy đủ nội dung bắt buộc",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 5",
+   "severity": "warning",
+   "title": "Điều khoản về giấy tờ người lao động chưa rõ ràng",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 6",
+   "severity": "warning",
+   "title": "Thiếu nội dung bắt buộc của hợp đồng đào tạo nghề",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 7",
+   "severity": "warning",
+   "title": "Rủi ro trong quy định kỷ luật lao động và bồi thường thiệt hại",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 8",
+   "severity": "critical",
+   "title": "Thời hạn báo trước khi người lao động đơn phương chấm dứt hợp đồng chưa đúng luật",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 9",
+   "severity": "warning",
+   "title": "Điều khoản bảo vệ lao động nữ và chấm dứt hợp đồng chưa đầy đủ",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 10",
+   "severity": "warning",
+   "title": "Thiếu quy định về thời hiệu giải quyết tranh chấp lao động",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 11",
+   "severity": "warning",
+   "title": "Rủi ro về nội dung bắt buộc của hợp đồng lao động",
+   "keys": []
+  }
+ ],
+ "coverage": {
+  "tong_so_dieu": 11,
+  "da_kiem": 11,
+  "chua_kiem": 0
+ },
+ "commit": "e268fcb0af37c7b7d4fdd2fff692ed34f2b94b57"
+}

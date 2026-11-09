@@ -1,0 +1,117 @@
+{
+ "per_rule": {
+  "ot_unpaid": {
+   "tp": 1,
+   "fp": 1,
+   "fn": 0,
+   "precision": 0.5,
+   "recall": 1.0,
+   "f1": 0.6666666666666666,
+   "tn": 0,
+   "unchecked": 0,
+   "n": 2
+  },
+  "no_bhxh": {
+   "tp": 0,
+   "fp": 0,
+   "fn": 0,
+   "precision": null,
+   "recall": null,
+   "f1": null,
+   "tn": 0,
+   "unchecked": 0,
+   "n": 0
+  },
+  "retain_id_papers": {
+   "tp": 0,
+   "fp": 0,
+   "fn": 0,
+   "precision": null,
+   "recall": null,
+   "f1": null,
+   "tn": 0,
+   "unchecked": 0,
+   "n": 0
+  },
+  "training_cost_flat": {
+   "tp": 0,
+   "fp": 0,
+   "fn": 0,
+   "precision": null,
+   "recall": null,
+   "f1": null,
+   "tn": 0,
+   "unchecked": 0,
+   "n": 0
+  },
+  "fine_deduct_wage": {
+   "tp": 0,
+   "fp": 0,
+   "fn": 0,
+   "precision": null,
+   "recall": null,
+   "f1": null,
+   "tn": 0,
+   "unchecked": 0,
+   "n": 0
+  },
+  "forfeit_wage_quit": {
+   "tp": 0,
+   "fp": 0,
+   "fn": 0,
+   "precision": null,
+   "recall": null,
+   "f1": null,
+   "tn": 0,
+   "unchecked": 0,
+   "n": 0
+  },
+  "terminate_pregnancy": {
+   "tp": 0,
+   "fp": 0,
+   "fn": 0,
+   "precision": null,
+   "recall": null,
+   "f1": null,
+   "tn": 0,
+   "unchecked": 0,
+   "n": 0
+  },
+  "ban_lawsuit": {
+   "tp": 0,
+   "fp": 0,
+   "fn": 0,
+   "precision": null,
+   "recall": null,
+   "f1": null,
+   "tn": 0,
+   "unchecked": 0,
+   "n": 0
+  }
+ },
+ "micro": {
+  "tp": 1,
+  "fp": 1,
+  "fn": 0,
+  "precision": 0.5,
+  "recall": 1.0,
+  "f1": 0.6666666666666666,
+  "tn": 0,
+  "unchecked": 0,
+  "n": 2
+ },
+ "micro_ci95": {
+  "precision": [
+   0.0,
+   1.0
+  ],
+  "recall": [
+   1.0,
+   1.0
+  ],
+  "f1": [
+   0.6667,
+   1.0
+  ]
+ }
+}

@@ -1,0 +1,325 @@
+{
+ "commit": "e268fcb0af37c7b7d4fdd2fff692ed34f2b94b57",
+ "predictions": {
+  "OT-01": [
+   {
+    "clause_ref": "Điều 2",
+    "severity": "critical",
+    "keys": [
+     "ot_unpaid"
+    ]
+   }
+  ],
+  "OT-02": [],
+  "OT-03": [],
+  "OT-04": [],
+  "OT-05": [
+   {
+    "clause_ref": "Điều 2",
+    "severity": "critical",
+    "keys": [
+     "ot_unpaid"
+    ]
+   }
+  ],
+  "OT-06": [],
+  "OT-07": [
+   {
+    "clause_ref": "Điều 2",
+    "severity": "critical",
+    "keys": [
+     "ot_unpaid"
+    ]
+   }
+  ],
+  "OT-08": [],
+  "OT-09": [],
+  "OT-10": [],
+  "BH-01": [
+   {
+    "clause_ref": "Điều 4",
+    "severity": "critical",
+    "keys": [
+     "no_bhxh"
+    ]
+   }
+  ],
+  "BH-02": [],
+  "BH-03": [],
+  "BH-04": [],
+  "BH-05": [
+   {
+    "clause_ref": "Điều 4",
+    "severity": "critical",
+    "keys": [
+     "no_bhxh"
+    ]
+   }
+  ],
+  "BH-06": [],
+  "BH-07": [
+   {
+    "clause_ref": "Điều 4",
+    "severity": "critical",
+    "keys": [
+     "no_bhxh"
+    ]
+   }
+  ],
+  "BH-08": [
+   {
+    "clause_ref": "Điều 4",
+    "severity": "critical",
+    "keys": [
+     "no_bhxh"
+    ]
+   }
+  ],
+  "BH-09": [
+   {
+    "clause_ref": "Điều 4",
+    "severity": "critical",
+    "keys": [
+     "no_bhxh"
+    ]
+   }
+  ],
+  "BH-10": [],
+  "GT-01": [
+   {
+    "clause_ref": "Điều 5",
+    "severity": "critical",
+    "keys": [
+     "retain_id_papers"
+    ]
+   }
+  ],
+  "GT-02": [],
+  "GT-03": [],
+  "GT-04": [],
+  "GT-05": [
+   {
+    "clause_ref": "Điều 5",
+    "severity": "critical",
+    "keys": [
+     "retain_id_papers"
+    ]
+   }
+  ],
+  "GT-06": [
+   {
+    "clause_ref": "Điều 5",
+    "severity": "critical",
+    "keys": [
+     "retain_id_papers"
+    ]
+   }
+  ],
+  "GT-07": [],
+  "GT-08": [],
+  "GT-09": [
+   {
+    "clause_ref": "Điều 5",
+    "severity": "critical",
+    "keys": [
+     "retain_id_papers"
+    ]
+   }
+  ],
+  "GT-10": [
+   {
+    "clause_ref": "Điều 5",
+    "severity": "critical",
+    "keys": [
+     "retain_id_papers"
+    ]
+   }
+  ],
+  "DT-01": [
+   {
+    "clause_ref": "Điều 6",
+    "severity": "critical",
+    "keys": [
+     "training_cost_flat"
+    ]
+   }
+  ],
+  "DT-02": [],
+  "DT-03": [],
+  "DT-04": [],
+  "DT-05": [
+   {
+    "clause_ref": "Điều 6",
+    "severity": "critical",
+    "keys": [
+     "training_cost_flat"
+    ]
+   }
+  ],
+  "DT-06": [
+   {
+    "clause_ref": "Điều 6",
+    "severity": "critical",
+    "keys": [
+     "training_cost_flat"
+    ]
+   }
+  ],
+  "DT-07": [],
+  "DT-08": [],
+  "DT-09": [],
+  "DT-10": [],
+  "KL-01": [
+   {
+    "clause_ref": "Điều 7",
+    "severity": "critical",
+    "keys": [
+     "fine_deduct_wage"
+    ]
+   }
+  ],
+  "KL-02": [],
+  "KL-03": [],
+  "KL-04": [],
+  "KL-05": [
+   {
+    "clause_ref": "Điều 7",
+    "severity": "critical",
+    "keys": [
+     "fine_deduct_wage"
+    ]
+   }
+  ],
+  "KL-06": [
+   {
+    "clause_ref": "Điều 7",
+    "severity": "critical",
+    "keys": [
+     "fine_deduct_wage"
+    ]
+   }
+  ],
+  "KL-07": [],
+  "KL-08": [],
+  "KL-09": [],
+  "KL-10": [
+   {
+    "clause_ref": "Điều 7",
+    "severity": "critical",
+    "keys": [
+     "fine_deduct_wage"
+    ]
+   }
+  ],
+  "LU-01": [
+   {
+    "clause_ref": "Điều 8",
+    "severity": "critical",
+    "keys": [
+     "forfeit_wage_quit"
+    ]
+   }
+  ],
+  "LU-02": [],
+  "LU-03": [],
+  "LU-04": [],
+  "LU-05": [
+   {
+    "clause_ref": "Điều 8",
+    "severity": "critical",
+    "keys": [
+     "forfeit_wage_quit"
+    ]
+   }
+  ],
+  "LU-06": [],
+  "LU-07": [],
+  "LU-08": [
+   {
+    "clause_ref": "Điều 8",
+    "severity": "critical",
+    "keys": [
+     "forfeit_wage_quit"
+    ]
+   }
+  ],
+  "LU-09": [],
+  "LU-10": [],
+  "TS-01": [
+   {
+    "clause_ref": "Điều 9",
+    "severity": "critical",
+    "keys": [
+     "terminate_pregnancy"
+    ]
+   }
+  ],
+  "TS-02": [],
+  "TS-03": [],
+  "TS-04": [],
+  "TS-05": [
+   {
+    "clause_ref": "Điều 9",
+    "severity": "critical",
+    "keys": [
+     "terminate_pregnancy"
+    ]
+   }
+  ],
+  "TS-06": [
+   {
+    "clause_ref": "Điều 9",
+    "severity": "critical",
+    "keys": [
+     "terminate_pregnancy"
+    ]
+   }
+  ],
+  "TS-07": [],
+  "TS-08": [
+   {
+    "clause_ref": "Điều 9",
+    "severity": "critical",
+    "keys": [
+     "terminate_pregnancy"
+    ]
+   }
+  ],
+  "TS-09": [],
+  "TS-10": [],
+  "TC-01": [
+   {
+    "clause_ref": "Điều 10",
+    "severity": "critical",
+    "keys": [
+     "ban_lawsuit"
+    ]
+   }
+  ],
+  "TC-02": [],
+  "TC-03": [],
+  "TC-04": [],
+  "TC-05": [
+   {
+    "clause_ref": "Điều 10",
+    "severity": "critical",
+    "keys": [
+     "ban_lawsuit"
+    ]
+   }
+  ],
+  "TC-06": [],
+  "TC-07": [
+   {
+    "clause_ref": "Điều 10",
+    "severity": "critical",
+    "keys": [
+     "ban_lawsuit"
+    ]
+   }
+  ],
+  "TC-08": [],
+  "TC-09": [],
+  "TC-10": []
+ }
+}
