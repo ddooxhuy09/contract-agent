@@ -1,0 +1,85 @@
+{
+  "created_at": "2026-11-09T11:27:46",
+  "split": "test",
+  "mode": "fts",
+  "variant": "none",
+  "settings_overrides": {},
+  "k": 10,
+  "fetch_factor": 3,
+  "limit": 0,
+  "only_covered": true,
+  "git": {
+    "commit": "ae9e230c3bf37a768c3f1bb60aedaf690b2dafa1",
+    "dirty": false,
+    "dirty_scope": [
+      "app",
+      "evaluation/legal_qa_retrieval.py"
+    ]
+  },
+  "dataset_sha256": "b9ec964eb33fd64799b410e3d2fc7d9ce20409d472a2c34ade5621063da2604f",
+  "llm_calls": 0,
+  "latency_ms": {
+    "median": 85.0,
+    "p95": 153.2
+  },
+  "all_cases": {
+    "n": 556,
+    "recall@1": 0.0054,
+    "recall@1_ci95": [
+      0.0,
+      0.0126
+    ],
+    "recall@3": 0.0054,
+    "recall@3_ci95": [
+      0.0,
+      0.0126
+    ],
+    "recall@5": 0.009,
+    "recall@5_ci95": [
+      0.0018,
+      0.018
+    ],
+    "recall@10": 0.0144,
+    "recall@10_ci95": [
+      0.0054,
+      0.0252
+    ],
+    "mrr@10": 0.0068,
+    "mrr@10_ci95": [
+      0.0013,
+      0.0144
+    ],
+    "doc_recall@10": 0.0252,
+    "errors": 0
+  },
+  "covered_cases_only": {
+    "n": 556,
+    "recall@1": 0.0054,
+    "recall@1_ci95": [
+      0.0,
+      0.0126
+    ],
+    "recall@3": 0.0054,
+    "recall@3_ci95": [
+      0.0,
+      0.0126
+    ],
+    "recall@5": 0.009,
+    "recall@5_ci95": [
+      0.0018,
+      0.018
+    ],
+    "recall@10": 0.0144,
+    "recall@10_ci95": [
+      0.0054,
+      0.0252
+    ],
+    "mrr@10": 0.0068,
+    "mrr@10_ci95": [
+      0.0013,
+      0.0144
+    ],
+    "doc_recall@10": 0.0252,
+    "errors": 0
+  }
+}

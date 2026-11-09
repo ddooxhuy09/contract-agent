@@ -1,0 +1,12 @@
+{
+  "run_dir": "evaluation_results\\legal_qa\\runs\\test_hybrid+V3_20261109_113738",
+  "git": {
+    "commit": "78d4437e61c71b92117e12755cc56bb7b2fee474",
+    "dirty": false,
+    "dirty_scope": [
+      "app",
+      "evaluation/legal_qa_retrieval.py"
+    ]
+  },
+  "at": "2026-11-09T12:18:22"
+}

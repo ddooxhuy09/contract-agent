@@ -1,0 +1,12 @@
+{
+  "run_dir": "evaluation_results\\legal_qa\\runs\\test_vector_20261109_112839",
+  "git": {
+    "commit": "ae9e230c3bf37a768c3f1bb60aedaf690b2dafa1",
+    "dirty": false,
+    "dirty_scope": [
+      "app",
+      "evaluation/legal_qa_retrieval.py"
+    ]
+  },
+  "at": "2026-11-09T11:31:28"
+}
