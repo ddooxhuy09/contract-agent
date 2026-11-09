@@ -65,3 +65,21 @@ Nguồn: 10 nhận xét về kết quả phân tích hợp đồng `CÔNG TY C�
 - **Không sửa code truy xuất, không sửa `norm_doc` / `article_from_path`.** Coverage thấp (772/3.196 câu tìm được) do văn bản gold hết hiệu lực (`status_flag=2`) hoặc chunk `is_effective=false` bị lọc, không do chuẩn hoá số hiệu. Chi tiết: `evaluation_results/legal_qa/PHAN_TICH_LOI_DEV.md`.
 - Phát hiện chưa xử lý, chờ quyết định: FTS dùng `plainto_tsquery` (AND toàn câu) nên rỗng ở 50/216 câu và chen hit nhiễu vào rank 2 khi RRF; chunk mở đầu không có Điều chiếm chỗ trong top 10.
 - Nguồn `data/dataset.csv` chưa xác định (xem `NGUON_DATASET.md`).
+
+## 2026-11-09: khai báo trước 3 biến thể thử trên dev (legal QA)
+Khai báo **trước khi cài đặt và trước khi chạy**. Chỉ thử đúng 3 biến thể dưới đây; **không thêm biến thể nào sau khi xem kết quả** (kể cả đổi trọng số, đổi `rrf_k`, đổi cách tách từ). Mọi biến thể là cờ cấu hình, mặc định giữ hành vi cũ, không xoá code cũ.
+
+| Biến thể | Nội dung | Cờ (`app/core/settings.py`) |
+|---|---|---|
+| V1 | FTS dùng truy vấn OR: tách câu hỏi thành các từ `\w+` (không trùng), nối bằng `\|`, dùng `to_tsquery('simple', ...)` thay cho `plainto_tsquery` (AND). Không lọc stopword. | `legal_fts_query = "or"` (mặc định `"plain"`) |
+| V2 | V1 + loại chunk không có Điều (path không có token `D<số>`, tức PREAMBLE, `article=None`) ngay trong SQL của cả vector và FTS (để top-k được lấp bằng chunk có Điều). | `legal_article_chunks_only = true` (mặc định `false`) |
+| V3 | V2 + RRF có trọng số: vector 0,7, FTS 0,3 (`rrf_k=60` giữ nguyên). | `legal_rrf_weight_vector = 0.7`, `legal_rrf_weight_fts = 0.3` (mặc định 1,0 / 1,0) |
+
+Cấu hình sẽ chạy (dev, `--only-covered`, n=216, cùng split đóng băng): `fts` cũ, `fts`+V1, `vector` (không đổi), `hybrid` cũ, `hybrid`+V1, `hybrid`+V2, `hybrid`+V3.
+
+Quy tắc chọn, khai báo trước:
+- Chọn biến thể (trong V1, V2, V3 ở mode hybrid) có **MRR@10 cao nhất** trên dev.
+- Coi là "hơn vector rõ ràng" chỉ khi **khoảng tin cậy 95% bootstrap ghép cặp** của (MRR@10 biến thể − MRR@10 vector) trên cùng 216 câu **không chứa 0 và nằm phía dương**. Nếu không, ghi trung thực là không có biến thể nào hơn vector rõ ràng (khi đó biến thể chọn vẫn là biến thể MRR cao nhất để báo cáo, nhưng không tuyên bố cải thiện).
+- Chưa chạy test. Chỉ chạy test một lần sau khi được duyệt, cho: `fts`, `vector`, `hybrid` cũ, biến thể được chọn.
+
+Về dấu `*` (dirty) trong `RESULTS.md`: `git status` toàn repo luôn có file không liên quan (`docs/dfd.md`, báo cáo gemini, `.serena/`, ...). Không stash hay xoá chúng. `git_info()` sẽ chỉ tính dirty trên mã ảnh hưởng kết quả: `app/` và `evaluation/legal_qa_retrieval.py` (kể cả file chưa theo dõi), và ghi rõ phạm vi này vào `metrics.json`.
