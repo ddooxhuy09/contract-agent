@@ -206,6 +206,12 @@ def _slot_number(ref: str) -> str:
     return m.group(0) if m else ""
 
 
+def _llm_name() -> str:
+    from app.core.settings import get_settings
+    s = get_settings()
+    return f"groq/{s.groq_model}" if s.llm_provider.strip().lower() == "groq" else f"gemini/{s.gemini_model}"
+
+
 def cmd_full(args) -> None:
     from app.infrastructure.container import build_container
     from app.infrastructure.retrieval.context import bind_retrieval
@@ -240,7 +246,7 @@ def cmd_full(args) -> None:
             "risks": [{"clause_ref": r.clause_ref, "severity": r.severity, "title": r.title,
                        "keys": [x.key for x in (r.findings or [])]} for r in risks],
             "coverage": {k: cov.get(k) for k in ("tong_so_dieu", "da_kiem", "chua_kiem")},
-            "commit": _commit(),
+            "commit": _commit(), "llm": _llm_name(),
         }
         if rec["slot_unchecked"]:  # hết quota/lỗi judge: không lưu, thử lại ở lần chạy sau
             stalled += 1
@@ -281,7 +287,8 @@ def cmd_report(args) -> None:
         pred = {p.stem: json.loads(p.read_text(encoding="utf-8")) for p in cache.glob("*.json")}
         done = [c for c in cases if c["case_id"] in pred]
         s = score_clause_level(done, pred)
-        lines += [f"# Bơm lỗi: pipeline đầy đủ (Gemini), {len(done)}/{len(sample_ids(cases))} ca mẫu đã hoàn tất", "",
+        llms = sorted({p.get("llm", "gemini") for p in pred.values()})
+        lines += [f"# Bơm lỗi: pipeline đầy đủ (judge: {', '.join(llms)}), {len(done)}/{len(sample_ids(cases))} ca mẫu đã hoàn tất", "",
                   "| Luật | n | TP | FP | FN | TN | Precision | Recall | F1 | Chưa kiểm |", "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
         for r in RULES:
             p = s["per_rule"][r]

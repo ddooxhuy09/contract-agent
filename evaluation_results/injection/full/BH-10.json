@@ -1,0 +1,52 @@
+{
+ "case_id": "BH-10",
+ "slot_unchecked": false,
+ "unchecked_clauses": [],
+ "slot_flagged": false,
+ "other_clause_flags": [
+  "",
+  "2",
+  "6",
+  "8",
+  "9"
+ ],
+ "risks": [
+  {
+   "clause_ref": "Hợp đồng (toàn văn)",
+   "severity": "warning",
+   "title": "Thiếu địa chỉ / nơi cư trú NLĐ và nội dung bắt buộc khác",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 2",
+   "severity": "warning",
+   "title": "Thiếu quy định giới hạn giờ làm thêm",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 6",
+   "severity": "warning",
+   "title": "Thiếu nội dung bắt buộc trong hợp đồng đào tạo nghề",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 8",
+   "severity": "warning",
+   "title": "Thời hạn báo trước chấm dứt hợp đồng không phù hợp",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 9",
+   "severity": "warning",
+   "title": "Điều khoản bảo vệ lao động nữ chưa rõ ràng",
+   "keys": []
+  }
+ ],
+ "coverage": {
+  "tong_so_dieu": 11,
+  "da_kiem": 11,
+  "chua_kiem": 0
+ },
+ "commit": "ed30fdd0d4d8959d1890b98cf6cf3dbe7ad0fbf4",
+ "llm": "groq/openai/gpt-oss-120b"
+}

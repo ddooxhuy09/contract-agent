@@ -1,0 +1,58 @@
+{
+ "case_id": "TS-03",
+ "slot_unchecked": false,
+ "unchecked_clauses": [],
+ "slot_flagged": true,
+ "other_clause_flags": [
+  "",
+  "2",
+  "6",
+  "7",
+  "8"
+ ],
+ "risks": [
+  {
+   "clause_ref": "Hợp đồng (toàn văn)",
+   "severity": "warning",
+   "title": "Thiếu địa chỉ / nơi cư trú NLĐ và nội dung bắt buộc khác",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 2",
+   "severity": "warning",
+   "title": "Thiếu quy định giới hạn giờ làm thêm và thông báo thời giờ làm việc",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 6",
+   "severity": "warning",
+   "title": "Điều khoản đào tạo chưa đáp ứng đầy đủ nội dung hợp đồng đào tạo nghề",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 7",
+   "severity": "warning",
+   "title": "Điều khoản kỷ luật lao động chưa rõ ràng về cách thức sa thải",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 8",
+   "severity": "warning",
+   "title": "Thời hạn báo trước khi chấm dứt hợp đồng",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 9",
+   "severity": "warning",
+   "title": "Chấm dứt hợp đồng vì kết hôn của lao động nữ",
+   "keys": []
+  }
+ ],
+ "coverage": {
+  "tong_so_dieu": 11,
+  "da_kiem": 11,
+  "chua_kiem": 0
+ },
+ "commit": "ed30fdd0d4d8959d1890b98cf6cf3dbe7ad0fbf4",
+ "llm": "groq/openai/gpt-oss-120b"
+}

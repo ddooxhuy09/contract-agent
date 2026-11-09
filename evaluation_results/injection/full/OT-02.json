@@ -5,15 +5,10 @@
  "slot_flagged": true,
  "other_clause_flags": [
   "",
-  "1",
-  "10",
-  "11",
-  "3",
   "5",
   "6",
   "7",
-  "8",
-  "9"
+  "8"
  ],
  "risks": [
   {
@@ -23,27 +18,15 @@
    "keys": []
   },
   {
-   "clause_ref": "Điều 1",
-   "severity": "warning",
-   "title": "Thiếu chi tiết về công việc và địa điểm làm việc",
-   "keys": []
-  },
-  {
    "clause_ref": "Điều 2",
    "severity": "critical",
-   "title": "Vi phạm quy định về thanh toán tiền lương làm thêm giờ",
-   "keys": []
-  },
-  {
-   "clause_ref": "Điều 3",
-   "severity": "warning",
-   "title": "Điều khoản tiền lương chưa đầy đủ nội dung bắt buộc",
+   "title": "Vi phạm quy định trả lương làm thêm giờ",
    "keys": []
   },
   {
    "clause_ref": "Điều 5",
    "severity": "warning",
-   "title": "Điều khoản về giấy tờ người lao động chưa rõ ràng",
+   "title": "Quy định về quản lý giấy tờ người lao động",
    "keys": []
   },
   {
@@ -55,31 +38,13 @@
   {
    "clause_ref": "Điều 7",
    "severity": "warning",
-   "title": "Rủi ro trong quy định kỷ luật lao động và bồi thường thiệt hại",
+   "title": "Quy định cách chức, sa thải trong kỷ luật quá rộng",
    "keys": []
   },
   {
    "clause_ref": "Điều 8",
    "severity": "critical",
-   "title": "Thời hạn báo trước khi người lao động đơn phương chấm dứt hợp đồng chưa đúng luật",
-   "keys": []
-  },
-  {
-   "clause_ref": "Điều 9",
-   "severity": "warning",
-   "title": "Điều khoản bảo vệ lao động nữ và chấm dứt hợp đồng chưa đầy đủ",
-   "keys": []
-  },
-  {
-   "clause_ref": "Điều 10",
-   "severity": "warning",
-   "title": "Thiếu quy định về thời hiệu giải quyết tranh chấp lao động",
-   "keys": []
-  },
-  {
-   "clause_ref": "Điều 11",
-   "severity": "warning",
-   "title": "Rủi ro về nội dung bắt buộc của hợp đồng lao động",
+   "title": "Thời hạn báo trước chấm dứt hợp đồng không phù hợp",
    "keys": []
   }
  ],
@@ -88,5 +53,6 @@
   "da_kiem": 11,
   "chua_kiem": 0
  },
- "commit": "e268fcb0af37c7b7d4fdd2fff692ed34f2b94b57"
+ "commit": "ed30fdd0d4d8959d1890b98cf6cf3dbe7ad0fbf4",
+ "llm": "groq/openai/gpt-oss-120b"
 }

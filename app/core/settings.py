@@ -1,6 +1,7 @@
 from functools import lru_cache
 from pathlib import Path
 
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -18,6 +19,11 @@ class Settings(BaseSettings):
     gemini_api_key_2: str = ""
     gemini_api_key_3: str = ""
     gemini_model: str = "gemini-2.5-flash"
+
+    # LLM_PROVIDER=groq sends every chat call to Groq instead of Gemini (default stays Gemini).
+    llm_provider: str = "gemini"
+    groq_api_key: str = Field("", validation_alias=AliasChoices("GROG_KEY", "GROQ_API_KEY"))
+    groq_model: str = "openai/gpt-oss-120b"
 
     @property
     def gemini_api_keys(self) -> list[str]:

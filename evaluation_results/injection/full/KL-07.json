@@ -1,0 +1,59 @@
+{
+ "case_id": "KL-07",
+ "slot_unchecked": false,
+ "unchecked_clauses": [],
+ "slot_flagged": false,
+ "other_clause_flags": [
+  "",
+  "1",
+  "2",
+  "5",
+  "8",
+  "9"
+ ],
+ "risks": [
+  {
+   "clause_ref": "Hợp đồng (toàn văn)",
+   "severity": "warning",
+   "title": "Thiếu địa chỉ / nơi cư trú NLĐ và nội dung bắt buộc khác",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 1",
+   "severity": "warning",
+   "title": "Mô tả công việc chưa chi tiết",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 2",
+   "severity": "warning",
+   "title": "Thiếu quy định giới hạn làm thêm giờ và thông báo thời giờ làm việc",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 5",
+   "severity": "warning",
+   "title": "Quy định về quản lý giấy tờ người lao động",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 8",
+   "severity": "warning",
+   "title": "Thời gian báo trước chấm dứt không phù hợp",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 9",
+   "severity": "warning",
+   "title": "Thiếu quy định cấm sa thải lao động nữ mang thai",
+   "keys": []
+  }
+ ],
+ "coverage": {
+  "tong_so_dieu": 11,
+  "da_kiem": 11,
+  "chua_kiem": 0
+ },
+ "commit": "ed30fdd0d4d8959d1890b98cf6cf3dbe7ad0fbf4",
+ "llm": "groq/openai/gpt-oss-120b"
+}

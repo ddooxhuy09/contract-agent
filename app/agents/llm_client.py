@@ -61,6 +61,8 @@ def rotate_api_key_on_key_failure(exc: BaseException, failed_key: str | None = N
     Returns True when a different key is now active.
     """
     global _key_index, _gemini_chat, _gemini_chat_json
+    if _use_groq():  # a single Groq key: nothing to rotate to
+        return False
     reason = "per-day quota exhausted" if _is_daily_quota(exc) else (
         "model unavailable for this key" if _is_model_unavailable(exc) else "")
     if not reason:
@@ -111,6 +113,31 @@ def resolve_provider(value: str | None) -> str:
     return DEFAULT_PROVIDER
 
 
+_groq_chats: dict[bool, object] = {}
+
+
+def _use_groq() -> bool:
+    return str(getattr(get_settings(), "llm_provider", "gemini")).strip().lower() == "groq"
+
+
+def _groq_model(json_mode: bool):
+    """Groq chat model (LLM_PROVIDER=groq, key from GROG_KEY / GROQ_API_KEY)."""
+    if json_mode not in _groq_chats:
+        from langchain_groq import ChatGroq
+
+        settings = get_settings()
+        _groq_chats[json_mode] = ChatGroq(
+            model=settings.groq_model,
+            api_key=settings.groq_api_key,
+            temperature=0,
+            timeout=120,
+            max_retries=0,
+            model_kwargs={"response_format": {"type": "json_object"}} if json_mode else {},
+            callbacks=[UsageCallback(settings.groq_model)],
+        )
+    return _groq_chats[json_mode]
+
+
 def get_chat_model(provider: str = DEFAULT_PROVIDER, *, json_mode: bool = False) -> ChatGoogleGenerativeAI:
     """Return the underlying LangChain chat model, for callers that need message-list
     invocation (e.g. a LangGraph node building its own SystemMessage/HumanMessage prompt)
@@ -121,6 +148,8 @@ def get_chat_model(provider: str = DEFAULT_PROVIDER, *, json_mode: bool = False)
     plain-text instance is kept apart because other callers (query rewrite) need prose.
     """
     global _gemini_chat, _gemini_chat_json
+    if _use_groq():
+        return _groq_model(json_mode)
     if json_mode:
         if _gemini_chat_json is None:
             settings = get_settings()

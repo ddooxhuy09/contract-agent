@@ -122,3 +122,9 @@ Số liệu chính để quyết định: **exact provision recall của `final_
 - Rule-only (80 ca): precision 0,53, recall 0,40, F1 0,46, 14/40 ca hợp lệ bị báo nhầm. Recall bị chặn bởi thiết kế bộ ca (3/5 ca vi phạm cố ý viết khác mẫu regex). Báo cáo: `evaluation_results/injection/BAO_CAO.md`.
 - Pipeline đầy đủ (Gemini): mới 2/48 ca mẫu, dừng vì hết quota ngày. Không có kết luận định lượng. Resume: `python -m evaluation.injection.run full`.
 - Không sửa `app/agents/labor_red_flags.py`.
+
+## 2026-11-09: judge cho bộ bơm lỗi đổi sang Groq (khai báo trước khi chạy)
+- Lý do: quota Gemini ngày đã hết; người dùng cấp key Groq (biến `GROG_KEY`). Thêm provider qua `LLM_PROVIDER=groq`, model `openai/gpt-oss-120b`, nhiệt độ 0; mặc định ứng dụng vẫn là Gemini.
+- 48 ca mẫu của bộ bơm lỗi chạy bằng **Groq (openai/gpt-oss-120b)**. Mỗi bản ghi trong `evaluation_results/injection/full/` có trường `llm`. Hai ca đã chạy bằng Gemini (OT-02, OT-08) chuyển sang `full_gemini_pilot/`, không trộn vào chỉ số.
+- Cách chấm, mẫu, seed không đổi. Kết quả này là của Groq judge, không so sánh trực tiếp với run Gemini khác.
+- Chạy thử 2 ca trước để tiết kiệm token; dừng khi gặp giới hạn.

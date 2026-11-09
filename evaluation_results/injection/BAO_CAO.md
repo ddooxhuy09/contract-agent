@@ -37,3 +37,18 @@ CI95 bootstrap theo ca (1000 lần, seed 20261109). Mỗi luật chỉ 10 ca nê
 1. Chạy tiếp (b) qua nhiều ngày bằng lệnh resume ở trên cho đến khi đủ 48 ca, hoặc chấp nhận mẫu nhỏ hơn và ghi rõ.
 2. Quyết định cách xử lý FP của quy tắc (xét phủ định trước khi kích hoạt): thay đổi `app/`, không làm trong lượt này.
 3. Nhờ luật sư xác nhận nhãn 80 ca, đặc biệt các near-miss phụ thuộc diễn giải.
+
+## Pipeline đầy đủ, mẫu 48 ca (judge Groq `openai/gpt-oss-120b`)
+Hoàn tất 48/48 ca (3 vi phạm + 3 hợp lệ mỗi luật, seed 20261109), 0 Điều chưa kiểm. Judge đổi từ Gemini sang Groq vì hết quota Gemini; khai báo trong NHAT_KY trước khi chạy. Hai ca Gemini cũ nằm ở `full_gemini_pilot/`, không tính.
+
+| Chỉ số (Điều bơm bị gắn critical/warning) | Giá trị |
+|---|---|
+| TP / FP / FN / TN | 24 / 15 / 0 / 9 |
+| Precision | 0,62 (CI95 0,46-0,76) |
+| Recall | 1,00 (24/24; CI suy biến) |
+| F1 | 0,76 (CI95 0,63-0,87) |
+
+- Judge bắt cả 24 ca vi phạm, kể cả các ca diễn đạt khác mẫu mà rule-only bỏ sót (recall 0,40).
+- Nhưng gắn cờ 15/24 ca hợp lệ (62%): 8 `lawful_variant`, 5 `negation_trap`, 1 `number_words`, 1 `long_sentence`. Judge phân biệt kém giữa near-miss và vi phạm.
+- Điều khác ngoài Điều bơm bị gắn cờ ở 48/48 ca (trung bình 5,4 Điều/ca, trên hợp đồng nền sạch). Chỉ số ở mức Điều bơm vì vậy không phản ánh số báo nhầm toàn hợp đồng.
+- Kết quả là của một model, một lần chạy, 48 ca do tác giả viết; không so sánh được trực tiếp với Gemini.

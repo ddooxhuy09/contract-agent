@@ -1,117 +1,117 @@
 {
  "per_rule": {
   "ot_unpaid": {
-   "tp": 1,
+   "tp": 3,
+   "fp": 2,
+   "fn": 0,
+   "precision": 0.6,
+   "recall": 1.0,
+   "f1": 0.7499999999999999,
+   "tn": 1,
+   "unchecked": 0,
+   "n": 6
+  },
+  "no_bhxh": {
+   "tp": 3,
    "fp": 1,
+   "fn": 0,
+   "precision": 0.75,
+   "recall": 1.0,
+   "f1": 0.8571428571428571,
+   "tn": 2,
+   "unchecked": 0,
+   "n": 6
+  },
+  "retain_id_papers": {
+   "tp": 3,
+   "fp": 1,
+   "fn": 0,
+   "precision": 0.75,
+   "recall": 1.0,
+   "f1": 0.8571428571428571,
+   "tn": 2,
+   "unchecked": 0,
+   "n": 6
+  },
+  "training_cost_flat": {
+   "tp": 3,
+   "fp": 2,
+   "fn": 0,
+   "precision": 0.6,
+   "recall": 1.0,
+   "f1": 0.7499999999999999,
+   "tn": 1,
+   "unchecked": 0,
+   "n": 6
+  },
+  "fine_deduct_wage": {
+   "tp": 3,
+   "fp": 2,
+   "fn": 0,
+   "precision": 0.6,
+   "recall": 1.0,
+   "f1": 0.7499999999999999,
+   "tn": 1,
+   "unchecked": 0,
+   "n": 6
+  },
+  "forfeit_wage_quit": {
+   "tp": 3,
+   "fp": 3,
    "fn": 0,
    "precision": 0.5,
    "recall": 1.0,
    "f1": 0.6666666666666666,
    "tn": 0,
    "unchecked": 0,
-   "n": 2
-  },
-  "no_bhxh": {
-   "tp": 0,
-   "fp": 0,
-   "fn": 0,
-   "precision": null,
-   "recall": null,
-   "f1": null,
-   "tn": 0,
-   "unchecked": 0,
-   "n": 0
-  },
-  "retain_id_papers": {
-   "tp": 0,
-   "fp": 0,
-   "fn": 0,
-   "precision": null,
-   "recall": null,
-   "f1": null,
-   "tn": 0,
-   "unchecked": 0,
-   "n": 0
-  },
-  "training_cost_flat": {
-   "tp": 0,
-   "fp": 0,
-   "fn": 0,
-   "precision": null,
-   "recall": null,
-   "f1": null,
-   "tn": 0,
-   "unchecked": 0,
-   "n": 0
-  },
-  "fine_deduct_wage": {
-   "tp": 0,
-   "fp": 0,
-   "fn": 0,
-   "precision": null,
-   "recall": null,
-   "f1": null,
-   "tn": 0,
-   "unchecked": 0,
-   "n": 0
-  },
-  "forfeit_wage_quit": {
-   "tp": 0,
-   "fp": 0,
-   "fn": 0,
-   "precision": null,
-   "recall": null,
-   "f1": null,
-   "tn": 0,
-   "unchecked": 0,
-   "n": 0
+   "n": 6
   },
   "terminate_pregnancy": {
-   "tp": 0,
-   "fp": 0,
+   "tp": 3,
+   "fp": 3,
    "fn": 0,
-   "precision": null,
-   "recall": null,
-   "f1": null,
+   "precision": 0.5,
+   "recall": 1.0,
+   "f1": 0.6666666666666666,
    "tn": 0,
    "unchecked": 0,
-   "n": 0
+   "n": 6
   },
   "ban_lawsuit": {
-   "tp": 0,
-   "fp": 0,
+   "tp": 3,
+   "fp": 1,
    "fn": 0,
-   "precision": null,
-   "recall": null,
-   "f1": null,
-   "tn": 0,
+   "precision": 0.75,
+   "recall": 1.0,
+   "f1": 0.8571428571428571,
+   "tn": 2,
    "unchecked": 0,
-   "n": 0
+   "n": 6
   }
  },
  "micro": {
-  "tp": 1,
-  "fp": 1,
+  "tp": 24,
+  "fp": 15,
   "fn": 0,
-  "precision": 0.5,
+  "precision": 0.6153846153846154,
   "recall": 1.0,
-  "f1": 0.6666666666666666,
-  "tn": 0,
+  "f1": 0.761904761904762,
+  "tn": 9,
   "unchecked": 0,
-  "n": 2
+  "n": 48
  },
  "micro_ci95": {
   "precision": [
-   0.0,
-   1.0
+   0.4615,
+   0.7647
   ],
   "recall": [
    1.0,
    1.0
   ],
   "f1": [
-   0.6667,
-   1.0
+   0.6316,
+   0.8667
   ]
  }
 }

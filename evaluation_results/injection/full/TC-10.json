@@ -1,0 +1,72 @@
+{
+ "case_id": "TC-10",
+ "slot_unchecked": false,
+ "unchecked_clauses": [],
+ "slot_flagged": true,
+ "other_clause_flags": [
+  "",
+  "2",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9"
+ ],
+ "risks": [
+  {
+   "clause_ref": "Hợp đồng (toàn văn)",
+   "severity": "warning",
+   "title": "Thiếu nội dung chủ yếu bắt buộc của HĐLĐ",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 2",
+   "severity": "warning",
+   "title": "Thiếu quy định giới hạn giờ làm thêm",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 5",
+   "severity": "warning",
+   "title": "Quản lý giấy tờ nhân sự",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 6",
+   "severity": "warning",
+   "title": "Rủi ro hợp đồng đào tạo nghề không đầy đủ nội dung",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 7",
+   "severity": "warning",
+   "title": "Kỷ luật lao động: cách thức cách chức, sa thải không phù hợp",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 8",
+   "severity": "critical",
+   "title": "Thời hạn báo trước khi người lao động đơn phương chấm dứt hợp đồng",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 9",
+   "severity": "warning",
+   "title": "Điều khoản bảo vệ lao động nữ chưa chi tiết",
+   "keys": []
+  },
+  {
+   "clause_ref": "Điều 10",
+   "severity": "warning",
+   "title": "Quy định giải quyết tranh chấp lao động",
+   "keys": []
+  }
+ ],
+ "coverage": {
+  "tong_so_dieu": 11,
+  "da_kiem": 11,
+  "chua_kiem": 0
+ },
+ "commit": "ed30fdd0d4d8959d1890b98cf6cf3dbe7ad0fbf4",
+ "llm": "groq/openai/gpt-oss-120b"
+}
