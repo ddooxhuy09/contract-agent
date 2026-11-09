@@ -49,3 +49,14 @@ Ghi lại các quyết định và thay đổi so với kế hoạch gốc. Mố
 - Dùng lại vector embedding của cùng một truy vấn trong một lượt truy xuất (bộ nhớ đệm 64 mục), giảm độ trễ của lượt tìm phụ.
 - Nhánh từ khóa FTS vẫn chưa sửa (ba cách thử đều thất bại; xem báo cáo trên).
 - Lưu ý khi đọc kết quả: đây là thay đổi truy xuất, cần chạy lại các đánh giá sau này trên cấu hình mới; số liệu RAG-only cũ (0,201) là trước hai thay đổi (sửa cờ hiệu lực và lượt tìm phụ).
+
+## 2026-11-09: rà soát độ chính xác pipeline (commit `fa71544`, nhánh `fix/pipeline-accuracy-review`)
+Nguồn: 10 nhận xét về kết quả phân tích hợp đồng `CÔNG TY CỔ PHẦN CÔNG NGHỆ TƯƠNG LAI_SAI.docx`. Nguyên nhân gốc từng lỗi, trước/sau và giới hạn: `docs/accuracy-review-contractlens-f87af2fa.md`. Gold set **chưa đóng băng** (chưa có tag `eval-frozen`), nên các thay đổi dưới đây không vi phạm nguyên tắc đóng băng; nhưng chúng đổi hành vi hệ thống, nên mọi số liệu đánh giá phải chạy lại trên mã này.
+- **Trích dẫn:** truy vấn kho luật đúng Điều/khoản/điểm (trước đây lấy dòng đầu theo độ sâu `ltree`, ra sai khoản: Điều 98 K2, 127 K1, 137 K2 → nay K1, K2, K3). Quote cắt đúng khoản; thêm kiểm tra nhất quán `article`/`location`/`evidence_path`/`quote`. Căn cứ pháp lý của các luật đỏ đổi theo đối chiếu kho: bỏ Điều 141 (ốm đau) và Điều 129 khỏi `terminate_pregnancy`/`fine_deduct_wage`.
+- **Luật đỏ:** thêm `training_cost_flat` (bồi thường chi phí đào tạo bằng số tháng lương cố định, Điều 62, Điều 40 K3) và tách `forfeit_wage_quit`. Còn 8 cờ (trước 7). Điều bị gán theo nội dung vi phạm thật, mỗi vi phạm là một `finding` riêng. **Ảnh hưởng gold set:** nếu cột `ai_luat_dau_ra` dùng "7 luật đỏ" thì cần ánh xạ lại cho cờ mới.
+- **Điều khoản sửa đổi:** viết lại theo câu rồi kiểm lại (còn vi phạm, câu cụt, mất số liệu hợp pháp); không qua kiểm tra thì không hiển thị. Áp dụng cả cho bản sửa do LLM sinh.
+- **Điều 21 BLLĐ:** 4 trạng thái `co`/`chua_day_du`/`thieu`/`khong_ap_dung`, thêm giới tính, địa điểm cụ thể, thời giờ nghỉ ngơi; `ppe` là "không áp dụng" cho việc văn phòng. Test `contract_qa_cases` đổi theo (kỳ vọng `ppe` thay đổi).
+- **Phần mở đầu hợp đồng:** văn bản chỉ hết hiệu lực một phần không còn tự tạo cảnh báo.
+- **Trích xuất:** `Party.id_number` tách khỏi `tax_id`; `duration` tính từ ngày; mỗi trường LLM bù bị cắt đúng chủ đề; `parse_vn_date` sửa lỗi "15 tháng 07 năm 2026" âm thầm thành ngày hôm nay.
+- **Báo cáo:** `coverage.pham_vi`/`phat_hien` (độ phủ điều khoản không phải chất lượng phát hiện), `legal_as_of` (đối chiếu luật tại ngày ký), độ tin cậy theo chất lượng chứng cứ thay cho 0,9 cố định, `confidence_notes`. Chỉ thêm trường tùy chọn vào schema.
+- **Giới hạn chưa đóng:** Điều 1 chưa được LLM chấm lại vì hết quota Gemini ngày; đường LLM mới kiểm bằng LLM giả; Điều bị quy tắc cờ critical vẫn bỏ qua LLM; phát hiện thiếu Điều 21 dựa trên mẫu câu; chưa có số liệu đo recall/precision.
