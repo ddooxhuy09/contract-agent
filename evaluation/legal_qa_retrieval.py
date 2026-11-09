@@ -216,12 +216,12 @@ def cmd_run(args) -> None:
     if not SPLIT_FILE.exists():
         raise SystemExit("Chưa có split.json. Chạy: python -m evaluation.legal_qa_retrieval split")
     split = json.loads(SPLIT_FILE.read_text(encoding="utf-8"))
-    lock = LOCK_DIR / f"{args.mode}.lock"
+    lock = LOCK_DIR / (f"{args.mode}.lock" if args.variant == "none" else f"{args.mode}+{args.variant}.lock")
     if args.split == "test":
         if args.limit:
             raise SystemExit("Tập test phải chạy đầy đủ, không dùng --limit.")
         if lock.exists() and not args.rerun_test:
-            raise SystemExit(f"Tập test mode={args.mode} đã chạy rồi ({lock}). Không chạy lại để chọn số đẹp. "
+            raise SystemExit(f"Tập test mode={args.mode} variant={args.variant} đã chạy rồi ({lock}). Không chạy lại để chọn số đẹp. "
                              "Nếu bắt buộc, dùng --rerun-test và ghi lý do vào docs/NHAT_KY_THAY_DOI.md.")
 
     cases, _ = load_cases()

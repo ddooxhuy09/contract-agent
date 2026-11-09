@@ -89,3 +89,8 @@ Về dấu `*` (dirty) trong `RESULTS.md`: `git status` toàn repo luôn có fil
 - Chọn **V3** (MRR@10 0,7112 cao nhất trong V1-V3). V3 không hơn vector rõ ràng (chênh +0,0088, CI95 [−0,0015; +0,0200]); hơn hybrid cũ (+0,0332, CI95 [+0,0180; +0,0504]).
 - V3 (và mọi biến thể OR) chậm: median 3,9 s so với 0,25 s của hybrid cũ. Chưa xử lý, chưa đổi mặc định của ứng dụng.
 - Không thêm biến thể thứ tư. Chưa chạy test.
+
+### Chạy test (2026-11-09)
+- Đã duyệt chạy test một lần cho `fts`, `vector`, `hybrid` cũ, `hybrid`+V3 (`--only-covered`, n=556).
+- `fts`, `vector`, `hybrid` cũ chạy tại commit `ae9e230`. Lần chạy `hybrid`+V3 bị từ chối sau 1 giây vì khoá test đặt tên theo `mode` (`hybrid.lock` của hybrid cũ chặn nhầm cấu hình V3 chưa từng chạy trên test). Không có kết quả test nào của V3 bị bỏ đi.
+- Sửa: khoá đặt tên theo `mode` + `variant` (biến thể `none` giữ tên cũ `<mode>.lock`). Không dùng `--rerun-test`, không xoá hay sửa file khoá nào, không đổi logic truy xuất. Thay đổi làm sau khi đã thấy kết quả test của 3 cấu hình kia nhưng không ảnh hưởng đến chúng; V3 chạy tại commit chứa sửa lỗi này (khác `ae9e230` chỉ ở tên khoá).
