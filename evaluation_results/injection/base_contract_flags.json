@@ -1,0 +1,532 @@
+{
+ "llm": "groq/openai/gpt-oss-120b",
+ "commit": "f23ba86f1985e06e30768a952f745d7c5b8b4089",
+ "coverage": {
+  "tong_so_dieu": 11,
+  "da_kiem": 11,
+  "chua_kiem": 0,
+  "ty_le_da_kiem": 1.0,
+  "chua_kiem_chi_tiet": [],
+  "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+  "phat_hien": {
+   "so_rui_ro": 8,
+   "so_dieu_co_rui_ro": 7,
+   "dieu_chua_phat_hien_rui_ro": [
+    "1",
+    "3",
+    "4",
+    "11"
+   ],
+   "dieu_chi_kiem_bang_quy_tac": [],
+   "do_tin_cay_trung_binh": 0.72,
+   "so_rui_ro_do_tin_cay_thap": 2,
+   "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+  }
+ },
+ "risks": [
+  {
+   "clause_ref": "Hợp đồng (toàn văn)",
+   "issue": "Hợp đồng lao động chưa thể hiện đủ các nội dung chủ yếu theo Điều 21 khoản 1 Bộ luật Lao động (1 mục thiếu hoàn toàn, 3 mục chưa đầy đủ). Đặc biệt: chưa ghi nơi cư trú / địa chỉ hiện tại của NLĐ. Các mục sau không tìm thấy hoặc chưa đủ rõ trong văn bản.",
+   "severity": "warning",
+   "legal_basis": "Điều 21 khoản 1 Bộ luật Lao động (45/2019/QH14) — Đã đối chiếu · Còn hiệu lực (có sửa đổi) · tại ngày ký 2026-03-02",
+   "recommendation": "- [Chưa đầy đủ] Thông tin NSDLĐ (tên, địa chỉ, người giao kết + chức danh) (Điều 21 khoản 1 điểm a) — đã có: Tên người sử dụng lao động; Họ tên, chức danh người giao kết; còn thiếu: Địa chỉ người sử dụng lao động.\n- [Chưa đầy đủ] Thông tin NLĐ (họ tên, ngày sinh, giới tính, CCCD/CMND/hộ chiếu) (Điều 21 khoản 1 điểm b) — đã có: Họ tên người lao động; còn thiếu: Ngày sinh; Giới tính; Số CCCD/CMND/hộ chiếu.\n- [Thiếu hoàn toàn] Nơi cư trú / địa chỉ hiện tại của NLĐ (Điều 21 khoản 1 điểm b).\n- [Chưa đầy đủ] Mức lương, hình thức / thời hạn trả lương, phụ cấp và khoản bổ sung (Điều 21 khoản 1 điểm đ) — đã có: Mức lương; Hình thức trả lương; Phụ cấp và các khoản bổ sung; còn thiếu: Thời hạn trả lương.\n- [Không áp dụng — nên ghi rõ] Trang bị bảo hộ lao động.",
+   "title": "Thiếu địa chỉ / nơi cư trú NLĐ và nội dung bắt buộc khác",
+   "summary_topics": [
+    "Thiếu nội dung bắt buộc",
+    "Điều 21 BLLĐ",
+    "Thiếu địa chỉ / nơi cư trú NLĐ",
+    "Thông tin NSDLĐ",
+    "Thông tin NLĐ",
+    "Mức lương, hình thức / thời hạn trả lương, phụ cấp và khoản bổ sung"
+   ],
+   "reasons": [
+    "[Chưa đầy đủ] Thông tin NSDLĐ (tên, địa chỉ, người giao kết + chức danh) (Điều 21 khoản 1 điểm a) — đã có: Tên người sử dụng lao động; Họ tên, chức danh người giao kết; còn thiếu: Địa chỉ người sử dụng lao động.",
+    "[Chưa đầy đủ] Thông tin NLĐ (họ tên, ngày sinh, giới tính, CCCD/CMND/hộ chiếu) (Điều 21 khoản 1 điểm b) — đã có: Họ tên người lao động; còn thiếu: Ngày sinh; Giới tính; Số CCCD/CMND/hộ chiếu.",
+    "[Thiếu hoàn toàn] Nơi cư trú / địa chỉ hiện tại của NLĐ (Điều 21 khoản 1 điểm b).",
+    "[Chưa đầy đủ] Mức lương, hình thức / thời hạn trả lương, phụ cấp và khoản bổ sung (Điều 21 khoản 1 điểm đ) — đã có: Mức lương; Hình thức trả lương; Phụ cấp và các khoản bổ sung; còn thiếu: Thời hạn trả lương."
+   ],
+   "impact": [
+    "Hợp đồng có nguy cơ bị coi là không đầy đủ nội dung chủ yếu theo pháp luật lao động.",
+    "Rủi ro khi thanh tra / tranh chấp về quyền lợi NLĐ chưa được thỏa thuận rõ."
+   ],
+   "legal_citations": [
+    {
+     "title": "Điều 21 khoản 1 điểm a — Bộ Luật lao động số 45/2019/QH14",
+     "summary": "",
+     "doc_number": "45/2019/QH14",
+     "location": "Chương 3 > Mục 1 > Điều 21 > Khoản 1 > Điểm a",
+     "article": "Điều 21",
+     "clause": "Khoản 1",
+     "point": "Điểm a",
+     "quote": "Điều 21. Nội dung hợp đồng lao động\n1. Hợp đồng lao động phải có những nội dung chủ yếu sau đây:\na) Tên, địa chỉ của người sử dụng lao động và họ tên, chức danh của người giao kết hợp đồng lao động bên phía người sử dụng lao động;",
+     "source_url": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van",
+     "deep_link": null,
+     "source_element_id": null,
+     "evidence_path": "139264.C3.M1.D21.K1.a",
+     "status": "Đã đối chiếu · Còn hiệu lực (có sửa đổi) · tại ngày ký 2026-03-02"
+    },
+    {
+     "title": "Điều 21 khoản 1 điểm b — Bộ Luật lao động số 45/2019/QH14",
+     "summary": "",
+     "doc_number": "45/2019/QH14",
+     "location": "Chương 3 > Mục 1 > Điều 21 > Khoản 1 > Điểm b",
+     "article": "Điều 21",
+     "clause": "Khoản 1",
+     "point": "Điểm b",
+     "quote": "Điều 21. Nội dung hợp đồng lao động\n1. Hợp đồng lao động phải có những nội dung chủ yếu sau đây:\nb) Họ tên, ngày tháng năm sinh, giới tính, nơi cư trú, số thẻ Căn cước công dân, Chứng minh nhân dân hoặc hộ chiếu của người giao kết hợp đồng lao động bên phía người lao động;",
+     "source_url": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van",
+     "deep_link": null,
+     "source_element_id": null,
+     "evidence_path": "139264.C3.M1.D21.K1.b",
+     "status": "Đã đối chiếu · Còn hiệu lực (có sửa đổi) · tại ngày ký 2026-03-02"
+    },
+    {
+     "title": "Điều 21 khoản 1 điểm đ — Bộ Luật lao động số 45/2019/QH14",
+     "summary": "",
+     "doc_number": "45/2019/QH14",
+     "location": "Chương 3 > Mục 1 > Điều 21 > Khoản 1 > Điểm dd",
+     "article": "Điều 21",
+     "clause": "Khoản 1",
+     "point": "Điểm dd",
+     "quote": "Điều 21. Nội dung hợp đồng lao động\n1. Hợp đồng lao động phải có những nội dung chủ yếu sau đây:\nđ) Mức lương theo công việc hoặc chức danh, hình thức trả lương, thời hạn trả lương, phụ cấp lương và các khoản bổ sung khác;",
+     "source_url": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van",
+     "deep_link": null,
+     "source_element_id": null,
+     "evidence_path": "139264.C3.M1.D21.K1.dd",
+     "status": "Đã đối chiếu · Còn hiệu lực (có sửa đổi) · tại ngày ký 2026-03-02"
+    }
+   ],
+   "actions": [
+    "Bổ sung nơi cư trú / địa chỉ hiện tại của NLĐ (nếu đang thiếu).",
+    "Bổ sung từng mục còn thiếu / chưa đầy đủ theo Điều 21 khoản 1 Bộ luật Lao động.",
+    "Đối chiếu Thông tư hướng dẫn nội dung HĐLĐ (nếu áp dụng) để ghi đủ thông tin định danh và chế độ."
+   ],
+   "revised_clause": null,
+   "original_clause": null,
+   "confidence": 0.8,
+   "confidence_notes": [
+    "Phát hiện thiếu dựa trên đối chiếu mẫu câu, có thể bỏ sót cách diễn đạt khác."
+   ],
+   "findings": null
+  },
+  {
+   "clause_ref": "Điều 2",
+   "issue": "Điều khoản không quy định giới hạn thời gian làm thêm giờ theo quy định của Bộ luật Lao động, có thể dẫn đến vi phạm pháp luật.",
+   "severity": "warning",
+   "legal_basis": "Bộ Luật lao động số 45/2019/QH14; Bộ Luật lao động số 45/2019/QH14",
+   "recommendation": "- Bổ sung các giới hạn thời gian làm thêm giờ theo Điều 107 (50% thời giờ bình thường, ≤12 giờ/ngày, ≤40 giờ/tháng, ≤200 giờ/năm hoặc ≤300 giờ/năm tùy ngành).\n- Rà soát và điều chỉnh lại điều khoản để phản ánh đầy đủ các yêu cầu pháp luật.\n- Áp dụng toàn văn điều khoản đã sửa (xem revised_clause).",
+   "title": "Thiếu quy định giới hạn giờ làm thêm",
+   "summary_topics": [
+    "Thời giờ làm việc",
+    "Làm thêm giờ",
+    "Giới hạn overtime",
+    "Tuân thủ luật lao động"
+   ],
+   "reasons": null,
+   "impact": [
+    "Người sử dụng lao động có thể bị xử phạt hành chính nếu vượt quá giới hạn làm thêm giờ.",
+    "Tranh chấp về tiền lương và thời gian làm việc có thể phát sinh.",
+    "Một phần hợp đồng có thể bị coi là không hợp lệ nếu vi phạm quy định bắt buộc về thời gian làm thêm."
+   ],
+   "legal_citations": [
+    {
+     "title": "Bộ Luật lao động số 45/2019/QH14",
+     "summary": "",
+     "doc_number": "45/2019/QH14",
+     "location": "Chương 7 > Mục 1 > Điều 105 > Khoản 1",
+     "article": "Điều 105",
+     "clause": "Khoản 1",
+     "point": null,
+     "quote": "Điều 105. Thời giờ làm việc bình thường 1. Thời giờ làm việc bình thường không quá 08 giờ trong 01 ngày và không quá 48 giờ trong 01 tuần.",
+     "source_url": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van",
+     "deep_link": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van#9c16f9e0-3167-11f1-a1d5-f7e98a75a87b",
+     "source_element_id": "9c16f9e0-3167-11f1-a1d5-f7e98a75a87b",
+     "evidence_path": "139264.C7.M1.D105.K1",
+     "status": "Đã đối chiếu · Còn hiệu lực (có sửa đổi) · tại ngày ký 2026-03-02"
+    },
+    {
+     "title": "Bộ Luật lao động số 45/2019/QH14",
+     "summary": "",
+     "doc_number": "45/2019/QH14",
+     "location": "Chương 7 > Mục 1 > Điều 107 > Khoản 2 > Điểm a",
+     "article": "Điều 107",
+     "clause": "Khoản 2",
+     "point": "Điểm a",
+     "quote": "Điều 107. Làm thêm giờ 2. Người sử dụng lao động được sử dụng người lao động làm thêm giờ khi đáp ứng đầy đủ các yêu cầu sau đây: a) Phải được sự đồng ý của người lao động;",
+     "source_url": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van",
+     "deep_link": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van#9c176f38-3167-11f1-a532-e95e4d8d7b34",
+     "source_element_id": "9c176f38-3167-11f1-a532-e95e4d8d7b34",
+     "evidence_path": "139264.C7.M1.D107.K2.a",
+     "status": "Đã đối chiếu · Còn hiệu lực (có sửa đổi) · tại ngày ký 2026-03-02"
+    }
+   ],
+   "actions": [
+    "Bổ sung giới hạn thời gian làm thêm không quá 50% thời giờ làm việc bình thường trong 1 ngày, không quá 12 giờ trong 1 ngày và không quá 40 giờ trong 1 tháng.",
+    "Bổ sung giới hạn tổng thời gian làm thêm không quá 200 giờ trong 1 năm (hoặc 300 giờ trong 1 năm đối với các ngành, nghề, công việc được quy định).",
+    "Rà soát lại toàn bộ điều khoản để đảm bảo phản ánh đầy đủ các yêu cầu của Điều 107 Bộ luật Lao động."
+   ],
+   "revised_clause": "Điều 2 - Thời giờ làm việc và làm thêm giờ\n\n2.1. Thời giờ làm việc bình thường là 08 giờ/ngày và 40 giờ/tuần, từ thứ Hai đến thứ Sáu.\n\n2.2. Người lao động được nghỉ giữa ca 60 phút, nghỉ hằng tuần 02 ngày, nghỉ lễ, tết và nghỉ phép năm có hưởng lương theo quy định của Bộ luật Lao động.\n\n2.3. Việc làm thêm giờ chỉ được thực hiện khi người lao động đồng ý và phải đáp ứng các yêu cầu của Bộ luật Lao động, bao gồm:\n   a) Không vượt quá 50% thời giờ làm việc bình thường trong một ngày;\n   b) Tổng thời gian làm thêm không quá 12 giờ trong một ngày và không quá 40 giờ trong một tháng;\n   c) Tổng thời gian làm thêm không quá 200 giờ trong một năm (hoặc không quá 300 giờ trong một năm đối với các ngành, nghề, công việc được quy định);\n   d) Người sử dụng lao động phải trả lương làm thêm giờ theo quy định của Bộ luật Lao động.",
+   "original_clause": "Thời giờ làm việc và làm thêm giờ 2.1. Thời giờ làm việc bình thường là 08 giờ/ngày và 40 giờ/tuần, từ thứ Hai đến thứ Sáu. 2.2. NLĐ được nghỉ giữa ca 60 phút, nghỉ hằng tuần 02 ngày, nghỉ lễ, tết và nghỉ phép năm có hưởng lương theo Bộ luật Lao động. 2.3. Việc làm thêm giờ (nếu có) chỉ thực hiện khi NLĐ đồng ý và được trả lương theo quy định của Bộ luật Lao động.",
+   "confidence": 0.75,
+   "confidence_notes": [
+    "Điều 105: quote không chứa nội dung khoản 1",
+    "Điều 107: quote không chứa nội dung khoản 2"
+   ],
+   "findings": null
+  },
+  {
+   "clause_ref": "Điều 5",
+   "issue": "Điều 5 chỉ quy định người lao động tự quản lý giấy tờ bản chính mà không quy định trách nhiệm của người sử dụng lao động trong việc giữ, bảo quản và trả lại giấy tờ khi chấm dứt hợp đồng.",
+   "severity": "warning",
+   "legal_basis": null,
+   "recommendation": "• Bổ sung quy định về việc người sử dụng lao động giữ, bảo quản và trả lại giấy tờ bản chính của người lao động.\n• Thêm điều khoản bảo mật và bồi thường khi giấy tờ bị mất/hư hỏng.\n• Áp dụng toàn văn điều khoản đã sửa ở trên.",
+   "title": "Quy định về quản lý giấy tờ người lao động chưa đầy đủ",
+   "summary_topics": [
+    "Quản lý giấy tờ",
+    "Trách nhiệm người sử dụng lao động",
+    "Bảo mật hồ sơ nhân sự"
+   ],
+   "reasons": null,
+   "impact": [
+    "Nếu giữ nguyên, có thể phát sinh tranh chấp về việc trả lại giấy tờ bản chính khi hợp đồng chấm dứt.",
+    "Người sử dụng lao động có thể bị coi là không thực hiện đầy đủ nghĩa vụ lưu trữ hồ sơ nhân sự theo quy định pháp luật."
+   ],
+   "legal_citations": null,
+   "actions": [
+    "Bổ sung quy định người sử dụng lao động phải giữ và bảo quản giấy tờ bản chính của người lao động trong suốt thời gian hợp đồng.",
+    "Xác định thời gian và cách thức trả lại giấy tờ bản chính cho người lao động khi hợp đồng chấm dứt.",
+    "Thêm điều khoản bảo mật thông tin cá nhân và trách nhiệm bồi thường nếu giấy tờ bị mất, hư hỏng."
+   ],
+   "revised_clause": "Điều 5 – Giấy tờ của người lao động\n5.1. Khi ký hợp đồng, người lao động cung cấp bản sao các giấy tờ cần thiết cho hồ sơ nhân sự.\n5.2. Giấy tờ bản chính của người lao động do người sử dụng lao động giữ và bảo quản trong suốt thời gian hợp đồng; người sử dụng lao động có trách nhiệm trả lại giấy tờ bản chính cho người lao động khi hợp đồng chấm dứt hoặc khi người lao động yêu cầu, trừ trường hợp pháp luật quy định khác.\n5.3. Người sử dụng lao động phải bảo mật, bảo quản an toàn các giấy tờ và thông tin cá nhân của người lao động; nếu gây mất mát, hư hỏng, người sử dụng lao động chịu trách nhiệm bồi thường theo quy định pháp luật.",
+   "original_clause": "Giấy tờ của người lao động 5.1. Khi ký hợp đồng, NLĐ cung cấp bản sao các giấy tờ cần thiết cho hồ sơ nhân sự. 5.2. Giấy tờ bản chính của NLĐ do NLĐ tự quản lý.",
+   "confidence": 0.45,
+   "confidence_notes": [
+    "Không có căn cứ pháp lý đã xác minh trong kho."
+   ],
+   "findings": null
+  },
+  {
+   "clause_ref": "Điều 6",
+   "issue": "Điều 6.2 không quy định đầy đủ các nội dung bắt buộc của hợp đồng đào tạo nghề theo Điều 62 Bộ luật Lao động 2019 và không nêu việc ký hợp đồng lao động sau khi đào tạo theo Điều 61.",
+   "severity": "warning",
+   "legal_basis": "Bộ Luật lao động số 45/2019/QH14; Bộ Luật lao động số 45/2019/QH14",
+   "recommendation": "- Bổ sung các nội dung bắt buộc của hợp đồng đào tạo nghề vào Điều 6.2.\n- Thêm quy định ký hợp đồng lao động sau khi đào tạo theo Điều 61.\n- Rà soát và làm rõ chi phí đào tạo trong Điều 6.1.\n- Áp dụng toàn văn điều khoản đã sửa (revised_clause) để đảm bảo tuân thủ pháp luật.",
+   "title": "Thiếu nội dung hợp đồng đào tạo nghề",
+   "summary_topics": [
+    "Đào tạo nghề",
+    "Nội dung hợp đồng đào tạo",
+    "Ký hợp đồng lao động sau đào tạo"
+   ],
+   "reasons": null,
+   "impact": [
+    "Hợp đồng đào tạo có thể bị coi là không hợp lệ, gây mất quyền lợi cho người lao động và công ty.",
+    "Công ty có thể phải bồi thường chi phí đào tạo nếu không có cam kết thời hạn làm việc rõ ràng.",
+    "Gây tranh chấp về chi phí, thời gian làm việc và trách nhiệm của các bên."
+   ],
+   "legal_citations": [
+    {
+     "title": "Bộ Luật lao động số 45/2019/QH14",
+     "summary": "",
+     "doc_number": "45/2019/QH14",
+     "location": "Chương 4 > Điều 62 > Khoản 2 > Điểm b",
+     "article": "Điều 62",
+     "clause": "Khoản 2",
+     "point": "Điểm b",
+     "quote": "Điều 62. Hợp đồng đào tạo nghề giữa người sử dụng lao động, người lao động và chi phí đào tạo nghề 2. Hợp đồng đào tạo nghề phải có các nội dung chủ yếu sau đây: b) Địa điểm, thời gian và tiền lương trong thời gian đào tạo;",
+     "source_url": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van",
+     "deep_link": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van#96771a60-3162-11f1-b46f-cd3586628101",
+     "source_element_id": "96771a60-3162-11f1-b46f-cd3586628101",
+     "evidence_path": "139264.C4.D62.K2.b",
+     "status": "Đã đối chiếu · Còn hiệu lực (có sửa đổi) · tại ngày ký 2026-03-02"
+    },
+    {
+     "title": "Bộ Luật lao động số 45/2019/QH14",
+     "summary": "",
+     "doc_number": "45/2019/QH14",
+     "location": "Chương 3 > Mục 1 > Điều 20 > Khoản 1 > Điểm b",
+     "article": "Điều 20",
+     "clause": "Khoản 1",
+     "point": "Điểm b",
+     "quote": "Điều 20. Loại hợp đồng lao động 1. Hợp đồng lao động phải được giao kết theo một trong các loại sau đây: b) Hợp đồng lao động xác định thời hạn là hợp đồng mà trong đó hai bên xác định thời hạn, thời điểm chấm dứt hiệu lực của hợp đồng trong thời gian không quá 36 tháng kể từ thời điểm có hiệu lực của hợp đồng.",
+     "source_url": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van",
+     "deep_link": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van#de3dd5f0-315d-11f1-bb21-1986d3b11ceb",
+     "source_element_id": "de3dd5f0-315d-11f1-bb21-1986d3b11ceb",
+     "evidence_path": "139264.C3.M1.D20.K1.b",
+     "status": "Đã đối chiếu · Còn hiệu lực (có sửa đổi) · tại ngày ký 2026-03-02"
+    }
+   ],
+   "actions": [
+    "Bổ sung các nội dung bắt buộc của hợp đồng đào tạo nghề (địa điểm, thời gian, tiền lương, thời hạn cam kết, chi phí đào tạo, trách nhiệm của các bên) vào Điều 6.2.",
+    "Thêm quy định ký hợp đồng lao động sau khi đào tạo theo Điều 61 Bộ luật Lao động.",
+    "Rà soát lại Điều 6.1 để xác định rõ các khoản chi phí đào tạo bao gồm tiền lương và bảo hiểm trong thời gian đào tạo."
+   ],
+   "revised_clause": "Điều 6 - Đào tạo\n\n6.1. Công ty tổ chức đào tạo hội nhập và đào tạo nghiệp vụ định kỳ cho người lao động, chịu toàn bộ chi phí các khóa đào tạo bao gồm tiền học phí, tài liệu, chi phí đi lại, sinh hoạt (nếu có) và tiền lương, bảo hiểm xã hội, bảo hiểm y tế, bảo hiểm thất nghiệp cho người lao động trong thời gian đào tạo.\n\n6.2. Khi người lao động được công ty cử đi đào tạo nâng cao trình độ bằng kinh phí của công ty, hai bên ký hợp đồng đào tạo nghề riêng, trong đó phải quy định đầy đủ các nội dung sau: (i) nghề đào tạo; (ii) địa điểm, thời gian và tiền lương trong thời gian đào tạo; (iii) thời hạn cam kết phải làm việc cho công ty sau khi hoàn thành đào tạo; (iv) chi phí đào tạo và trách nhiệm hoàn trả chi phí nếu người lao động không thực hiện cam kết; (v) trách nhiệm của người sử dụng lao động và của người lao động; (vi) các điều kiện khác theo quy định của Bộ luật Lao động. Sau khi thời hạn học nghề, tập nghề kết thúc và người lao động đáp ứng các điều kiện quy định, hai bên ký hợp đồng lao động theo quy định tại Điều 61 Bộ luật Lao động.",
+   "original_clause": "Đào tạo 6.1. Công ty tổ chức đào tạo hội nhập và đào tạo nghiệp vụ định kỳ cho NLĐ và chịu chi phí các khóa này. 6.2. Khi NLĐ được cử đi đào tạo nâng cao trình độ bằng kinh phí của Công ty, hai bên ký hợp đồng đào tạo nghề riêng theo Bộ luật Lao động.",
+   "confidence": 0.75,
+   "confidence_notes": [
+    "Điều 62: quote không chứa nội dung khoản 2",
+    "Điều 20: quote không chứa nội dung khoản 1"
+   ],
+   "findings": null
+  },
+  {
+   "clause_ref": "Điều 7",
+   "issue": "Điều 7.2 cho phép cách chức, sa thải như hình thức kỷ luật mà không quy định điều kiện, trái quy định của Nghị định 27/2014/NĐ‑CP và Bộ luật Lao động.",
+   "severity": "warning",
+   "legal_basis": "Nghị định số 27/2014/NĐ-CP Quy định chi tiết thi hành một số điều của Bộ luật Lao động về lao động là người giúp việc gia đình; Bộ Luật lao động số 45/2019/QH14",
+   "recommendation": "• Sửa lại Điều 7.2 theo nội dung đã chỉnh sửa; • Thêm điều kiện áp dụng cách chức, sa thải; • Đảm bảo tham chiếu rõ ràng tới NĐ 27/2014 và Bộ luật Lao động; • Toàn văn sửa: \"7.2. Việc xử lý kỷ luật lao động áp dụng các hình thức: (i) khiển trách; (ii) kéo dài thời hạn nâng lương không quá 06 tháng; (iii) cách chức hoặc sa thải chỉ được thực hiện trong trường hợp người lao động tái phạm hoặc vi phạm nghiêm trọng, theo trình tự và thủ tục quy định tại Điều 26 Nghị định 27/2014/NĐ‑CP và các quy định của Bộ luật Lao động.\"",
+   "title": "Quá rộng hình thức kỷ luật cách chức, sa thải",
+   "summary_topics": [
+    "Kỷ luật lao động",
+    "Cách chức",
+    "Sa thải",
+    "Điều kiện áp dụng"
+   ],
+   "reasons": null,
+   "impact": [
+    "Hợp đồng có thể bị coi là trái pháp luật, dẫn tới tranh chấp, bồi thường hoặc vô hiệu một phần.",
+    "Người sử dụng lao động có thể bị xử phạt hành chính theo NĐ 27/2014 nếu áp dụng hình thức không hợp pháp.",
+    "Người lao động có quyền khiếu nại, gây mất ổn định quan hệ lao động."
+   ],
+   "legal_citations": [
+    {
+     "title": "Nghị định số 27/2014/NĐ-CP Quy định chi tiết thi hành một số điều của Bộ luật Lao động về lao động là người giúp việc gia đình",
+     "summary": "",
+     "doc_number": "27/2014/NĐ-CP",
+     "location": "Chương 6 > Điều 26 > Khoản 1",
+     "article": "Điều 26",
+     "clause": "Khoản 1",
+     "point": null,
+     "quote": "Điều 26. Kỷ luật lao động, trách nhiệm vật chất 1. Khi người lao động có hành vi vi phạm các nội dung trong hợp đồng lao động nhưng không thuộc trường hợp quy định tại Khoản 2 và Khoản 3 Điều 12 Nghị định này thì người sử dụng lao động xử lý kỷ luật lao động theo hình thức khiển trách; trường hợp người lao động tái phạm, tùy theo mức độ vi phạm mà người sử dụng lao động có thể chấm dứt hợp đồng lao động theo quy định tại Khoản 1 Điều 12 Nghị định này.",
+     "source_url": "https://vbpl.vn/van-ban/chi-tiet/nghi-dinh-so-27-2014-nd-cp-quy-dinh-chi-tiet-thi-hanh-mot-so-dieu-cua-bo-luat-lao-dong-ve-lao-dong-la-nguoi-giup-viec-gia-dinh--34095?tabs=toan-van",
+     "deep_link": "https://vbpl.vn/van-ban/chi-tiet/nghi-dinh-so-27-2014-nd-cp-quy-dinh-chi-tiet-thi-hanh-mot-so-dieu-cua-bo-luat-lao-dong-ve-lao-dong-la-nguoi-giup-viec-gia-dinh--34095?tabs=toan-van#1663fc80-2c85-11f1-ba54-af2084325f25",
+     "source_element_id": "1663fc80-2c85-11f1-ba54-af2084325f25",
+     "evidence_path": "34095.C6.D26.K1",
+     "status": "Đã đối chiếu · Còn hiệu lực · tại ngày ký 2026-03-02"
+    },
+    {
+     "title": "Bộ Luật lao động số 45/2019/QH14",
+     "summary": "",
+     "doc_number": "45/2019/QH14",
+     "location": "Chương 8 > Mục 1 > Điều 124 > Khoản 1",
+     "article": "Điều 124",
+     "clause": "Khoản 1",
+     "point": null,
+     "quote": "Điều 124. Hình thức xử lý kỷ luật lao động 1. Khiển trách.",
+     "source_url": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van",
+     "deep_link": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van#9c2ccbd0-3167-11f1-bf3c-93f2c8fd229b",
+     "source_element_id": "9c2ccbd0-3167-11f1-bf3c-93f2c8fd229b",
+     "evidence_path": "139264.C8.M1.D124.K1",
+     "status": "Đã đối chiếu · Còn hiệu lực (có sửa đổi) · tại ngày ký 2026-03-02"
+    }
+   ],
+   "actions": [
+    "Sửa lại Điều 7.2, giới hạn cách chức, sa thải chỉ áp dụng khi người lao động tái phạm hoặc vi phạm nghiêm trọng theo quy định của NĐ 27/2014.",
+    "Thêm điều kiện và quy trình thực hiện khiển trách, kéo dài thời hạn nâng lương theo Điều 124 và Điều 126 Bộ luật Lao động nếu cần.",
+    "Chỉ rõ tham chiếu tới Nghị định 27/2014/NĐ‑CP và Bộ luật Lao động trong điều khoản."
+   ],
+   "revised_clause": "7.2. Việc xử lý kỷ luật lao động áp dụng các hình thức: (i) khiển trách; (ii) kéo dài thời hạn nâng lương không quá 06 tháng; (iii) cách chức hoặc sa thải chỉ được thực hiện trong trường hợp người lao động tái phạm hoặc vi phạm nghiêm trọng, theo trình tự và thủ tục quy định tại Điều 26 Nghị định 27/2014/NĐ‑CP và các quy định của Bộ luật Lao động.",
+   "original_clause": "Kỷ luật lao động và trách nhiệm vật chất 7.1. NLĐ chấp hành nội quy lao động của Công ty đã được đăng ký theo quy định. 7.2. Việc xử lý kỷ luật lao động áp dụng các hình thức khiển trách, kéo dài thời hạn nâng lương không quá 06 tháng, cách chức, sa thải theo đúng trình tự pháp luật. 7.3. NLĐ làm hư hỏng, làm mất tài sản của Công ty thì bồi thường theo quy định của Bộ luật Lao động.",
+   "confidence": 0.73,
+   "confidence_notes": [
+    "Điều 26: quote không chứa nội dung khoản 1",
+    "Điều 124: quote không chứa nội dung khoản 1"
+   ],
+   "findings": null
+  },
+  {
+   "clause_ref": "Điều 8",
+   "issue": "Điều 8.1 quy định người lao động phải báo trước 30 ngày, không đáp ứng yêu cầu tối thiểu của Điều 35 Bộ luật Lao động 2019 đối với hợp đồng không xác định thời hạn (cần 45 ngày) và không phản ánh đúng các mức báo trước cho các loại hợp đồng khác.",
+   "severity": "critical",
+   "legal_basis": "Bộ Luật lao động số 45/2019/QH14",
+   "recommendation": "• Sửa Điều 8.1 theo mẫu trên để đáp ứng quy định của Điều 35 Bộ luật Lao động.\n• Kiểm tra và bổ sung quy định thanh toán tiền lương, quyền lợi nếu có quy định pháp luật cụ thể.\n• Rà soát toàn bộ hợp đồng để đảm bảo các điều khoản chấm dứt khác cũng tuân thủ pháp luật.\n• Áp dụng toàn văn Điều 8 đã sửa (revised_clause) vào hợp đồng.",
+   "title": "Thời hạn báo trước chấm dứt hợp đồng không phù hợp",
+   "summary_topics": [
+    "Thời hạn báo trước",
+    "Chấm dứt hợp đồng",
+    "Luật Lao động",
+    "Hợp đồng không xác định thời hạn"
+   ],
+   "reasons": null,
+   "impact": [
+    "Điều khoản có thể bị coi là trái pháp luật, dẫn tới việc tòa án hoặc cơ quan giải quyết tranh tụng tuyên vô hiệu một phần hoặc toàn bộ điều khoản.",
+    "Người lao động có thể yêu cầu bồi thường nếu công ty không tuân thủ thời gian báo trước đúng quy định.",
+    "Công ty có nguy cơ bị xử phạt hành chính hoặc bồi thường thiệt hại do vi phạm Bộ luật Lao động."
+   ],
+   "legal_citations": [
+    {
+     "title": "Bộ Luật lao động số 45/2019/QH14",
+     "summary": "",
+     "doc_number": "45/2019/QH14",
+     "location": "Chương 3 > Mục 3 > Điều 35 > Khoản 1 > Điểm a",
+     "article": "Điều 35",
+     "clause": "Khoản 1",
+     "point": "Điểm a",
+     "quote": "Điều 35. Quyền đơn phương chấm dứt hợp đồng lao động của người lao động 1. Người lao động có quyền đơn phương chấm dứt hợp đồng lao động nhưng phải báo trước cho người sử dụng lao động như sau: a) Ít nhất 45 ngày nếu làm việc theo hợp đồng lao động không xác định thời hạn;",
+     "source_url": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van",
+     "deep_link": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van#4b64d6f0-315f-11f1-92b3-fd1b74d06662",
+     "source_element_id": "4b64d6f0-315f-11f1-92b3-fd1b74d06662",
+     "evidence_path": "139264.C3.M3.D35.K1.a",
+     "status": "Đã đối chiếu · Còn hiệu lực (có sửa đổi) · tại ngày ký 2026-03-02"
+    }
+   ],
+   "actions": [
+    "Sửa Điều 8.1 để nêu rõ thời gian báo trước tùy loại hợp đồng theo quy định của Điều 35 Bộ luật Lao động.",
+    "Thêm quy định chi tiết về thời hạn thanh toán tiền lương và các quyền lợi dựa trên quy định pháp luật hiện hành (nếu có).",
+    "Rà soát các điều khoản khác liên quan đến chấm dứt hợp đồng để đảm bảo toàn bộ nội dung phù hợp với Bộ luật Lao động."
+   ],
+   "revised_clause": "Điều 8 - Chấm dứt hợp đồng do người lao động đơn phương\n\n8.1 Người lao động có quyền đơn phương chấm dứt hợp đồng lao động nhưng phải báo trước cho người sử dụng lao động theo thời hạn tối thiểu quy định tại Điều 35 Bộ luật Lao động năm 2019, cụ thể:\n   a) Ít nhất 45 ngày nếu là hợp đồng lao động không xác định thời hạn;\n   b) Ít nhất 30 ngày nếu là hợp đồng lao động xác định thời hạn có thời hạn từ 12 tháng đến 36 tháng;\n   c) Ít nhất 03 ngày làm việc nếu là hợp đồng lao động xác định thời hạn có thời hạn dưới 12 tháng;\n   d) Đối với một số ngành, nghề, công việc đặc thù, thời hạn báo trước được thực hiện theo quy định của Chính phủ.\n\n8.2 Khi chấm dứt hợp đồng, người sử dụng lao động thanh toán đầy đủ tiền lương và các quyền lợi của người lao động trong thời hạn không quá 14 ngày làm việc kể từ ngày chấm dứt, phù hợp với quy định pháp luật hiện hành.",
+   "original_clause": "Chấm dứt hợp đồng do người lao động đơn phương 8.1. NLĐ có quyền đơn phương chấm dứt hợp đồng lao động nhưng phải báo trước ít nhất 30 ngày. 8.2. Khi chấm dứt hợp đồng, Công ty thanh toán đầy đủ tiền lương và các quyền lợi của NLĐ trong thời hạn 14 ngày làm việc kể từ ngày chấm dứt.",
+   "confidence": 0.85,
+   "confidence_notes": [
+    "Điều 35: quote không chứa nội dung khoản 1"
+   ],
+   "findings": null
+  },
+  {
+   "clause_ref": "Điều 9",
+   "issue": "Điều 9.2 chỉ tham chiếu chung tới quy định chấm dứt hợp đồng mà không nêu rõ cấm người sử dụng đơn phương chấm dứt đối với lao động nữ mang thai, nghỉ thai sản hoặc nuôi con dưới 12 tháng, gây mơ hồ và rủi ro vi phạm pháp luật.",
+   "severity": "warning",
+   "legal_basis": "Bộ Luật lao động số 45/2019/QH14; Bộ Luật lao động số 45/2019/QH14; Bộ Luật lao động số 45/2019/QH14",
+   "recommendation": "• Sửa đổi Điều 9.2 theo nội dung trên để loại bỏ tính mơ hồ và tuân thủ Điều 137, Điều 37 của Bộ luật Lao động.\n• Cập nhật Điều 9.1 mô tả chi tiết các chế độ thai sản, nghỉ nuôi con và nghỉ hành kinh.\n• (Tùy chọn) Bổ sung quy định về quyền đơn phương chấm dứt của lao động nữ theo Điều 138.\n• Áp dụng toàn văn Điều khoản đã sửa (revised_clause) vào hợp đồng.",
+   "title": "Điều khoản bảo vệ lao động nữ chưa nêu cấm chấm dứt",
+   "summary_topics": [
+    "Bảo vệ lao động nữ",
+    "Chấm dứt hợp đồng",
+    "Cấm sa thải thai sản",
+    "Rủi ro pháp lý"
+   ],
+   "reasons": null,
+   "impact": [
+    "Nếu công ty chấm dứt lao động nữ trái quy định, sẽ bị xử phạt hành chính và phải bồi thường thiệt hại cho người lao động.",
+    "Có khả năng tranh chấp lao động, hợp đồng có thể bị tuyên bố vô hiệu một phần.",
+    "Ảnh hưởng uy tín công ty và tăng chi phí pháp lý."
+   ],
+   "legal_citations": [
+    {
+     "title": "Bộ Luật lao động số 45/2019/QH14",
+     "summary": "",
+     "doc_number": "45/2019/QH14",
+     "location": "Chương 10 > Điều 137 > Khoản 3",
+     "article": "Điều 137",
+     "clause": "Khoản 3",
+     "point": null,
+     "quote": "Điều 137. Bảo vệ thai sản 3. Người sử dụng lao động không được sa thải hoặc đơn phương chấm dứt hợp đồng lao động đối với người lao động vì lý do kết hôn, mang thai, nghỉ thai sản, nuôi con dưới 12 tháng tuổi, trừ trường hợp người sử dụng lao động là cá nhân chết, bị Tòa án tuyên bố mất năng lực hành vi dân sự, mất tích hoặc đã chết hoặc người sử dụng lao động không phải là cá nhân chấm dứt hoạt động hoặc bị cơ quan chuyên môn về đăng ký kinh doanh thuộc Ủy ban nhân dân cấp tỉnh ra thông báo không có người đại diện theo pháp luật, người được ủy quyền thực hiện quyền và nghĩa vụ của người đại diện theo pháp luật. Trường hợp hợp đồng lao động hết hạn trong thời gian lao động nữ mang thai hoặc nuôi con dưới 12 tháng tuổi thì được ưu tiên giao kết hợp đồng lao động mới.",
+     "source_url": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van",
+     "deep_link": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van#d50c17f0-316a-11f1-889a-d92d98c31a1b",
+     "source_element_id": "d50c17f0-316a-11f1-889a-d92d98c31a1b",
+     "evidence_path": "139264.C10.D137.K3",
+     "status": "Đã đối chiếu · Còn hiệu lực (có sửa đổi) · tại ngày ký 2026-03-02"
+    },
+    {
+     "title": "Bộ Luật lao động số 45/2019/QH14",
+     "summary": "",
+     "doc_number": "45/2019/QH14",
+     "location": "Chương 3 > Mục 3 > Điều 37 > Khoản 3",
+     "article": "Điều 37",
+     "clause": "Khoản 3",
+     "point": null,
+     "quote": "Điều 37. Trường hợp người sử dụng lao động không được thực hiện quyền đơn phương chấm dứt hợp đồng lao động 3. Người lao động nữ mang thai; người lao động đang nghỉ thai sản hoặc nuôi con dưới 12 tháng tuổi.",
+     "source_url": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van",
+     "deep_link": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van#4b6a2e20-315f-11f1-8270-3dc164114e33",
+     "source_element_id": "4b6a2e20-315f-11f1-8270-3dc164114e33",
+     "evidence_path": "139264.C3.M3.D37.K3",
+     "status": "Đã đối chiếu · Còn hiệu lực (có sửa đổi) · tại ngày ký 2026-03-02"
+    },
+    {
+     "title": "Bộ Luật lao động số 45/2019/QH14",
+     "summary": "",
+     "doc_number": "45/2019/QH14",
+     "location": "Chương 10 > Điều 138 > Khoản 1",
+     "article": "Điều 138",
+     "clause": "Khoản 1",
+     "point": null,
+     "quote": "Điều 138. Quyền đơn phương chấm dứt, tạm hoãn hợp đồng lao động của lao động nữ mang thai 1. Lao động nữ mang thai nếu có xác nhận của cơ sở khám bệnh, chữa bệnh có thẩm quyền về việc tiếp tục làm việc sẽ ảnh hưởng xấu tới thai nhi thì có quyền đơn phương chấm dứt hợp đồng lao động hoặc tạm hoãn thực hiện hợp đồng lao động. Trường hợp đơn phương chấm dứt hợp đồng lao động hoặc tạm hoãn thực hiện hợp đồng lao động thì phải thông báo cho người sử dụng lao động kèm theo xác nhận của cơ sở khám bệnh, chữa bệnh có thẩm quyền về việc tiếp tục làm việc sẽ ảnh hưởng xấu tới thai nhi.",
+     "source_url": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van",
+     "deep_link": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van#d50c8d20-316a-11f1-9372-4d96eb77bdf8",
+     "source_element_id": "d50c8d20-316a-11f1-9372-4d96eb77bdf8",
+     "evidence_path": "139264.C10.D138.K1",
+     "status": "Đã đối chiếu · Còn hiệu lực (có sửa đổi) · tại ngày ký 2026-03-02"
+    }
+   ],
+   "actions": [
+    "Sửa đổi Điều 9.2 để nêu rõ cấm người sử dụng đơn phương chấm dứt hợp đồng đối với lao động nữ mang thai, nghỉ thai sản hoặc nuôi con dưới 12 tháng, trừ các trường hợp pháp luật cho phép.",
+    "Thêm vào Điều 9.1 mô tả chi tiết các chế độ thai sản, nghỉ nuôi con và nghỉ trong thời gian hành kinh theo Điều 137.",
+    "Nếu muốn cân bằng, bổ sung quy định về quyền đơn phương chấm dứt của lao động nữ theo Điều 138."
+   ],
+   "revised_clause": "9.1. Công ty bảo đảm các chế độ dành cho lao động nữ theo Bộ luật Lao động, bao gồm chế độ thai sản, thời gian nghỉ khi nuôi con dưới 12 tháng tuổi và thời gian nghỉ trong thời gian hành kinh, theo quy định tại Điều 137 Bộ luật Lao động năm 2019.\n\n9.2. Người sử dụng lao động không được đơn phương chấm dứt hợp đồng lao động đối với lao động nữ trong thời gian mang thai, nghỉ thai sản hoặc nuôi con dưới 12 tháng tuổi, trừ các trường hợp pháp luật cho phép (ví dụ: hết hạn hợp đồng, hoàn thành công việc, hoặc trường hợp người sử dụng lao động là cá nhân chết, mất năng lực hành vi dân sự, …). Việc chấm dứt hợp đồng còn lại được thực hiện theo quy định tại Điều 34, Điều 37 và các quy định khác của Bộ luật Lao động.",
+   "original_clause": "Bảo vệ lao động nữ và chấm dứt hợp đồng 9.1. Công ty bảo đảm các chế độ dành cho lao động nữ theo Bộ luật Lao động, gồm chế độ thai sản và thời gian nghỉ khi nuôi con dưới 12 tháng tuổi. 9.2. Việc chấm dứt hợp đồng lao động thực hiện theo các quy định về chấm dứt hợp đồng của Bộ luật Lao động.",
+   "confidence": 0.62,
+   "confidence_notes": [
+    "Điều 137: quote không chứa nội dung khoản 3",
+    "Điều 37: quote không chứa nội dung khoản 3",
+    "Điều 138: quote không chứa nội dung khoản 1"
+   ],
+   "findings": null
+  },
+  {
+   "clause_ref": "Điều 10",
+   "issue": "Điều khoản không quy định thời hạn yêu cầu hòa giải và khởi kiện, trái quy định thời hiệu tại Bộ luật Lao động.",
+   "severity": "warning",
+   "legal_basis": "Nghị định số 27/2014/NĐ-CP Quy định chi tiết thi hành một số điều của Bộ luật Lao động về lao động là người giúp việc gia đình; Bộ Luật lao động số 45/2019/QH14",
+   "recommendation": "• Bổ sung thời hạn yêu cầu hòa giải không quá 06 tháng kể từ ngày phát hiện vi phạm.\n• Bổ sung thời hạn khởi kiện tại Tòa án không quá 01 năm kể từ ngày phát hiện vi phạm.\n• Rà soát lại toàn bộ điều khoản giải quyết tranh chấp để đảm bảo tuân thủ các quy định thời hiệu.\n• Áp dụng toàn văn sửa đổi trên.",
+   "title": "Thiếu quy định thời hạn giải quyết tranh chấp",
+   "summary_topics": [
+    "Giải quyết tranh chấp",
+    "Thời hiệu yêu cầu",
+    "Hòa giải",
+    "Khởi kiện"
+   ],
+   "reasons": null,
+   "impact": [
+    "Bên không kịp thời yêu cầu có thể mất quyền khởi kiện, không được bảo vệ quyền lợi.",
+    "Gây tranh chấp pháp lý về việc liệu thời hạn đã quá hạn hay chưa.",
+    "Tăng khả năng tranh chấp kéo dài, chi phí pháp lý tăng."
+   ],
+   "legal_citations": [
+    {
+     "title": "Nghị định số 27/2014/NĐ-CP Quy định chi tiết thi hành một số điều của Bộ luật Lao động về lao động là người giúp việc gia đình",
+     "summary": "",
+     "doc_number": "27/2014/NĐ-CP",
+     "location": "Chương 6 > Điều 27",
+     "article": "Điều 27",
+     "clause": null,
+     "point": null,
+     "quote": "Điều 27. Giải quyết tranh chấp lao động Khi xảy ra tranh chấp lao động giữa người sử dụng lao động và người lao động hoặc giữa người lao động với thành viên trong hộ gia đình, người sử dụng lao động và người lao động cùng nhau thương lượng, giải quyết. Trường hợp một trong hai bên không thống nhất thì có thể yêu cầu hòa giải viên lao động hoặc Tòa án giải quyết tranh chấp lao động cá nhân theo quy định tại Điều 201 của Bộ luật Lao động. Chương VII ĐIỀU KHOẢN THI HÀNH",
+     "source_url": "https://vbpl.vn/van-ban/chi-tiet/nghi-dinh-so-27-2014-nd-cp-quy-dinh-chi-tiet-thi-hanh-mot-so-dieu-cua-bo-luat-lao-dong-ve-lao-dong-la-nguoi-giup-viec-gia-dinh--34095?tabs=toan-van",
+     "deep_link": "https://vbpl.vn/van-ban/chi-tiet/nghi-dinh-so-27-2014-nd-cp-quy-dinh-chi-tiet-thi-hanh-mot-so-dieu-cua-bo-luat-lao-dong-ve-lao-dong-la-nguoi-giup-viec-gia-dinh--34095?tabs=toan-van#16644aa0-2c85-11f1-8b53-23c3614867c2",
+     "source_element_id": "16644aa0-2c85-11f1-8b53-23c3614867c2",
+     "evidence_path": "34095.C6.D27",
+     "status": "Đã đối chiếu · Còn hiệu lực · tại ngày ký 2026-03-02"
+    },
+    {
+     "title": "Bộ Luật lao động số 45/2019/QH14",
+     "summary": "",
+     "doc_number": "45/2019/QH14",
+     "location": "Chương 14 > Mục 2 > Điều 190 > Khoản 1",
+     "article": "Điều 190",
+     "clause": "Khoản 1",
+     "point": null,
+     "quote": "Điều 190. Thời hiệu yêu cầu giải quyết tranh chấp lao động cá nhân 1. Thời hiệu yêu cầu hòa giải viên lao động thực hiện hòa giải tranh chấp lao động cá nhân là 06 tháng kể từ ngày phát hiện ra hành vi mà bên tranh chấp cho rằng quyền và lợi ích hợp pháp của mình bị vi phạm.",
+     "source_url": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van",
+     "deep_link": "https://vbpl.vn/van-ban/chi-tiet/bo-luat-lao-dong-so-45-2019-qh14--139264?tabs=toan-van#7e950e10-316d-11f1-9c36-27bfc30b6fac",
+     "source_element_id": "7e950e10-316d-11f1-9c36-27bfc30b6fac",
+     "evidence_path": "139264.C14.M2.D190.K1",
+     "status": "Đã đối chiếu · Còn hiệu lực (có sửa đổi) · tại ngày ký 2026-03-02"
+    }
+   ],
+   "actions": [
+    "Bổ sung thời hạn yêu cầu hòa giải không quá 06 tháng kể từ ngày phát hiện vi phạm.",
+    "Bổ sung thời hạn khởi kiện tại Tòa án không quá 01 năm kể từ ngày phát hiện vi phạm.",
+    "Rà soát lại toàn bộ điều khoản giải quyết tranh chấp để đảm bảo tuân thủ các quy định thời hiệu."
+   ],
+   "revised_clause": "Giải quyết tranh chấp 10.1. Tranh chấp lao động được giải quyết bằng thương lượng; nếu không thành, mỗi bên có quyền yêu cầu hòa giải viên lao động hòa giải trong thời hạn 06 tháng kể từ ngày phát hiện vi phạm, và nếu vẫn không giải quyết được, khởi kiện tại Tòa án nhân dân có thẩm quyền trong thời hạn 01 năm kể từ ngày phát hiện vi phạm, theo quy định của pháp luật.",
+   "original_clause": "Giải quyết tranh chấp 10.1. Tranh chấp lao động được giải quyết bằng thương lượng; nếu không thành, mỗi bên có quyền yêu cầu hòa giải viên lao động hòa giải và khởi kiện tại Tòa án nhân dân có thẩm quyền theo quy định pháp luật.",
+   "confidence": 0.82,
+   "confidence_notes": [
+    "Điều 190: quote không chứa nội dung khoản 1"
+   ],
+   "findings": null
+  }
+ ]
+}
