@@ -1,0 +1,70 @@
+{
+ "label": "new",
+ "commit": "04f1e6c09c631931253b59d9c001d08b10c8b16c",
+ "predictions": {
+  "OT2-V1": [
+   "ot_unpaid"
+  ],
+  "OT2-V2": [],
+  "OT2-C1": [],
+  "OT2-C2": [
+   "ot_unpaid"
+  ],
+  "BH2-V1": [
+   "no_bhxh"
+  ],
+  "BH2-V2": [],
+  "BH2-C1": [],
+  "BH2-C2": [
+   "no_bhxh"
+  ],
+  "GT2-V1": [
+   "retain_id_papers"
+  ],
+  "GT2-V2": [],
+  "GT2-C1": [],
+  "GT2-C2": [
+   "retain_id_papers"
+  ],
+  "DT2-V1": [
+   "training_cost_flat"
+  ],
+  "DT2-V2": [],
+  "DT2-C1": [],
+  "DT2-C2": [
+   "training_cost_flat"
+  ],
+  "KL2-V1": [
+   "fine_deduct_wage"
+  ],
+  "KL2-V2": [],
+  "KL2-C1": [],
+  "KL2-C2": [
+   "fine_deduct_wage"
+  ],
+  "LU2-V1": [
+   "forfeit_wage_quit"
+  ],
+  "LU2-V2": [],
+  "LU2-C1": [],
+  "LU2-C2": [
+   "forfeit_wage_quit"
+  ],
+  "TS2-V1": [
+   "terminate_pregnancy"
+  ],
+  "TS2-V2": [],
+  "TS2-C1": [],
+  "TS2-C2": [
+   "terminate_pregnancy"
+  ],
+  "TC2-V1": [
+   "ban_lawsuit"
+  ],
+  "TC2-V2": [],
+  "TC2-C1": [],
+  "TC2-C2": [
+   "ban_lawsuit"
+  ]
+ }
+}

@@ -135,3 +135,9 @@ Số liệu chính để quyết định: **exact provision recall của `final_
 - Nhãn nhà cung cấp trả về qua `get_providers()` hiển thị model đang dùng; id nội bộ `gemini` giữ nguyên để không đổi API.
 - **Lưu ý:** run `gemini_full_laborscope_20261108` còn 19 ca chưa chạy; muốn tiếp tục phải đặt `LLM_PROVIDER=gemini`, nếu không sẽ chạy bằng Groq và làm lẫn cấu hình đánh giá.
 - `settings_summary()` của harness đánh giá ghi thêm `llm_provider`, `groq_model`.
+
+## 2026-11-09: bước quét luật cố định xét phủ định (injection_v2)
+- Bộ `evaluation/injection_v2` (32 ca) viết và gắn tag `injection-v2-frozen` (`fab1cef`) **trước** khi sửa code. Kỳ vọng ghi trước: sửa được phủ định ngay trước cụm khóa (C1), không sửa được dạng khác (C2), có thể nuốt nhầm một số vi phạm thật (V2).
+- `labor_red_flags.py`: quét dùng `_violates` (thay vì `pattern.search`) ở `check_labor_red_flags`, `_locate_clause`, `rewrite_clause`, danh sách câu vi phạm; cửa sổ phủ định dừng ở dấu chấm/xuống dòng. `matching_law_blurbs` (hỏi đáp) giữ nguyên vì khớp trên câu hỏi của người dùng.
+- Kết quả rule-only (cũ → mới): TP 16→8, FP 16→8, FN 0→8; precision 0,50→0,50; recall 1,00→0,50; F1 0,67→0,50. Chi tiết `evaluation_results/injection_v2/BAO_CAO.md`. Kết quả ròng trên bộ này không tốt hơn; không chỉnh thêm sau khi xem số.
+- Bộ 80 ca cũ không chạy lại.

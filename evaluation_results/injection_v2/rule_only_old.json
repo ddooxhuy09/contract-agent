@@ -1,0 +1,102 @@
+{
+ "label": "old",
+ "commit": "fab1cef00c567d46a20d47db80ee72c833e82225",
+ "predictions": {
+  "OT2-V1": [
+   "ot_unpaid"
+  ],
+  "OT2-V2": [
+   "ot_unpaid"
+  ],
+  "OT2-C1": [
+   "ot_unpaid"
+  ],
+  "OT2-C2": [
+   "ot_unpaid"
+  ],
+  "BH2-V1": [
+   "no_bhxh"
+  ],
+  "BH2-V2": [
+   "no_bhxh"
+  ],
+  "BH2-C1": [
+   "no_bhxh"
+  ],
+  "BH2-C2": [
+   "no_bhxh"
+  ],
+  "GT2-V1": [
+   "retain_id_papers"
+  ],
+  "GT2-V2": [
+   "retain_id_papers"
+  ],
+  "GT2-C1": [
+   "retain_id_papers"
+  ],
+  "GT2-C2": [
+   "retain_id_papers"
+  ],
+  "DT2-V1": [
+   "training_cost_flat"
+  ],
+  "DT2-V2": [
+   "training_cost_flat"
+  ],
+  "DT2-C1": [
+   "training_cost_flat"
+  ],
+  "DT2-C2": [
+   "training_cost_flat"
+  ],
+  "KL2-V1": [
+   "fine_deduct_wage"
+  ],
+  "KL2-V2": [
+   "fine_deduct_wage"
+  ],
+  "KL2-C1": [
+   "fine_deduct_wage"
+  ],
+  "KL2-C2": [
+   "fine_deduct_wage"
+  ],
+  "LU2-V1": [
+   "forfeit_wage_quit"
+  ],
+  "LU2-V2": [
+   "forfeit_wage_quit"
+  ],
+  "LU2-C1": [
+   "forfeit_wage_quit"
+  ],
+  "LU2-C2": [
+   "forfeit_wage_quit"
+  ],
+  "TS2-V1": [
+   "terminate_pregnancy"
+  ],
+  "TS2-V2": [
+   "terminate_pregnancy"
+  ],
+  "TS2-C1": [
+   "terminate_pregnancy"
+  ],
+  "TS2-C2": [
+   "terminate_pregnancy"
+  ],
+  "TC2-V1": [
+   "ban_lawsuit"
+  ],
+  "TC2-V2": [
+   "ban_lawsuit"
+  ],
+  "TC2-C1": [
+   "ban_lawsuit"
+  ],
+  "TC2-C2": [
+   "ban_lawsuit"
+  ]
+ }
+}
