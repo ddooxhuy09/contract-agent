@@ -21,7 +21,7 @@ Trạng thái: nháp, soạn từ hiện trạng mã nguồn đến commit ghi �
    Không có đối chiếu với luật sư. Chỉ có độ chính xác so với gold set (nhãn người gán, chuyên gia **[ĐIỀN]**): Precision **[ĐIỀN]**, Recall **[ĐIỀN]**, khoảng tin cậy 95% bootstrap, cỡ mẫu N **[ĐIỀN]** Điều từ M **[ĐIỀN]** hợp đồng. Cỡ mẫu nhỏ nên khoảng rộng; các Điều cùng hợp đồng không độc lập.
 
 7. **Hợp đồng dài hơn 12.000 ký tự xử lý thế nào?**
-   Tách và đánh giá điều khoản chạy trên toàn văn bằng quy tắc regex. Giới hạn 12.000 ký tự chỉ áp cho lần gọi LLM bù các trường mà regex bỏ sót (ngày, giá trị hợp đồng, các bên…), có cảnh báo trong log khi bị cắt. Báo cáo cũ nói điều khoản sau mốc đó không được kiểm là chưa đúng. Chưa đo trên tập hợp đồng thật dài; **[ĐIỀN: độ dài trung bình các hợp đồng gold set]**.
+   Tách và đánh giá điều khoản chạy trên toàn văn bằng quy tắc regex. Giới hạn 12.000 ký tự chỉ áp cho lần gọi LLM bù các trường mà regex bỏ sót (ngày, giá trị hợp đồng, các bên…), có cảnh báo trong log khi bị cắt. Báo cáo cũ nói điều khoản sau mốc đó không được kiểm là chưa đúng. Đã đo độ dài văn bản của 6 hợp đồng tổng hợp trong gold set: 2.715 đến 3.765 ký tự (trung bình khoảng 3.070) và hợp đồng mẫu thật 3.605 ký tự, tất cả dưới ngưỡng nên chưa có ca nào bị cắt. Chưa đo trên hợp đồng thật dài hơn; đừng nói hệ thống đã được kiểm chứng ở độ dài đó.
 
 8. **Bộ luật Lao động 2019 có được đánh dấu hiệu lực đúng không?**
    Trước khi sửa thì không: cả ba văn bản luật lao động chính mang trạng thái 4 ("hết hiệu lực một phần") nên toàn bộ chunk bị loại khỏi truy xuất (BLLĐ 874, NĐ 145/2020 674, Luật ATVSLĐ 516 chunk). Đã bật lại có sao lưu và hoàn tác được; chi tiết và giới hạn ở `docs/kiem_tra_hieu_luc.md`. Hạn chế còn lại: kho không biết điều nào của Nghị định 145/2020 đã bị sửa đổi sau này; 2033 văn bản trạng thái 4 khác vẫn bị loại.
@@ -33,7 +33,7 @@ Trạng thái: nháp, soạn từ hiện trạng mã nguồn đến commit ghi �
     Chưa có biện pháp riêng: nội dung hợp đồng được đưa thẳng vào prompt (`app/core/prompts.py`). Giảm thiểu hiện có: đầu ra judge phải qua `parse_json_object` và kiểm `severity` hợp lệ, nên chỉ ra được cảnh báo chứ không thực thi hành động nào; dữ liệu theo từng người dùng. Nêu đây là hạn chế đã biết, không nói đã chống được.
 
 11. **Dữ liệu hợp đồng gửi sang Gemini có tuân thủ quy định bảo vệ dữ liệu cá nhân không?**
-    Nội dung hợp đồng (có thể có tên, địa chỉ, lương) được gửi tới API Gemini. Chưa đánh giá tuân thủ pháp lý. Với gold set, hợp đồng được ẩn danh trước khi dùng. **[ĐIỀN: bạn cần đối chiếu quy định bảo vệ dữ liệu cá nhân hiện hành và điều khoản dịch vụ của Gemini trước khi khẳng định gì.]**
+    Nội dung hợp đồng (có thể có tên, địa chỉ, lương, số CCCD) được gửi tới API Gemini. Chưa đánh giá tuân thủ pháp lý. Với gold set, hợp đồng được ẩn danh trước khi dùng. **[ĐIỀN: bạn cần đối chiếu quy định bảo vệ dữ liệu cá nhân hiện hành và điều khoản dịch vụ của Gemini trước khi khẳng định gì.]**
 
 12. **Pytest pass bao nhiêu? Chạy được trên máy khác không?**
-    Xem `docs/test_final.txt`. Khi có `data/` và `evaluation_results/`: tất cả pass, 1 bị bỏ qua. Trên bản clone mới không có hai thư mục này (bị `.gitignore`), 17 test đọc dữ liệu sẽ fail (`docs/test_baseline.txt`); đây là lỗi môi trường, chưa làm các test đó tự bỏ qua. Môi trường kiểm thử: container Python 3.12.
+    Xem `docs/test_final.txt`. Khi có `data/` và `evaluation_results/`: lần chạy 09/11/2026 trên commit `fa71544` cho 307 passed, 1 skipped, 0 failed, `ruff` sạch. Trên bản clone mới không có hai thư mục này (bị `.gitignore`), 17 test đọc dữ liệu sẽ fail (`docs/test_baseline.txt`); đây là lỗi môi trường, chưa làm các test đó tự bỏ qua. Môi trường kiểm thử: container Python 3.12.

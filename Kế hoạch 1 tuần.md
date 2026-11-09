@@ -171,11 +171,11 @@ Vị trí: `app/api/contracts.py` dòng ~30 (allowlist), `app/document/parser.py
 ### Việc 3.2: Giới hạn 12.000 ký tự
 Vị trí: `app/agents/clause_parser.py` dòng ~407.
 
-- [ ] Kiểm tra hợp đồng trung bình dài bao nhiêu. Đếm trên 5–10 file thật.
+- [x] Kiểm tra hợp đồng trung bình dài bao nhiêu. Đếm trên 5–10 file thật.
 - [ ] Lựa chọn:
   - **Cách A (nhanh):** giữ giới hạn, nhưng khi vượt quá thì đặt `coverage` thấp và ghi cảnh báo "chỉ kiểm 12.000 ký tự đầu".
   - **Cách B:** chia theo đoạn và xử lý từng phần. Chỉ làm nếu còn thời gian.
-- [ ] Ghi quyết định vào `docs/NHAT_KY_THAY_DOI.md`.
+- [x] Ghi quyết định vào `docs/NHAT_KY_THAY_DOI.md`.
 
 ### Việc 3.3: Xử lý PDF scan
 Vị trí: `app/api/contracts.py` dòng ~75–90.
