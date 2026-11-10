@@ -11,11 +11,15 @@ evaluation_results/
 
 ## Đọc theo thứ tự này
 
-1. [`reports/GEMINI_FULL_RUN_20261108.md`](reports/GEMINI_FULL_RUN_20261108.md): lần chạy đầy đủ có Gemini mới nhất (15/34 ca, dừng vì quota) và hai lỗi parser đã sửa trước đó.
+1. [`reports/GEMINI_FULL_RUN_20261108.md`](reports/GEMINI_FULL_RUN_20261108.md): lần chạy đầy đủ có Gemini mới nhất (15/34 ca, dừng vì quota) và hai lỗi parser đã sửa trước đó. **Run này bỏ dở, xem ghi chú ngay dưới.**
 1. [`reports/CHUNKER_ASOF_RUN.md`](reports/CHUNKER_ASOF_RUN.md): các lần chạy RAG-only và cách đọc số liệu.
 2. [`reports/RAG_SCOPE_ABLATION.md`](reports/RAG_SCOPE_ABLATION.md): vì sao bỏ labor hint, vì sao xếp seed trước.
 3. [`reports/STATUS4_AUDIT.md`](reports/STATUS4_AUDIT.md): vì sao chưa lọc theo ngày cho văn bản "hết hiệu lực một phần".
 4. [`reports/qa_coverage.md`](reports/qa_coverage.md), [`reports/missing_legal_documents.csv`](reports/missing_legal_documents.csv): văn bản trong `dataset.csv` chưa có trong corpus.
+
+## Run bỏ dở: `gemini_full_laborscope_20261108`
+
+Run đầy đủ có Gemini này **bỏ dở ở 15/34 ca** (dừng vì hết quota Gemini ngày; 19 ca chưa chạy). **Không dùng trong báo cáo** và không có kết luận định lượng từ nó. Thư mục giữ nguyên ở trạng thái đã commit; không tiếp tục chạy. Muốn tiếp tục thì phải đặt `LLM_PROVIDER=gemini`, vì mặc định ứng dụng nay là Groq.
 
 ## Các lần chạy RAG-only (không gọi Gemini, n = 34)
 
