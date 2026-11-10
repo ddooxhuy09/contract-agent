@@ -5,7 +5,9 @@ from __future__ import annotations
 import re
 import threading
 import time
+import traceback
 
+from langchain_core.callbacks import BaseCallbackHandler
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 from app.core.logging import logger
@@ -19,6 +21,37 @@ _gemini_chat_json: ChatGoogleGenerativeAI | None = None
 _key_index = 0
 # Clause checks run on several threads at once; one key failure must move the index only once.
 _rotate_lock = threading.Lock()
+
+
+class RawResponseLog(BaseCallbackHandler):
+    """Logs the provider's raw reply when a call fails or the model emits tool calls.
+
+    Added to chase a failure whose text («No such file … HANDOFF.md») looked like a tool call:
+    on error it logs the exception class, HTTP body and traceback; on success it logs only
+    replies that carry tool_calls or a non-"stop" finish reason.
+    """
+
+    raise_error = False
+
+    def on_llm_error(self, error: BaseException, **kwargs) -> None:
+        response = getattr(error, "response", None)
+        logger.error(
+            "LLM raw error: type=%s repr=%r status=%s body=%r response_text=%r cause=%r | %s",
+            type(error).__name__, error, getattr(error, "status_code", None), getattr(error, "body", None),
+            getattr(response, "text", None), error.__cause__,
+            "".join(traceback.format_exception(type(error), error, error.__traceback__))[-3000:],
+        )
+
+    def on_llm_end(self, response, **kwargs) -> None:
+        try:
+            message = response.generations[0][0].message
+        except (AttributeError, IndexError):
+            return
+        meta = getattr(message, "response_metadata", None) or {}
+        tool_calls = getattr(message, "tool_calls", None) or (getattr(message, "additional_kwargs", None) or {}).get("tool_calls")
+        if tool_calls or meta.get("finish_reason") not in (None, "stop"):
+            logger.warning("LLM raw reply: tool_calls=%r finish_reason=%r content=%r",
+                           tool_calls, meta.get("finish_reason"), str(message.content)[:500])
 
 
 def active_api_key() -> str:
@@ -133,7 +166,7 @@ def _groq_model(json_mode: bool):
             timeout=120,
             max_retries=0,
             model_kwargs={"response_format": {"type": "json_object"}} if json_mode else {},
-            callbacks=[UsageCallback(settings.groq_model)],
+            callbacks=[UsageCallback(settings.groq_model), RawResponseLog()],
         )
     return _groq_chats[json_mode]
 
@@ -202,6 +235,7 @@ def chat_completion(prompt: str, provider: str = DEFAULT_PROVIDER) -> str:
             return response.content
         except Exception as e:
             last_err = e
+            logger.error("chat_completion failure (attempt %s/3): %r | %s", attempt + 1, e, traceback.format_exc()[-2000:])
             if attempt < 2 and rotate_api_key_on_key_failure(e, key_used):
                 model = get_chat_model(provider)
                 continue
