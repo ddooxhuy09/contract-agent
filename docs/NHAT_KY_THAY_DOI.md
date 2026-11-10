@@ -147,3 +147,24 @@ Số liệu chính để quyết định: **exact provision recall của `final_
 - Lý do tắt mặc định: trên injection_v2, recall giảm 1,00 → 0,50 mà precision không đổi (0,50); cửa sổ phủ định 30 ký tự bỏ cả 8 báo nhầm nhưng cũng bỏ 8 vi phạm thật. Đây là công cụ sàng lọc, ưu tiên không bỏ sót hơn là ít báo nhầm.
 - Kiểm tra sau khi đưa vào cờ (tính trực tiếp, không ghi đè file kết quả): cờ tắt cho TP/FP/FN = 16/16/0 và trùng từng ca với `rule_only_old.json`; cờ bật cho 8/8/8 và trùng `rule_only_new.json`.
 - Test: `tests/unit/test_red_flags_negation.py` kiểm cả hai trạng thái (bật: 11 test như trước; tắt và mặc định: 4 test mới).
+
+## 2026-11-10: lỗi `.agent-harness/HANDOFF.md` khi chạy judge
+- **Giả thuyết ban đầu (model gpt-oss-120b tự gọi công cụ đọc file, Groq trả lỗi): không đúng.** Không thấy `tool_calls` hay mã lỗi HTTP nào; lỗi là `FileNotFoundError` của Python, ném ra trước khi lời gọi Groq được gửi.
+- **Nguyên nhân thật:** file `C:\Users\Lenovo\AppData\Local\Temp\h2.py` (ngoài dự án, của việc khác) có dòng đầu `open(".agent-harness/HANDOFF.md")`. Khi chạy script nằm trong thư mục Temp (`python /tmp/e2e.py`), thư mục Temp thành `sys.path[0]`, nên `import h2` (gói HTTP/2 mà httpx nạp khi tạo client) chạy nhầm file đó. Tái hiện trực tiếp: `import sys; sys.path.insert(0, TEMP); import h2` ném đúng lỗi này, còn không có Temp trong đường dẫn thì `import h2` ra gói thật. Chỉ các lời gọi tạo client HTTP/2 bị ảnh hưởng (trích xuất dự phòng và Điều 1, nơi duy nhất cần LLM với hợp đồng demo).
+- **Không đổi mã để "tắt tool"**: không có tool nào được truyền cho Groq (`ChatGroq` không gọi `bind_tools`). Đã thêm log thô (`RawResponseLog` trong `app/agents/llm_client.py` và traceback ở `chat_completion`) để lần sau thấy ngay `tool_calls`, thân phản hồi HTTP và traceback nếu lỗi thật của Groq xảy ra.
+- **Chạy qua API 5 lần liên tiếp** (API chạy ở máy chủ, cổng 8011, cùng DB; `scripts/api_e2e.py`): Điều chưa kiểm mỗi lần = 0, 0, 0, 0, 0 (5/5 Điều đã kiểm; 6, 5, 6, 6, 6 rủi ro; 11 đến 23 giây mỗi lần). Không có lần nào thấy lỗi.
+- **Tái hiện lỗi cũ**: chạy script từ thư mục Temp, 4 lần liên tiếp đều có 1 Điều chưa kiểm cùng lỗi trên; cùng script chạy từ thư mục khác thì 0 chưa kiểm.
+- **Cách tránh:** đổi tên hoặc xóa `h2.py` trong Temp, hoặc không đặt script chạy trong Temp. Tôi không xóa file đó (ngoài dự án).
+- **Lệnh chạy lại từ PowerShell thường:**
+  ```
+  cd D:\contract-agent
+  $env:PYTHONUTF8 = "1"
+  Start-Process python -ArgumentList "-m","uvicorn","app.main:app","--host","127.0.0.1","--port","8011" -WindowStyle Hidden
+  # đợi khoảng 1 phút cho bge-m3 khởi động, rồi:
+  python scripts\api_e2e.py http://127.0.0.1:8011 5
+  # tái hiện nguyên nhân:
+  python -c "import sys; sys.path.insert(0, r'$env:TEMP'); import h2"
+  ```
+  Dừng API: `Get-CimInstance Win32_Process | ? { $_.CommandLine -match 'uvicorn.*8011' } | % { Stop-Process -Id $_.ProcessId -Force }`.
+- **Phát hiện kèm theo:** `requirements.txt` thiếu `langchain-groq` (đã thêm `langchain-groq==1.1.2`). Container `contractlens-api-1` đang chạy được tạo trước đó nên chưa có gói này và chưa có biến `GROG_KEY`; muốn demo Docker dùng Groq phải dựng lại: `docker compose up -d --build api`. Tôi chưa dựng lại vì nó thay stack đang chạy của bạn.
+- **Tác dụng phụ của 5 lần chạy API:** tạo 1 tài khoản thử `e2e-*@example.com` và 5 bản ghi hợp đồng thử trong DB dự án (cổng 5433). Chưa xóa.
