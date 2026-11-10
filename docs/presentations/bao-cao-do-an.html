@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Phân tích hợp đồng tích hợp hỏi đáp pháp luật</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --paper: #fffdf8;
+      --panel: #f4efe6;
+      --ink: #1c1917;
+      --muted: #5e5852;
+      --line: #d9d0c4;
+      --navy: #1b365d;
+      --crimson: #9b1b2e;
+      --seal: #b42318;
+      --law: #1f5c4a;
+      --gold: #b08948;
+      --ok: #1f5c4a;
+      --warn: #8a4b12;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html,
+    body {
+      height: 100%
+    }
+
+    body {
+      font-family: "Be Vietnam Pro", system-ui, sans-serif;
+      background: #121820;
+      color: var(--ink);
+      overflow: hidden
+    }
+
+    .stage {
+      height: 100%;
+      display: grid;
+      place-items: center;
+      padding: 1.2rem 3.2rem 1.2rem 1.2rem
+    }
+
+    body.notes-on .stage {
+      height: 66%;
+      padding-bottom: 0.5rem
+    }
+
+    .deck {
+      aspect-ratio: 16/9;
+      width: min(1440px, calc(100vw - 4.4rem), calc((100vh - 2.4rem) * 16 / 9));
+      height: auto;
+      max-height: calc(100vh - 2.4rem);
+      background: var(--paper);
+      display: grid;
+      grid-template-columns: 10px 1fr;
+      position: relative;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, .45);
+    }
+
+    body.notes-on .deck {
+      width: min(1440px, calc(100vw - 4.4rem), calc((66vh - 1.2rem) * 16 / 9));
+      max-height: calc(66vh - 1.2rem)
+    }
+
+    .ribbon {
+      background: var(--crimson)
+    }
+
+    .slides {
+      position: relative;
+      min-width: 0;
+      min-height: 0
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      padding: 1.35rem 2.1rem 2.35rem 1.8rem;
+      display: none;
+      flex-direction: column;
+      gap: 0.7rem
+    }
+
+    .slide.on {
+      display: flex
+    }
+
+    .dieu {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--crimson)
+    }
+
+    h1,
+    h2 {
+      font-family: Newsreader, Georgia, serif;
+      font-weight: 600;
+      color: var(--navy);
+      letter-spacing: -0.02em;
+      line-height: 1.15
+    }
+
+    h1 {
+      font-size: clamp(1.55rem, 2.6vw, 2.15rem);
+      max-width: 46rem
+    }
+
+    h2 {
+      font-size: clamp(1.35rem, 2.2vw, 1.85rem)
+    }
+
+    .take {
+      font-size: 0.95rem;
+      color: var(--muted);
+      font-weight: 500;
+      max-width: 52rem
+    }
+
+    .fill {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      justify-content: flex-start
+    }
+
+    .cols {
+      display: grid;
+      gap: 0.75rem;
+      flex: 1;
+      min-height: 0
+    }
+
+    .c2 {
+      grid-template-columns: 1fr 1fr
+    }
+
+    .c3 {
+      grid-template-columns: 1fr 1fr 1fr
+    }
+
+    .c4 {
+      grid-template-columns: repeat(4, 1fr)
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 0.8rem 0.9rem;
+      min-width: 0
+    }
+
+    .card h3 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--navy);
+      margin-bottom: 0.4rem
+    }
+
+    .card.law h3 {
+      color: var(--law)
+    }
+
+    .card.risk h3 {
+      color: var(--crimson)
+    }
+
+    .card ul {
+      padding-left: 1.05rem
+    }
+
+    .card li {
+      font-size: 0.84rem;
+      line-height: 1.42;
+      margin: 0.22rem 0
+    }
+
+    .kw {
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--ink)
+    }
+
+    .why {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.28rem;
+      line-height: 1.4
+    }
+
+    .mono {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.74rem
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 0.42rem 0.5rem;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top
+    }
+
+    th {
+      font-size: 0.64rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600
+    }
+
+    td:first-child {
+      font-weight: 600;
+      color: var(--navy);
+      white-space: nowrap
+    }
+
+    .cover {
+      justify-content: center;
+      padding-left: 2.2rem
+    }
+
+    .cover .rule {
+      width: 4.5rem;
+      height: 3px;
+      background: var(--gold);
+      margin: 0.85rem 0 1rem
+    }
+
+    .meta {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--muted)
+    }
+
+    .meta strong {
+      color: var(--ink);
+      font-weight: 600
+    }
+
+    .stamp {
+      position: absolute;
+      right: 2.4rem;
+      bottom: 3.6rem;
+      width: 6.4rem;
+      height: 6.4rem;
+      border: 2.5px solid var(--seal);
+      border-radius: 50%;
+      color: var(--seal);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transform: rotate(-9deg);
+      opacity: 0.85;
+    }
+
+    .foot {
+      position: absolute;
+      left: 10px;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.32rem 1.6rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      background: var(--paper);
+    }
+
+    .progress {
+      position: absolute;
+      left: 10px;
+      right: 0;
+      bottom: 1.55rem;
+      height: 2px;
+      background: var(--line)
+    }
+
+    .progress i {
+      display: block;
+      height: 100%;
+      background: var(--crimson);
+      width: 0%;
+      transition: width .2s ease
+    }
+
+    .nav {
+      position: fixed;
+      right: 0.7rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      z-index: 5
+    }
+
+    .nav button {
+      width: 34px;
+      height: 34px;
+      border: 1px solid #3a4654;
+      background: #1c2632;
+      color: #e8e4dc;
+      cursor: pointer;
+      font-size: 0.95rem
+    }
+
+    .nav button:hover {
+      border-color: var(--gold)
+    }
+
+    .help {
+      position: fixed;
+      left: 0.75rem;
+      bottom: 0.45rem;
+      font-size: 0.62rem;
+      color: #9aa6b2;
+      z-index: 5
+    }
+
+    .notes-panel {
+      display: none;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 34%;
+      background: #0e141b;
+      color: #ebe6dc;
+      padding: 0.8rem 1.6rem 1rem;
+      overflow: auto;
+      z-index: 8;
+      border-top: 3px solid var(--crimson);
+    }
+
+    body.notes-on .notes-panel {
+      display: block
+    }
+
+    .notes-panel h4 {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.64rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #d4a194;
+      margin-bottom: 0.4rem
+    }
+
+    .notes-panel p {
+      font-size: 0.92rem;
+      line-height: 1.55;
+      max-width: 72rem
+    }
+
+    /* diagrams */
+    .pipe,
+    .pipe-v {
+      list-style: none;
+      display: flex
+    }
+
+    .pipe {
+      flex-wrap: nowrap;
+      align-items: stretch;
+      gap: 0;
+      position: relative
+    }
+
+    .pipe::before {
+      content: "";
+      position: absolute;
+      left: 1.5%;
+      right: 1.5%;
+      top: 50%;
+      height: 2px;
+      background: var(--crimson);
+      z-index: 0
+    }
+
+    .pipe li,
+    .pipe-v li {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 0.55rem 0.4rem;
+      font-size: 0.74rem;
+      font-weight: 600;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .pipe li {
+      flex: 1;
+      min-width: 0;
+      position: relative;
+      z-index: 1;
+      margin: 0 0.22rem;
+      min-height: 2.7rem
+    }
+
+    .pipe-v {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.45rem;
+      flex: 1
+    }
+
+    .pipe-v li {
+      min-height: 2.15rem;
+      position: relative
+    }
+
+    .pipe-v li:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -0.48rem;
+      width: 2px;
+      height: 0.42rem;
+      background: var(--crimson)
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      flex: 1
+    }
+
+    .split .lane {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      padding: 0.7rem 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem
+    }
+
+    .split .lane h3 {
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem
+    }
+
+    .before h3 {
+      color: var(--crimson)
+    }
+
+    .after h3 {
+      color: var(--law)
+    }
+
+    .arch {
+      display: grid;
+      gap: 0.55rem;
+      flex: 0 0 auto;
+      width: 100%
+    }
+
+    .arch-row,
+    .pipe {
+      width: 100%
+    }
+
+    .arch-row {
+      display: grid;
+      gap: 0.45rem
+    }
+
+    .arch-row.r1 {
+      grid-template-columns: 1fr
+    }
+
+    .arch-row.r2 {
+      grid-template-columns: 1fr
+    }
+
+    .arch-row.r3 {
+      grid-template-columns: 1fr 1fr
+    }
+
+    .arch-row.r4 {
+      grid-template-columns: 1fr 1fr 1fr 1fr
+    }
+
+    .node {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      padding: 0.5rem 0.65rem;
+      text-align: center
+    }
+
+    .node b {
+      display: block;
+      font-size: 0.82rem;
+      color: var(--navy)
+    }
+
+    .node span {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 0.12rem
+    }
+
+    .node.core {
+      background: #e8eef6;
+      border-color: #b9c7db
+    }
+
+    .node.db {
+      background: #e7f0eb;
+      border-color: #b7cfc4
+    }
+
+    .node.ai {
+      background: #f6eadc;
+      border-color: #e0c9a4
+    }
+
+    .arrow-down {
+      text-align: center;
+      color: var(--crimson);
+      font-weight: 700;
+      line-height: 1;
+      font-size: 1.15rem
+    }
+
+    .tree {
+      font-size: 0.86rem;
+      line-height: 1.55;
+      font-family: "IBM Plex Mono", monospace
+    }
+
+    .tree .lvl {
+      color: var(--navy);
+      font-weight: 600
+    }
+
+    .compare td.yes {
+      color: var(--ok);
+      font-weight: 600
+    }
+
+    .compare td.no {
+      color: var(--crimson);
+      font-weight: 600
+    }
+
+    .shots {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+      flex: 1;
+      min-height: 0
+    }
+
+    .shot {
+      border: 1px solid var(--line);
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      min-height: 0
+    }
+
+    .shot .frame {
+      flex: 1;
+      min-height: 7.4rem;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(#fff, #fff), repeating-linear-gradient(-45deg, #f3eee6, #f3eee6 8px, #efe9df 8px, #efe9df 16px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shot img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #fff
+    }
+
+    .shot img.missing {
+      display: none
+    }
+
+    .shot .empty {
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-align: center;
+      padding: 0.6rem;
+      font-family: "IBM Plex Mono", monospace
+    }
+
+    .shot figcaption {
+      font-size: 0.7rem;
+      padding: 0.28rem 0.5rem;
+      border-top: 1px solid var(--line);
+      background: var(--panel)
+    }
+
+    .thanks {
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 3.4rem
+    }
+
+    .thanks h1 {
+      font-size: 2.6rem
+    }
+
+    .err {
+      display: none
+    }
+
+    .slides {
+      overflow: hidden
+    }
+
+    @media (max-width:980px) {
+
+      .c2,
+      .c3,
+      .c4,
+      .split,
+      .shots,
+      .arch-row.r3,
+      .arch-row.r4 {
+        grid-template-columns: 1fr
+      }
+
+      .stamp {
+        display: none
+      }
+
+      .pipe {
+        flex-wrap: wrap
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        overflow: visible
+      }
+
+      .nav,
+      .help,
+      .notes-panel,
+      .progress {
+        display: none !important
+      }
+
+      .stage {
+        height: auto;
+        padding: 0;
+        display: block
+      }
+
+      .deck {
+        width: 100%;
+        height: auto;
+        box-shadow: none
+      }
+
+      .slide {
+        position: relative !important;
+        display: flex !important;
+        page-break-after: always;
+        min-height: 100vh
+      }
+    }
+  </style>
+  </head>
+
+  <body>
+
+    <div class="help">&larr;&rarr; chuyển slide &nbsp;·&nbsp; S: speaker notes &nbsp;·&nbsp; Home/End</div>
+    <div class="nav">
+      <button type="button" id="prev" aria-label="Trước">&uarr;</button>
+      <button type="button" id="next" aria-label="Sau">&darr;</button>
+    </div>
+    <aside class="notes-panel">
+      <h4>Speaker notes</h4>
+      <p id="notesText"></p>
+    </aside>
+
+    <div class="stage">
+      <div class="deck">
+        <div class="ribbon" aria-hidden="true"></div>
+        <div class="slides">
+
+          <section class="slide cover on"
+            data-notes="Em xin chào quý thầy cô và anh chị. Em xin phép báo cáo đồ án thực tập nghiên cứu và xây dựng hệ thống phân tích hợp đồng, tích hợp hỏi đáp luật, tập trung hợp đồng lao động. Sản phẩm tên ContractLens. Em sẽ đi từ thực trạng, bài toán, dữ liệu, kiến trúc, hai luồng chính, rồi kết quả và hạn chế.">
+            <p class="dieu">Đồ án thực tập</p>
+            <h1>Nghiên cứu và xây dựng hệ thống phân tích hợp đồng tích hợp hỏi đáp luật liên quan đến hợp đồng lao động
+            </h1>
+            <div class="rule"></div>
+            <p class="take">ContractLens — rà soát HĐLĐ tiếng Việt và hỏi đáp có căn cứ pháp lý</p>
+            <div class="meta">
+              Sinh viên: <strong>Họ và tên</strong><br>
+              MSSV: <strong>MSSV</strong><br>
+              Đơn vị thực tập: <strong>Tên đơn vị</strong><br>
+              Giảng viên hướng dẫn: <strong>Họ tên GVHD</strong>
+            </div>
+            <div class="stamp">Đồ án<br>thực tập<br>2026</div>
+            <div class="cols c3" style="margin-top:1.6rem;max-width:42rem">
+              <div class="card">
+                <p class="kw">Rà soát HĐLĐ</p>
+                <p class="why">Cảnh báo + bản sửa Điều</p>
+              </div>
+              <div class="card law">
+                <p class="kw">Hỏi đáp có nguồn</p>
+                <p class="why">HĐ và kho luật song song</p>
+              </div>
+              <div class="card">
+                <p class="kw">GraphRAG</p>
+                <p class="why">Postgres + Neo4j</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="slide"
+            data-notes="Mạch báo cáo không cần câu dẫn trên hình. Thứ tự slide chính là câu chuyện: từ khoảng trống ngoài đời, sang dữ liệu pháp luật và hợp đồng, rồi kiến trúc, data pipeline, RAG, LangGraph, hai luồng nghiệp vụ, ràng buộc prompt, kết quả và hạn chế.">
+            <p class="dieu">Điều 01</p>
+            <h2>NỘI DUNG</h2>
+            <p class="take">Mạch kể bằng thứ tự slide — từ bài toán đến kết quả</p>
+            <div class="cols c3 fill">
+              <div class="card">
+                <h3>Bài toán</h3>
+                <ul>
+                  <li>Thực trạng</li>
+                  <li>Bài toán đặt ra</li>
+                  <li>Hành trình trước / sau</li>
+                </ul>
+              </div>
+              <div class="card law">
+                <h3>Dữ liệu &amp; kiến trúc</h3>
+                <ul>
+                  <li>Cấu trúc VBQPPL &amp; HĐLĐ</li>
+                  <li>Stack công nghệ</li>
+                  <li>Kiến trúc &amp; data pipeline</li>
+                  <li>PostgreSQL &amp; Neo4j cho RAG</li>
+                </ul>
+              </div>
+              <div class="card">
+                <h3>Luồng &amp; đánh giá</h3>
+                <ul>
+                  <li>LangGraph phân tích rủi ro</li>
+                  <li>Hỏi đáp pháp luật</li>
+                  <li>Ràng buộc trong prompt</li>
+                  <li>Kết quả · hạn chế · hướng phát triển</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="slide"
+            data-notes="Ngoài đời, người lao động nhận HĐLĐ dài, thuật ngữ khó. Luật nằm rải ở Bộ luật, Nghị định, Thông tư, lại còn chuyện còn hay hết hiệu lực. Người ký thường không có luật sư bên cạnh. Điểm em muốn nhấn mạnh ở đây là khoảng trống hỗ trợ đọc và đối chiếu, không thay thế tư vấn pháp lý chính thức.">
+            <p class="dieu">Điều 02</p>
+            <h2>THỰC TRẠNG</h2>
+            <p class="take">Ký HĐLĐ khi chưa kịp đối chiếu đầy đủ căn cứ pháp lý</p>
+            <div class="cols c3 fill">
+              <div class="card risk">
+                <h3>Đọc hợp đồng</h3>
+                <p class="kw">Mật độ điều khoản cao</p>
+                <p class="why">OT, BHXH, giữ giấy tờ gốc, thời hạn, thử việc — dễ bỏ sót khi đọc gấp.</p>
+              </div>
+              <div class="card law">
+                <h3>Đối chiếu luật</h3>
+                <p class="kw">Nhiều tầng VBQPPL</p>
+                <p class="why">Bộ luật / Luật / Nghị định / Thông tư — bị sửa, thay, bãi bỏ.</p>
+              </div>
+              <div class="card">
+                <h3>Hỏi đáp</h3>
+                <p class="kw">Câu trả lời chung chung</p>
+                <p class="why">Không gắn đúng Điều trên hồ sơ đang cầm, không có nguồn trích dẫn.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="slide"
+            data-notes="Bài toán nghiệp vụ: nhận file HĐLĐ, chỉ ra chỗ có thể trái luật hoặc thiếu nội dung bắt buộc, kèm căn cứ và bản sửa điều khoản, rồi hỗ trợ hỏi tiếp trên đúng hồ sơ đó. Phạm vi đồ án khoanh ở hợp đồng lao động. Kho luật nạp trước từ VBPL, không crawl lúc user hỏi. Có disclaimer trên giao diện.">
+            <p class="dieu">Điều 03</p>
+            <h2>BÀI TOÁN ĐẶT RA</h2>
+            <p class="take">Hai việc trên cùng một hồ sơ: rà soát rủi ro và hỏi đáp có nguồn</p>
+            <div class="cols c2 fill">
+              <div class="card">
+                <h3>Yêu cầu chức năng</h3>
+                <ul>
+                  <li>Nhập hợp đồng DOCX / PDF / ảnh</li>
+                  <li>Cảnh báo trái luật hoặc thiếu mục bắt buộc</li>
+                  <li>Căn cứ pháp lý kèm đề xuất sửa nguyên Điều</li>
+                  <li>Hỏi đáp tiếng Việt trên đúng hồ sơ HĐ</li>
+                </ul>
+              </div>
+              <div class="card law">
+                <h3>Phạm vi đồ án</h3>
+                <ul>
+                  <li>Trọng tâm hợp đồng lao động</li>
+                  <li>Corpus luật nạp sẵn, không crawl runtime</li>
+                  <li>Tài khoản JWT, HĐ gắn theo user</li>
+                  <li>Kết quả mang tính tham khảo</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="slide"
+            data-notes="Hai cột đối chiếu. Bên trái là hành trình hiện tại tự đọc, search Google, hỏi người khác, câu trả lời không gắn hồ sơ. Bên phải: tải lên, cắt Điều, đối chiếu kho luật, báo cáo rủi ro, rồi hỏi đáp có căn cứ. Hệ thống chỉ hỗ trợ ra quyết định, việc ký hay không vẫn thuộc về người dùng.">
+            <p class="dieu">Điều 04</p>
+            <h2>HÀNH TRÌNH TRƯỚC / SAU</h2>
+            <p class="take">Cùng một HĐLĐ — khác quy trình đối chiếu</p>
+            <div class="split fill">
+              <div class="lane before">
+                <h3>Trước hệ thống</h3>
+                <ol class="pipe-v">
+                  <li>Nhận file HĐLĐ</li>
+                  <li>Tự đọc toàn văn</li>
+                  <li>Không chắc chỗ sai</li>
+                  <li>Search / hỏi người khác</li>
+                  <li>Trả lời không gắn hồ sơ</li>
+                </ol>
+              </div>
+              <div class="lane after">
+                <h3>Có hệ thống</h3>
+                <ol class="pipe-v">
+                  <li>Tải HĐLĐ lên</li>
+                  <li>Cắt Điều, lập hồ sơ</li>
+                  <li>Đối chiếu kho luật</li>
+                  <li>Báo cáo rủi ro + bản sửa</li>
+                  <li>Hỏi đáp có căn cứ</li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <section class="slide"
+            data-notes="Văn bản quy phạm pháp luật không lưu một khối chữ. Hệ thống tách thuộc tính, cây mục lục Phần–Chương–Mục–Tiểu mục–Điều–Khoản–Điểm, và quan hệ với văn bản khác. Cây này phục vụ mở rộng ngữ cảnh khi retrieval, gắn hiệu lực theo cấp, và định danh Điều theo path không nhầm văn bản.">
+            <p class="dieu">Điều 05</p>
+            <h2>CẤU TRÚC VĂN BẢN PHÁP LUẬT</h2>
+            <p class="take">Metadata + cây mục lục + quan hệ liên văn bản</p>
+            <div class="cols c2 fill">
+              <div class="card">
+                <h3>Cây mục lục</h3>
+                <div class="tree">
+                  <div class="lvl">VBQPPL</div>
+                  <div>&nbsp;&nbsp;số hiệu · loại · hiệu lực</div>
+                  <div class="lvl">&nbsp;&nbsp;Phần</div>
+                  <div>&nbsp;&nbsp;&nbsp;&nbsp;Chương · Mục · Tiểu mục</div>
+                  <div class="lvl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Điều · Khoản · Điểm</div>
+                  <div>&nbsp;&nbsp;quan hệ: bãi bỏ · sửa · căn cứ · dẫn chiếu</div>
+                </div>
+              </div>
+              <div class="card law">
+                <h3>Vai trò trong hệ thống</h3>
+                <ul>
+                  <li>Định danh Điều theo path — không nhầm văn bản</li>
+                  <li>Expand sibling / ancestor khi GraphRAG</li>
+                  <li>Hiệu lực theo cấp hierarchy</li>
+                  <li>Bắt buộc để ingest — muc_luc.json chưa tự sinh</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="slide"
+            data-notes="Hợp đồng được nhìn như hồ sơ các bên cộng danh sách Điều. Cắt theo Điều N và là đơn vị chấm rủi ro và đơn vị citation khi hỏi đáp. Checklist Điều 21 Bộ luật Lao động kiểm tra thiếu mục bắt buộc trên toàn văn, không dùng vector RAG cho việc này.">
+            <p class="dieu">Điều 06</p>
+            <h2>CẤU TRÚC HỢP ĐỒNG LAO ĐỘNG</h2>
+            <p class="take">Hồ sơ các bên + thân hợp đồng theo Điều</p>
+            <div class="cols c2 fill">
+              <div class="card">
+                <h3>Cấu trúc</h3>
+                <div class="tree">
+                  <div class="lvl">HĐLĐ</div>
+                  <div>&nbsp;&nbsp;căn cứ pháp lý · các bên · ngày ký</div>
+                  <div>&nbsp;&nbsp;Điều 1 · Điều 2 · …</div>
+                  <div>&nbsp;&nbsp;&nbsp;&nbsp;khoản nằm trong chunk Điều</div>
+                  <div>&nbsp;&nbsp;ký tên · phụ lục</div>
+                </div>
+              </div>
+              <div class="card">
+                <h3>Đơn vị xử lý</h3>
+                <ul>
+                  <li>Extract loại HĐ, các bên, thời hạn — chưa phải rủi ro</li>
+                  <li>Chunk theo Điều N (overlap 120, tối đa 1800 ký tự)</li>
+                  <li>Checklist Điều 21 BLLĐ — nội dung bắt buộc</li>
+                  <li>Citation QA là số Điều thật trên HĐ</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="slide"
+            data-notes="Phần công nghệ chỉ nêu những gì có trong source. FastAPI monolith, React, Gemini 2.5 Flash, BGE-M3 1024 chiều, Postgres 16 với pgvector và ltree, Neo4j 5, LangGraph, Docker Compose bốn service. Không Redis, không Kubernetes, không microservices — đây là điểm em muốn nói rõ để tránh hiểu nhầm quy mô đồ án.">
+            <p class="dieu">Điều 07</p>
+            <h2>CÔNG NGHỆ SỬ DỤNG</h2>
+            <p class="take">Stack triển khai trong repository hiện tại</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Lớp</th>
+                  <th>Công nghệ</th>
+                  <th>Vai trò</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Giao diện</td>
+                  <td>React 19 · Vite · Tailwind</td>
+                  <td>Auth, upload, báo cáo, chat SSE</td>
+                </tr>
+                <tr>
+                  <td>API</td>
+                  <td>FastAPI · Python 3.12</td>
+                  <td>Monolith: auth, upload, analyze, QA</td>
+                </tr>
+                <tr>
+                  <td>Orchestration</td>
+                  <td>LangGraph</td>
+                  <td>Hai state graph: analyze + QA</td>
+                </tr>
+                <tr>
+                  <td>LLM</td>
+                  <td>Gemini 2.5 Flash</td>
+                  <td>Extract, chấm Điều, QA, OCR ảnh</td>
+                </tr>
+                <tr>
+                  <td>Embedding</td>
+                  <td>BAAI/bge-m3 · 1024 chiều</td>
+                  <td>Semantic retrieval HĐ và luật</td>
+                </tr>
+                <tr>
+                  <td>OLTP + vector</td>
+                  <td>PostgreSQL 16 · pgvector · ltree</td>
+                  <td>Hồ sơ, chữ, vector, FTS, checkpoint</td>
+                </tr>
+                <tr>
+                  <td>Graph</td>
+                  <td>Neo4j 5</td>
+                  <td>Cây path, quan hệ VB — không lưu chữ</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section class="slide"
+            data-notes="Kiến trúc: người dùng qua React tới một FastAPI. Hai graph LangGraph gọi Gemini và BGE-M3. Chữ và vector nằm ở Postgres, Neo4j chỉ giữ id và cạnh. Crawl luật là script offline, tách khỏi request người dùng. Docker Compose chạy đúng bốn process.">
+            <p class="dieu">Điều 08</p>
+            <h2>KIẾN TRÚC HỆ THỐNG</h2>
+            <p class="take">Monolith FastAPI · hai datastore · LLM bên ngoài</p>
+            <div class="arch fill">
+              <ol class="pipe">
+                <li>Người dùng</li>
+                <li>React SPA</li>
+                <li>FastAPI</li>
+              </ol>
+              <div class="arrow-down">&darr;</div>
+              <div class="arch-row r3">
+                <div class="node core"><b>LangGraph Analyze</b><span>extract → evaluate → review</span></div>
+                <div class="node core"><b>LangGraph QA</b><span>retrieve → rewrite → generate</span></div>
+              </div>
+              <div class="arrow-down">&darr;</div>
+              <div class="arch-row r4">
+                <div class="node db"><b>PostgreSQL</b><span>chữ, vector, FTS, checkpoint</span></div>
+                <div class="node db"><b>Neo4j</b><span>path, cạnh VBQPPL</span></div>
+                <div class="node ai"><b>Gemini 2.5 Flash</b><span>extract, judge, QA, OCR</span></div>
+                <div class="node ai"><b>BGE-M3</b><span>embedding 1024 chiều</span></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="slide"
+            data-notes="Triển khai local bằng Docker Compose: postgres, neo4j, api, frontend. Không phải cụm Kubernetes. Crawl và ingest là script chạy tay, không phải API runtime. Storage file là đĩa local, không MinIO.">
+            <p class="dieu">Điều 09</p>
+            <h2>TRIỂN KHAI</h2>
+            <p class="take">Docker Compose — bốn process, không microservices</p>
+            <div class="cols c4 fill">
+              <div class="card">
+                <h3>postgres</h3>
+                <p class="kw">pgvector:pg16</p>
+                <p class="why">User, HĐ, corpus, vector, checkpoint LangGraph.</p>
+              </div>
+              <div class="card law">
+                <h3>neo4j</h3>
+                <p class="kw">neo4j:5</p>
+                <p class="why">Đồ thị mục lục và quan hệ văn bản.</p>
+              </div>
+              <div class="card">
+                <h3>api</h3>
+                <p class="kw">Python 3.12</p>
+                <p class="why">FastAPI + embedding model trong container.</p>
+              </div>
+              <div class="card">
+                <h3>frontend</h3>
+                <p class="kw">Node 22</p>
+                <p class="why">Vite dev server trong Compose.</p>
+              </div>
+            </div>
+            <p class="why">Crawl VBPL và ingest corpus: script thủ công, tách khỏi request người dùng.</p>
+          </section>
+
+          <section class="slide"
+            data-notes="Quy trình dữ liệu pháp luật. Crawl vbpl.vn ra folder. Extract trong RAM. Chuẩn hóa, dựng cây, chunk, embed, rồi ghi Postgres và Neo4j. muc_luc.json bắt buộc khi ingest nhưng crawler hiện không tự tạo, phải bổ sung trước. User hỏi không crawl lại.">
+            <p class="dieu">Điều 10</p>
+            <h2>QUY TRÌNH XỬ LÝ DỮ LIỆU</h2>
+            <p class="take">Từ VBPL đến kho sẵn sàng truy hồi</p>
+            <ol class="pipe">
+              <li>Thu thập</li>
+              <li>Trích xuất</li>
+              <li>Chuẩn hóa</li>
+              <li>Phân cấp</li>
+              <li>Chunking</li>
+              <li>Embedding</li>
+              <li>Lưu trữ</li>
+            </ol>
+            <div class="cols c3 fill">
+              <div class="card">
+                <h3>Input folder</h3>
+                <p class="mono">thuoc_tinh.json<br>van_ban.md<br>muc_luc.json<br>luoc_do.json</p>
+                <p class="why">muc_luc bắt buộc; crawler chưa tự sinh.</p>
+              </div>
+              <div class="card">
+                <h3>PostgreSQL</h3>
+                <p class="why">Metadata, hierarchy ltree, chunk text, vector 1024, full-text.</p>
+              </div>
+              <div class="card law">
+                <h3>Neo4j</h3>
+                <p class="why">Node path, PARENT_OF, REPEALS, AMENDS, CITES. Không lưu chunk_text.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="slide"
+            data-notes="Lý do có hai cơ sở dữ liệu. Postgres giữ chữ, user, vector, FTS, ltree trong cùng một hệ quản trị — phù hợp dữ liệu có cấu trúc cộng semantic retrieval. Neo4j chỉ bung hàng xóm trên cây sau khi có seed. Chữ luôn hydrate lại từ Postgres. Mặc định LEGAL_EXPAND_BACKEND là neo4j.">
+            <p class="dieu">Điều 11</p>
+            <h2>POSTGRESQL &amp; NEO4J</h2>
+            <p class="take">Chữ và vector tại Postgres · cạnh cấu trúc tại Neo4j</p>
+            <div class="cols c2">
+              <div class="card">
+                <h3>PostgreSQL</h3>
+                <p class="kw">Cấu trúc + semantic retrieval</p>
+                <p class="why">Lý do: cùng hệ quản trị cho hồ sơ, pháp điển, pgvector, full-text, ltree, checkpoint
+                  chat.</p>
+              </div>
+              <div class="card law">
+                <h3>Neo4j</h3>
+                <p class="kw">Graph expand</p>
+                <p class="why">Lý do: sibling, ancestor, REPEALS / AMENDS. Không lưu nội dung Điều.</p>
+              </div>
+            </div>
+            <ol class="pipe">
+              <li>Query</li>
+              <li>Seed vector + FTS</li>
+              <li>Expand graph</li>
+              <li>Hydrate text</li>
+              <li>Context tối đa 10</li>
+            </ol>
+          </section>
+
+          <section class="slide"
+            data-notes="RAG không kết luận đúng sai. Top chunk chỉ là trang sách vừa mở. Với phân tích Điều, k_seed bằng 4, max_total bằng 10. Với chat luật, seed 5, tối đa 10. Kết luận do Gemini ở hai bước sau. Không có đoạn thì không để LLM đoán. Hybrid search là vector cộng FTS, gộp bằng RRF.">
+            <p class="dieu">Điều 12</p>
+            <h2>RAG PIPELINE</h2>
+            <p class="take">Từ truy vấn đến ngữ cảnh có căn cứ — chưa phải phán quyết</p>
+            <ol class="pipe">
+              <li>Query</li>
+              <li>Rewrite</li>
+              <li>Hybrid search</li>
+              <li>Lọc hiệu lực</li>
+              <li>Neo4j expand</li>
+              <li>Hydrate PG</li>
+              <li>LLM</li>
+            </ol>
+            <div class="cols c3 fill">
+              <div class="card">
+                <h3>Hybrid</h3>
+                <p class="why">Vector cosine + Postgres FTS. Hợp nhất Reciprocal Rank Fusion.</p>
+              </div>
+              <div class="card">
+                <h3>Phân tích Điều</h3>
+                <p class="why">k_seed = 4 · max_total = 10</p>
+              </div>
+              <div class="card law">
+                <h3>Chat luật</h3>
+                <p class="why">seed = 5 · tối đa 10 đoạn</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="slide"
+            data-notes="LangGraph không biết luật. Nó điều phối thứ tự node, retry, fan-out tối đa hai Điều cùng lúc, checkpointer Postgres cho chat. UI phân tích không bật review HITL. Hai graph không gọi nhau. Đây không phải multi-agent độc lập.">
+            <p class="dieu">Điều 13</p>
+            <h2>LANGGRAPH WORKFLOW</h2>
+            <p class="take">Máy trạng thái điều phối bước — không phải bộ não pháp lý</p>
+            <div class="cols c2 fill">
+              <div class="card">
+                <h3>Analyze — supervisor</h3>
+                <ol class="pipe-v">
+                  <li>extract</li>
+                  <li>evaluate</li>
+                  <li>review</li>
+                </ol>
+                <p class="why">Retry extract tối đa 2. Fan-out judge_clause, tối đa 2 luồng.</p>
+              </div>
+              <div class="card law">
+                <h3>QA — self-correct</h3>
+                <ol class="pipe-v">
+                  <li>retrieve</li>
+                  <li>rewrite hoặc generate</li>
+                  <li>refusal / remember</li>
+                </ol>
+                <p class="why">Checkpoint theo contract_id. Rewrite tối đa 2 vòng.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="slide"
+            data-notes="Một hợp đồng trước khi có báo cáo: parse, chunk, embed, lập hồ sơ, rà soát regex, rồi RAG cùng Gemini từng Điều còn lại. Điều critical từng regex thì bỏ qua LLM. Không retrieve được luật thì warning thiếu căn cứ, không bịa. Kết quả JSONB trên uploaded_contracts.">
+            <p class="dieu">Điều 14</p>
+            <h2>PHÂN TÍCH RỦI RO HỢP ĐỒNG</h2>
+            <p class="take">File → hồ sơ → quy tắc → RAG/LLM → báo cáo</p>
+            <ol class="pipe">
+              <li>Upload</li>
+              <li>Parse</li>
+              <li>Chunk + embed</li>
+              <li>Extract hồ sơ</li>
+              <li>Regex Đ.21</li>
+              <li>GraphRAG</li>
+              <li>Gemini JSON</li>
+              <li>Cache JSONB</li>
+            </ol>
+            <div class="cols c3 fill">
+              <div class="card risk">
+                <h3>Regex bắt được lỗi?</h3>
+                <p class="why">Giữ risk + revise_ops. Không gọi LLM lại cùng Điều.</p>
+              </div>
+              <div class="card">
+                <h3>Không có luật liên quan?</h3>
+                <p class="why">Warning thiếu căn cứ. Không để model đoán.</p>
+              </div>
+              <div class="card law">
+                <h3>Có luật</h3>
+                <p class="why">JSON: critical / warning / ok + revised_clause.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="slide"
+            data-notes="Ba tầng cùng một lần bấm phân tích. Extract chỉ lập hồ sơ, không phải rà soát. Thiếu mục bắt buộc không dùng vector RAG mà SQL đúng Điều 21 BLLĐ. Similarity không phải thang đo đúng sai luật. Regex bắt các lỗi rõ: OT, BHXH, giữ CCCD, lời mở đầu.">
+            <p class="dieu">Điều 15</p>
+            <h2>BA TẦNG XỬ LÝ PHÂN TÍCH</h2>
+            <p class="take">Cùng pipeline — khác cơ chế kết luận</p>
+            <table class="compare">
+              <thead>
+                <tr>
+                  <th>Tầng</th>
+                  <th>Cơ chế</th>
+                  <th>Kết luận pháp lý?</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Lập hồ sơ</td>
+                  <td>Regex + LLM extract</td>
+                  <td class="no">Không — profile HĐ</td>
+                </tr>
+                <tr>
+                  <td>Rà soát nhanh</td>
+                  <td>Pattern HĐLĐ · SQL Điều 21 BLLĐ</td>
+                  <td class="yes">Có — lỗi rõ / thiếu mục</td>
+                </tr>
+                <tr>
+                  <td>RAG + Gemini</td>
+                  <td>Top-4 seed · expand · JSON</td>
+                  <td class="yes">Có — critical / warning / ok</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section class="slide"
+            data-notes="Hai cách ra bản sửa. Regex dùng revise_ops thay chuỗi trên Điều gốc, không gọi LLM. Gemini khi severity khác ok bắt buộc viết lại toàn bộ Điều thành revised_clause, đủ điều kiện copy thay thế. UI hiện bản sửa; HITL duyệt có API nhưng frontend chưa gọi.">
+            <p class="dieu">Điều 16</p>
+            <h2>BẢN SỬA ĐIỀU KHOẢN</h2>
+            <p class="take">Hai nguồn revised_clause — cùng một ô trên báo cáo</p>
+            <div class="cols c2 fill">
+              <div class="card">
+                <h3>revise_ops</h3>
+                <p class="kw">Regex · không gọi LLM</p>
+                <p class="why">Thay pattern trên Điều gốc: OT, BHXH, giữ giấy tờ, lời mở đầu.</p>
+              </div>
+              <div class="card law">
+                <h3>revised_clause</h3>
+                <p class="kw">Gemini · toàn Điều</p>
+                <p class="why">Bắt buộc khi severity khác ok. Đủ điều kiện copy thay nguyên văn.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="slide"
+            data-notes="Chat không phân loại hỏi luật hay hỏi hợp đồng — luôn retrieve cả hai. Query luật được viết lại theo hội thoại. Regex chặn retrieval lệch sang ngành không liên quan. Citation Điều bị lọc theo chunk hợp đồng thật. contract_type mặc định Hợp đồng lao động. SSE gửi theo bước, không stream từng token.">
+            <p class="dieu">Điều 17</p>
+            <h2>LUỒNG HỎI ĐÁP PHÁP LUẬT</h2>
+            <p class="take">Hai nguồn song song — không bộ định tuyến ý định</p>
+            <ol class="pipe">
+              <li>Câu hỏi</li>
+              <li>HĐ top-5</li>
+              <li>Luật seed-5</li>
+              <li>Lọc theo ngành</li>
+              <li>Đủ ngữ cảnh?</li>
+              <li>Gemini JSON</li>
+              <li>Lọc citation</li>
+            </ol>
+            <div class="cols c3 fill">
+              <div class="card">
+                <h3>Ngữ cảnh yếu</h3>
+                <p class="why">Rewrite tối đa 2 vòng, retrieve lại.</p>
+              </div>
+              <div class="card risk">
+                <h3>Không có chunk</h3>
+                <p class="why">Refusal. Không để model bịa.</p>
+              </div>
+              <div class="card law">
+                <h3>Citation</h3>
+                <p class="why">Chỉ giữ số Điều nằm trong retrieve.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="slide"
+            data-notes="Prompt nêu rõ model phải grounding, phân biệt critical và warning, cấm bịa số hiệu, ưu tiên cấp VBQPPL còn hiệu lực, bắt revised_clause khi khác ok, JSON cho UI và lọc citation. Schema tiếng Anh cho máy, nội dung tiếng Việt cho người. Ưu điểm là tách rõ, không trộn lời thoại với trường máy.">
+            <p class="dieu">Điều 18</p>
+            <h2>RÀNG BUỘC PHÁP LÝ TRONG PROMPT</h2>
+            <p class="take">Grounding · phân loại kết luận · citation · bản sửa có cấu trúc</p>
+            <div class="cols c2 fill">
+              <div class="card">
+                <h3>Ràng buộc</h3>
+                <ul>
+                  <li>Chỉ dùng ngữ cảnh đã retrieve</li>
+                  <li>critical: cấm hoặc bắt buộc trong luật</li>
+                  <li>warning: bất lợi hoặc thiếu căn cứ</li>
+                  <li>Không dùng VB ngành không khớp phạm vi HĐ</li>
+                  <li>severity khác ok → revised_clause toàn Điều</li>
+                </ul>
+              </div>
+              <div class="card law">
+                <h3>Ưu điểm</h3>
+                <ul>
+                  <li>JSON cho UI, lưu DB, lọc citation</li>
+                  <li>Schema tiếng Anh, nội dung tiếng Việt</li>
+                  <li>Ưu tiên Bộ luật / Luật còn hiệu lực</li>
+                  <li>QA bỏ số Điều bịa ngoài retrieve</li>
+                  <li>Refusal khi không có chunk căn cứ</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="slide"
+            data-notes="Kết quả đạt được ở mức prototype: đủ luồng đăng nhập, upload, phân tích, chat chạy được. Kho luật ingest được. Disclaimer trên UI. Unit test các module chính. Ảnh demo thấy được nhờ slide sau — em chèn file vào thư mục slides-demo. Đây không phải tư vấn pháp lý chính thức.">
+            <p class="dieu">Điều 19</p>
+            <h2>KẾT QUẢ ĐẠT ĐƯỢC</h2>
+            <p class="take">Prototype end-to-end trên HĐLĐ tiếng Việt</p>
+            <div class="cols c2 fill">
+              <div class="card">
+                <h3>Sản phẩm</h3>
+                <ul>
+                  <li>Auth JWT, danh sách HĐ theo user</li>
+                  <li>Upload DOCX / PDF / ảnh</li>
+                  <li>Báo cáo rủi ro + bản sửa Điều</li>
+                  <li>Hỏi đáp có nguồn, SSE theo bước</li>
+                </ul>
+              </div>
+              <div class="card law">
+                <h3>Kỹ thuật</h3>
+                <ul>
+                  <li>Corpus: cây + vector + graph expand</li>
+                  <li>Regex HĐLĐ + GraphRAG + Gemini</li>
+                  <li>Disclaimer tham khảo trên giao diện</li>
+                  <li>Unit test module phân tích, retrieve, QA</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="slide"
+            data-notes="Bốn màn hình chính của sản phẩm. Nếu chưa có ảnh, khung vẫn hiện tên file cần đặt. Em xin phép demo trực tiếp nếu thầy cô muốn xem hệ thống chạy thật.">
+            <p class="dieu">Điều 20</p>
+            <h2>MINH HỌA GIAO DIỆN</h2>
+            <p class="take">Bốn màn hình chính của prototype</p>
+            <div class="shots">
+              <figure class="shot">
+                <div class="frame"><span class="empty">slides-demo/01-dang-nhap.png</span><img
+                    src="slides-demo/01-dang-nhap.png" alt="Đăng nhập"></div>
+                <figcaption>Đăng nhập</figcaption>
+              </figure>
+              <figure class="shot">
+                <div class="frame"><span class="empty">slides-demo/02-upload.png</span><img
+                    src="slides-demo/02-upload.png" alt="Upload hợp đồng"></div>
+                <figcaption>Upload hợp đồng</figcaption>
+              </figure>
+              <figure class="shot">
+                <div class="frame"><span class="empty">slides-demo/03-bao-cao.png</span><img
+                    src="slides-demo/03-bao-cao.png" alt="Báo cáo rủi ro"></div>
+                <figcaption>Báo cáo rủi ro</figcaption>
+              </figure>
+              <figure class="shot">
+                <div class="frame"><span class="empty">slides-demo/04-chat.png</span><img src="slides-demo/04-chat.png"
+                    alt="Hỏi đáp"></div>
+                <figcaption>Hỏi đáp pháp luật</figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <section class="slide"
+            data-notes="Hạn chế thật trong repo, không né tránh. Regex gắn HĐLĐ. Chat giả định loại hợp đồng lao động. HITL và rewind có API nhưng chưa có UI. Crawl phụ thuộc cookie, thiếu mục lục tự động. Hiệu lực có thể lệch theo ngày vì không có cron. Chưa CI/CD, chưa production. Không thay thế luật sư.">
+            <p class="dieu">Điều 21</p>
+            <h2>HẠN CHẾ</h2>
+            <p class="take">Phạm vi đồ án học tập — chưa phải hệ thống vận hành</p>
+            <div class="cols c2 fill">
+              <div class="card risk">
+                <h3>Sản phẩm</h3>
+                <ul>
+                  <li>Quy tắc deterministic chỉ cho HĐLĐ</li>
+                  <li>QA mặc định contract_type cố định</li>
+                  <li>HITL, rewind có API, chưa có UI</li>
+                  <li>Không thay thế luật sư</li>
+                </ul>
+              </div>
+              <div class="card">
+                <h3>Dữ liệu &amp; mô hình</h3>
+                <ul>
+                  <li>Crawl VBPL cần cookie, muc_luc thủ công</li>
+                  <li>Không cron làm mới hiệu lực</li>
+                  <li>Kết luận phụ thuộc seed RAG</li>
+                  <li>Chưa CI/CD, chưa production</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="slide"
+            data-notes="Hướng phát triển bám theo chỗ đang thiếu. UI duyệt báo cáo HITL, nhận diện nhiều loại hợp đồng, tự động hóa mục lục khi crawl, đo chất lượng retrieval, siết quote phải nằm trong chunk. Gói triển khai production nằm ngoài phạm vi đồ án hiện tại.">
+            <p class="dieu">Điều 22</p>
+            <h2>HƯỚNG PHÁT TRIỂN</h2>
+            <p class="take">Nới nghiệp vụ · làm sạch corpus · siết grounding</p>
+            <div class="cols c3 fill">
+              <div class="card">
+                <h3>Nghiệp vụ</h3>
+                <ul>
+                  <li>UI review HITL</li>
+                  <li>Nhiều loại hợp đồng</li>
+                  <li>Chấp nhận bản sửa trên UI</li>
+                </ul>
+              </div>
+              <div class="card">
+                <h3>Dữ liệu</h3>
+                <ul>
+                  <li>Sinh mục lục trong lúc crawl</li>
+                  <li>Refresh hiệu lực theo lịch</li>
+                  <li>Đánh giá chất lượng retrieval</li>
+                </ul>
+              </div>
+              <div class="card law">
+                <h3>Kỹ thuật</h3>
+                <ul>
+                  <li>Test E2E qua UI</li>
+                  <li>Quote phải nằm trong chunk</li>
+                  <li>Gói triển khai production sau đồ án</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="slide thanks"
+            data-notes="Em xin cảm ơn quý thầy cô, anh chị hướng dẫn tại đơn vị thực tập, và mọi người đã theo dõi. Em xin nhận câu hỏi ạ.">
+            <p class="dieu">Kết thúc</p>
+            <h1>CẢM ƠN</h1>
+            <div class="rule"></div>
+            <p class="take">Thảo luận và câu hỏi</p>
+            <p class="meta" style="margin-top:1.2rem">
+              Hệ thống phân tích hợp đồng lao động tích hợp hỏi đáp pháp luật<br>
+              ContractLens — Họ và tên · MSSV
+            </p>
+          </section>
+
+        </div>
+        <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+        <footer class="foot"><span>ContractLens — Đồ án thực tập</span><span id="pg">1 / 1</span></footer>
+      </div>
+    </div>
+
+    <script>
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const pg = document.getElementById('pg');
+      const bar = document.getElementById('bar');
+      const notesText = document.getElementById('notesText');
+      let i = 0;
+
+      function show(n) {
+        i = Math.max(0, Math.min(slides.length - 1, n));
+        slides.forEach((s, k) => s.classList.toggle('on', k === i));
+        pg.textContent = (i + 1) + ' / ' + slides.length;
+        bar.style.width = ((i + 1) / slides.length * 100) + '%';
+        notesText.textContent = slides[i].dataset.notes || '';
+        history.replaceState(null, '', '#' + (i + 1));
+      }
+
+      document.getElementById('prev').onclick = () => show(i - 1);
+      document.getElementById('next').onclick = () => show(i + 1);
+
+      document.addEventListener('keydown', (e) => {
+        if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); show(i + 1); }
+        if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); show(i - 1); }
+        if (e.key === 'Home') show(0);
+        if (e.key === 'End') show(slides.length - 1);
+        if (e.key === 's' || e.key === 'S') document.body.classList.toggle('notes-on');
+      });
+
+      document.querySelectorAll('.shot img').forEach(img => {
+        img.addEventListener('error', () => img.classList.add('missing'));
+        if (img.complete && img.naturalWidth === 0) img.classList.add('missing');
+      });
+
+      function fromHash() {
+        const n = parseInt(location.hash.replace(/[^0-9]/g, ''), 10);
+        show(Number.isFinite(n) ? n - 1 : 0);
+      }
+      window.addEventListener('hashchange', fromHash);
+      fromHash();
+    </script>
+
+    document.getElementById("next").onclick = () => show(i + 1);
+    document.addEventListener("keydown", (e) => {
+    if (["ArrowRight", "ArrowDown", "PageDown", " "].includes(e.key)) {
+    e.preventDefault(); show(i + 1);
+    }
+    if (["ArrowLeft", "ArrowUp", "PageUp", "Backspace"].includes(e.key)) {
+    e.preventDefault(); show(i - 1);
+    }
+    if (e.key === "Home") show(0);
+    if (e.key === "End") show(slides.length - 1);
+    if (e.key === "s" || e.key === "S") document.body.classList.toggle("notes-on");
+    });
+    document.querySelectorAll(".shot img").forEach((img) => {
+    img.addEventListener("error", () => img.classList.add("missing"));
+    if (img.complete && img.naturalWidth === 0) img.classList.add("missing");
+    });
+    function fromHash() {
+    const n = parseInt((location.hash || "").replace(/\D/g, ""), 10);
+    show(n ? n - 1 : 0);
+    }
+    window.addEventListener("hashchange", fromHash);
+    fromHash();
+    </script>
+  </body>
+
+</html>

@@ -1,0 +1,66 @@
+@startuml dfd-2-upload
+!include _skin.puml
+title DFD mức 2 — 2.0 Tải lên và lập chỉ mục hợp đồng
+caption UploadContract: lưu file → parse → chunk theo Điều → BGE-M3 → PostgreSQL
+
+actor "Giao diện\n(UploadScreen)" as UI
+
+rectangle "2.1\nNhận multipart\nPOST /upload" as Recv
+rectangle "2.2\nKiểm tra đuôi file" as Val
+rectangle "2.3\nLưu file\nLocalObjectStorage" as Save
+rectangle "2.4\nĐọc nội dung\nparse_document" as Parse
+rectangle "2.4a\nDOCX\npython-docx" as Docx
+rectangle "2.4b\nPDF\npdfplumber" as Pdf
+rectangle "2.4c\nẢnh OCR" as Ocr
+rectangle "2.5\nCắt theo Điều\nchunk_by_clause" as Chunk
+rectangle "2.6\nSinh embedding\nHuggingFaceEmbedder\nBAAI/bge-m3 (1024)" as Embed
+rectangle "2.7\nGhi metadata HĐ +\nchunk" as Persist
+
+cloud "Gemini API\n(OCR_PROMPT)" as Gemini
+database "D3.1 data/uploads" as FS
+database "D1.2 uploaded_contracts" as UC
+database "D1.2b contract_chunks\n(+ vector 1024)" as CC
+
+UI --> Recv : file + Bearer JWT\n(+ user_id từ 1.3)
+Recv --> Val : filename, bytes
+Val --> Recv : .doc/.docx/.pdf/.png/.jpg/.jpeg\nhoặc ValueError 400
+
+Recv --> Save : bytes, {uuid}{ext}
+Save --> FS : ghi file
+FS --> Save : storage_key
+Save --> Recv : đường dẫn
+
+Recv --> Parse : path + ext
+Parse --> Docx : .doc / .docx
+Docx --> Parse : full_text
+Parse --> Pdf : .pdf
+Pdf --> Parse : full_text
+Parse --> Ocr : .png / .jpg / .jpeg
+Ocr --> Gemini : ảnh base64 + OCR_PROMPT
+Gemini --> Ocr : full_text
+Ocr --> Parse : full_text
+Parse --> Recv : toàn văn / lỗi parse
+
+Recv --> Chunk : full_text + contract_id
+Chunk --> Recv : Document[] (Preamble + Điều N,\noverlap 120, max ~1800)
+
+Recv --> Embed : page_content[]
+Embed --> Recv : vectors 1024 chiều
+
+Recv --> Persist : Contract + ContractChunk[]
+Persist --> UC : upsert (trước chunk — thỏa FK)
+Persist --> CC : replace_for_contract
+UC --> Persist : OK
+CC --> Persist : OK
+Persist --> Recv : status=parsed, chunk_count
+
+Recv --> UI : UploadResponse\n(contract_id, status, message, chunk_count)
+
+note bottom of Recv
+  Nếu parse/chunk/embed lỗi: vẫn upsert HĐ
+  ``status=uploaded``, ``chunk_count=0``, ``full_text=None``.
+  File nguồn: ``app/application/use_cases/contracts.py``,
+  ``parser.py``, ``chunker.py``, ``hf_embedder.py``.
+end note
+
+@enduml

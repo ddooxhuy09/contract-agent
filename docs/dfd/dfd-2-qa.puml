@@ -1,0 +1,82 @@
+@startuml dfd-2-qa
+!include _skin.puml
+title DFD mức 2 — 4.0 Hỏi đáp hợp đồng (Q&A)
+caption LangGraph QA: retrieve → rewrite (≤2) → generate | refusal → remember. Frontend dùng SSE.
+
+actor "ChatTab" as UI
+
+rectangle "4.1\nKiểm tra sở hữu\nGET history / POST stream" as Own
+rectangle "4.2\nstream_answer_events\nPOST /chat/stream" as Stream
+rectangle "4.3\nRetrieve" as Ret
+rectangle "4.3a\nVector HĐ\nretrieve_contract" as CRet
+rectangle "4.3b\nGraphRAG luật\nretrieve_legal" as LRet
+rectangle "4.3c\nBlurbs BLLĐ\nmatching_law_blurbs" as Blurb
+rectangle "4.3d\nLong-term memory" as Mem
+rectangle "4.4\nRewrite query\n(rule + LLM lần cuối)" as Rw
+rectangle "4.5\nGenerate JSON\nQA_SYSTEM_PROMPT" as Gen
+rectangle "4.6\nTừ chối\n(không đủ ngữ cảnh)" as Ref
+rectangle "4.7\nRemember +\nfinalize" as Save
+rectangle "4.8\nLịch sử hội thoại\nGET /chat/{id}/history" as Hist
+
+cloud "Gemini API" as Gemini
+database "D1.2 uploaded_contracts" as UC
+database "D1.2b contract_chunks" as CC
+database "D1.3 legal_embeddings" as Legal
+database "D2 Neo4j" as Neo4j
+database "D1.4 checkpoint +\nPostgres store" as Ckpt
+
+UI --> Own : contract_id + JWT
+Own --> UC : get_owned
+UC --> Own : HĐ / 404
+Own --> Stream : được phép
+
+Stream --> Ret : câu hỏi + history
+Ret --> CRet : embed câu hỏi → cosine
+CRet --> CC : top-K theo contract_id
+CC --> CRet : đoạn Điều + score
+Ret --> LRet : query đã augment
+LRet --> Legal : vector + FTS + RRF
+LRet --> Neo4j : expand
+Legal --> LRet : chunk còn HL
+Neo4j --> LRet : path
+Ret --> Blurb : regex cờ đỏ trên Q + HĐ
+Blurb --> Ret : đoạn luật cố định (nếu khớp)
+Ret --> Mem : load_qa_memory
+Mem --> Ckpt : tối đa 5 cặp Q&A / HĐ
+Ckpt --> Mem : tóm tắt
+Ret --> Stream : có ngữ cảnh / yếu / không có
+
+Stream --> Rw : score < ngưỡng\nhoặc không hit, attempts < 2
+Rw --> Gemini : QA_QUERY_REWRITE_PROMPT\n(chỉ lần rewrite cuối)
+Gemini --> Rw : câu query mới
+Rw --> Ret : retrieve lại
+
+Stream --> Gen : đủ ngữ cảnh
+Gen --> Gemini : system + human +\nHĐ + luật + memory
+Gemini --> Gen : JSON {answer, cited_clauses}
+Gen --> Stream : câu trả lời\n(lọc citation theo Điều thật)
+
+Stream --> Ref : hết attempt, không context
+Ref --> Stream : câu từ chối cố định\n(không để LLM đoán)
+
+Stream --> Save : remember
+Save --> Ckpt : checkpoint thread +\nstore memory
+Ckpt --> Save : OK
+Save --> Stream : xong
+Stream --> UI : SSE ``step`` (nhãn node)\nrồi ``done`` (JSON answer)
+
+UI --> Hist : mở tab Hỏi đáp
+Hist --> Own : ownership
+Own --> Hist : OK
+Hist --> Ckpt : messages
+Ckpt --> Hist : ChatHistoryItem[]
+Hist --> UI : lịch sử
+
+note bottom of Stream
+  ``POST /chat`` (JSON, không stream) có trên backend;
+  frontend **không** gọi. Time-travel ``/states``, ``/rewind``
+  Implemented API, frontend **không** gọi.
+  SSE **không** stream token — generate trả JSON envelope.
+end note
+
+@enduml

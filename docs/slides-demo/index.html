@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="corporate-clean">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bảo vệ TTTN · Hệ thống phân tích hợp đồng + hỏi đáp luật</title>
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/base.css">
+<link rel="stylesheet" id="theme-link" href="../../assets/themes/corporate-clean.css">
+<link rel="stylesheet" href="../../assets/animations/animations.css">
+<style>
+.t{width:100%;border-collapse:collapse;font-size:15px}
+.t th,.t td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--border)}
+.t th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);font-weight:600}
+.t tr:hover td{background:var(--surface-2)}
+
+.arch{margin-top:18px;display:grid;grid-template-rows:auto auto auto auto auto;gap:12px}
+.arch .tier{display:grid;grid-template-columns:130px 1fr;align-items:stretch;gap:16px}
+.arch .tname{display:flex;align-items:center;justify-content:center;background:var(--surface-2);border-radius:var(--radius);padding:12px;font-weight:600;font-size:12px;color:var(--text-2);text-transform:uppercase;letter-spacing:.08em;text-align:center}
+.arch .cells{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.arch .cell{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px;text-align:center;box-shadow:var(--shadow)}
+.arch .cell h4{font-size:12.5px;margin:2px 0 1px}
+.arch .cell p{font-size:10.5px;color:var(--text-3);margin:0}
+.arch .tier.hl .cell{border-top:3px solid var(--accent)}
+
+.flow{display:flex;align-items:center;gap:12px;margin-top:28px;flex-wrap:wrap}
+.flow .node{flex:1;min-width:150px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center;box-shadow:var(--shadow)}
+.flow .node h4{font-size:14.5px;margin:0 0 4px}
+.flow .node p{font-size:11.5px;color:var(--text-3);margin:0}
+.flow .arr{color:var(--text-3);font-size:22px;flex-shrink:0}
+.flow .node.hl{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent),var(--shadow)}
+
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:20px}
+.step{position:relative;padding:20px 18px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow)}
+.step .num{position:absolute;top:-18px;left:16px;width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;box-shadow:var(--shadow)}
+.step h4{margin:14px 0 6px;font-size:15px}
+.step p{font-size:12px;color:var(--text-2);line-height:1.55}
+
+.riskbar{display:flex;height:14px;border-radius:999px;overflow:hidden;margin-top:14px}
+.riskbar span{display:block;height:100%}
+</style>
+</head>
+<body data-themes="corporate-clean,academic-paper,minimal-white,swiss-grid,editorial-serif,blueprint" data-theme-base="../../assets/themes/">
+<div class="deck">
+
+<!-- 1. COVER -->
+<section class="slide" data-title="Trang bìa">
+  <div class="deck-header"><span class="eyebrow">Báo cáo Thực tập tốt nghiệp · 08/2026</span><span class="eyebrow">PTIT — Cơ sở TP.HCM</span></div>
+  <p class="kicker">Bảo vệ đồ án tốt nghiệp đại học</p>
+  <h1 class="h1 anim-fade-up" data-anim="fade-up">Hệ thống <span class="gradient-text">phân tích hợp đồng</span><br>tích hợp hỏi đáp luật lao động</h1>
+  <p class="lede">RAG + GraphRAG + LangGraph cho rà soát hợp đồng lao động tiếng Việt, có căn cứ pháp luật và con người kiểm soát kết quả.</p>
+  <div class="row wrap mt-l" style="gap:8px">
+    <span class="pill pill-accent">Đặng Thị Bích Trâm · N22DCCN186</span>
+    <span class="pill pill-accent">Đỗ Minh Bảo Huy · N22DCCN133</span>
+    <span class="pill pill-accent">Hàng Gia Thịnh · N22DCVT093</span>
+  </div>
+  <div class="deck-footer"><span class="dim2">GVHD: ThS. Nguyễn Thị Bích Nguyên</span><span class="slide-number" data-current="1" data-total="22"></span></div>
+  <div class="notes">Kính chào hội đồng. Em xin trình bày đồ án "Nghiên cứu và xây dựng hệ thống phân tích hợp đồng tích hợp hỏi đáp luật liên quan đến hợp đồng lao động". Nhóm gồm 3 thành viên, dưới sự hướng dẫn của ThS. Nguyễn Thị Bích Nguyên.</div>
+</section>
+
+<!-- 2. AGENDA -->
+<section class="slide" data-title="Nội dung trình bày">
+  <p class="kicker">Agenda</p>
+  <h2 class="h2">Nội dung trình bày hôm nay</h2>
+  <div class="grid g3 mt-l anim-stagger-list" data-anim-target>
+    <div class="card"><div class="row"><div class="h3 dim2" style="width:44px">01</div><div><h4>Bài toán & mục tiêu</h4><p class="dim">Bối cảnh, phạm vi, phương pháp</p></div></div></div>
+    <div class="card"><div class="row"><div class="h3 dim2" style="width:44px">02</div><div><h4>Kiến trúc & thiết kế</h4><p class="dim">Layered architecture, RAG, GraphRAG</p></div></div></div>
+    <div class="card"><div class="row"><div class="h3 dim2" style="width:44px">03</div><div><h4>Dữ liệu pháp luật</h4><p class="dim">Schema PostgreSQL v2.1, thu thập từ VBPL</p></div></div></div>
+    <div class="card"><div class="row"><div class="h3 dim2" style="width:44px">04</div><div><h4>Triển khai</h4><p class="dim">Docker Compose, cấu hình</p></div></div></div>
+    <div class="card"><div class="row"><div class="h3 dim2" style="width:44px">05</div><div><h4>Kiểm thử & Demo</h4><p class="dim">Ma trận test, minh họa giao diện</p></div></div></div>
+    <div class="card"><div class="row"><div class="h3 dim2" style="width:44px">06</div><div><h4>Hạn chế & kết luận</h4><p class="dim">Hướng cải tiến, kiến nghị</p></div></div></div>
+  </div>
+  <div class="notes">Bài trình bày gồm 6 phần chính, đi từ bài toán, thiết kế kỹ thuật, dữ liệu pháp luật, triển khai, kiểm thử/demo đến kết luận. Thời lượng dự kiến 12-15 phút.</div>
+</section>
+
+<!-- 3. LY DO / BOI CANH -->
+<section class="slide" data-title="Lý do chọn đề tài">
+  <p class="kicker">Bối cảnh · Vì sao chọn đề tài này</p>
+  <h2 class="h2">Rà soát hợp đồng thủ công khó mở rộng và khó nhất quán</h2>
+  <div class="grid g3 mt-l anim-stagger-list" data-anim-target>
+    <div class="card card-accent"><h4>① Dữ liệu tự do</h4><p class="dim">Hợp đồng ở dạng DOC/DOCX, PDF, bản scan — cần pipeline xử lý tài liệu và chunking theo Điều.</p></div>
+    <div class="card card-accent"><h4>② Pháp luật có cấu trúc</h4><p class="dim">Văn bản có quan hệ phân cấp, sửa đổi, bãi bỏ, dẫn chiếu — vector search đơn thuần chưa đủ.</p></div>
+    <div class="card card-accent"><h4>③ Cần kiểm chứng được</h4><p class="dim">Kết quả phải có căn cứ pháp luật rõ ràng, người dùng kiểm tra và chỉnh sửa được.</p></div>
+  </div>
+  <p class="dim mt-l">→ Đề tài tiếp cận theo hướng <b>Retrieval-Augmented Generation</b>: truy xuất nguồn hợp đồng + pháp luật trước khi mô hình ngôn ngữ sinh kết quả, không thay thế chuyên gia pháp lý.</p>
+  <div class="notes">Rà soát hợp đồng lao động thủ công đòi hỏi vừa hiểu nội dung hợp đồng vừa đối chiếu pháp luật liên quan — tốn thời gian và khó nhất quán khi số lượng hợp đồng tăng. Ba lý do chính khiến nhóm chọn đề tài này: dữ liệu đầu vào tự do định dạng, kiến thức pháp luật có quan hệ phân cấp phức tạp, và yêu cầu kết quả phải kiểm chứng được. Điểm nhấn: đây là lớp hỗ trợ kỹ thuật, không thay thế con người.</div>
+</section>
+
+<!-- 4. MUC TIEU -->
+<section class="slide" data-title="Mục tiêu">
+  <p class="kicker">Mục tiêu đề tài</p>
+  <h2 class="h2">7 mục tiêu kỹ thuật của hệ thống</h2>
+  <ul class="grid g2 anim-stagger-list mt-m" style="list-style:none;padding:0;margin:0;gap:12px" data-anim-target>
+    <li class="card"><h4>Web app quản lý hợp đồng</h4><p class="dim">Đăng ký, đăng nhập, tải lên và quản lý hợp đồng.</p></li>
+    <li class="card"><h4>Trích xuất đa định dạng</h4><p class="dim">DOC/DOCX, PDF, ảnh → chuẩn hóa, chia nội dung theo Điều.</p></li>
+    <li class="card"><h4>Kho embedding</h4><p class="dim">Hợp đồng & pháp luật trên PostgreSQL/pgvector.</p></li>
+    <li class="card"><h4>Truy xuất theo quan hệ pháp lý</h4><p class="dim">PostgreSQL + pgvector + ltree mở rộng ngữ cảnh.</p></li>
+    <li class="card"><h4>Workflow LangGraph</h4><p class="dim">Phân tích rủi ro và hỏi đáp hợp đồng có state.</p></li>
+    <li class="card"><h4>Kết quả có căn cứ</h4><p class="dim">Rủi ro, mức độ, khuyến nghị, điều khoản đề xuất sửa.</p></li>
+  </ul>
+  <p class="dim mt-m">+ Triển khai bằng Docker Compose và bộ kiểm thử tự động.</p>
+  <div class="notes">7 mục tiêu bám sát vòng đời một hợp đồng: từ upload, trích xuất, index hóa, truy xuất ngữ nghĩa có quan hệ pháp lý, phân tích rủi ro bằng LangGraph, đến đầu ra có căn cứ pháp luật rõ ràng. Toàn bộ được đóng gói bằng Docker Compose kèm test tự động.</div>
+</section>
+
+<!-- 5. PHAM VI & PHUONG PHAP -->
+<section class="slide" data-title="Phạm vi & phương pháp">
+  <p class="kicker">Phạm vi · Phương pháp thực hiện</p>
+  <h2 class="h2">Bám sát mã nguồn hiện tại của repository</h2>
+  <div class="grid g2 mt-l" style="align-items:start">
+    <div class="card anim-fade-left" data-anim="fade-left">
+      <h3>Phạm vi</h3>
+      <p class="dim">Phản ánh nhánh <code>main</code> của repository <b>contract-agent</b>: FastAPI, PostgreSQL/pgvector, Gemini, BAAI/bge-m3, LangGraph, React/Vite, Docker Compose, pipeline ingest kho pháp luật.</p>
+      <p class="dim mt-s">Khi tài liệu <code>docs/</code> khác mã nguồn hiện tại → ưu tiên mã nguồn.</p>
+    </div>
+    <div class="card anim-fade-right" data-anim="fade-right">
+      <h3>Phương pháp</h3>
+      <ul class="mt-s">
+        <li>Khảo sát cấu trúc mã nguồn và luồng API</li>
+        <li>Đối chiếu kiến trúc phân lớp với module nghiệp vụ</li>
+        <li>Mô hình hóa pipeline theo luồng dữ liệu</li>
+        <li>Đánh giá bằng unit test, integration test và các tiêu chí độ đúng, khả năng truy xuất nguồn, ổn định, khả năng triển khai</li>
+      </ul>
+    </div>
+  </div>
+  <div class="notes">Báo cáo không mô tả một thiết kế lý thuyết mà bám sát đúng mã nguồn hiện có trong repository contract-agent, nhánh main. Phương pháp thực hiện đi từ khảo sát code, đối chiếu kiến trúc, mô hình hóa luồng dữ liệu, đến đánh giá bằng test thực tế.</div>
+</section>
+
+<!-- 6. CHUC NANG CHINH -->
+<section class="slide" data-title="Chức năng chính">
+  <p class="kicker">Sản phẩm · F01–F08</p>
+  <h2 class="h2">8 chức năng chính của hệ thống</h2>
+  <div class="card mt-m" style="padding:2px 12px">
+  <table class="t">
+    <thead><tr><th>Mã</th><th>Chức năng</th><th>Mô tả</th></tr></thead>
+    <tbody>
+      <tr><td><b>F01</b></td><td>Đăng ký / đăng nhập</td><td>Tạo tài khoản, xác thực mật khẩu, phát hành JWT</td></tr>
+      <tr><td><b>F02</b></td><td>Tải hợp đồng</td><td>Nhận DOC/DOCX, PDF hoặc ảnh và lưu nội dung</td></tr>
+      <tr><td><b>F03</b></td><td>Lập chỉ mục</td><td>Chunk theo Điều, lưu embedding vào PostgreSQL/pgvector</td></tr>
+      <tr><td><b>F04</b></td><td>Phân tích</td><td>Trích xuất thông tin, đánh giá rủi ro, căn cứ pháp luật</td></tr>
+      <tr><td><b>F05</b></td><td>Review người dùng</td><td>Dừng trước khi lưu kết quả chính thức, cho phép chỉnh sửa</td></tr>
+      <tr><td><b>F06</b></td><td>Hỏi đáp</td><td>Truy xuất hợp đồng + pháp luật rồi sinh câu trả lời</td></tr>
+      <tr><td><b>F07</b></td><td>Lịch sử chat</td><td>Lưu checkpoint, xem trạng thái, rewind hội thoại</td></tr>
+      <tr><td><b>F08</b></td><td>Quản lý hợp đồng</td><td>Liệt kê hợp đồng thuộc tài khoản hiện tại</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="notes">8 chức năng bao phủ toàn bộ vòng đời sử dụng: xác thực, tải lên, lập chỉ mục, phân tích rủi ro, review con người (human-in-the-loop), hỏi đáp, lịch sử hội thoại và quản lý danh sách hợp đồng theo tài khoản.</div>
+</section>
+
+<!-- 7. NGHIEP VU VBPL -->
+<section class="slide" data-title="Nghiệp vụ pháp luật VBPL">
+  <p class="kicker">Nghiệp vụ · Dữ liệu VBPL</p>
+  <h2 class="h2">5 nhóm hình thức văn bản & cấu trúc phân cấp</h2>
+  <div class="grid g2 mt-m" style="align-items:start">
+    <div class="card">
+      <h4>5 nhóm nghiệp vụ (từ 26 hình thức VBPL)</h4>
+      <ul class="mt-s" style="font-size:13.5px;line-height:1.7">
+        <li><b>1. VBQPPL</b> — Hiến pháp, Bộ luật, Luật, Nghị định, Thông tư… → căn cứ pháp lý chính</li>
+        <li><b>2. VBQPPL lịch sử</b> — Sắc lệnh, Thông tư liên tịch… → lịch sử/đối chiếu</li>
+        <li><b>3. Văn bản hành chính</b> — Công văn, Thông báo… → không mặc nhiên là căn cứ</li>
+        <li><b>4. Văn bản kỹ thuật pháp lý</b> — Văn bản hợp nhất, hệ thống hóa</li>
+        <li><b>5. Dữ liệu tham chiếu/hỗ trợ</b> — Văn bản liên quan, bản dịch…</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Cấu trúc phân cấp</h4>
+      <p class="dim mt-s">Văn bản → Phần → Chương → Mục → Tiểu mục → Điều → Khoản → Điểm.</p>
+      <p class="dim mt-s">Không phải văn bản nào cũng đủ mọi cấp — schema dùng <b>scaffold</b> để giữ chuỗi khóa ngoại, còn <code>ltree</code> path cho RAG giữ cấu trúc thực tế (sparse).</p>
+      <p class="dim mt-s">→ Cho phép mở rộng lên cha / xuống con / sang node cùng cấp khi truy xuất.</p>
+    </div>
+  </div>
+  <div class="notes">Trước khi xây RAG, nhóm khảo sát nghiệp vụ VBPL — 26 hình thức văn bản được nhóm gom thành 5 nhóm nghiệp vụ do nhóm tự đề xuất, không phải phân loại chính thức của Bộ Tư pháp. Điểm quan trọng: một kết quả tương đồng ngữ nghĩa cao chưa chắc là căn cứ pháp lý phù hợp — còn phải xét hình thức văn bản, hiệu lực, và quan hệ sửa đổi/thay thế/bãi bỏ.</div>
+</section>
+
+<!-- 8. CONG NGHE -->
+<section class="slide" data-title="Công nghệ sử dụng">
+  <p class="kicker">Cơ sở lý thuyết & Công nghệ</p>
+  <h2 class="h2">Bảng tổng hợp công nghệ sử dụng</h2>
+  <div class="card mt-m" style="padding:2px 12px">
+  <table class="t">
+    <thead><tr><th>Thành phần</th><th>Công nghệ</th><th>Vai trò</th></tr></thead>
+    <tbody>
+      <tr><td>Backend</td><td>Python, FastAPI, Uvicorn</td><td>REST API và lifecycle ứng dụng</td></tr>
+      <tr><td>LLM</td><td>Gemini 2.5 Flash</td><td>OCR, extraction, risk judgment, QA</td></tr>
+      <tr><td>Embedding</td><td>BAAI/bge-m3 (1024-d)</td><td>Biểu diễn văn bản thành vector</td></tr>
+      <tr><td>RDBMS</td><td>PostgreSQL 16 + pgvector</td><td>Dữ liệu nghiệp vụ và vector</td></tr>
+      <tr><td>Graph/Hierarchy</td><td>PostgreSQL + ltree</td><td>Quan hệ văn bản pháp luật</td></tr>
+      <tr><td>Workflow</td><td>LangGraph</td><td>Analysis và QA state machine</td></tr>
+      <tr><td>Frontend</td><td>React 19, Vite, Tailwind CSS</td><td>Giao diện web</td></tr>
+      <tr><td>Auth</td><td>JWT + bcrypt</td><td>Xác thực người dùng</td></tr>
+      <tr><td>Deploy</td><td>Docker Compose</td><td>Đóng gói và vận hành</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="notes">Đây là bảng tổng hợp toàn bộ stack công nghệ, mỗi dòng gắn với một chương thiết kế phía sau: LangGraph cho workflow, pgvector+ltree cho retrieval, Gemini cho các tác vụ ngôn ngữ tự nhiên.</div>
+</section>
+
+<!-- 9. KIEN TRUC TONG THE -->
+<section class="slide" data-title="Kiến trúc tổng thể">
+  <p class="kicker">Thiết kế hệ thống</p>
+  <h2 class="h2">Kiến trúc phân lớp (Clean/Hexagonal)</h2>
+  <div class="arch anim-stagger-list" data-anim-target>
+    <div class="tier"><div class="tname">API</div>
+      <div class="cells"><div class="cell"><h4>FastAPI</h4><p>REST endpoint</p></div><div class="cell"><h4>Dependency</h4><p>get_current_user_id</p></div><div class="cell"><h4>Error mapping</h4><p>DB error → 503</p></div><div class="cell"><h4>Frontend</h4><p>React/Vite/Tailwind</p></div></div>
+    </div>
+    <div class="tier hl"><div class="tname">Application</div>
+      <div class="cells"><div class="cell"><h4>UploadContract</h4><p>use case</p></div><div class="cell"><h4>AnalyzeContract</h4><p>use case</p></div><div class="cell"><h4>ChatWithContract</h4><p>use case</p></div><div class="cell"><h4>AppContainer</h4><p>DI container</p></div></div>
+    </div>
+    <div class="tier"><div class="tname">Agents</div>
+      <div class="cells"><div class="cell"><h4>LangGraph</h4><p>analysis / QA</p></div><div class="cell"><h4>Extraction</h4><p>hybrid regex+LLM</p></div><div class="cell"><h4>Risk rules</h4><p>deterministic</p></div><div class="cell"><h4>GraphRAG</h4><p>seed→expand→hydrate</p></div></div>
+    </div>
+    <div class="tier"><div class="tname">Domain</div>
+      <div class="cells"><div class="cell"><h4>Entity</h4><p>ContractAnalysis…</p></div><div class="cell"><h4>Error</h4><p>domain error</p></div><div class="cell"><h4>Port/Interface</h4><p>repository, LLM</p></div><div class="cell"><h4>—</h4><p>framework-agnostic</p></div></div>
+    </div>
+    <div class="tier"><div class="tname">Infrastructure</div>
+      <div class="cells"><div class="cell"><h4>PostgreSQL</h4><p>repository</p></div><div class="cell"><h4>pgvector</h4><p>vector search</p></div><div class="cell"><h4>Embedding</h4><p>HuggingFace</p></div><div class="cell"><h4>Storage</h4><p>Local objects</p></div></div>
+    </div>
+  </div>
+  <div class="notes">React gửi request đến FastAPI, API xác thực và gọi use case lấy dependency từ AppContainer. Application layer chứa logic nghiệp vụ, Agents layer chứa LangGraph và helper chuyên biệt, Infrastructure hiện thực repository/vector/LLM/storage. Domain nằm ở trung tâm, không phụ thuộc framework.</div>
+</section>
+
+<!-- 10. XU LY TAI LIEU -->
+<section class="slide" data-title="Xử lý tài liệu">
+  <p class="kicker">Thiết kế · Upload & xử lý tài liệu</p>
+  <h2 class="h2">Từ tệp tải lên đến chunk có embedding</h2>
+  <div class="flow anim-stagger-list" data-anim-target>
+    <div class="node"><h4>📤 Upload</h4><p>Nhận bytes, tạo UUID contract_id, lưu qua LocalObjectStorage</p></div>
+    <div class="arr">→</div>
+    <div class="node"><h4>📄 Parse</h4><p>DOCX (python-docx), PDF (pdfplumber), ảnh (Gemini Vision OCR)</p></div>
+    <div class="arr">→</div>
+    <div class="node hl"><h4>✂️ Chunk theo Điều</h4><p>Regex tìm tiêu đề Điều · 1800 ký tự/chunk · overlap 120</p></div>
+    <div class="arr">→</div>
+    <div class="node"><h4>🧬 Embedding</h4><p>BGE-M3 1024-d cho từng chunk</p></div>
+    <div class="arr">→</div>
+    <div class="node"><h4>💾 Lưu PostgreSQL</h4><p>contract_chunks + pgvector</p></div>
+  </div>
+  <p class="dim mt-m">Chuẩn hóa Unicode NFC trước khi tách; Khoản giữ trong cùng Điều trừ khi vượt max_chunk_size. Parse lỗi → status <code>uploaded</code>, không chặn luồng.</p>
+  <div class="notes">Use case UploadContract chọn parser theo định dạng file. Sau khi có full_text, chunker chuẩn hóa Unicode rồi tách theo Điều bằng regex, với ngưỡng 1800 ký tự và overlap 120 ký tự để giữ ngữ cảnh liền mạch giữa các chunk.</div>
+</section>
+
+<!-- 11. ANALYSIS WORKFLOW -->
+<section class="slide" data-title="Analysis workflow">
+  <p class="kicker">Thiết kế · Analysis workflow (LangGraph)</p>
+  <h2 class="h2">Supervisor + 3 subgraph: Extract → Evaluate → Review</h2>
+  <div class="steps anim-stagger-list" data-anim-target>
+    <div class="step"><div class="num">1</div><h4>Extract</h4><p>Trích xuất ContractAnalysis; retry tối đa 2 lần sau lần đầu.</p></div>
+    <div class="step"><div class="num">2</div><h4>Deterministic pre-pass</h4><p>check_labor_red_flags, check_labor_completeness, check_preamble_citations — chạy trước LLM.</p></div>
+    <div class="step"><div class="num">3</div><h4>Evaluate (fan-out)</h4><p>Send tạo nhánh judge_clause cho từng Điều chưa skip; concurrency giới hạn 2.</p></div>
+    <div class="step"><div class="num">4</div><h4>Human review (HITL)</h4><p>interrupt() trả draft_analysis/draft_risks; chỉ lưu chính thức khi được approve.</p></div>
+  </div>
+  <p class="dim mt-m">judge_clause: lấy nội dung Điều từ contract_chunks → LegalGraphRag/fallback retrieve_legal → Gemini đánh giá, retry nội bộ tối đa 2 lần.</p>
+  <div class="notes">AnalysisState theo dõi contract_text, risks, các biến retry/review. Điểm hay: deterministic pre-pass giảm số lần gọi LLM cho các red flag đã xác định được bằng luật, và skip_llm_clauses tránh đánh giá lại các Điều đã có critical risk. Human-in-the-loop là lớp kiểm soát cuối trước khi lưu kết quả chính thức.</div>
+</section>
+
+<!-- 12. QA WORKFLOW -->
+<section class="slide" data-title="QA workflow">
+  <p class="kicker">Thiết kế · QA workflow (LangGraph)</p>
+  <h2 class="h2">Retrieve → Rewrite → Generate → Refusal — chống hallucination</h2>
+  <div class="flow anim-stagger-list" data-anim-target>
+    <div class="node"><h4>🔎 Retrieve</h4><p>Nội dung hợp đồng + pháp luật + long-term memory</p></div>
+    <div class="arr">→</div>
+    <div class="node"><h4>✏️ Rewrite</h4><p>Rule-based, lần cuối gọi Gemini rewrite truy vấn</p></div>
+    <div class="arr">→</div>
+    <div class="node hl"><h4>🧠 Generate (JSON)</h4><p>Gemini trả JSON; retry tối đa 2 lần nếu parse lỗi</p></div>
+    <div class="arr">→</div>
+    <div class="node"><h4>🚫 Refusal</h4><p>Không đủ ngữ cảnh sau 2 lần retrieval → từ chối trả lời</p></div>
+  </div>
+  <p class="dim mt-m"><b>Cơ chế chống hallucination:</b> <code>cited_clauses</code> do LLM sinh ra được lọc theo <code>_valid_clause_numbers</code> — chỉ giữ Điều thực sự có trong kết quả retrieval. Sau khi trả lời, node <code>remember</code> lưu vào long-term memory; checkpointer hỗ trợ history & rewind.</p>
+  <div class="notes">Đây là cơ chế kiểm soát citation quan trọng nhất của hệ thống: model không được tin tuyệt đối, mọi Điều được trích dẫn phải đối chiếu lại với tập kết quả retrieval thực tế. Nếu không đủ ngữ cảnh, hệ thống thà từ chối còn hơn suy đoán.</div>
+</section>
+
+<!-- 13. GRAPHRAG -->
+<section class="slide" data-title="GraphRAG">
+  <p class="kicker">Thiết kế · GraphRAG</p>
+  <h2 class="h2">Seed → Expand → Hydrate → Rank</h2>
+  <div class="flow anim-stagger-list" data-anim-target>
+    <div class="node"><h4>🌱 Seed</h4><p>rewrite_legal_query + hybrid search (vector + FTS, RRF)</p></div>
+    <div class="arr">→</div>
+    <div class="node hl"><h4>🕸️ Expand</h4><p>ltree + legal_document_relations + legal_path_relations</p></div>
+    <div class="arr">→</div>
+    <div class="node"><h4>💧 Hydrate</h4><p>Lấy nội dung/metadata các path liên quan từ PostgreSQL</p></div>
+    <div class="arr">→</div>
+    <div class="node"><h4>📊 Rank</h4><p>Lọc theo hiệu lực, xếp hạng trước khi đưa vào context</p></div>
+  </div>
+  <p class="dim mt-m">Nếu không có seed đạt ngưỡng similarity → thử lại với <code>min_score=0</code>, sau đó thử biến thể hẹp hơn (contract_type/title/summary). Seed có thể lọc theo <code>sector</code> để tránh nhầm văn bản chuyên ngành.</p>
+  <div class="notes">GraphRAG là điểm khác biệt so với RAG thuần vector: sau khi có seed, hệ thống mở rộng sang sibling/ancestor/parent-clause/related-docs/repealed-by-docs bằng ltree và các bảng quan hệ, rồi mới hydrate nội dung thật để đưa vào prompt. Cách này giúp không bỏ sót ngữ cảnh pháp lý liên quan.</div>
+</section>
+
+<!-- 14. THIET KE DU LIEU -->
+<section class="slide" data-title="Thiết kế dữ liệu">
+  <p class="kicker">Thiết kế dữ liệu · PostgreSQL v2.1</p>
+  <h2 class="h2">4 nhóm dữ liệu trên schema v2.1</h2>
+  <div class="grid g4 mt-l anim-stagger-list" data-anim-target>
+    <div class="card"><p class="eyebrow">Nhóm 1</p><h4 class="mt-s">Tài khoản & hợp đồng</h4><p class="dim">users, uploaded_contracts, contract_chunks</p></div>
+    <div class="card"><p class="eyebrow">Nhóm 2</p><h4 class="mt-s">Metadata VBPL</h4><p class="dim">legal_documents + eff_from/eff_to/status_flag</p></div>
+    <div class="card"><p class="eyebrow">Nhóm 3</p><h4 class="mt-s">Hierarchy đầy đủ</h4><p class="dim">Document→Part→Chapter→Section→SubSection→Article→Clause→Point</p></div>
+    <div class="card"><p class="eyebrow">Nhóm 4</p><h4 class="mt-s">Embeddings & quan hệ</h4><p class="dim">legal_embeddings, legal_document_relations, legal_path_relations</p></div>
+  </div>
+  <p class="dim mt-l">Extension dùng: <code>vector</code> (pgvector), <code>pg_trgm</code>, <code>ltree</code>, <code>pgcrypto</code>. Cấp thiếu dữ liệu được <b>scaffold</b> ("Không có") để giữ chuỗi khóa ngoại; index HNSW (vector_cosine_ops), GIN (tsv/trigram), GiST (ltree).</p>
+  <div class="notes">Schema v2.1 thay thế mô hình cũ chỉ có Article-Clause-Point bằng chuỗi khóa ngoại đầy đủ từ Document đến Point. Điểm mạnh: retrieval có thể kết hợp semantic search, lexical search và graph expansion trên cùng bộ định danh path ltree.</div>
+</section>
+
+<!-- 15. ERD DFD USE CASE -->
+<section class="slide" data-title="ERD / DFD / Use Case">
+  <p class="kicker">Phân tích thiết kế · ERD · DFD · Use Case</p>
+  <h2 class="h2">Ba góc nhìn bổ sung cho nhau</h2>
+  <div class="grid g3 mt-l anim-stagger-list" data-anim-target>
+    <div class="card"><div style="font-size:32px">🗂️</div><h4 class="mt-s">ERD</h4><p class="dim">Cấu trúc lưu trữ dữ liệu: quan hệ user–hợp đồng–chunk và kho pháp luật.</p></div>
+    <div class="card"><div style="font-size:32px">🔀</div><h4 class="mt-s">DFD (ngữ cảnh & mức 1)</h4><p class="dim">Đường đi của dữ liệu: tiếp nhận → trích xuất → phân tích rủi ro → đối chiếu pháp luật → khuyến nghị.</p></div>
+    <div class="card"><div style="font-size:32px">🙋</div><h4 class="mt-s">Use Case</h4><p class="dim">Một tác nhân duy nhất: Người dùng — tải hợp đồng, nhận kết quả phân tích + khuyến nghị.</p></div>
+  </div>
+  <p class="dim mt-l">Các bước kỹ thuật (extraction, GraphRAG, LangGraph…) là xử lý nội bộ, không phải tác nhân độc lập trong Use Case — giữ phạm vi tương tác bên ngoài đơn giản, đúng mục tiêu "người dùng không cần hiểu kỹ thuật phía sau".</p>
+  <div class="notes">ERD cho biết dữ liệu lưu trữ và liên kết ra sao; DFD mô tả dữ liệu đi qua bước xử lý nào; Use Case xác định phạm vi tương tác của người dùng. Kết hợp ba sơ đồ đảm bảo mô hình dữ liệu, luồng xử lý và yêu cầu nghiệp vụ thống nhất.</div>
+</section>
+
+<!-- 16. THU THAP VBPL -->
+<section class="slide" data-title="Thu thập dữ liệu VBPL">
+  <p class="kicker">Xây dựng · Thu thập & cập nhật dữ liệu pháp luật</p>
+  <h2 class="h2">Crawl VBPL & đồng bộ định kỳ hàng tháng</h2>
+  <div class="steps anim-stagger-list" data-anim-target>
+    <div class="step"><div class="num">1</div><h4>Crawl theo docType</h4><p>Gửi HTTP request nội bộ của VBPL, phân trang theo từng hình thức văn bản (Bộ luật, Luật, Nghị định, Thông tư ưu tiên).</p></div>
+    <div class="step"><div class="num">2</div><h4>Chuẩn hóa</h4><p>UTF-8, toàn văn → text, metadata & quan hệ giữ dạng cấu trúc.</p></div>
+    <div class="step"><div class="num">3</div><h4>Ingest</h4><p>Ánh xạ schema, dựng hierarchy, tạo path ltree, tạo embedding BGE-M3.</p></div>
+    <div class="step"><div class="num">4</div><h4>Đồng bộ hàng tháng</h4><p>So sánh văn bản mới/thay đổi/không đổi; cập nhật hiệu lực, chỉ re-embed phần thay đổi.</p></div>
+  </div>
+  <p class="dim mt-m">Khi văn bản hết hiệu lực → cập nhật <code>eff_flag/status_flag/eff_to</code> và đánh dấu <code>is_effective=FALSE</code> cho embedding liên quan, tránh dùng làm căn cứ.</p>
+  <div class="notes">Crawler không thao tác trình duyệt mà gọi trực tiếp API/request nội bộ mà giao diện VBPL sử dụng, không phải public API chính thức. Chu kỳ đồng bộ 1 lần/tháng cân bằng giữa độ mới của kho tri thức và chi phí crawl/embedding/kiểm thử.</div>
+</section>
+
+<!-- 17. TRIEN KHAI -->
+<section class="slide" data-title="Triển khai">
+  <p class="kicker">Xây dựng & triển khai</p>
+  <h2 class="h2">Docker Compose — 3 service chính</h2>
+  <div class="grid g3 mt-l anim-stagger-list" data-anim-target>
+    <div class="card"><div style="font-size:30px">🐘</div><h4 class="mt-s">postgres</h4><p class="dim">Cổng 5433 · volume riêng cho dữ liệu PostgreSQL</p></div>
+    <div class="card"><div style="font-size:30px">⚙️</div><h4 class="mt-s">api</h4><p class="dim">Cổng 8010 · FastAPI · healthcheck sau khi embedding warm-up</p></div>
+    <div class="card"><div style="font-size:30px">💻</div><h4 class="mt-s">frontend</h4><p class="dim">Cổng 5173 · React/Vite · phụ thuộc health của postgres</p></div>
+  </div>
+  <p class="dim mt-l">Cấu hình qua <code>.env</code> → <code>Settings</code>: <code>GEMINI_API_KEY</code> bắt buộc; <code>JWT_SECRET</code> không được giữ giá trị mặc định (kiểm tra ngay trong FastAPI lifespan); <code>DATABASE_URL</code>; <code>CORS_ORIGINS</code> giới hạn origin frontend.</p>
+  <div class="notes">Volume riêng cho dữ liệu PostgreSQL, file upload, cache mô hình embedding và node_modules giúp dữ liệu không mất khi container được tạo lại. API có healthcheck chờ đủ lâu cho bước warm-up embedding model lúc khởi động.</div>
+</section>
+
+<!-- 18. KIEM THU -->
+<section class="slide" data-title="Kiểm thử & đánh giá">
+  <p class="kicker">Kiểm thử & đánh giá</p>
+  <h2 class="h2">Ma trận kiểm thử chức năng (trích)</h2>
+  <div class="card mt-m" style="padding:2px 12px">
+  <table class="t">
+    <thead><tr><th>TC</th><th>Đầu vào</th><th>Kết quả mong đợi</th><th>Trạng thái</th></tr></thead>
+    <tbody>
+      <tr><td>TC03</td><td>File DOCX/PDF/ảnh</td><td>Parse hoặc báo lỗi rõ ràng</td><td>✅ Có test</td></tr>
+      <tr><td>TC05/06</td><td>Phân tích (review / không review)</td><td>Lưu analysis+risks / trả awaiting_review</td><td>✅ Có test</td></tr>
+      <tr><td>TC07/08</td><td>QA có / không có context</td><td>Trả lời có source_clauses / refusal</td><td>✅ Có test</td></tr>
+      <tr><td>TC09</td><td>Citation không tồn tại</td><td>Điều không xác minh bị loại</td><td>✅ Có test</td></tr>
+      <tr><td>TC10</td><td>GraphRAG</td><td>Expand & hydrate đúng theo path</td><td>✅ Có test</td></tr>
+      <tr><td>TC11/12</td><td>Lỗi DB / JWT mặc định</td><td>HTTP 503 không lộ SQL / từ chối khởi động</td><td>🔎 Đánh giá code</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="dim mt-m">Bộ test bao phủ: agents, analysis, auth, document, legal corpus, amendments, effectivity, GraphRAG, labor rules, citations, QA memory, API integration.</p>
+  <div class="notes">Kiểm thử tổ chức thành unit tests và integration tests, tập trung vào kết quả đầu ra quan sát được theo luồng sử dụng chính, thay vì coi từng module nội bộ là một chức năng độc lập với người dùng.</div>
+</section>
+
+<!-- 19. DEMO -->
+<section class="slide" data-title="Demo hệ thống">
+  <p class="kicker">Demo & minh họa sử dụng</p>
+  <h2 class="h2">Luồng sử dụng chính trên giao diện</h2>
+  <div class="grid g3 mt-l anim-stagger-list" data-anim-target>
+    <div class="card"><h4>🔐 Đăng nhập</h4><p class="dim">Email/mật khẩu → JWT cho các thao tác tiếp theo.</p></div>
+    <div class="card"><h4>📋 Danh sách hợp đồng</h4><p class="dim">Tên tệp, ngày tạo, trạng thái phân tích.</p></div>
+    <div class="card"><h4>⚡ Kết luận nhanh</h4><p class="dim">Phân loại nghiêm trọng / cần chú ý / ổn + hồ sơ hợp đồng trích xuất.</p></div>
+    <div class="card"><h4>⚠️ Chi tiết rủi ro</h4><p class="dim">Đoạn hợp đồng đặt cạnh căn cứ pháp luật, checklist chỉnh sửa.</p></div>
+    <div class="card"><h4>📝 Đề xuất chỉnh sửa</h4><p class="dim">So sánh điều khoản gốc và điều khoản sau chỉnh sửa.</p></div>
+    <div class="card"><h4>💬 Trợ lý AI hỏi đáp</h4><p class="dim">Hỏi đáp có trích dẫn Điều hợp đồng & căn cứ pháp lý.</p></div>
+  </div>
+  <div class="notes">[Trình chiếu demo trực tiếp hoặc ảnh chụp màn hình tại đây] Mỗi màn hình gắn với một tầng dữ liệu đã trình bày: kết luận nhanh dùng risks đã lưu, chi tiết rủi ro dùng LegalCitation có nguồn, trợ lý hỏi đáp dùng QA workflow với cited_clauses đã được lọc.</div>
+</section>
+
+<!-- 20. HAN CHE & CAI TIEN -->
+<section class="slide" data-title="Hạn chế & hướng cải tiến">
+  <p class="kicker">Đánh giá · Hạn chế & hướng cải tiến</p>
+  <h2 class="h2">Nhìn thẳng vào giới hạn hiện tại</h2>
+  <div class="grid g2 mt-l">
+    <div class="card" style="border-top:3px solid var(--bad)">
+      <h3>Hạn chế</h3>
+      <ul class="mt-s" style="font-size:13.5px;line-height:1.7">
+        <li>Chất lượng phân tích phụ thuộc corpus pháp luật và độ cập nhật</li>
+        <li>OCR bằng LLM có thể sai với ảnh mờ, bảng nhiều cột</li>
+        <li>GraphRAG cần corpus có hierarchy/relation đầy đủ</li>
+        <li>LLM provider có rate limit và chi phí</li>
+        <li>Chưa có benchmark do chuyên gia gán nhãn</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid var(--good)">
+      <h3>Hướng cải tiến</h3>
+      <ul class="mt-s" style="font-size:13.5px;line-height:1.7">
+        <li>Benchmark tiếng Việt gán nhãn risk & citation bởi chuyên gia</li>
+        <li>Reranker chuyên biệt cho legal retrieval</li>
+        <li>Observability: latency, token usage, tỷ lệ refusal</li>
+        <li>Object storage tách khỏi local filesystem</li>
+        <li>RBAC, audit log cho triển khai doanh nghiệp</li>
+      </ul>
+    </div>
+  </div>
+  <div class="notes">Nhóm chủ động trình bày hạn chế thay vì né tránh — điều này thể hiện hiểu đúng phạm vi và độ tin cậy của một hệ thống AI trong lĩnh vực pháp lý. Hướng cải tiến tập trung vào đánh giá định lượng và khả năng vận hành production.</div>
+</section>
+
+<!-- 21. KET LUAN -->
+<section class="slide" data-title="Kết luận">
+  <p class="kicker">Kết luận</p>
+  <h2 class="h2">Kiểm soát nguồn dữ liệu là giá trị cốt lõi</h2>
+  <div class="grid g3 mt-l anim-stagger-list" data-anim-target>
+    <div class="card"><h4>Kết quả đạt được</h4><p class="dim">Hệ thống web đầy đủ vòng đời hợp đồng: upload → analyze → chat, có API xác thực, lịch sử, rewind.</p></div>
+    <div class="card"><h4>AI workflow</h4><p class="dim">LangGraph tổ chức analysis (supervisor + HITL) và QA (retrieval + refusal) có retry và kiểm soát trạng thái.</p></div>
+    <div class="card"><h4>Pháp luật có căn cứ</h4><p class="dim">Pipeline corpus VBPL + GraphRAG + citation gắn nguồn để người dùng kiểm chứng.</p></div>
+  </div>
+  <p class="lede mt-l" style="margin:0">Kết hợp RAG, GraphRAG và workflow có trạng thái tạo ra quy trình rà soát hợp đồng <b>có cấu trúc và có thể kiểm chứng</b> hơn so với gọi LLM trực tiếp — nhưng kết quả AI vẫn cần con người có thẩm quyền xác nhận.</p>
+  <div class="notes">Giá trị chính không nằm ở một mô hình LLM đơn lẻ mà ở cách hệ thống kiểm soát nguồn dữ liệu, quản lý trạng thái, giới hạn retry/concurrency, và cho phép con người tham gia ở các bước quan trọng.</div>
+</section>
+
+<!-- 22. THANKS / QA -->
+<section class="slide center tc" data-title="Cảm ơn & Q&A">
+  <div>
+    <h1 class="h1 anim-fade-up" data-anim="fade-up" style="font-size:120px;line-height:1"><span class="gradient-text">Cảm ơn</span></h1>
+    <p class="lede mt-m" style="margin:16px auto 0">Nhóm xin cảm ơn ThS. Nguyễn Thị Bích Nguyên và hội đồng đã lắng nghe.</p>
+    <div class="row mt-l" style="justify-content:center;gap:24px;flex-wrap:wrap">
+      <div class="dim">Đặng Thị Bích Trâm · N22DCCN186</div>
+      <div class="dim">Đỗ Minh Bảo Huy · N22DCCN133</div>
+      <div class="dim">Hàng Gia Thịnh · N22DCVT093</div>
+    </div>
+    <p class="dim mt-l">Rất mong nhận câu hỏi và góp ý từ hội đồng.</p>
+  </div>
+  <div class="notes">Kết thúc phần trình bày, mời hội đồng đặt câu hỏi. Chuẩn bị sẵn: (1) cách chống hallucination trong QA, (2) vì sao chọn GraphRAG thay vì vector search thuần, (3) cách xử lý văn bản pháp luật hết hiệu lực, (4) giới hạn của deterministic risk rules.</div>
+</section>
+
+</div>
+<script src="../../assets/runtime.js"></script>
+</body></html>

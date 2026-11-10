@@ -1,0 +1,77 @@
+@startuml dfd-2-frontend
+!include _skin.puml
+title DFD mức 2 — Giao diện người dùng (React SPA)
+caption Không React Router: điều hướng ``view`` / ``result`` trong App.jsx
+
+actor "Người dùng" as User
+
+rectangle "App\n(cổng màn hình)" as App
+rectangle "LoginScreen" as Login
+rectangle "ContractListScreen" as List
+rectangle "UploadScreen" as Upload
+rectangle "AnalysisResult" as Result
+rectangle "Sidebar" as Side
+rectangle "Tab Báo cáo\n(ExecutiveSummary,\nIssueList, ClauseIndex)" as Report
+rectangle "ChatTab" as Chat
+rectangle "api.js +\nAuthContext" as Api
+rectangle "localStorage\ncontractlens_auth" as LS
+
+rectangle "FastAPI\n/api/v1/*" as BE
+
+User --> Login : email + mật khẩu\nĐăng nhập / Đăng ký
+Login --> Api : signIn / signUp
+Api --> BE : POST /auth/login hoặc /register
+BE --> Api : access_token + user
+Api --> LS : ghi JSON phiên
+LS --> Api : đọc token cho header
+Api --> App : session
+App --> Login : chưa đăng nhập
+App --> List : đã đăng nhập
+
+User --> List : xem / mở HĐ / Tải mới
+List --> Api : listContracts
+Api --> BE : GET /contracts
+BE --> Api : danh sách
+Api --> List : contracts[]
+List --> Api : analyzeContract (HĐ cũ)
+Api --> BE : POST /analyze (thường cache)
+BE --> Api : analysis + risks
+Api --> App : result → AnalysisResult
+
+User --> Upload : chọn file + chế độ AI\n+ Phân tích ngay
+Upload --> Api : fetchModels
+Api --> BE : GET /models (không JWT)
+BE --> Api : [{provider, label}]
+Upload --> Api : uploadContract
+Api --> BE : POST /upload
+BE --> Api : contract_id
+Upload --> Api : analyzeContract
+Api --> BE : POST /analyze
+BE --> Api : báo cáo
+Api --> App : result
+
+User --> Result : chọn tab / Sidebar
+Result --> Side : Hợp đồng / Tải lên /\nBáo cáo / Hỏi đáp
+Result --> Report : tab báo cáo
+Result --> Chat : tab hỏi đáp
+
+User --> Chat : gõ câu hỏi
+Chat --> Api : streamChat
+Api --> BE : POST /chat/stream (SSE)
+BE --> Api : step / done
+Api --> Chat : câu trả lời + trích dẫn
+Chat --> Api : fetchChatHistory
+Api --> BE : GET /chat/{id}/history
+BE --> Api : messages
+Api --> Chat : lịch sử
+
+User --> App : Đăng xuất
+App --> LS : xóa khóa auth
+LS --> App : hết phiên → LoginScreen
+
+note bottom of Api
+  Base URL: ``VITE_API_BASE_URL``.
+  Không có UI cho HITL review, rewind, list checkpoint.
+end note
+
+@enduml

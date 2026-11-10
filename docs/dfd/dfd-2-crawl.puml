@@ -1,0 +1,44 @@
+@startuml dfd-2-crawl
+!include _skin.puml
+title DFD mức 2 — 6.0 Crawl văn bản từ VBPL.vn
+caption Script thủ công — không có REST crawl. Cần VBPL_COOKIE.
+
+actor "Người vận hành" as Op
+
+rectangle "6.1\ncrawl_all\nscripts.crawl_vbpl" as Crawl
+rectangle "6.2\nLấy danh sách VB\nfetch_list" as List
+rectangle "6.3\nChi tiết từng VB\nfetch_document_detail" as Detail
+rectangle "6.4\nChuyển HTML → MD\n+ thuộc tính + lược đồ" as Conv
+rectangle "6.5\nGhi folder văn bản" as Write
+
+cloud "VBPL.vn" as VBPL
+database "D3.2 data/crawl_data/list" as ListCache
+database "D3.2b data/crawl_data/documents\n/{loại}/{tên VB}/" as Docs
+
+Op --> Crawl : python -m scripts.crawl_vbpl.crawl_all\n[--doc-type] [--limit]
+Crawl --> List : theo loại văn bản
+List --> VBPL : HTTP list (cookie phiên)
+VBPL --> List : danh sách id + tiêu đề
+List --> ListCache : cache list (tuỳ bước)
+ListCache --> List : id đã biết
+List --> Crawl : item[]
+
+Crawl --> Detail : slug + doc_id\n(bỏ qua nếu đã có thuoc_tinh.json)
+Detail --> VBPL : HTML + thuộc tính + lược đồ
+VBPL --> Detail : payload
+Detail --> Conv : html, attributes, luoc_do
+Conv --> Write : van_ban.md,\nthuoc_tinh.json,\nluoc_do.json
+Write --> Docs : tạo folder theo tiêu đề
+Docs --> Write : OK
+Write --> Crawl : thành công / FAILED
+Crawl --> Op : log skip / ok / lỗi
+
+note bottom of Docs
+  ``muc_luc.json`` có thể được bổ sung
+  bằng bước extract mục lục riêng
+  (fetch_luoc_do / pipeline convert).
+  Ingest (7.0) **bắt buộc** có
+  thuoc_tinh.json + van_ban.md + muc_luc.json.
+end note
+
+@enduml

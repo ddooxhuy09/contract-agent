@@ -1,0 +1,62 @@
+@startuml contractlens-neo4j
+!theme plain
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+hide empty methods
+title Neo4j GraphRAG (đơn giản)\n≠ mirror 7 bảng hierarchy Postgres
+
+note as Intro
+  **Postgres** = SoT (text, embedding, hierarchy Part→…→Point)
+  **Neo4j** = chỉ cây **path** + quan hệ văn bản để expand GraphRAG
+  Đồng bộ khi **ingest** legal corpus (không tự migrate theo mỗi lần đổi PG schema).
+end note
+
+class Document {
+  doc_id <<UK>>
+  doc_num
+  doc_type
+  status_flag <<sync từ PG>>
+}
+
+class Node {
+  doc_id + path <<UK>>
+  level
+  label
+}
+
+class Chunk {
+  path <<UK = embeddings.path>>
+  doc_id
+  chunk_type
+}
+
+Document "1" --> "*" Node : HAS_NODE
+Node "0..1" --> "*" Node : PARENT_OF
+Chunk "*" --> "1" Document : OF_DOC
+Chunk "*" --> "0..1" Node : OF_NODE
+
+Document "1" --> "*" Document : AMENDS / BASED_ON /\nCITES / REPEALS / …
+
+note bottom of Document
+  Doc↔Doc = mirror **legal_document_relations** (luoc_do)
+  lúc ingest.
+end note
+
+note bottom of Chunk
+  **Không** lưu chunk_text / embedding.
+  Hydrate text từ Postgres theo **path**.
+  REFERS_TO (path↔path) có trong code
+  nhưng hiện **chưa** gọi khi ingest
+  → quan hệ path chủ yếu ở PG **legal_path_relations**.
+end note
+
+note right of Node
+  level ≈ Chapter / Section / Article /
+  Clause / Point / Meta
+  (flatten từ muc_luc path —
+  **không** map 1-1 sang
+  legal_parts / chapters / …)
+end note
+
+@enduml

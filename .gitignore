@@ -85,3 +85,8 @@ evaluation_results/**/traces/
 evaluation_results/**/console.log
 dataset.csv
 !evaluation/benchmark/**/contracts/*.docx
+
+# --- Local tool / assistant artifacts ---
+.serena/
+Claude outputs/
+docs/prompts/

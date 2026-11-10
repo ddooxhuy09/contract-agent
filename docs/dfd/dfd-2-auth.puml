@@ -1,0 +1,53 @@
+@startuml dfd-2-auth
+!include _skin.puml
+title DFD mức 2 — 1.0 Xác thực người dùng
+caption JWT tự phát hành (PyJWT) + bcrypt; không dùng Supabase
+
+actor "Giao diện\n(LoginScreen / api.js)" as UI
+
+rectangle "1.1\nĐăng ký\nRegisterUser" as Reg
+rectangle "1.2\nĐăng nhập\nLoginUser" as Login
+rectangle "1.3\nGác cổng JWT\nResolveUserId /\nget_current_user_id" as Gate
+rectangle "1.4\nBăm mật khẩu\nBcryptPasswordHasher" as Hash
+rectangle "1.5\nPhát hành / đọc JWT\nJwtTokenService" as Jwt
+
+database "D1.1 users\n(id, email, password_hash)" as Users
+
+UI --> Reg : POST /api/v1/auth/register\n{email, password ≥ 6}
+Reg --> Hash : password thuần
+Hash --> Reg : password_hash
+Reg --> Users : INSERT email + hash
+Users --> Reg : User / ConflictError (409)
+Reg --> Jwt : user_id, email
+Jwt --> Reg : access_token
+Reg --> UI : {access_token, token_type, user_id, email}
+
+UI --> Login : POST /api/v1/auth/login\n{email, password}
+Login --> Users : SELECT theo email
+Users --> Login : User / không có
+Login --> Hash : verify(password, hash)
+Hash --> Login : đúng / sai
+Login --> Jwt : user_id, email
+Jwt --> Login : access_token
+Login --> UI : token JSON / 401
+
+UI --> Gate : Authorization: Bearer <JWT>\n(mọi API trừ /models, /health, auth)
+Gate --> Jwt : parse_access_token
+Jwt --> Gate : payload.sub = user_id / AuthError
+Gate --> UI : UUID user_id cho use case\nhoặc HTTP 401
+
+note right of UI
+  Frontend lưu JSON vào
+  **localStorage** khóa ``contractlens_auth``.
+  Đăng xuất chỉ xóa localStorage,
+  không gọi API.
+end note
+
+note bottom of Gate
+  Gác cổng trước: upload, analyze,
+  analyze/resume, contracts, chat,
+  chat/stream, history, states, rewind.
+  Nguồn: ``app/api/deps.py``, ``auth.py``.
+end note
+
+@enduml

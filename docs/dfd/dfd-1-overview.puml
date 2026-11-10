@@ -1,0 +1,110 @@
+@startuml dfd-1-overview
+!include _skin.puml
+title DFD mức 1 — Các tiến trình chính
+caption Phân rã 0.0 ContractLens thành 7 tiến trình (1.0–7.0)
+
+actor "Người dùng" as User
+actor "Người vận hành" as Operator
+
+package "ContractLens" {
+  rectangle "1.0\nXác thực\nngười dùng" as P1
+  rectangle "2.0\nTải lên &\nlập chỉ mục HĐ" as P2
+  rectangle "3.0\nPhân tích\nrủi ro" as P3
+  rectangle "4.0\nHỏi đáp\nhợp đồng" as P4
+  rectangle "5.0\nDanh sách\nhợp đồng" as P5
+  rectangle "6.0\nCrawl VBPL" as P6
+  rectangle "7.0\nIngest kho\npháp luật" as P7
+}
+
+cloud "Gemini API" as Gemini
+cloud "VBPL.vn" as VBPL
+
+database "D1.1 users" as Users
+database "D1.2 uploaded_contracts\n+ contract_chunks" as Contracts
+database "D1.3 legal_* +\nlegal_embeddings" as Legal
+database "D1.4 LangGraph\ncheckpoint / store" as Ckpt
+database "D2 Neo4j\nDocument / Node / Chunk" as Neo4j
+database "D3.1 data/uploads" as Uploads
+database "D3.2 data/crawl_data" as CrawlFS
+
+' ---- Người dùng ----
+User --> P1 : email + mật khẩu
+P1 --> User : access_token + user_id
+User --> P1 : Bearer JWT (mọi API còn lại)
+P1 --> User : user_id / 401
+
+User --> P2 : file HĐ (DOCX/PDF/ảnh) + JWT
+P2 --> User : contract_id, status, chunk_count
+
+User --> P3 : contract_id, provider, force
+P3 --> User : analysis JSONB + risks JSONB
+
+User --> P4 : câu hỏi + contract_id (SSE)
+P4 --> User : step / câu trả lời + cited_clauses
+
+User --> P5 : yêu cầu danh sách
+P5 --> User : danh sách HĐ của user
+
+' ---- Auth store ----
+P1 --> Users : INSERT user / SELECT email\n+ hash mật khẩu
+Users --> P1 : User / không tìm thấy
+
+' ---- Upload ----
+P2 --> Uploads : ghi file {contract_id}{ext}
+Uploads --> P2 : đường dẫn
+P2 --> Gemini : ảnh (OCR) nếu PNG/JPG
+Gemini --> P2 : full_text từ ảnh
+P2 --> Contracts : upsert HĐ + replace chunks\n(+ embedding 1024)
+Contracts --> P2 : OK
+
+' ---- Analyze ----
+P3 --> Contracts : get_owned + đọc cache analysis
+Contracts --> P3 : contract / analysis cũ
+P3 --> Legal : GraphRAG luật khi judge Điều
+Legal --> P3 : ngữ cảnh pháp luật
+P3 --> Neo4j : expand cây path
+Neo4j --> P3 : path liên quan
+P3 --> Gemini : extract + judge clause
+Gemini --> P3 : ContractAnalysis / RiskItem
+P3 --> Contracts : save_analysis (JSONB)
+
+' ---- QA ----
+P4 --> Contracts : kiểm tra sở hữu;\nvector search chunk HĐ
+Contracts --> P4 : HĐ + đoạn Điều
+P4 --> Legal : hybrid search + GraphRAG
+Legal --> P4 : chunk luật còn hiệu lực
+P4 --> Neo4j : expand
+Neo4j --> P4 : path
+P4 --> Gemini : generate / rewrite query
+Gemini --> P4 : JSON câu trả lời
+P4 --> Ckpt : lưu hội thoại + memory
+Ckpt --> P4 : lịch sử thread
+
+' ---- List ----
+P5 --> Contracts : SELECT theo user_id
+Contracts --> P5 : metadata HĐ
+
+' ---- Offline corpus ----
+Operator --> P6 : python -m scripts.crawl_vbpl.crawl_all
+P6 --> VBPL : list + chi tiết (VBPL_COOKIE)
+VBPL --> P6 : HTML, thuộc tính, lược đồ
+P6 --> CrawlFS : van_ban.md, thuoc_tinh.json,\nluoc_do.json, muc_luc.json
+CrawlFS --> P6 : skip nếu đã crawl
+
+Operator --> P7 : python -m scripts.ingest_legal_corpus PATH
+P7 --> CrawlFS : đọc folder văn bản
+CrawlFS --> P7 : JSON + Markdown
+P7 --> Legal : upsert documents, hierarchy,\nembeddings, relations
+P7 --> Neo4j : upsert cây Document/Node/Chunk
+P7 --> Operator : số VB đã nạp / checkpoint
+
+note as N
+  **1.0** ``app/application/use_cases/auth.py``, ``app/api/deps.py``
+  **2.0** ``UploadContract`` — parse, chunk, BGE-M3, pgvector
+  **3.0** ``AnalyzeContract`` + LangGraph ``workflow.py``
+  **4.0** ``qa_agent.py`` — frontend dùng ``POST /chat/stream``
+  **5.0** ``ListContracts`` — ``GET /api/v1/contracts``
+  **6.0–7.0** không có REST ingest; chạy script thủ công
+end note
+
+@enduml

@@ -1,0 +1,22 @@
+' Skin dùng chung cho DFD ContractLens.
+' Include: !include _skin.puml
+!theme plain
+skinparam shadowing false
+skinparam defaultFontSize 13
+skinparam ArrowColor #334155
+skinparam ArrowFontColor #0F172A
+skinparam ArrowFontSize 12
+skinparam ActorBackgroundColor #DBEAFE
+skinparam ActorBorderColor #1D4ED8
+skinparam RectangleBackgroundColor #EEF2FF
+skinparam RectangleBorderColor #4338CA
+skinparam DatabaseBackgroundColor #FEF3C7
+skinparam DatabaseBorderColor #B45309
+skinparam CloudBackgroundColor #FCE7F3
+skinparam CloudBorderColor #BE185D
+skinparam NoteBackgroundColor #F8FAFC
+skinparam NoteBorderColor #94A3B8
+skinparam PackageBackgroundColor #F8FAFC
+skinparam PackageBorderColor #64748B
+skinparam roundCorner 18
+hide stereotype

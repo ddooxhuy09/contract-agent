@@ -1,0 +1,71 @@
+@startuml dfd-2-ingest
+!include _skin.puml
+title DFD mức 2 — 7.0 Ingest kho pháp luật
+caption Extract in-memory rồi ghi Postgres + embedding BGE-M3 + Neo4j. Không có HTTP ingest.
+
+actor "Người vận hành" as Op
+
+rectangle "7.1\ningest_legal_corpus\n(batch + checkpoint)" as Script
+rectangle "7.2\nDiscover folder VB" as Disc
+rectangle "7.3\nExtract\nload_document_folder" as Ext
+rectangle "7.3a\nmap thuoc_tinh" as Meta
+rectangle "7.3b\nmuc_luc → path/hierarchy" as Toc
+rectangle "7.3c\nvan_ban → chunks" as Body
+rectangle "7.3d\nluoc_do → doc relations" as Rel
+rectangle "7.3e\ndẫn chiếu nội bộ" as Cite
+rectangle "7.4\nIngestLegalDocument" as Ing
+rectangle "7.5\nEmbed chunks\nBGE-M3" as Emb
+rectangle "7.6\nUpsert Postgres" as PGW
+rectangle "7.7\nUpsert Neo4j tree" as NJW
+
+database "D3.2 crawl folders" as FS
+database "D3.3 checkpoint file\n(dưới PATH ingest)" as Ck
+database "D1.3 legal_documents" as LD
+database "D1.3b legal_parts…points\n(hierarchy ltree)" as Hier
+database "D1.3c legal_embeddings" as EmbT
+database "D1.3d legal_document_relations\n+ legal_path_relations" as RelT
+database "D2 Neo4j" as Neo4j
+
+Op --> Script : python -m scripts.ingest_legal_corpus PATH\n[--dry-run] [--force] [--limit]
+Script --> Ck : đọc doc_id đã xong
+Ck --> Script : skip set
+Script --> Disc : quét cây thư mục
+Disc --> FS : folder có bộ file bắt buộc
+FS --> Disc : path[]
+Disc --> Script : folders
+
+Script --> Ext : mỗi folder mới
+Ext --> Meta : thuoc_tinh.json
+Ext --> Toc : muc_luc.json
+Ext --> Body : van_ban.md
+Ext --> Rel : luoc_do.json (optional)
+Ext --> Cite : citation trong body
+Ext --> Script : artifacts (thuoc_tinh, chunks,\nlegal_nodes, relations, …)
+
+Script --> Ing : artifacts\n(--dry-run: dừng, không ghi)
+Ing --> Emb : chunk_text[]
+Emb --> Ing : vector 1024
+Ing --> PGW : thứ tự ghi
+PGW --> LD : 1. legal_documents
+PGW --> Hier : 2. hierarchy (inherit HL từ VB)
+PGW --> EmbT : 3. embeddings + path UNIQUE
+PGW --> RelT : 4–5. doc relations + path relations
+LD --> PGW : OK
+Hier --> PGW : OK
+EmbT --> PGW : OK
+RelT --> PGW : OK
+Ing --> NJW : cây id/path (không text)
+NJW --> Neo4j : Document, Node, Chunk +\ncạnh HAS_NODE / PARENT_OF / luoc_do
+Neo4j --> NJW : OK
+Ing --> Script : stats
+Script --> Ck : mark_completed(doc_id)
+Script --> Op : số VB / chunk / lỗi
+
+note as N2
+  Lệnh riêng ``scripts.ingest_clause_amendments``
+  ghi thêm ``legal_path_relations`` (sửa đổi / bãi bỏ).
+  Trigger Postgres cập nhật ``status_flag`` / ``is_effective``
+  trong cùng transaction — không có worker/cron.
+end note
+
+@enduml

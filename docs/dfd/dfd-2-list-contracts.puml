@@ -1,0 +1,24 @@
+@startuml dfd-2-list-contracts
+!include _skin.puml
+title DFD mức 2 — 5.0 Danh sách hợp đồng
+caption ListContracts — GET /api/v1/contracts
+
+actor "ContractListScreen\n/ App.jsx" as UI
+rectangle "5.1\nGác cổng JWT\n(1.3)" as Gate
+rectangle "5.2\nListContracts.execute" as List
+database "D1.2 uploaded_contracts" as UC
+
+UI --> Gate : GET /api/v1/contracts\nAuthorization: Bearer
+Gate --> List : user_id
+List --> UC : SELECT * WHERE user_id = ?\nORDER BY created_at DESC
+UC --> List : rows (contract_id, filename,\nstatus, chunk_count, created_at, …)
+List --> UI : { contracts: [...] }
+
+note right of UI
+  Mở HĐ cũ: màn hình gọi
+  ``analyzeContract`` (3.0) — nếu đã có
+  analysis thì 3.3 trả cache, không chạy LLM.
+  Tải HĐ mới: 2.0 rồi 3.0.
+end note
+
+@enduml

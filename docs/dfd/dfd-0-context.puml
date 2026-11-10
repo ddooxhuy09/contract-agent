@@ -1,0 +1,44 @@
+@startuml dfd-0-context
+!include _skin.puml
+title DFD mức 0 — Sơ đồ ngữ cảnh ContractLens
+caption Hệ thống AI rà soát hợp đồng tiếng Việt (runtime + pipeline pháp điển offline)
+
+actor "Người dùng\n(trình duyệt web)" as User
+actor "Người vận hành\n(crawl / ingest)" as Operator
+
+rectangle "0.0\nContractLens\n(Frontend React + FastAPI + LangGraph)" as System
+
+cloud "Gemini API\n(Google Generative AI)" as Gemini
+cloud "Cổng VBPL.vn" as VBPL
+
+database "D1 PostgreSQL\nusers, HĐ, chunk/embedding,\ncorpus luật, checkpoint" as PG
+database "D2 Neo4j\ncây path + quan hệ văn bản\n(GraphRAG, không lưu text)" as Neo4j
+database "D3 Ổ đĩa cục bộ\ndata/uploads\ndata/crawl_data" as FS
+
+User --> System : yêu cầu (đăng ký/nhập, tải HĐ,\nphân tích, hỏi đáp)
+System --> User : kết quả (JWT, danh sách HĐ,\nbáo cáo rủi ro, câu trả lời SSE)
+
+Operator --> System : lệnh crawl / ingest corpus
+System --> Operator : log tiến độ, số văn bản đã nạp
+
+System --> Gemini : prompt (OCR, trích xuất,\nđánh giá rủi ro, Q&A, rewrite)
+Gemini --> System : văn bản / JSON từ LLM
+
+System --> VBPL : danh sách + chi tiết văn bản\n(kèm cookie phiên)
+VBPL --> System : HTML / thuộc tính / lược đồ
+
+System --> PG : đọc / ghi
+PG --> System : bản ghi, vector, FTS
+System --> Neo4j : upsert cây / expand path
+Neo4j --> System : doc_id, path, quan hệ
+System --> FS : ghi file HĐ / folder crawl
+FS --> System : bytes file, JSON/MD luật
+
+note bottom of System
+  Embedding **BAAI/bge-m3** chạy trong process API
+  (không phải dịch vụ bên ngoài lúc runtime).
+  Auth: JWT tự phát hành — không dùng Supabase.
+  Vector: **pgvector** trên PostgreSQL — không dùng FAISS.
+end note
+
+@enduml

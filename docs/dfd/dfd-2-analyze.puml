@@ -1,0 +1,101 @@
+@startuml dfd-2-analyze
+!include _skin.puml
+title DFD mức 2 — 3.0 Phân tích rủi ro
+caption LangGraph: supervisor → extract → evaluate (deterministic + judge) → review tùy chọn
+
+actor "Giao diện /\nAPI client" as UI
+
+rectangle "3.1\nAnalyzeContract\nPOST /analyze" as Orch
+rectangle "3.2\nKiểm tra sở hữu\nget_owned" as Own
+rectangle "3.3\nĐọc cache analysis" as Cache
+rectangle "3.4\nLangGraph supervisor\nworkflow.py" as Sup
+
+rectangle "3.4a\nExtract\nparse_contract" as Ext
+rectangle "3.4a1\nRegex metadata" as Rx
+rectangle "3.4a2\nLLM điền field trống\nEXTRACTION_PROMPT" as LlmExt
+
+rectangle "3.4b\nDeterministic pre-pass" as Det
+rectangle "3.4b1\nCờ đỏ HĐLĐ" as Red
+rectangle "3.4b2\nĐủ nội dung Đ.21" as Comp
+rectangle "3.4b3\nCăn cứ mở đầu" as Pre
+
+rectangle "3.4c\nJudge từng Điều\n(evaluate_clause,\nmax_concurrency=2)" as Judge
+rectangle "3.4c1\nGraphRAG luật\n(xem dfd-2-retrieval)" as Rag
+rectangle "3.4c2\nLLM rủi ro\nCLAUSE_RISK_PROMPT" as LlmJ
+
+rectangle "3.4d\nHITL review\ninterrupt (review_mode)" as Rev
+rectangle "3.5\nLưu JSONB\nsave_analysis" as Save
+
+cloud "Gemini API" as Gemini
+database "D1.2 uploaded_contracts" as UC
+database "D1.2b contract_chunks" as CC
+database "D1.3 legal_*" as Legal
+database "D2 Neo4j" as Neo4j
+
+UI --> Orch : {contract_id, provider,\nforce, review_mode}
+Orch --> Own : contract_id + user_id
+Own --> UC : SELECT owned
+UC --> Own : row / NotFoundError 404
+Own --> Orch : Contract
+
+Orch --> Cache : analysis đã có?\nforce=false, review_mode=false
+Cache --> UC : đọc analysis, risks
+UC --> Cache : JSONB / NULL
+Cache --> Orch : trả cache ngay\nhoặc tiếp tục pipeline
+
+Orch --> CC : nếu thiếu full_text\n→ nối chunk
+CC --> Orch : nội dung Điều
+
+Orch --> Sup : full_text, contract_id, provider
+Sup --> Ext : extract
+Ext --> Rx : trích loại HĐ, bên, ngày…
+Rx --> Ext : field đã có
+Ext --> LlmExt : field trống
+LlmExt --> Gemini : EXTRACTION_PROMPT
+Gemini --> LlmExt : JSON ContractAnalysis
+LlmExt --> Ext : analysis + clauses
+Ext --> Sup : analysis
+
+Sup --> Det : evaluate
+Det --> Red : check_labor_red_flags
+Red --> Legal : hydrate Điều BLLĐ
+Legal --> Red : trích dẫn luật
+Det --> Comp : check_labor_completeness
+Det --> Pre : check_preamble_citations
+Pre --> Legal : khớp «Căn cứ…»
+Legal --> Pre : legal_documents
+Det --> Sup : risks + skip_llm_clauses
+
+Sup --> Judge : Send từng Điều\nkhông nằm skip_llm_clauses
+Judge --> CC : body Điều (ưu tiên chunk)
+CC --> Judge : clause text
+Judge --> Rag : query theo Điều
+Rag --> Legal : hybrid + hydrate
+Rag --> Neo4j : expand path
+Legal --> Rag : ngữ cảnh luật
+Neo4j --> Rag : path
+Rag --> Judge : legal context
+Judge --> LlmJ : Điều + luật
+LlmJ --> Gemini : CLAUSE_RISK_PROMPT
+Gemini --> LlmJ : RiskItem JSON / không vấn đề
+LlmJ --> Judge : risk hoặc []
+Judge --> Sup : risks
+
+Sup --> Rev : chỉ khi review_mode
+Rev --> UI : draft + review_id\n(awaiting_review)
+UI --> Rev : POST /analyze/resume\n{approved, edits}\n**Frontend hiện không gọi**
+Rev --> Sup : approved / edited_risks
+
+Sup --> Orch : analysis + risks
+Orch --> Save : persist
+Save --> UC : UPDATE analysis, risks JSONB
+UC --> Save : OK
+Save --> Orch : xong
+Orch --> UI : AnalyzeResponse
+
+note bottom of Det
+  Deterministic **không** gọi LLM.
+  Điều đã cờ đỏ tới hạn bị skip khỏi Gemini/RAG.
+end note
+
+@enduml
