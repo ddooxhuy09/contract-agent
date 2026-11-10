@@ -25,6 +25,11 @@ class Settings(BaseSettings):
     groq_api_key: str = Field("", validation_alias=AliasChoices("GROG_KEY", "GROQ_API_KEY"))
     groq_model: str = "openai/gpt-oss-120b"
 
+    # RED_FLAG_NEGATION_CHECK=true: the fixed-rule scan skips negated matches («không giữ bản gốc…»).
+    # Off by default: on injection_v2 it cut recall 1.00 -> 0.50 at unchanged precision, and a screening
+    # tool should not miss violations (see docs/NHAT_KY_THAY_DOI.md).
+    red_flag_negation_check: bool = False
+
     @property
     def gemini_api_keys(self) -> list[str]:
         """Configured Gemini keys in use order, de-duplicated, blanks dropped."""

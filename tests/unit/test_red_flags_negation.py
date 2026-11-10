@@ -1,10 +1,22 @@
-"""The red-flag scan skips negated matches («không giữ bản gốc…») but keeps real violations."""
+"""RED_FLAG_NEGATION_CHECK on: the scan skips negated matches («không giữ bản gốc…») but keeps real violations.
+Off (default): the original plain pattern scan, which flags negated matches too."""
 
 import pytest
 
 from app.agents.labor_red_flags import _FLAGS, _violates, check_labor_red_flags, revise_clause_text
+from app.core.settings import get_settings
 
 BY_KEY = {f.key: f for f in _FLAGS}
+
+
+@pytest.fixture
+def negation_on(monkeypatch):
+    monkeypatch.setattr(get_settings(), "red_flag_negation_check", True)
+
+
+@pytest.fixture
+def negation_off(monkeypatch):
+    monkeypatch.setattr(get_settings(), "red_flag_negation_check", False)
 
 
 def _contract(clause: str) -> str:
@@ -23,7 +35,7 @@ def _keys(text: str) -> set[str]:
     ("ot_unpaid", "Công ty nghiêm cấm mọi hành vi không trả lương làm thêm giờ."),
     ("terminate_pregnancy", "Công ty không được đơn phương chấm dứt hợp đồng vì NLĐ mang thai."),
 ])
-def test_negated_match_is_not_a_violation(key, text):
+def test_negated_match_is_not_a_violation(negation_on, key, text):
     assert not _violates(BY_KEY[key], text)
     assert key not in _keys(_contract(f"2.1. {text}"))
 
@@ -34,17 +46,17 @@ def test_negated_match_is_not_a_violation(key, text):
     ("fine_deduct_wage", "Hình thức kỷ luật phạt tiền, khấu trừ trực tiếp vào tiền lương."),
     ("ban_lawsuit", "NLĐ không được khởi kiện ra Tòa án."),
 ])
-def test_real_violation_still_fires(key, text):
+def test_real_violation_still_fires(negation_on, key, text):
     assert _violates(BY_KEY[key], text)
     assert key in _keys(_contract(f"2.1. {text}"))
 
 
-def test_negation_in_an_earlier_sentence_does_not_hide_a_violation():
+def test_negation_in_an_earlier_sentence_does_not_hide_a_violation(negation_on):
     text = "Công ty không thu tiền cọc.\nCông ty giữ bản gốc CCCD của NLĐ."
     assert "retain_id_papers" in _keys(_contract(f"2.1. {text}"))
 
 
-def test_only_the_violating_sentence_is_reported_and_rewritten():
+def test_only_the_violating_sentence_is_reported_and_rewritten(negation_on):
     clause = "2.1. Công ty không giữ bản gốc bằng cấp của NLĐ. 2.2. Công ty không đóng BHXH cho NLĐ."
     items = [i for i in check_labor_red_flags(_contract(clause), None)]
     assert {f.key for i in items for f in i.findings} == {"no_bhxh"}
@@ -52,3 +64,21 @@ def test_only_the_violating_sentence_is_reported_and_rewritten():
     assert "không đóng BHXH" in violated and "bản gốc" not in violated
     revised = revise_clause_text(clause, ["no_bhxh", "retain_id_papers"])
     assert revised is not None and "Công ty không giữ bản gốc bằng cấp của NLĐ" in revised and "không đóng BHXH" not in revised
+
+
+def test_default_is_off():
+    assert get_settings().red_flag_negation_check is False
+
+
+@pytest.mark.parametrize("key, text", [
+    ("retain_id_papers", "Công ty không giữ bản gốc CCCD của NLĐ."),
+    ("fine_deduct_wage", "Công ty không áp dụng hình thức kỷ luật phạt tiền."),
+])
+def test_off_flags_negated_matches_like_the_original_scan(negation_off, key, text):
+    assert key in _keys(_contract(f"2.1. {text}"))
+
+
+def test_off_keeps_real_violations_and_the_unbounded_window(negation_off):
+    assert "retain_id_papers" in _keys(_contract("2.1. Công ty giữ bản gốc CCCD của NLĐ."))
+    # original `_violates` window ignores sentence boundaries: a «không» 20 chars back still counts
+    assert not _violates(BY_KEY["retain_id_papers"], "Công ty không thu.\nCông ty giữ bản gốc CCCD")

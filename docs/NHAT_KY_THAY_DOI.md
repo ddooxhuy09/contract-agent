@@ -141,3 +141,9 @@ Số liệu chính để quyết định: **exact provision recall của `final_
 - `labor_red_flags.py`: quét dùng `_violates` (thay vì `pattern.search`) ở `check_labor_red_flags`, `_locate_clause`, `rewrite_clause`, danh sách câu vi phạm; cửa sổ phủ định dừng ở dấu chấm/xuống dòng. `matching_law_blurbs` (hỏi đáp) giữ nguyên vì khớp trên câu hỏi của người dùng.
 - Kết quả rule-only (cũ → mới): TP 16→8, FP 16→8, FN 0→8; precision 0,50→0,50; recall 1,00→0,50; F1 0,67→0,50. Chi tiết `evaluation_results/injection_v2/BAO_CAO.md`. Kết quả ròng trên bộ này không tốt hơn; không chỉnh thêm sau khi xem số.
 - Bộ 80 ca cũ không chạy lại.
+
+## 2026-11-10: kiểm tra phủ định đưa vào cờ `RED_FLAG_NEGATION_CHECK`, mặc định TẮT
+- Bản sửa ở `04f1e6c` thay thẳng hành vi quét. Nay nằm sau cờ cấu hình `red_flag_negation_check` (biến môi trường `RED_FLAG_NEGATION_CHECK`), **mặc định `false` = hành vi quét cũ**. Bật cờ cho đúng hành vi của `04f1e6c`.
+- Lý do tắt mặc định: trên injection_v2, recall giảm 1,00 → 0,50 mà precision không đổi (0,50); cửa sổ phủ định 30 ký tự bỏ cả 8 báo nhầm nhưng cũng bỏ 8 vi phạm thật. Đây là công cụ sàng lọc, ưu tiên không bỏ sót hơn là ít báo nhầm.
+- Kiểm tra sau khi đưa vào cờ (tính trực tiếp, không ghi đè file kết quả): cờ tắt cho TP/FP/FN = 16/16/0 và trùng từng ca với `rule_only_old.json`; cờ bật cho 8/8/8 và trùng `rule_only_new.json`.
+- Test: `tests/unit/test_red_flags_negation.py` kiểm cả hai trạng thái (bật: 11 test như trước; tắt và mặc định: 4 test mới).

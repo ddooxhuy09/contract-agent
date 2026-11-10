@@ -88,6 +88,7 @@ cd frontend && npm install && npm run dev      # lint: npm run lint, build: npm 
 | Nhóm | Biến |
 |---|---|
 | Bắt buộc | `GROQ_API_KEY` (hoặc `GROG_KEY`; hoặc `GEMINI_API_KEY` khi `LLM_PROVIDER=gemini`), `JWT_SECRET` (khác giá trị mặc định, nếu không app không khởi động) |
+| Luật đỏ | `RED_FLAG_NEGATION_CHECK` (mặc định `false`; `true` = bước quét bỏ qua câu phủ định, xem `docs/NHAT_KY_THAY_DOI.md`) |
 | LLM | `LLM_PROVIDER` (`groq` mặc định | `gemini`), `GROQ_MODEL` (mặc định `openai/gpt-oss-120b`) |
 | LLM dự phòng (Gemini) | `GEMINI_API_KEY_1`, `GEMINI_API_KEY_2`, `GEMINI_API_KEY_3`: key bổ sung. Khi key đang dùng hết quota theo ngày, client chuyển sang key kế tiếp (`app/agents/llm_client.py`). Quota theo phút vẫn chờ rồi thử lại trên cùng key. |
 | LLM / embedding | `GEMINI_MODEL`, `EMBEDDING_MODEL`, `EMBEDDING_DIM`, `EMBEDDING_DEVICE`, `EMBEDDING_TRUST_REMOTE_CODE`, `EMBEDDING_NORMALIZE`, `EMBEDDING_MAX_SEQ_LENGTH`, `HF_TOKEN` |

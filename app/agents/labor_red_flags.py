@@ -32,6 +32,7 @@ from app.agents.legal_citations import (
     extract_article_title,
     format_path_location,
 )
+from app.core.settings import get_settings
 from app.document.chunker import find_headings
 from app.schemas.contract import ContractAnalysis, LegalCitation, RiskFinding, RiskItem
 
@@ -331,15 +332,26 @@ def _locate_clause(flag: RedFlag, body: str) -> str:
     heads = find_headings(body)
     for i, h in enumerate(heads):
         end = heads[i + 1].start() if i + 1 < len(heads) else len(body)
-        if _violates(flag, body[h.start() : end]):
+        if _hits(flag, body[h.start() : end]):
             return h.group(1)
     return clause_number_from_ref(flag.clause_hint)
+
+
+def _negation_check() -> bool:
+    return bool(getattr(get_settings(), "red_flag_negation_check", False))
+
+
+def _hits(flag: RedFlag, text: str) -> bool:
+    """Scan hit: plain pattern search (default), or negation-aware ``_violates`` when RED_FLAG_NEGATION_CHECK is on."""
+    return _violates(flag, text) if _negation_check() else bool(flag.pattern.search(text))
 
 
 def _violates(flag: RedFlag, segment: str) -> bool:
     """``flag`` fires on ``segment`` unless the match is negated («không dùng phạt tiền…»)."""
     for m in flag.pattern.finditer(segment):
-        before = re.split(r"[.\n]", segment[max(0, m.start() - 30) : m.start()])[-1]  # same sentence only
+        before = segment[max(0, m.start() - 30) : m.start()]
+        if _negation_check():
+            before = re.split(r"[.\n]", before)[-1]  # same sentence only
         if not re.search(r"\b(?:không|cấm|nghiêm\s*cấm)\b", before, re.I):
             return True
     return False
@@ -350,7 +362,7 @@ def rewrite_clause(original: str, flags: list[RedFlag]) -> str:
     out: list[tuple[str, str]] = []
     emitted: set[str] = set()
     for seg, sep in split_segments(_nfc(original)):
-        hit = [f for f in flags if _violates(f, seg)]
+        hit = [f for f in flags if _hits(f, seg)]
         dropped = any(d.search(seg) for f in flags for d in f.drop)
         if not hit and not dropped:
             out.append((seg, sep))
@@ -574,7 +586,7 @@ def check_labor_red_flags(
     by_num: dict[str, list[tuple[RedFlag, list[LegalCitation], list[str], list[str]]]] = defaultdict(list)
     originals: dict[str, str | None] = {}
     for flag in _FLAGS:
-        if not _violates(flag, body):
+        if not _hits(flag, body):
             continue
         num = _locate_clause(flag, body) or "?"
         if num not in originals:
@@ -601,7 +613,7 @@ def check_labor_red_flags(
             if cite is not None:
                 cites.append(cite)
             problems += probs
-        violated = sentences_matching(originals[num] or body, flag.pattern, accept=lambda s, f=flag: _violates(f, s))
+        violated = sentences_matching(originals[num] or body, flag.pattern, accept=lambda s, f=flag: _hits(f, s))
         by_num[num].append((flag, cites, problems, violated))
 
     return [
