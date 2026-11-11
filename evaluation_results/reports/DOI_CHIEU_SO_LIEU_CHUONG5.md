@@ -2,13 +2,13 @@
 
 Sinh bởi `python -m evaluation.check_chapter_numbers`. Chỉ báo, không sửa chương.
 
-Tổng 172 số: **171 khớp, 1 lệch**.
+Tổng 172 số: **172 khớp, 0 lệch**.
 
 ## Lệch
 
 | Vị trí | Mục | Trong chương | Thực tế |
 |---|---|---|---|
-| 5.5.3 | trung bình số ĐIỀU khác bị gắn cờ (không tính cờ toàn văn) | 5.4 | 4.4167 |
+| - | không có | - | - |
 
 ## Toàn bộ
 
@@ -139,7 +139,7 @@ Tổng 172 số: **171 khớp, 1 lệch**.
 | 5.5.3 | ca có mục khác bị gắn cờ (kể cả cờ toàn văn, ref rỗng) | 48 | 48 | khớp |
 | 5.5.3 | trung bình số mục khác bị gắn cờ (tính cả cờ toàn văn) | 5.4 | 5.4167 | khớp |
 | 5.5.3 | ca có ít nhất một Điều khác (có số) bị gắn cờ | 48 | 48 | khớp |
-| 5.5.3 | trung bình số ĐIỀU khác bị gắn cờ (không tính cờ toàn văn) | 5.4 | 4.4167 | LỆCH |
+| 5.5.3 | trung bình số ĐIỀU khác bị gắn cờ (không tính cờ toàn văn) | 4.4 | 4.4167 | khớp |
 | 5.6 | số cờ trên hợp đồng nền | 8 | 8 | khớp |
 | 5.6 | cờ warning | 7 | 7 | khớp |
 | 5.6 | cờ critical | 1 | 1 | khớp |

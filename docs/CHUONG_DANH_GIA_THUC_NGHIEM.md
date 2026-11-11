@@ -139,7 +139,7 @@ Một ca được tính là dương tính khi Điều bị bơm có cờ `critic
 
 - Pipeline bắt **24/24** ca vi phạm, kể cả các ca viết khác mẫu mà luật cố định bỏ sót.
 - Nhưng 15/24 ca hợp lệ (62%) bị gắn cờ: 8 biến thể hợp pháp, 5 câu phủ định, 1 số bằng chữ, 1 câu dài.
-- Ở cả 48/48 ca, các Điều khác ngoài Điều bị bơm cũng bị gắn cờ (trung bình 5,4 Điều mỗi ca).
+- Ở cả 48/48 ca, các Điều khác ngoài Điều bị bơm cũng bị gắn cờ (trung bình 4,4 Điều có số mỗi ca; 5,4 nếu tính cả cờ ở cấp toàn văn).
 
 ## 5.6. Thí nghiệm 4: hợp đồng nền không bơm lỗi (RQ3)
 

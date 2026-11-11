@@ -174,7 +174,7 @@ def section_injection() -> None:
     num(48, sum(1 for x in flags if x), w, "ca có mục khác bị gắn cờ (kể cả cờ toàn văn, ref rỗng)")
     num(5.4, sum(len(x) for x in flags) / 48, w, "trung bình số mục khác bị gắn cờ (tính cả cờ toàn văn)", 1)
     num(48, sum(1 for x in flags if any(x)), w, "ca có ít nhất một Điều khác (có số) bị gắn cờ")
-    num(5.4, sum(len([y for y in x if y]) for x in flags) / 48, w, "trung bình số ĐIỀU khác bị gắn cờ (không tính cờ toàn văn)", 1)
+    num(4.4, sum(len([y for y in x if y]) for x in flags) / 48, w, "trung bình số ĐIỀU khác bị gắn cờ (không tính cờ toàn văn)", 1)
     # 5.6 hợp đồng nền
     bf = json.loads(read(ER / "injection/base_contract_flags.json"))
     sev = collections.Counter(r["severity"] for r in bf["risks"])
