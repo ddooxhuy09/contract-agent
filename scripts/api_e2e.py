@@ -1,10 +1,12 @@
 """Chạy một hợp đồng demo qua API N lần liên tiếp, in số Điều chưa kiểm mỗi lần.
 
   python api_e2e.py [base_url] [runs]
-Tạo tài khoản thử trên API cục bộ (email *.test, mật khẩu ngẫu nhiên, không in ra).
+Tạo tài khoản thử trên API cục bộ (email e2e-*@example.com, mật khẩu ngẫu nhiên, không in ra),
+rồi hỏi đáp một câu trên hợp đồng vừa phân tích. Chạy từ thư mục dự án, không chạy từ thư mục Temp.
 """
 import io
 import json
+import re
 import secrets
 import sys
 import time
@@ -15,6 +17,7 @@ from docx import Document
 
 BASE = sys.argv[1] if len(sys.argv) > 1 else "http://127.0.0.1:8011"
 RUNS = int(sys.argv[2]) if len(sys.argv) > 2 else 5
+QUESTION = "Người lao động có được nghỉ phép năm không?"
 DEMO = next(Path("data/demo_contracts").glob("*.md"))
 
 doc = Document()
@@ -46,6 +49,14 @@ for i in range(1, RUNS + 1):
         risks = body.get("risks") or body.get("risk_items") or []
         row.update(chua_kiem=cov.get("chua_kiem"), da_kiem=cov.get("da_kiem"), tong=cov.get("tong_so_dieu"),
                    chi_tiet=cov.get("chua_kiem_chi_tiet"), so_rui_ro=len(risks))
+        qa = c.post("/chat", json={"contract_id": cid, "question": QUESTION})
+        if qa.status_code == 200:
+            ans = qa.json()
+            row.update(qa_hoi_lai=ans.get("needs_clarification"), qa_dai=len(ans.get("answer") or ""),
+                       qa_co_trich_dan=bool(re.search(r"Điều\s+\d+", ans.get("answer") or "")))
+        else:
+            row["qa_error"] = qa.text[:200]
+        row["seconds"] = round(time.time() - t0)
     else:
         row["error"] = an.text[:300]
     results.append(row)
