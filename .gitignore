@@ -90,3 +90,5 @@ dataset.csv
 .serena/
 Claude outputs/
 docs/prompts/
+
+CLAUDE.md
