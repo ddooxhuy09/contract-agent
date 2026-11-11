@@ -106,6 +106,10 @@ python -m pytest tests/integration -q                  # cần stack đang chạ
 
 Test unit không cần Postgres/Neo4j/Gemini (hiện 227 passed, 1 skipped khi có thư mục `data/` và `evaluation_results/`; clone mới không có hai thư mục này sẽ fail 17 test đọc dữ liệu, xem `docs/test_baseline.txt`).
 
+## Đánh giá
+
+Kết quả đánh giá thực nghiệm nằm ở [`docs/CHUONG_DANH_GIA_THUC_NGHIEM.md`](docs/CHUONG_DANH_GIA_THUC_NGHIEM.md) (chương 5), tóm tắt hai bộ test để trình bày ở [`docs/bo_test_hoi_dong/`](docs/bo_test_hoi_dong/), số liệu thô và báo cáo ở [`evaluation_results/`](evaluation_results/). Cấu hình được đánh giá: truy xuất **vector-only**, judge **Groq `openai/gpt-oss-120b`** (nhiệt độ 0), `RED_FLAG_NEGATION_CHECK` **tắt** (mặc định). Các bộ ca đã đóng băng (tag `injection-frozen`, `injection-v2-frozen`, `legalqa-split-frozen`) không được sửa. Checklist buổi demo: [`docs/DEMO_CHECKLIST.md`](docs/DEMO_CHECKLIST.md).
+
 ## Tài liệu
 
 | Cần gì | Đọc |
