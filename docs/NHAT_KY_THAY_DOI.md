@@ -168,3 +168,8 @@ Số liệu chính để quyết định: **exact provision recall của `final_
   Dừng API: `Get-CimInstance Win32_Process | ? { $_.CommandLine -match 'uvicorn.*8011' } | % { Stop-Process -Id $_.ProcessId -Force }`.
 - **Phát hiện kèm theo:** `requirements.txt` thiếu `langchain-groq` (đã thêm `langchain-groq==1.1.2`). Container `contractlens-api-1` đang chạy được tạo trước đó nên chưa có gói này và chưa có biến `GROG_KEY`; muốn demo Docker dùng Groq phải dựng lại: `docker compose up -d --build api`. Tôi chưa dựng lại vì nó thay stack đang chạy của bạn.
 - **Tác dụng phụ của 5 lần chạy API:** tạo 1 tài khoản thử `e2e-*@example.com` và 5 bản ghi hợp đồng thử trong DB dự án (cổng 5433). Chưa xóa.
+
+## 2026-11-11 chốt deadline
+- **P0-A1 (git):** commit `6909191` gồm chương 5 (sửa mô tả 93 câu nhiều dòng nhãn; commit pipeline 48 ca ở bảng 5.9; thêm mối đe doạ "lần chạy 48 ca không gắn commit sạch" ở 5.10; Điều 17 khoản 2 sửa thành khoản 1), `BASE_CONTRACT_FLAGS.md` (cùng sửa Điều 17) và `docs/bo_test_hoi_dong/` (BO_TEST_HOI_DONG.md, REVIEW_BO_TEST_HOP_DONG.csv). Các sửa này không động đến `cases.jsonl` hay kết quả đo.
+- **P0-A2/3:** `docs/dfd.md` (bản viết lại theo mã hiện tại) được commit theo quyết định của tác giả (`d389d0e`); `CLAUDE.md` đưa vào `.gitignore` (`6a97469`).
+- **P0-A4 (kiểm tra trước push):** trong 25+ commit chưa đẩy không có `.env`, key hay token (chỉ có tên biến trong `.env.example`/README), không có dữ liệu hợp đồng thật; file >5 MB duy nhất là `tests/fixtures/legal_qa.jsonl` (15 MB, test cần).
