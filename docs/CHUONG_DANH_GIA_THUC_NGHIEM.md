@@ -30,7 +30,7 @@ Báo cáo đánh giá trước đây của dự án (bộ v04, 34 câu) có hai 
 
 ### 5.3.1. Dữ liệu
 
-- **Nguồn:** `data/dataset.csv`, 3.298 dòng, 3.196 câu hỏi, 724 văn bản. Mỗi câu có nhãn là cặp (số hiệu văn bản, số Điều); 93 câu có hai cặp nhãn.
+- **Nguồn:** `data/dataset.csv`, 3.298 dòng, 3.196 câu hỏi, 724 văn bản. Mỗi câu có nhãn là cặp (số hiệu văn bản, số Điều); 93 câu có nhiều hơn một dòng nhãn (84 câu có hai dòng, 9 câu có từ ba dòng trở lên).
 - **Xuất xứ:** đối chiếu toàn bộ 3.196 câu với bộ Hugging Face `DaHaDaHa/zac2021`: 100% trùng mã câu hỏi, nội dung câu hỏi và nhãn. Theo tên và cấu trúc, đây là dữ liệu cuộc thi Zalo AI Challenge 2021 – Legal Text Retrieval; tuy nhiên trang Hugging Face không có mô tả nên mối liên hệ với cuộc thi và giấy phép **chưa được kiểm chứng độc lập** (`evaluation_results/legal_qa/NGUON_DATASET.md`).
 - **Chia dev/test:** theo văn bản (băm MD5 số hiệu văn bản, 20% dev), để câu hỏi của cùng một văn bản không nằm ở cả hai tập: dev 523 câu, test 2.673 câu. Đóng băng ở tag `legalqa-split-frozen`.
 
@@ -156,7 +156,7 @@ Một ca được tính là dương tính khi Điều bị bơm có cờ `critic
 Hai lỗi của judge đáng chú ý:
 
 - **Áp sai số liệu luật:** cờ `critical` duy nhất (Điều 8) sai về thời hạn báo trước.
-- **Khuyến nghị trái luật:** ở Điều 5, judge đề nghị người sử dụng lao động giữ bản chính giấy tờ của người lao động, trong khi Điều 17 khoản 2 cấm việc này. Judge cũng hai lần trích Nghị định 27/2014, văn bản chỉ áp dụng cho lao động giúp việc gia đình.
+- **Khuyến nghị trái luật:** ở Điều 5, judge đề nghị người sử dụng lao động giữ bản chính giấy tờ của người lao động, trong khi Điều 17 khoản 1 cấm việc này. Judge cũng hai lần trích Nghị định 27/2014, văn bản chỉ áp dụng cho lao động giúp việc gia đình.
 
 Quan sát thêm (sau khi xem dữ liệu, mẫu nhỏ, chỉ mang tính gợi ý): trong lần chạy 48 ca, ca hợp lệ đặt vào các Điều mà hợp đồng nền đã bị gắn cờ sẵn bị gắn cờ 14/21 lần; ca đặt vào Điều 4 (nền không bị gắn cờ) chỉ 1/3. Nghĩa là phần lớn báo nhầm có thể đến từ xu hướng gắn cờ sẵn của judge trên các Điều đó, không nhất thiết do nội dung ca. Chỉ số khai báo ban đầu ở bảng 5.5 được giữ nguyên.
 
@@ -211,6 +211,7 @@ Với công cụ sàng lọc rủi ro, bỏ sót vi phạm nguy hiểm hơn báo
 - **Một model, một lần chạy:** judge Groq `gpt-oss-120b`, nhiệt độ 0, chưa đo độ lặp lại; kết quả không so sánh được với Gemini.
 - **Benchmark truy xuất:** chỉ 20,8% câu test có điều gold còn hiệu lực trong kho; tập con này nghiêng về văn bản còn hiệu lực. Nguồn dữ liệu chưa xác định được giấy phép. Chia dev/test riêng của đề tài, nên không so trực tiếp với kết quả công bố dùng split gốc.
 - **Quy trình:** lần chạy test của `hybrid + V3` thực hiện sau khi đã thấy kết quả test của ba cấu hình còn lại, do lỗi khoá test (khoá đặt theo mode, chặn nhầm V3). Thay đổi giữa hai commit chỉ ở tên file khoá, không đụng logic truy xuất; ghi trong nhật ký.
+- **Mã chưa commit lúc chạy pipeline 48 ca:** phần tích hợp judge Groq được viết và chạy trước khi commit; kết quả ghi commit `ed30fdd`, mã Groq chỉ có trong commit `f23ba86` (cùng commit chứa kết quả). Vì vậy lần chạy này không gắn với một commit sạch.
 - **Hợp đồng nền chưa sạch hoàn toàn** (thiếu thông tin Điều 21), ảnh hưởng đến cách đọc số cờ ở Điều khác.
 
 ## 5.11. Hướng phát triển
@@ -231,6 +232,6 @@ Với công cụ sàng lọc rủi ro, bỏ sót vi phạm nguy hiểm hơn báo
 | Truy xuất: dev | — | `551e9e2` | `legal_qa/DEV_BIEN_THE.md` |
 | Truy xuất: test | khoá `legal_qa/test_locks/` | `ae9e230`, `78d4437` (V3) | `legal_qa/TEST_KET_QUA.md`, tag `legalqa-test-done` |
 | Chọn cấu hình (v04) | quy tắc trong `docs/NHAT_KY_THAY_DOI.md` | `087256a`; đổi mặc định `7148b39` | `evaluation_results/reports/RAG_V04_HYBRID_VS_VECTOR.md` |
-| Bơm lỗi 80 ca | tag `injection-frozen` (`e268fcb`) | rule-only `ed30fdd`; pipeline `f23ba86` | `injection/REPORT_rule_only.md`, `injection/REPORT_full.md`, `injection/BAO_CAO.md` |
-| Hợp đồng nền | — | `84c8d5e` | `injection/BASE_CONTRACT_FLAGS.md` |
+| Bơm lỗi 80 ca | tag `injection-frozen` (`e268fcb`) | rule-only `ed30fdd`; pipeline: mã tại `ed30fdd` cộng phần judge Groq chưa commit lúc chạy, kết quả commit ở `f23ba86` | `injection/REPORT_rule_only.md`, `injection/REPORT_full.md`, `injection/BAO_CAO.md` |
+| Hợp đồng nền | — | chạy ở `f23ba86`, kết quả commit ở `84c8d5e` | `injection/BASE_CONTRACT_FLAGS.md` |
 | Phủ định | tag `injection-v2-frozen` (`fab1cef`) | cũ `fab1cef`, mới `04f1e6c`; đưa vào cờ, tắt mặc định `6ba982d` | `injection_v2/BAO_CAO.md` |
