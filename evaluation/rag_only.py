@@ -1,4 +1,4 @@
-"""Real retrieval-only benchmark: local BGE, PostgreSQL and Neo4j; no LLM client."""
+"""Real retrieval-only benchmark: local BGE and PostgreSQL; no LLM client."""
 from __future__ import annotations
 
 import asyncio
@@ -102,7 +102,6 @@ async def run(args):
     from app.infrastructure.db.contract_chunk_repository import PgContractChunkRepository
     from app.infrastructure.db.user_repository import PgUserRepository
     from app.infrastructure.storage.local_storage import LocalObjectStorage
-    from app.infrastructure.neo4j.graph_repository import Neo4jGraphRepository
     from app.infrastructure.retrieval.context import bind_retrieval, get_graph_rag
     from app.infrastructure.retrieval.query_rewrite import augment_qa_retrieval_query
     from app.vectorstore.retriever import retrieve_contract, retrieve_legal
@@ -122,10 +121,10 @@ async def run(args):
     write_json(output / "execution_metadata.json", metadata)
     print("RAG-only: Gemini credential absent, no LLM client is instantiated.", flush=True)
     metadata["corpus_before"] = fingerprints()
-    embedder, graph = HuggingFaceEmbedder(), Neo4jGraphRepository()
+    embedder = HuggingFaceEmbedder()
     contracts, chunks = PgContractRepository(), PgContractChunkRepository()
     legal_search = PgLegalVectorSearch(embedder)
-    bind_retrieval(PgContractVectorSearch(embedder), legal_search, graph, PgLegalChunkRepository(), chunks)
+    bind_retrieval(PgContractVectorSearch(embedder), legal_search, PgLegalChunkRepository(), chunks)
     rag = get_graph_rag()
     print("Loading cached BGE-M3 only...", flush=True)
     warmup = time.perf_counter()
@@ -183,7 +182,6 @@ async def run(args):
             print(f"RAG {case['id']} {pred['status']} {pred['retrieval_ms']:.0f}ms", flush=True)
     finally:
         observer.restore()
-        graph.close()
         metadata["finished_at"] = now()
         metadata["status_counts"] = dict(Counter(p["status"] for p in predictions))
         metadata["corpus_after"] = fingerprints()

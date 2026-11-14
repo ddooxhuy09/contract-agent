@@ -37,7 +37,7 @@ def settings_summary():
     s = get_settings()
     u = urlsplit(s.database_url)
     names = ("llm_provider", "groq_model", "gemini_model", "embedding_model", "embedding_dim", "embedding_device", "embedding_normalize",
-             "embedding_max_seq_length", "top_k_retrieval", "similarity_threshold", "legal_expand_backend",
+             "embedding_max_seq_length", "top_k_retrieval", "similarity_threshold",
              "rag_labor_scope", "legal_retrieval_mode", "legal_fts_query", "legal_article_chunks_only",
              "legal_rrf_weight_vector", "legal_rrf_weight_fts")
     return {**{n: getattr(s, n) for n in names}, "provider": "gemini", "temperature": 0,
@@ -51,7 +51,7 @@ def error_info(exc):
     from app.core.settings import get_settings
     s = get_settings()
     message = str(exc)
-    for secret in (*s.gemini_api_keys, s.neo4j_password, urlsplit(s.database_url).password):
+    for secret in (*s.gemini_api_keys, urlsplit(s.database_url).password):
         if secret:
             message = message.replace(secret, "[REDACTED]")
     return {"type": type(exc).__name__, "message": message[:4000]}
@@ -279,7 +279,7 @@ class Runtime:
         from app.infrastructure.retrieval.context import bind_retrieval, get_graph_rag
         self.container = build_container()
         c = self.container
-        bind_retrieval(c.contract_search, c.legal_search, c.graph, c.legal_chunks, c.contract_chunks)
+        bind_retrieval(c.contract_search, c.legal_search, c.legal_chunks, c.contract_chunks)
         # Same configured embedder. Failure is not converted into a different model.
         await asyncio.to_thread(c.embedder.embed_query, "warmup")
         if self.isolated:
@@ -381,5 +381,3 @@ class Runtime:
         if self.isolated:
             from app.agents.checkpointer import close_checkpointer
             await close_checkpointer()
-        if self.container:
-            self.container.graph.close()

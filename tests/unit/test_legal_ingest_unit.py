@@ -65,31 +65,10 @@ class FakeEmbedder:
         return [0.1] * 8
 
 
-class FakeGraph:
-    def __init__(self):
-        self.calls = []
-
-    def ensure_schema(self):
-        pass
-
-    def upsert_document_tree(self, **kwargs):
-        self.calls.append(("tree", kwargs))
-
-    def upsert_doc_relations(self, relations):
-        self.calls.append(("rels", relations))
-
-    def upsert_chunk_relations(self, relations):
-        pass
-
-    def expand(self, chunk_refs, limit=80):
-        return {"seeds": chunk_refs, "sibling_paths": [], "ancestor_paths": [], "related_docs": []}
-
-
 def test_ingest_legal_document_skeleton():
     docs = FakeLegalDocs()
     chunks = FakeLegalChunks()
-    graph = FakeGraph()
-    result = IngestLegalDocument(docs, chunks, FakeEmbedder(), graph).execute(
+    result = IngestLegalDocument(docs, chunks, FakeEmbedder()).execute(
         thuoc_tinh={
             "doc_id": "d1",
             "doc_num": "1/2024",
@@ -122,4 +101,3 @@ def test_ingest_legal_document_skeleton():
     assert chunks.chunks[0].embedding is not None
     assert chunks.chunks[0].path == "d1.C1.D1.K1.a"
     assert len(chunks.nodes) == 1
-    assert graph.calls

@@ -1,6 +1,6 @@
 -- =============================================================================
 -- ContractLens — Postgres schema v2.1 (EMPTY bootstrap)
--- Mirror: schemas/empty/contractlens_postgres.sql  |  Neo4j: schema.cypher
+-- Mirror: schemas/empty/contractlens_postgres.sql
 -- Hierarchy = full FK chain doc→part→…; only parts.doc_id (+ embeddings.doc_id)
 -- Missing levels stored as title/content='Không có'; RAG ltree stays sparse
 -- Chunks+RAG = legal_embeddings (UNIQUE path ltree; chunk_type on embeddings)
@@ -341,7 +341,7 @@ CREATE TABLE IF NOT EXISTS legal_document_relations (
 );
 
 COMMENT ON TABLE legal_document_relations IS
-  'doc_id ↔ doc_id edges (luoc_do). Neo4j mirrors same id pairs.';
+  'doc_id ↔ doc_id edges (luoc_do). Read by GraphRAG expand (related / repealing docs).';
 
 CREATE INDEX IF NOT EXISTS idx_ldr_from ON legal_document_relations (from_doc_id);
 CREATE INDEX IF NOT EXISTS idx_ldr_to ON legal_document_relations (to_doc_id);

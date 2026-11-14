@@ -119,7 +119,6 @@ def audit_benchmark():
 
 def inspect_corpus():
     import psycopg2
-    from neo4j import GraphDatabase
     from app.core.settings import get_settings
     s = get_settings()
     provisions, laws, edges = load("LEGAL_PROVISIONS.json"), load("LEGAL_DOCUMENTS_STATUS.json"), load("LEGAL_RELATION_GRAPH.json")
@@ -170,21 +169,22 @@ def inspect_corpus():
             result["path_relation_count"] = cur.fetchone()[0]
             cur.execute("SELECT count(*) FROM legal_embeddings WHERE doc_id=ANY(%s) AND (chunk_text ILIKE %s OR chunk_text ILIKE %s OR chunk_text ILIKE %s)", (ids, '%placeholder%', '%chưa xác minh%', '%unverified%'))
             result["placeholder_marker_count_in_requested_documents"] = cur.fetchone()[0]
+            edge_sql = ("SELECT from_doc_id AS source_doc_id,to_doc_id AS target_doc_id,relation_type AS type "
+                        "FROM legal_document_relations WHERE from_doc_id=ANY(%s) AND to_doc_id=ANY(%s)")
+            cur.execute("SELECT relation_type,count(*) FROM legal_document_relations GROUP BY relation_type")
+            result["graph_counts"] = [{"relationship_type": r[0], "count": r[1]} for r in cur.fetchall()]
+            for edge in edges:
+                src, dst = docmap.get(norm_law(edge["source_law_id"]), []), docmap.get(norm_law(edge["target_law_id"]), [])
+                cur.execute(edge_sql, (src, dst))
+                forward = [dict(zip(("source_doc_id", "target_doc_id", "type"), r)) for r in cur.fetchall()]
+                cur.execute(edge_sql, (dst, src))
+                reverse = [dict(zip(("source_doc_id", "target_doc_id", "type"), r)) for r in cur.fetchall()]
+                result["graph_coverage"].append({"benchmark_edge_id": edge["edge_id"], "benchmark_type": edge["type"],
+                                                  "source_law": edge["source_law_id"], "target_law": edge["target_law_id"],
+                                                  "observed_directed_document_edges": forward,
+                                                  "observed_reverse_document_edges": reverse,
+                                                  "exact_scope_verified": False})
         conn.rollback()
-        driver = GraphDatabase.driver(s.neo4j_uri, auth=(s.neo4j_user, s.neo4j_password))
-        try:
-            with driver.session() as session:
-                result["graph_counts"] = [dict(row) for row in session.run("MATCH ()-[r]->() RETURN type(r) AS relationship_type,count(*) AS count")]
-                for edge in edges:
-                    records = session.run("MATCH (a:Document)-[r]->(b:Document) WHERE a.doc_id IN $a AND b.doc_id IN $b RETURN a.doc_id AS source_doc_id,b.doc_id AS target_doc_id,type(r) AS type,properties(r) AS properties", a=docmap.get(norm_law(edge["source_law_id"]), []), b=docmap.get(norm_law(edge["target_law_id"]), []))
-                    result["graph_coverage"].append({"benchmark_edge_id": edge["edge_id"], "benchmark_type": edge["type"],
-                                                      "source_law": edge["source_law_id"], "target_law": edge["target_law_id"],
-                                                      "observed_directed_document_edges": [dict(r) for r in records],
-                                                      "exact_scope_verified": False})
-                    reverse = session.run("MATCH (a:Document)-[r]->(b:Document) WHERE a.doc_id IN $a AND b.doc_id IN $b RETURN a.doc_id AS source_doc_id,b.doc_id AS target_doc_id,type(r) AS type,properties(r) AS properties", a=docmap.get(norm_law(edge["target_law_id"]), []), b=docmap.get(norm_law(edge["source_law_id"]), []))
-                    result["graph_coverage"][-1]["observed_reverse_document_edges"] = [dict(r) for r in reverse]
-        finally:
-            driver.close()
     finally:
         conn.close()
     return result
@@ -192,7 +192,7 @@ def inspect_corpus():
 
 def render_coverage(audit, coverage):
     lines = ["# CORPUS COVERAGE REPORT — Existing Corpus Baseline", "", f"Snapshot: {coverage.get('snapshot_at', now())}", "",
-             "Corpus được sao chép vật lý từ hai volume đang dừng; inference chỉ chạy trên bản sao. Không bổ sung corpus luật benchmark.", "",
+             "Corpus được sao chép vật lý từ volume PostgreSQL đang dừng; inference chỉ chạy trên bản sao. Không bổ sung corpus luật benchmark.", "",
              f"- Metadata văn bản: {coverage.get('document_metadata_rows')}; văn bản có chunk: {coverage.get('documents_with_chunks')}.",
              f"- Chunk: {coverage.get('chunk_count')}; có embedding: {coverage.get('embedded_chunk_count')}; is_effective=true: {coverage.get('effective_chunk_count')}.",
              "- Metadata văn bản có thể là stub do ingest quan hệ; chỉ số có chunk được báo cáo riêng.", "",

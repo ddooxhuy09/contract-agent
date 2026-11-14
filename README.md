@@ -1,6 +1,6 @@
 # ContractLens — AI rà soát hợp đồng lao động tiếng Việt
 
-Stack: FastAPI · Postgres/pgvector · Neo4j · Groq (gpt-oss-120b) / Gemini · BAAI/bge-m3 · React (Vite)
+Stack: FastAPI · Postgres/pgvector (ltree) · Groq (gpt-oss-120b) / Gemini · BAAI/bge-m3 · React (Vite)
 
 Phạm vi: hợp đồng lao động. Đây không phải tư vấn pháp lý; xem [`docs/PHAM_VI.md`](docs/PHAM_VI.md).
 
@@ -47,9 +47,6 @@ Lần đầu API sẽ tải model embedding (`BAAI/bge-m3`) — có thể mất 
 docker compose up -d postgres
 powershell -File scripts\restore_db.ps1
 
-# Neo4j (neo4j.dump): tuỳ chọn, chỉ cần khi LEGAL_EXPAND_BACKEND=neo4j|both (mặc định postgres)
-# docker compose --profile neo4j up -d neo4j; powershell -File scripts\restore_neo4j.ps1
-
 docker compose up -d
 ```
 
@@ -58,8 +55,6 @@ docker compose up -d
 ```bash
 docker compose up -d postgres
 sh scripts/restore_db.sh
-# Tuỳ chọn (LEGAL_EXPAND_BACKEND=neo4j|both):
-# docker compose --profile neo4j up -d neo4j && ./scripts/restore_neo4j.sh
 docker compose up -d
 ```
 
@@ -74,7 +69,7 @@ docker compose down             # dừng stack
 ## Yêu cầu và phát triển cục bộ
 
 - Docker Desktop (cách chạy chính, xem trên). Image API dùng Python 3.12, image frontend dùng Node 22; máy dev hiện kiểm thử với Python 3.11.
-- Chạy backend ngoài Docker (cần Postgres/Neo4j đang chạy, ví dụ `docker compose up -d postgres neo4j`):
+- Chạy backend ngoài Docker (cần Postgres đang chạy, ví dụ `docker compose up -d postgres`):
 
 ```bash
 pip install -r requirements.txt
@@ -93,9 +88,9 @@ cd frontend && npm install && npm run dev      # lint: npm run lint, build: npm 
 | LLM | `LLM_PROVIDER` (`groq` mặc định | `gemini`), `GROQ_MODEL` (mặc định `openai/gpt-oss-120b`) |
 | LLM dự phòng (Gemini) | `GEMINI_API_KEY_1`, `GEMINI_API_KEY_2`, `GEMINI_API_KEY_3`: key bổ sung. Khi key đang dùng hết quota theo ngày, client chuyển sang key kế tiếp (`app/agents/llm_client.py`). Quota theo phút vẫn chờ rồi thử lại trên cùng key. |
 | LLM / embedding | `GEMINI_MODEL`, `EMBEDDING_MODEL`, `EMBEDDING_DIM`, `EMBEDDING_DEVICE`, `EMBEDDING_TRUST_REMOTE_CODE`, `EMBEDDING_NORMALIZE`, `EMBEDDING_MAX_SEQ_LENGTH`, `HF_TOKEN` |
-| Database | `DATABASE_URL`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `POSTGRES_PORT`, `NEO4J_URI`, `NEO4J_USER`, `NEO4J_PASSWORD` |
+| Database | `DATABASE_URL`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `POSTGRES_PORT` |
 | Auth / API | `JWT_ALGORITHM`, `JWT_EXPIRE_MINUTES`, `CORS_ORIGINS`, `UPLOAD_DIR`, `MAX_UPLOAD_MB`, `LOGIN_MAX_FAILURES`, `LOGIN_WINDOW_SECONDS`, `API_PORT`, `FRONTEND_PORT`, `VITE_API_BASE_URL` |
-| Retrieval | `MAX_CHUNK_SIZE`, `CHUNK_OVERLAP`, `TOP_K_RETRIEVAL`, `SIMILARITY_THRESHOLD`, `LEGAL_EXPAND_BACKEND`, `RAG_LABOR_SCOPE` |
+| Retrieval | `MAX_CHUNK_SIZE`, `CHUNK_OVERLAP`, `TOP_K_RETRIEVAL`, `SIMILARITY_THRESHOLD`, `RAG_LABOR_SCOPE` |
 | Tùy chọn | `LANGCHAIN_API_KEY`, `LANGCHAIN_PROJECT`, `COMPOSE_PROJECT_NAME`, `DEV_RELOAD` |
 
 ### Test
@@ -105,7 +100,7 @@ python -m pytest tests -q --ignore=tests/integration   # unit + fixture QA, khô
 python -m pytest tests/integration -q                  # cần stack đang chạy
 ```
 
-Test unit không cần Postgres/Neo4j/Gemini (hiện 227 passed, 1 skipped khi có thư mục `data/` và `evaluation_results/`; clone mới không có hai thư mục này sẽ fail 17 test đọc dữ liệu, xem `docs/test_baseline.txt`).
+Test unit không cần Postgres/Gemini (hiện 227 passed, 1 skipped khi có thư mục `data/` và `evaluation_results/`; clone mới không có hai thư mục này sẽ fail 17 test đọc dữ liệu, xem `docs/test_baseline.txt`).
 
 ## Đánh giá
 
@@ -141,7 +136,7 @@ Path hierarchy / `legal_path_relations` root theo **số hiệu** (`100_2015_QH1
 
 ### Extract vs ingest (khi nào chạy gì)
 
-**Extract** = parse folder trong RAM (chưa ghi DB). **Ingest** = embed + upsert Postgres/Neo4j. Cả hai chạy khi gọi `ingest_legal_corpus` (trừ `--dry-run` chỉ extract).
+**Extract** = parse folder trong RAM (chưa ghi DB). **Ingest** = embed + upsert Postgres. Cả hai chạy khi gọi `ingest_legal_corpus` (trừ `--dry-run` chỉ extract).
 
 ```
 crawl → folder JSON/MD
@@ -161,7 +156,6 @@ IngestLegalDocument.execute (GHI DB) — thứ tự:
   3. embed → legal_embeddings (path, chunk_type, is_effective khởi tạo)
   4. legal_document_relations (luoc_do + stub doc nếu thiếu)
   5. legal_path_relations (dẫn chiếu nội bộ vừa extract)
-  6. Neo4j tree (nodes + chunks)
 
 clause_amendments — lệnh riêng: scripts.ingest_clause_amendments
   → cũng ghi legal_path_relations (sửa đổi/bãi bỏ, ref_type khác dan_chieu)
@@ -198,7 +192,7 @@ SELECT refresh_hierarchy_status_flags();     -- cấp Điều/Khoản/Điểm + 
 
 Query-time GraphRAG / citation vẫn so `as_of` với `eff_to` — không tin riêng nhãn “Còn hiệu lực”.
 
-Schema rỗng để dựng DB mới / gửi đối tác: `schemas/empty/` (`contractlens_postgres.sql`, `contractlens_neo4j.cypher`).
+Schema rỗng để dựng DB mới / gửi đối tác: `schemas/empty/` (`contractlens_postgres.sql`).
 
 ### 1) Crawl VBPL
 
@@ -215,12 +209,12 @@ Output: `data/crawl_data/documents/…`
 
 Bổ sung `muc_luc.json` (+ `clause_amendments.json` nếu có) vào từng folder trước khi ingest.
 
-### 2) Schema DB / Neo4j
+### 2) Schema DB
 
-DB mới: apply `schema.sql` (hoặc `schemas/empty/contractlens_postgres.sql`) + `schema.cypher`.  
-Docker Postgres đã mount `schema.sql` vào init. Neo4j: chạy constraint/index trong `schema.cypher`.
+DB mới: apply `schema.sql` (hoặc `schemas/empty/contractlens_postgres.sql`).  
+Docker Postgres đã mount `schema.sql` vào init.
 
-### 3) Ingest corpus → Postgres + Neo4j
+### 3) Ingest corpus → Postgres
 
 Extract (assemble) rồi ghi DB như mục **Extract vs ingest** ở trên.
 
@@ -280,7 +274,7 @@ python -m pytest tests/unit/test_legal_corpus_parser.py tests/unit/test_clause_a
 | `evaluation_results/` | **Kết quả** benchmark: `reports/` (tổng hợp) và `runs/` (từng lần chạy) |
 | `docs/` | Tài liệu thiết kế, slide, prompt. Xem `docs/README.md` |
 | `data/` | Dữ liệu cục bộ, không đưa lên git (dataset.csv, corpus mẫu, hợp đồng demo, upload) |
-| `schema.sql`, `schema.cypher` | Schema Postgres/Neo4j mà docker-compose và app nạp trực tiếp |
+| `schema.sql` | Schema Postgres mà docker-compose và app nạp trực tiếp |
 | `schemas/empty/` | Bản sao schema rỗng để bàn giao |
 
 ## API chính

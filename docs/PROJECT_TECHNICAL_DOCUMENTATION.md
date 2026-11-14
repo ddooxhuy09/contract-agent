@@ -22,7 +22,7 @@ Evidence: `app/main.py` (`title="ContractLens"`, `description="Hệ thống AI r
 
 **Mục đích (Implemented):** Web app cho phép người dùng đăng ký/đăng nhập, tải hợp đồng tiếng Việt (DOCX/PDF/ảnh), hệ thống trích điều khoản, đối chiếu với kho văn bản pháp luật đã ingest, gắn cờ rủi ro, rồi hỏi đáp trên hợp đồng đó.
 
-**Bài toán (Implemented, nhìn từ code):** rà soát hợp đồng (đặc biệt hợp đồng lao động có nhánh regex/deterministic riêng) so với corpus pháp luật Việt Nam lưu trong PostgreSQL + Neo4j, rồi trả báo cáo rủi ro và Q&A có retrieval.
+**Bài toán (Implemented, nhìn từ code):** rà soát hợp đồng (đặc biệt hợp đồng lao động có nhánh regex/deterministic riêng) so với corpus pháp luật Việt Nam lưu trong PostgreSQL, rồi trả báo cáo rủi ro và Q&A có retrieval.
 
 **Đối tượng sử dụng (Implemented):** người dùng có tài khoản email/mật khẩu. Không có phân quyền admin/role trong schema `users` — chỉ `id`, `email`, `password_hash`, `created_at`. Hợp đồng gắn `user_id`; API kiểm tra ownership qua JWT.
 
@@ -30,13 +30,12 @@ Evidence: `app/main.py` (`title="ContractLens"`, `description="Hệ thống AI r
 
 1. Frontend React (Vite) — UI đăng nhập, danh sách HĐ, upload, báo cáo, chat.
 2. Backend FastAPI monolith — auth, upload, analyze, chat.
-3. PostgreSQL 16 + pgvector + ltree — user, hợp đồng, chunk/embedding, corpus pháp luật, FTS.
-4. Neo4j 5 — cây mục lục + quan hệ văn bản cho GraphRAG expand (không lưu text/embedding).
-5. Gemini (Google Generative AI) — LLM.
-6. HuggingFace `BAAI/bge-m3` — embedding 1024 chiều.
-7. Scripts crawl VBPL + ingest corpus (chạy thủ công, không phải API runtime).
+3. PostgreSQL 16 + pgvector + ltree — user, hợp đồng, chunk/embedding, corpus pháp luật, FTS, cây mục lục + quan hệ văn bản cho GraphRAG expand.
+4. Gemini (Google Generative AI) — LLM.
+5. HuggingFace `BAAI/bge-m3` — embedding 1024 chiều.
+6. Scripts crawl VBPL + ingest corpus (chạy thủ công, không phải API runtime).
 
-Đây **không** phải microservices. Docker Compose chạy 4 process: `postgres`, `neo4j`, `api`, `frontend`. Backend là một ứng dụng FastAPI.
+Đây **không** phải microservices. Docker Compose chạy 3 process: `postgres`, `api`, `frontend`. Backend là một ứng dụng FastAPI.
 
 ---
 
@@ -76,10 +75,9 @@ Chỉ liệt kê dependency **có import/use**. Version Python packages trong `r
 | Tailwind CSS | `^3.4.19` | `frontend/tailwind.config.js` | Styling | UI |
 | PostgreSQL | image `pgvector/pgvector:pg16` | `docker-compose.yml`, `schema.sql` | DB chính | Users, contracts, legal corpus, vectors, FTS |
 | pgvector | extension `vector` | `schema.sql`, `app/infrastructure/vector/pg_search.py` | Vector search cosine/HNSW | Embedding HĐ + luật |
-| ltree | extension | `schema.sql`, legal paths | Cây Điều/Khoản/Điểm | Key RAG + expand |
+| ltree | extension | `schema.sql`, legal paths | Cây Điều/Khoản/Điểm | Key RAG + GraphRAG expand (`legal_repository.expand_paths`) |
 | pg_trgm | extension | `schema.sql` | Trigram search số hiệu/tiêu đề | Index `legal_documents` |
 | pgcrypto | extension | `schema.sql` | `gen_random_uuid()` | PK `users` |
-| Neo4j | image `neo4j:5` | `docker-compose.yml`, `app/infrastructure/neo4j/graph_repository.py` | Graph expand | GraphRAG hydrate (id/path only) |
 | psycopg2 | unpinned (`psycopg2-binary`) | `app/infrastructure/db/connection.py` | Sync DB | Repositories, schema apply, vector search |
 | psycopg / psycopg_pool | unpinned (`psycopg[binary]`) | `app/agents/checkpointer.py` | Async pool | LangGraph checkpointer + memory store |
 | LangGraph | unpinned | `app/agents/workflow.py`, `qa_agent.py` | State graphs | Analyze + QA pipelines |
@@ -98,7 +96,7 @@ Chỉ liệt kê dependency **có import/use**. Version Python packages trong `r
 | python-multipart | unpinned | FastAPI upload | Multipart file | `POST /upload` |
 | python-dotenv | unpinned | pydantic-settings `env_file=".env"`; `scripts/export_sample_excel.py` | Load env | Config |
 | email-validator | unpinned | `EmailStr` trên `AuthRequest` | Validate email | Register/login |
-| Docker Compose | file tại root | `docker-compose.yml` | Chạy stack local | postgres + neo4j + api + frontend |
+| Docker Compose | file tại root | `docker-compose.yml` | Chạy stack local | postgres + api + frontend |
 | Node.js | 22 (image `node:22-alpine`) | `frontend/Dockerfile` | Frontend container | Vite |
 
 ### 3.2 Có trong `requirements.txt` nhưng không thấy import trực tiếp
@@ -139,7 +137,7 @@ contract-agent/
 │   ├── core/                     # settings, prompts, logging
 │   ├── document/                 # Parse + chunk hợp đồng
 │   ├── domain/                   # Entities, ports, errors
-│   ├── infrastructure/           # DB, Neo4j, embeddings, retrieval, auth, storage
+│   ├── infrastructure/           # DB, embeddings, retrieval, auth, storage
 │   ├── schemas/                  # Pydantic API/domain DTOs
 │   └── vectorstore/              # Facade retrieve_contract / retrieve_legal
 ├── frontend/                     # React + Vite + Tailwind
@@ -151,7 +149,6 @@ contract-agent/
 ├── docs/                         # Tài liệu thiết kế bổ sung (không phải source of truth)
 ├── data/                         # Runtime uploads / crawl output (gitignore)
 ├── schema.sql                    # Postgres schema v2.1
-├── schema.cypher                 # Neo4j constraints/indexes
 ├── docker-compose.yml
 ├── Dockerfile
 ├── requirements.txt
@@ -165,7 +162,7 @@ contract-agent/
 |--------|------|----------|
 | `app/api` | HTTP | Gọi use cases |
 | `app/application/use_cases` | Orchestrate 1 use case | Gọi ports (repo, pipeline, storage) |
-| `app/infrastructure` | Adapter thật | Postgres, Neo4j, HF, Gemini, local files |
+| `app/infrastructure` | Adapter thật | Postgres, HF, Gemini, local files |
 | `app/agents` | Logic phân tích + QA | LangGraph; retrieval qua `vectorstore` + `infrastructure/retrieval` |
 | `app/infrastructure/legal_corpus` | Parse folder crawl → artifacts ingest | Được `scripts/ingest_*` gọi |
 | `app/infrastructure/retrieval` | GraphRAG, rewrite, scope filter | Bind lúc startup trong `main.py` |
@@ -193,7 +190,6 @@ flowchart TB
   end
   subgraph data [Datastores]
     PG[(PostgreSQL + pgvector + ltree)]
-    NJ[(Neo4j graph ids/paths)]
     FS[Local files data/uploads]
   end
   subgraph ext [External]
@@ -208,7 +204,6 @@ flowchart TB
   AG --> GEM
   AG --> HF
   AG --> PG
-  AG --> NJ
 ```
 
 **Phân tích hợp đồng (rút gọn):**
@@ -237,7 +232,7 @@ Frontend ChatTab
   → SSE step/done → UI
 ```
 
-`LEGAL_EXPAND_BACKEND` (mặc định `postgres` từ 15/11/2026; trước đó `neo4j`) chọn expand cây: Postgres ltree, Neo4j, hoặc merge cả hai. Neo4j chỉ được kết nối khi chọn `neo4j`/`both` (service compose profile `neo4j`). **Configured** qua env; code đọc ở `LegalGraphRag._expand`.
+Bước expand chạy hoàn toàn trên Postgres (`LegalGraphRag._expand` → `PgLegalChunkRepository.expand_paths`): anh em, tổ tiên và khoản cha theo `ltree`; văn bản liên quan và văn bản bãi bỏ/thay thế theo `legal_document_relations`. Trước 15/11/2026 bước này mặc định chạy trên Neo4j (biến `LEGAL_EXPAND_BACKEND`, nay đã bỏ); xem `docs/NHAT_KY_THAY_DOI.md`.
 
 ---
 
@@ -331,8 +326,7 @@ ChatTab.handleSend
 Folder crawl (thuoc_tinh.json, van_ban.md, muc_luc.json, optional luoc_do.json)
 → load_document_folder (assemble.py)
 → IngestLegalDocument.execute
-→ Postgres legal_* + embeddings
-→ Neo4j Document/Node/Chunk tree + doc relations
+→ Postgres legal_* + embeddings + legal_document_relations + legal_path_relations
 ```
 
 Không có HTTP endpoint ingest.
@@ -397,11 +391,10 @@ Không có UI cho review HITL, rewind, hay list checkpoint.
 1. Từ chối boot nếu `JWT_SECRET` trống hoặc `change-me-in-production`.
 2. `build_container()`.
 3. `apply_postgres_schema()` — chạy cả `schema.sql` (log warning nếu fail).
-4. `graph.ensure_schema()` — CREATE CONSTRAINT/INDEX từ `schema.cypher`.
-5. Gán `LangGraphAnalyzePipeline` / `LangGraphQaPipeline`.
-6. `bind_retrieval(...)`.
-7. `init_checkpointer()` (pool async + `AsyncPostgresSaver.setup()` + memory store).
-8. Warmup embed query `"warmup"`.
+4. Gán `LangGraphAnalyzePipeline` / `LangGraphQaPipeline`.
+5. `bind_retrieval(...)`.
+6. `init_checkpointer()` (pool async + `AsyncPostgresSaver.setup()` + memory store).
+7. Warmup embed query `"warmup"`.
 
 **Layers:**
 
@@ -409,7 +402,7 @@ Không có UI cho review HITL, rewind, hay list checkpoint.
 Route (app/api/routes.py)
   → Use case (application/use_cases)
   → Port implementation (infrastructure/*) hoặc LangGraph pipeline (agents/*)
-  → PostgreSQL / Neo4j / Gemini / local disk
+  → PostgreSQL / Gemini / local disk
 ```
 
 **Middleware:** chỉ `CORSMiddleware`. Không thấy rate-limit / request-id middleware riêng.
@@ -482,14 +475,12 @@ Cột HĐ quan trọng: `full_text`, `status`, `analysis JSONB`, `risks JSONB`, 
 
 **LangGraph tables:** `AsyncPostgresSaver.setup()` và `AsyncPostgresStore.setup()` tạo bảng checkpoint/store lúc startup. **Không** định nghĩa trong `schema.sql`. Tên bảng cụ thể: **Unknown** (do thư viện tạo).
 
-### 10.2 Neo4j (Implemented)
+### 10.2 Đồ thị pháp luật trong Postgres (Implemented)
 
-- Bolt `NEO4J_URI`. Driver official `neo4j`.
-- Constraints: `Document.doc_id`, `(Node.doc_id, path)`, `Chunk.path`.
-- Labels: `:Document`, `:Node`, `:Chunk`. Relationships: `HAS_NODE`, `PARENT_OF`, `OF_DOC`, `OF_NODE`, cộng map luoc_do → `REPEALS` / `SUPERSEDES` / `AMENDS` / … (xem `RELATION_TYPE_MAP`).
-- **Không** lưu `chunk_text` / embedding trên Neo4j (comment schema + code upsert chỉ id/path/type).
-
-**Neo4j methods Defined nhưng ingest không gọi:** `upsert_chunk_relations`, `sync_doc_status`, `bulk_sync_doc_status` — **Referenced / unused trong flow ingest hiện tại**. Expand GraphRAG dùng `expand()`.
+- Cây Phần→…→Điểm: cột `path` kiểu `ltree` ở các bảng hierarchy (`legal_parts` … `legal_points`) và `legal_embeddings`.
+- Cạnh văn bản↔văn bản: `legal_document_relations` (`relation_type` từ luoc_do: `can_cu_ban_hanh`, `dan_chieu`, `sua_doi_bo_sung`, `van_ban_bi_bai_bo`, `thay_the`, …). Cạnh path↔path: `legal_path_relations`.
+- Expand GraphRAG: `PgLegalChunkRepository.expand_paths` trả `sibling_paths`, `ancestor_paths`, `parent_clause_paths`, `related_docs`, `repealed_by_docs`.
+- Neo4j từng giữ bản sao đồ thị này (id/path, không text) và đã gỡ ngày 15/11/2026; xem `docs/NHAT_KY_THAY_DOI.md`.
 
 ### 10.3 Vector search (Implemented — pgvector, không có vector DB riêng)
 
@@ -583,7 +574,7 @@ Chunk luật: `van_ban_chunker.build_body_chunks` theo mục lục Điều/Kho�
 
 **Embedding:** `IngestLegalDocument` gọi `embedder.embed_documents` trên `chunk_text`.
 
-**Storage:** Postgres `legal_embeddings.path` UNIQUE; Neo4j tree song song.
+**Storage:** Postgres `legal_embeddings.path` UNIQUE; cây ở các bảng hierarchy (`ltree`).
 
 ### Retrieval (query time)
 
@@ -592,7 +583,7 @@ Query (title/summary/câu hỏi)
 → rewrite_legal_query / augment_qa_retrieval_query (rule-based)
 → PgLegalVectorSearch.search (vector + FTS + RRF)
 → filter_sector_mismatches
-→ LegalGraphRag._expand (Neo4j và/hoặc ltree)
+→ LegalGraphRag._expand (Postgres: ltree + legal_document_relations)
 → hydrate text Postgres get_texts_by_paths
 → related/superseding docs via search_in_docs
 → order: hiệu lực → cấp VB (normative_rank) → năm → role → score
@@ -632,7 +623,7 @@ Folder
 → discover_document_folders
 → load_document_folder
 → IngestLegalDocument.execute
-→ Postgres + Neo4j
+→ Postgres
 → checkpoint JSON (skip doc đã xong, trừ --force)
 ```
 
@@ -647,7 +638,6 @@ Folder
 | `backfill_risk_citation_links` | `risks` JSONB | quotes/links | làm giàu cache phân tích |
 | `export_sample_excel` | Postgres | xlsx | tài liệu mẫu; cần `openpyxl` |
 | `restore_db.ps1/.sh` | `contractlens_backup.dump` | restore PG | local data |
-| `restore_neo4j.ps1/.sh` | `neo4j.dump` | restore volume | local graph |
 
 Dump files **không** commit (gitignore `*.dump`). Có dump hay không trên máy: **Unknown**.
 
@@ -668,7 +658,7 @@ Không ghi secret. Không có SDK cloud khác trong code app.
 
 ## 15. Configuration
 
-Nguồn: `.env` + `app/core/settings.py` (`extra="ignore"`). Compose override `DATABASE_URL` / `NEO4J_URI` trong network Docker.
+Nguồn: `.env` + `app/core/settings.py` (`extra="ignore"`). Compose override `DATABASE_URL` trong network Docker.
 
 | Variable | Purpose | Required | Used where |
 |----------|---------|----------|------------|
@@ -684,7 +674,6 @@ Nguồn: `.env` + `app/core/settings.py` (`extra="ignore"`). Compose override `D
 | `HF_TOKEN` | tải model | optional | Compose env; HF hub |
 | `DATABASE_URL` | Postgres | cần để chạy API | connection, checkpointer |
 | `DB_POOL_MIN_SIZE` / `MAX_SIZE` / `TIMEOUT` | pool checkpointer | defaults 2/10/10 | settings — **không** có trong `.env.example` nhưng Settings có default |
-| `NEO4J_URI` / `USER` / `PASSWORD` | Neo4j | cần GraphRAG neo4j | graph_repository |
 | `JWT_ALGORITHM` | HS256 | không | jwt |
 | `JWT_EXPIRE_MINUTES` | default 10080 | không | jwt |
 | `UPLOAD_DIR` | thư mục file | không | local_storage, settings |
@@ -693,14 +682,13 @@ Nguồn: `.env` + `app/core/settings.py` (`extra="ignore"`). Compose override `D
 | `CHUNK_OVERLAP` | 120 | không | chunker |
 | `TOP_K_RETRIEVAL` | 5 | không | retrieve_contract |
 | `SIMILARITY_THRESHOLD` | 0.6 | không | legal search + QA weak-hit |
-| `SCHEMA_SQL_PATH` / `SCHEMA_CYPHER_PATH` | path schema | default files | schema_loader, neo4j |
-| `LEGAL_EXPAND_BACKEND` | postgres\|neo4j\|both | default postgres | LegalGraphRag |
-| `API_PORT` / `FRONTEND_PORT` / `POSTGRES_PORT` / `NEO4J_BOLT_PORT` | publish ports | Compose | docker-compose |
+| `SCHEMA_SQL_PATH` | path schema | default file | schema_loader |
+| `API_PORT` / `FRONTEND_PORT` / `POSTGRES_PORT` | publish ports | Compose | docker-compose |
 | `DEV_RELOAD` | uvicorn --reload | default 0 | Compose api command |
 | `VITE_API_BASE_URL` | frontend API | Compose default `:8010` | `api.js`, AuthContext |
 | `LANGCHAIN_TRACING_V2` / `API_KEY` / `PROJECT` | LangSmith | optional | Compose + .env.example |
 | `VBPL_COOKIE` | crawl | crawler | `scripts/crawl_vbpl/common.py` — **không** trong `.env.example` |
-| `COMPOSE_PROJECT_NAME` | tên project/volume | default contractlens | restore_neo4j.ps1 |
+| `COMPOSE_PROJECT_NAME` | tên project/volume | default contractlens | restore_db.ps1 |
 
 `.env` thật gitignored. Không document giá trị secret.
 
@@ -713,7 +701,6 @@ Nguồn: `.env` + `app/core/settings.py` (`extra="ignore"`). Compose override `D
 | Service | Image / build | Host port (default) | Volume | Start |
 |---------|---------------|---------------------|--------|-------|
 | `postgres` | `pgvector/pgvector:pg16` | 5433→5432 | `pgdata`; init `schema.sql` | health `pg_isready` |
-| `neo4j` | `neo4j:5` | 7688→7687 Bolt | `neo4jdata` | health wget `:7474` (7474 **không** publish) |
 | `api` | `Dockerfile` Python 3.12 | 8010→8000 | app bind-mount, uploads, hf_cache | uvicorn `app.main:app` |
 | `frontend` | `frontend/Dockerfile` Node 22 | 5173→5173 | src bind-mount | `npm run dev --host 0.0.0.0` |
 
@@ -721,7 +708,7 @@ Frontend **không** production-nginx: container chạy Vite dev. API image **kh�
 
 `docker/api-entrypoint.sh`: chmod cache/uploads rồi `exec` CMD.
 
-Mạng: network mặc định Compose; API dùng hostname `postgres` / `neo4j`.
+Mạng: network mặc định Compose; API dùng hostname `postgres`.
 
 ---
 
@@ -770,12 +757,12 @@ Không liệt kê hết hàm. Chỉ entry / xương sống.
 | `parse_contract` | `agents/clause_parser.py` | Extract metadata+clauses | full text | `ContractAnalysis` | `_extract_node` | regex + Gemini |
 | `answer_question` / `stream_answer_events` | `agents/qa_agent.py` | QA graph | question, contract_id | ChatResponse / SSE | pipeline | retrieve, Gemini |
 | `retrieve_contract` / `retrieve_legal` | `vectorstore/retriever.py` | Facade RAG | query | LangChain `Document[]` | QA, risk_flagger fallback | PG search / GraphRAG |
-| `LegalGraphRag.retrieve_for_clause` | `retrieval/legal_graph_rag.py` | Hybrid + expand | title/summary | `RetrievedChunk[]` | risk_flagger, retriever | vector search, graph.expand |
+| `LegalGraphRag.retrieve_for_clause` | `retrieval/legal_graph_rag.py` | Hybrid + expand | title/summary | `RetrievedChunk[]` | risk_flagger, retriever | vector search, `expand_paths` |
 | `PgLegalVectorSearch.search` | `vector/pg_search.py` | Hybrid RRF | query, k | chunks | GraphRAG | embed_query, SQL |
 | `HuggingFaceEmbedder` | `embeddings/hf_embedder.py` | Embed | texts | vectors | upload, ingest, search | HF model |
-| `IngestLegalDocument.execute` | `use_cases/legal_ingest.py` | Ghi corpus | artifacts | counts | ingest scripts | repos, embedder, Neo4j |
+| `IngestLegalDocument.execute` | `use_cases/legal_ingest.py` | Ghi corpus | artifacts | counts | ingest scripts | repos, embedder |
 | `load_document_folder` | `legal_corpus/assemble.py` | Extract folder | Path | dict artifacts | ingest_legal_corpus | chunker, luoc_do, muc_luc |
-| `Neo4jGraphRepository.expand` | `neo4j/graph_repository.py` | Graph hop | paths | sibling/ancestor/related | LegalGraphRag | Cypher |
+| `PgLegalChunkRepository.expand_paths` | `db/legal_repository.py` | Graph hop | paths | sibling/ancestor/related/repealed_by | LegalGraphRag | SQL ltree |
 | `JwtTokenService` | `auth/jwt_tokens.py` | JWT | user id | token / payload | auth use cases | PyJWT |
 | `chat_completion` | `agents/llm_client.py` | Gemini string | prompt | text | extract, judge, rewrite | ChatGoogleGenerativeAI |
 
@@ -792,7 +779,7 @@ Không liệt kê hết hàm. Chỉ entry / xương sống.
 | List contracts | `ContractListScreen` | `ListContracts` | `uploaded_contracts` | — | — |
 | Chat | `ChatTab` SSE | `/chat/stream`, `qa_agent.py` | chunks + legal + checkpoints + store | hybrid RAG + Gemini | Gemini, HF |
 | Chat history | `ChatTab` | `/chat/{id}/history` | LangGraph checkpoint | — | — |
-| Legal corpus | — | scripts + `IngestLegalDocument` | legal_* + Neo4j | BGE-M3 lúc ingest | vbpl.vn (crawl) |
+| Legal corpus | — | scripts + `IngestLegalDocument` | legal_* | BGE-M3 lúc ingest | vbpl.vn (crawl) |
 | Models list | `UploadScreen` | `GET /models` | — | đọc settings model name | — |
 
 ---
@@ -829,7 +816,7 @@ Nhìn từ implementation; rationale team không ghi thì ghi vậy.
 |------------|----------|-----------|
 | FastAPI monolith + React SPA | `app/`, `frontend/` | Not explicitly documented in source code |
 | Postgres vừa OLTP vừa vector vừa FTS | `schema.sql`, `pg_search.py` | Not explicitly documented in source code |
-| Neo4j chỉ graph id/path, text ở Postgres | `schema.cypher`, ingest | Comment schema: hydrate text từ PG |
+| GraphRAG expand trên Postgres (ltree + bảng quan hệ), không dùng graph DB riêng | `legal_repository.expand_paths`, `evaluation_results/runs/rag_expand_*_20261115/` | Benchmark 15/11/2026: Postgres bằng hoặc tốt hơn Neo4j, nhanh hơn, bớt một kho phải đồng bộ (`docs/NHAT_KY_THAY_DOI.md`) |
 | LangGraph cho analyze + QA | `workflow.py`, `qa_agent.py` | Code comment: supervisor, self-correct, HITL |
 | JWT local + bcrypt | auth modules | App refuse default JWT secret |
 | Local disk storage | `LocalObjectStorage` | Not explicitly documented in source code |
@@ -853,7 +840,7 @@ Nhìn từ implementation; rationale team không ghi thì ghi vậy.
 - Crawl không tạo `muc_luc.json`.
 - Trigger hiệu lực **không** chạy khi chỉ trôi ngày — README hướng dẫn gọi SQL tay.
 - `langchain-community`, `httpx`, `numpy` (trực tiếp): không thấy dùng.
-- `file_handler.py`, một số method Neo4j status/chunk-rel: unused trong flow chính.
+- `file_handler.py`: unused trong flow chính.
 - `container.chat_model` khởi tạo nhưng agent dùng `llm_client`.
 - `frontend/.env.example` port 8000 vs Compose 8010.
 - `export_sample_excel.py` cần `openpyxl` không kê `requirements.txt`.
@@ -885,7 +872,6 @@ Lần đầu API tải `BAAI/bge-m3`.
 ```powershell
 docker compose up -d postgres
 powershell -File scripts\restore_db.ps1
-powershell -File scripts\restore_neo4j.ps1
 docker compose up -d
 ```
 
@@ -893,7 +879,7 @@ docker compose up -d
 
 **Crawl:** `python -m scripts.crawl_vbpl.crawl_all` — cần `VBPL_COOKIE`.
 
-Chạy backend không Docker: `app/main.py` có `uvicorn.run(..., port=8000)` nhưng README chính thức là Compose. Port host tools: Postgres `5433`, Neo4j Bolt `7688` (`.env.example`).
+Chạy backend không Docker: `app/main.py` có `uvicorn.run(..., port=8000)` nhưng README chính thức là Compose. Port host tools: Postgres `5433` (`.env.example`).
 
 ---
 
@@ -942,13 +928,13 @@ Sửa RAG / GraphRAG
   → app/infrastructure/retrieval/legal_graph_rag.py
   → app/infrastructure/vector/pg_search.py
   → app/vectorstore/retriever.py
-  → app/infrastructure/neo4j/graph_repository.py
+  → app/infrastructure/db/legal_repository.py (expand_paths)
 
 Sửa embedding
   → app/infrastructure/embeddings/hf_embedder.py, app/core/settings.py
 
-Sửa schema Postgres / Neo4j
-  → schema.sql, schema.cypher (mirror schemas/empty/)
+Sửa schema Postgres
+  → schema.sql (mirror schemas/empty/)
 
 Sửa ingest luật
   → app/infrastructure/legal_corpus/assemble.py
@@ -971,7 +957,7 @@ Sửa test
 
 ### Project in One Paragraph
 
-ContractLens là đồ án web rà soát hợp đồng tiếng Việt: user đăng ký bằng email, tải file DOCX/PDF/ảnh, backend FastAPI parse–chunk–embed vào PostgreSQL (pgvector), rồi chạy một LangGraph phân tích (regex HĐLĐ + Gemini đối chiếu GraphRAG trên kho luật). Kho luật được crawl từ vbpl.vn và ingest offline vào Postgres (text, hierarchy ltree, embedding) và Neo4j (cây path, không lưu nội dung). User xem báo cáo rủi ro trên React và hỏi đáp qua SSE; câu trả lời grounded bằng retrieval hợp đồng + luật, có checkpointer Postgres cho lịch sử. Stack chạy local bằng Docker Compose (Postgres 16, Neo4j 5, API, Vite). Không có microservices, Redis, hay CI/CD trong repository này.
+ContractLens là đồ án web rà soát hợp đồng tiếng Việt: user đăng ký bằng email, tải file DOCX/PDF/ảnh, backend FastAPI parse–chunk–embed vào PostgreSQL (pgvector), rồi chạy một LangGraph phân tích (regex HĐLĐ + Gemini đối chiếu GraphRAG trên kho luật). Kho luật được crawl từ vbpl.vn và ingest offline vào Postgres (text, hierarchy ltree, embedding), cùng bảng quan hệ văn bản dùng cho GraphRAG. User xem báo cáo rủi ro trên React và hỏi đáp qua SSE; câu trả lời grounded bằng retrieval hợp đồng + luật, có checkpointer Postgres cho lịch sử. Stack chạy local bằng Docker Compose (Postgres 16, API, Vite). Không có microservices, Redis, hay CI/CD trong repository này.
 
 ### Architecture Diagram
 
@@ -982,13 +968,11 @@ flowchart LR
   API[FastAPI monolith]
   LG[LangGraph Analyze / QA]
   PG[(Postgres pgvector ltree)]
-  NJ[(Neo4j)]
   G[Gemini]
   E[BGE-M3]
   U --> FE --> API --> LG
   API --> PG
   LG --> PG
-  LG --> NJ
   LG --> G
   API --> E
   LG --> E
@@ -1003,11 +987,10 @@ flowchart LR
 | Analyze/QA orchestration | LangGraph | State machines | `app/agents/workflow.py`, `qa_agent.py` |
 | LLM | Gemini 2.5 Flash | Extract, judge, QA, OCR | `app/agents/llm_client.py` |
 | Embedding | BAAI/bge-m3 via LangChain HF | Vectors 1024 | `app/infrastructure/embeddings/` |
-| Primary DB | PostgreSQL 16 + pgvector | Data + hybrid search | `schema.sql`, `infrastructure/db/` |
-| Graph | Neo4j 5 | Expand cây/quan hệ | `schema.cypher`, `neo4j/` |
+| Primary DB | PostgreSQL 16 + pgvector + ltree | Data + hybrid search + GraphRAG expand | `schema.sql`, `infrastructure/db/` |
 | Auth | JWT HS256 + bcrypt | Sessions | `infrastructure/auth/` |
 | Files | Local disk | Uploads | `infrastructure/storage/` |
-| Runtime | Docker Compose | 4 containers | `docker-compose.yml` |
+| Runtime | Docker Compose | 3 containers | `docker-compose.yml` |
 
 ### Main Flow
 
@@ -1016,7 +999,7 @@ User
 → React (login / upload / report / chat)
 → FastAPI /api/v1
 → Use cases
-→ Postgres (± Neo4j expand)
+→ Postgres (vector + ltree expand)
 → LangGraph + Gemini + BGE-M3
 → JSON hoặc SSE
 → React
@@ -1025,7 +1008,7 @@ User
 Corpus luật (tách khỏi request user):
 
 ```text
-vbpl.vn crawl → folder JSON/MD → assemble → embed → Postgres + Neo4j
+vbpl.vn crawl → folder JSON/MD → assemble → embed → Postgres
 ```
 
 ---
@@ -1067,9 +1050,8 @@ vbpl.vn crawl → folder JSON/MD → assemble → embed → Postgres + Neo4j
 - `app/infrastructure/retrieval/legal_graph_rag.py`, `context.py`, `query_rewrite.py`, `scope_match.py`, `normative_rank.py`
 - `app/infrastructure/vector/pg_search.py`, `rrf.py`
 - `app/infrastructure/embeddings/hf_embedder.py`
-- `app/infrastructure/neo4j/graph_repository.py`
 - `app/infrastructure/db/*.py`
-- `schema.sql`, `schema.cypher`
+- `schema.sql`
 - `schemas/empty/`
 
 **Frontend**
@@ -1082,7 +1064,7 @@ vbpl.vn crawl → folder JSON/MD → assemble → embed → Postgres + Neo4j
 - `app/infrastructure/legal_corpus/assemble.py` và các module cùng package
 - `scripts/ingest_legal_corpus.py`, `ingest_clause_amendments.py`, `ingest_legal_sample.py`
 - `scripts/crawl_vbpl/`
-- `scripts/restore_db.ps1`, `scripts/restore_neo4j.ps1`
+- `scripts/restore_db.ps1`
 - `scripts/backfill_*.py`, `scripts/export_sample_excel.py`
 
 **Tests**

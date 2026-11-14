@@ -45,7 +45,6 @@ Sample_*
 sample_*
 listing.json
 contractlens_backup.dump
-neo4j.dump
 
 # --- Local corpus / demo contracts (keep on disk, do not push) ---
 *_SAI.md

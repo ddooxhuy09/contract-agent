@@ -56,9 +56,6 @@ class Settings(BaseSettings):
     db_pool_min_size: int = 2
     db_pool_max_size: int = 10
     db_pool_timeout: float = 10.0
-    neo4j_uri: str = "bolt://localhost:7687"
-    neo4j_user: str = "neo4j"
-    neo4j_password: str = "contractlens"
 
     jwt_secret: str = "change-me-in-production"
     jwt_algorithm: str = "HS256"
@@ -78,7 +75,6 @@ class Settings(BaseSettings):
     similarity_threshold: float = 0.6
 
     schema_sql_path: str = "schema.sql"
-    schema_cypher_path: str = "schema.cypher"
 
     # Retrieval experiments (see evaluation_results/reports/LABOR_EFFECTIVITY_RAG_RUN.md).
     rag_labor_scope: bool = True  # extra search inside the core labor-law instruments for labor queries
@@ -89,9 +85,6 @@ class Settings(BaseSettings):
     legal_article_chunks_only: bool = False  # drop chunks whose path has no Điều token (e.g. PREAMBLE)
     legal_rrf_weight_vector: float = 1.0
     legal_rrf_weight_fts: float = 1.0
-
-    # GraphRAG hierarchy expand: postgres (ltree) | neo4j | both (merge, prefer neo4j then fill gaps)
-    legal_expand_backend: str = "postgres"
 
     @property
     def upload_path(self) -> Path:

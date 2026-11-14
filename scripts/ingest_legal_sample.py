@@ -8,12 +8,7 @@ from app.infrastructure.db.schema_loader import apply_postgres_schema
 def main() -> None:
     apply_postgres_schema()
     c = build_container()
-    if c.graph is not None:
-        try:
-            c.graph.ensure_schema()
-        except Exception:
-            pass
-    result = IngestLegalDocument(c.legal_docs, c.legal_chunks, c.embedder, c.graph).execute(
+    result = IngestLegalDocument(c.legal_docs, c.legal_chunks, c.embedder).execute(
         thuoc_tinh={
             "doc_id": "sample-168",
             "doc_num": "168/2024/NĐ-CP",
@@ -33,7 +28,7 @@ def main() -> None:
                 ),
             }
         ],
-        graph_nodes=[
+        legal_nodes=[
             {"path": "sample_168.C1", "level": "Chapter", "label": "Chương I", "parent_path": None},
             {"path": "sample_168.C1.D1", "level": "Article", "label": "Điều 1", "parent_path": "sample_168.C1"},
             {"path": "sample_168.C1.D1.K1", "level": "Clause", "label": "Khoản 1", "parent_path": "sample_168.C1.D1"},

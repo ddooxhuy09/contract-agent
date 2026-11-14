@@ -323,7 +323,7 @@ def build_muc_luc_index(muc_luc: list[dict[str, Any]]) -> MucLucIndex:
 
 
 def graph_nodes_for_doc(index: MucLucIndex, doc_id: str) -> list[dict[str, Any]]:
-    """Neo4j nodes with path = ltree text `{sanitized_doc}.{structural}`."""
+    """Structural tree nodes with path = ltree text `{sanitized_doc}.{structural}`."""
     out: list[dict[str, Any]] = []
     for n in index.nodes:
         path = to_ltree_path(doc_id, n.path)

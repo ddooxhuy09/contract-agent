@@ -165,7 +165,7 @@ def _settings() -> dict:
     from app.core.settings import get_settings
     s = get_settings()
     keys = ("llm_provider", "groq_model", "judge_finding_types", "red_flag_llm_verify", "red_flag_negation_check",
-            "legal_retrieval_mode", "legal_expand_backend")
+            "legal_retrieval_mode")
     return {k: getattr(s, k, None) for k in keys}
 
 
@@ -179,7 +179,6 @@ def cmd_full(args) -> None:
     from app.infrastructure.retrieval.context import bind_retrieval
 
     cont = build_container()
-    # Keywords only: works with and without the optional Neo4j graph argument (LEGAL_EXPAND_BACKEND=postgres).
     bind_retrieval(cont.contract_search, cont.legal_search,
                    legal_chunks=cont.legal_chunks, contract_chunks=cont.contract_chunks)
     cache = OUT / args.flags

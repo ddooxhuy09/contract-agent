@@ -5,7 +5,7 @@ from app.domain.ports.repositories import (
     LegalChunkRepository,
     LegalDocumentRepository,
 )
-from app.domain.ports.services import ContractVectorSearch, GraphRepository, LegalVectorSearch
+from app.domain.ports.services import ContractVectorSearch, LegalVectorSearch
 from app.infrastructure.retrieval.legal_graph_rag import LegalGraphRag
 
 _contract_search: ContractVectorSearch | None = None
@@ -18,7 +18,6 @@ _graph_rag: LegalGraphRag | None = None
 def bind_retrieval(
     contract_search: ContractVectorSearch,
     legal_search: LegalVectorSearch,
-    graph: GraphRepository | None = None,
     legal_chunks: LegalChunkRepository | None = None,
     contract_chunks: ContractChunkRepository | None = None,
 ) -> None:
@@ -28,7 +27,7 @@ def bind_retrieval(
     _legal_chunks = legal_chunks
     _contract_chunks = contract_chunks
     if legal_search is not None and legal_chunks is not None:
-        _graph_rag = LegalGraphRag(legal_search, legal_chunks, graph)
+        _graph_rag = LegalGraphRag(legal_search, legal_chunks)
     else:
         _graph_rag = None
 

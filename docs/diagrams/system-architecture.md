@@ -17,7 +17,6 @@ flowchart LR
     PL["infrastructure/agents/pipelines.py"]
     RET["infrastructure/retrieval + vector"]
     PG[("Postgres + pgvector")]
-    N4[("Neo4j")]
     FS[["data/uploads"]]
     GM["Gemini"]
     HF["BAAI/bge-m3 embedder"]
@@ -35,8 +34,7 @@ flowchart LR
     QA --> GM
     WF --> RET
     QA --> RET
-    RET --> PG
-    RET --> N4
+    RET -->|vector, ltree expand| PG
     RET --> HF
     WF -->|checkpoint| PG
     QA -->|checkpoint, memory| PG
@@ -44,7 +42,7 @@ flowchart LR
 
 ## Evidence
 - `app/main.py`: `lifespan` dựng `build_container()`, `LangGraphAnalyzePipeline`, `LangGraphQaPipeline`, `bind_retrieval`, `init_checkpointer`; `include_router(router)`; mount `frontend/dist`.
-- `app/infrastructure/container.py`: `AppContainer` gồm repository Pg, `LocalObjectStorage`, `HuggingFaceEmbedder`, `GeminiChatModel`, `Neo4jGraphRepository`, `PgLegalVectorSearch`.
+- `app/infrastructure/container.py`: `AppContainer` gồm repository Pg, `LocalObjectStorage`, `HuggingFaceEmbedder`, `GeminiChatModel`, `PgLegalVectorSearch` (không còn Neo4j từ 15/11/2026).
 - `app/infrastructure/agents/pipelines.py`: import `qa_agent`, `workflow`.
 - `app/agents/memory.py`: docstring ghi bộ nhớ dài hạn dùng `AsyncPostgresStore`.
 

@@ -13,7 +13,6 @@ from app.domain.ports.services import (
     TokenService,
     ContractVectorSearch,
     LegalVectorSearch,
-    GraphRepository,
     AnalyzePipeline,
     QaPipeline,
 )
@@ -31,7 +30,6 @@ __all__ = [
     "TokenService",
     "ContractVectorSearch",
     "LegalVectorSearch",
-    "GraphRepository",
     "AnalyzePipeline",
     "QaPipeline",
 ]

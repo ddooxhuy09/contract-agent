@@ -1,34 +1,27 @@
 @startuml dfd-2-retrieval
 !include _skin.puml
 title DFD mức 2 — Tra cứu GraphRAG (dùng bởi 3.4c và 4.3b)
-caption Postgres = nguồn sự thật (text + embedding). Neo4j = expand path. Hydrate lại từ PG.
+caption Toàn bộ trên Postgres: seed (vector + FTS), expand (ltree + legal_document_relations), hydrate text theo path.
 
 rectangle "R.1\nRewrite / augment query\n(rule-based)" as Rw
 rectangle "R.2\nHybrid search PG\nvector + FTS + RRF k=60" as Hyb
 rectangle "R.3\nLọc lệch ngành\nfilter_sector_mismatches" as Sec
-rectangle "R.4\nExpand cây\nLEGAL_EXPAND_BACKEND" as Exp
-rectangle "R.4a\nNeo4j expand()" as Nj
-rectangle "R.4b\nPostgres ltree" as Lt
+rectangle "R.4\nExpand cây + quan hệ VB\nexpand_paths" as Exp
 rectangle "R.5\nHydrate text\nget_texts_by_paths" as Hyd
 rectangle "R.6\nVB liên quan / thay thế\nsearch_in_docs" as Rel
 rectangle "R.7\nXếp hạng +\nlọc hết hiệu lực" as Rank
 rectangle "R.8\nformat_context\n(seed/sibling/ancestor/…)" as Fmt
 
-database "D1.3 legal_embeddings\n+ legal_documents" as PG
-database "D2 Neo4j\n(chỉ id/path)" as Neo4j
+database "D1.3 legal_embeddings\n+ legal_documents\n+ legal_document_relations" as PG
 
 Rw --> Hyb : query (tiêu đề Điều / câu hỏi)
 Hyb --> PG : cosine HNSW +\nplainto_tsquery('simple')
 PG --> Hyb : seed hits (k_seed)
 Hyb --> Sec : candidates
 Sec --> Exp : sau lọc ngành
-Exp --> Nj : backend neo4j | merge
-Exp --> Lt : backend postgres | merge
-Nj --> Neo4j : neighbor / ancestor / sibling
-Neo4j --> Nj : path[]
-Lt --> PG : ltree query
-PG --> Lt : path[]
-Exp --> Hyd : path hợp nhất
+Exp --> PG : ltree (sibling / ancestor / khoản cha)\n+ quan hệ VB (liên quan / bãi bỏ)
+PG --> Exp : path[], doc_id[]
+Exp --> Hyd : path mở rộng
 Hyd --> PG : SELECT text theo path
 PG --> Hyd : chunk_text + metadata
 Hyd --> Rel : docs
@@ -39,8 +32,8 @@ Rank --> Fmt : còn HL trước, cấp VB, năm, role, score
 Fmt --> Rank : ngữ cảnh đưa vào prompt
 
 note bottom of Exp
-  Mặc định ``LEGAL_EXPAND_BACKEND=postgres`` (ltree).
-  Có thể ``neo4j`` hoặc ``both`` (cần profile neo4j).
+  ``PgLegalChunkRepository.expand_paths``.
+  (Trước 15/11/2026 bước này chạy trên Neo4j; đã gỡ.)
   Contract RAG (4.3a) **không** qua sơ đồ này:
   chỉ vector ``contract_chunks`` theo ``contract_id``.
 end note

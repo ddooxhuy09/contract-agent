@@ -1,4 +1,4 @@
-"""Batch-ingest legal crawler folders into Postgres + Neo4j.
+"""Batch-ingest legal crawler folders into Postgres.
 
 Usage:
   python -m scripts.ingest_legal_corpus PATH [--dry-run] [--limit N]
@@ -97,12 +97,7 @@ def main(argv: list[str] | None = None) -> int:
         except Exception as e:
             logger.warning("Postgres schema apply failed: %s", e)
         c = build_container()
-        if c.graph is not None:
-            try:
-                c.graph.ensure_schema()
-            except Exception as e:
-                logger.warning("Neo4j schema ensure failed: %s", e)
-        ingest = IngestLegalDocument(c.legal_docs, c.legal_chunks, c.embedder, c.graph)
+        ingest = IngestLegalDocument(c.legal_docs, c.legal_chunks, c.embedder)
         chunk_repo = c.legal_chunks
 
     ok = 0
@@ -164,7 +159,6 @@ def main(argv: list[str] | None = None) -> int:
                 thuoc_tinh=artifacts["thuoc_tinh"],
                 chunks=artifacts["chunks"],
                 relations=artifacts["relations"],
-                graph_nodes=artifacts["graph_nodes"],
                 stub_docs=artifacts.get("stub_docs"),
                 legal_nodes=artifacts.get("legal_nodes"),
                 path_relations=artifacts.get("path_relations"),

@@ -12,7 +12,7 @@ from app.domain.entities.legal import (
     LegalNode,
 )
 from app.domain.ports.repositories import LegalChunkRepository, LegalDocumentRepository
-from app.domain.ports.services import Embedder, GraphRepository
+from app.domain.ports.services import Embedder
 from app.infrastructure.legal_corpus.muc_luc_paths import article_root_ltree, chunk_ref_to_ltree
 
 
@@ -31,19 +31,17 @@ def _parse_date(value: Any) -> date | None:
 
 
 class IngestLegalDocument:
-    """Upsert thuoc_tinh + nodes + chunks (+ optional relations) into PG and Neo4j."""
+    """Upsert thuoc_tinh + nodes + chunks (+ optional relations) into Postgres."""
 
     def __init__(
         self,
         legal_docs: LegalDocumentRepository,
         legal_chunks: LegalChunkRepository,
         embedder: Embedder,
-        graph: GraphRepository | None,
     ):
         self._docs = legal_docs
         self._chunks = legal_chunks
         self._embedder = embedder
-        self._graph = graph
 
     @staticmethod
     def _build_document(thuoc_tinh: dict[str, Any], doc_id: str) -> LegalDocument:
@@ -153,49 +151,11 @@ class IngestLegalDocument:
                 )
         self._docs.upsert_relations(rel_entities)
 
-    def _sync_graph(
-        self,
-        doc: LegalDocument,
-        entities: list[LegalChunk],
-        graph_nodes: list[dict[str, Any]] | None,
-        rel_entities: list[LegalDocRelation],
-    ) -> None:
-        if self._graph is None:
-            return
-        nodes = graph_nodes or [
-            {
-                "path": c.path,
-                "level": "Point" if c.chunk_type == "body" else "Meta",
-                "label": c.path,
-                "parent_path": None,
-            }
-            for c in entities
-        ]
-        self._graph.upsert_document_tree(
-            doc_id=doc.doc_id,
-            doc_num=doc.doc_num,
-            doc_type=doc.doc_type,
-            nodes=nodes,
-            chunks=[{"path": c.path, "chunk_type": c.chunk_type} for c in entities],
-        )
-        if rel_entities:
-            self._graph.upsert_doc_relations(
-                [
-                    {
-                        "from_doc_id": r.from_doc_id,
-                        "to_doc_id": r.to_doc_id,
-                        "relation_type": r.relation_type,
-                    }
-                    for r in rel_entities
-                ]
-            )
-
     def execute(
         self,
         thuoc_tinh: dict[str, Any],
         chunks: list[dict[str, Any]],
         relations: list[dict[str, str]] | None = None,
-        graph_nodes: list[dict[str, Any]] | None = None,
         stub_docs: dict[str, dict[str, Any]] | None = None,
         legal_nodes: list[dict[str, Any]] | None = None,
         path_relations: list[dict[str, str]] | None = None,
@@ -234,7 +194,6 @@ class IngestLegalDocument:
         if path_rel_entities:
             self._chunks.upsert_relations(path_rel_entities)
 
-        self._sync_graph(doc, entities, graph_nodes, rel_entities)
 
         logger.info(
             "Ingested legal doc_id=%s chunks=%s nodes=%s path_rels=%s",

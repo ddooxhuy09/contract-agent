@@ -81,7 +81,7 @@ def load_document_folder(folder: Path | str) -> dict[str, Any]:
 
     thuoc_tinh = map_thuoc_tinh(thuoc_tinh_raw, full_text=van_ban)
     doc_id = str(thuoc_tinh["doc_id"])
-    # Hierarchy / Neo4j tree rooted by số hiệu when available (matches legal_documents.path)
+    # Hierarchy tree (legal_nodes) rooted by số hiệu when available (matches legal_documents.path)
     path_root = str(thuoc_tinh.get("doc_num") or doc_id)
 
     index = build_muc_luc_index(muc_luc)

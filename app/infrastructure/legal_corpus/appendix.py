@@ -167,7 +167,7 @@ def _chunks_for_appendix_node(
 
 
 def appendix_graph_nodes(chunks: list[dict[str, Any]], doc_id: str) -> list[dict[str, Any]]:
-    """Ensure Neo4j nodes exist for appendix paths not already in muc_luc."""
+    """Structural tree nodes for appendix paths not already in muc_luc (become hierarchy rows)."""
     from app.infrastructure.legal_corpus.muc_luc_paths import sanitize_doc_id_for_ltree
 
     nodes: list[dict[str, Any]] = []

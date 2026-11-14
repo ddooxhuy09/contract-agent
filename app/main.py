@@ -40,17 +40,11 @@ async def lifespan(app: FastAPI):
         apply_postgres_schema()
     except Exception as e:
         logger.warning("Postgres schema apply failed (is Docker Postgres up?): %s", e)
-    if container.graph is not None:
-        try:
-            container.graph.ensure_schema()
-        except Exception as e:
-            logger.warning("Neo4j unavailable at startup: %s", e)
     container.analyze_pipeline = LangGraphAnalyzePipeline()
     container.qa_pipeline = LangGraphQaPipeline()
     bind_retrieval(
         container.contract_search,
         container.legal_search,
-        container.graph,
         legal_chunks=container.legal_chunks,
         contract_chunks=container.contract_chunks,
     )
@@ -73,13 +67,6 @@ async def lifespan(app: FastAPI):
             await close_checkpointer()
         except Exception as e:
             logger.warning("Checkpointer close failed: %s", e)
-        close = getattr(container.graph, "close", None)
-        if callable(close):
-            try:
-                close()
-            except Exception as e:
-                logger.warning("Graph repository close failed: %s", e)
-
 
 
 app = FastAPI(
