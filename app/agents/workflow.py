@@ -154,7 +154,7 @@ def _rule_verdict(clause: Clause, risk: RiskItem | None) -> dict:
 
 
 def _rule_hints(risks: list[RiskItem]) -> dict[str, str]:
-    """Clause number -> titles of the critical fixed rules that fired there (same set skip_llm_clause_numbers uses)."""
+    """Clause number -> titles of the critical red-flag rules that fired there (items carrying findings)."""
     from app.agents.labor_red_flags import clause_number_from_ref
 
     hints: dict[str, list[str]] = {}
@@ -179,7 +179,9 @@ def _apply_rule_rejections(risks: list[RiskItem], rejected: list[dict] | None) -
         n = clause_number_from_ref(r.clause_ref) if r.findings else None
         if n in reasons and r.severity == "critical":
             note = f"Quét từ khoá nghi vi phạm nhưng mô hình kiểm tra lại không xác nhận: {reasons[n]}"
-            r = r.model_copy(update={"severity": "info", "confidence_notes": [*(r.confidence_notes or []), note]})
+            findings = [f.model_copy(update={"severity": "info"}) for f in r.findings]
+            r = r.model_copy(update={"severity": "info", "findings": findings,
+                                     "confidence_notes": [*(r.confidence_notes or []), note]})
         out.append(r)
     return out
 
@@ -187,7 +189,8 @@ def _apply_rule_rejections(risks: list[RiskItem], rejected: list[dict] | None) -
 def _detection_summary(analysis: ContractAnalysis, risks: list[RiskItem], skipped: list[str]) -> dict:
     """What the findings say about detection — separate from how many clauses were scanned."""
     nums = {str(c.clause_number) for c in analysis.clauses}
-    flagged = {m.group(1) for r in risks if r.severity != "info" and (m := re.search(r"(\d+)", r.clause_ref or ""))} & nums
+    risks = [r for r in risks if r.severity != "info"]  # advice / unconfirmed rule hits are not risks
+    flagged = {m.group(1) for r in risks if (m := re.search(r"(\d+)", r.clause_ref or ""))} & nums
     confs = [r.confidence for r in risks if r.confidence is not None]
     return {
         "so_rui_ro": len(risks),

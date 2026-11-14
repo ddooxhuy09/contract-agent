@@ -14,6 +14,7 @@ import hashlib
 import json
 import os
 import re
+import subprocess
 from pathlib import Path
 
 from evaluation.injection.run import ACTIONABLE, RULES, _commit, _fmt, _llm_name, _slot_number, bootstrap, prf
@@ -154,14 +155,32 @@ def _record(cid: str, slot: str | None, analysis, risks) -> dict:
     }
 
 
+def _dirty() -> str:
+    """Uncommitted changes in code that affects results; a run must match its recorded commit."""
+    return subprocess.run(["git", "status", "--porcelain", "--", "app", "evaluation/injection_v3"],
+                          cwd=ROOT, capture_output=True, text=True).stdout.strip()
+
+
+def _settings() -> dict:
+    from app.core.settings import get_settings
+    s = get_settings()
+    keys = ("llm_provider", "groq_model", "judge_finding_types", "red_flag_llm_verify", "red_flag_negation_check",
+            "legal_retrieval_mode", "legal_expand_backend")
+    return {k: getattr(s, k, None) for k in keys}
+
+
 def cmd_full(args) -> None:
+    if _dirty():
+        raise SystemExit("Mã trong app/ hoặc evaluation/injection_v3 chưa commit; chạy từ bản sạch (git worktree):"
+                         + chr(10) + _dirty())
     _set_flags(args.flags)
     from app.agents.workflow import run_analysis_workflow
     from app.infrastructure.container import build_container
     from app.infrastructure.retrieval.context import bind_retrieval
 
     cont = build_container()
-    bind_retrieval(cont.contract_search, cont.legal_search, cont.graph,
+    # Keywords only: works with and without the optional Neo4j graph argument (LEGAL_EXPAND_BACKEND=postgres).
+    bind_retrieval(cont.contract_search, cont.legal_search,
                    legal_chunks=cont.legal_chunks, contract_chunks=cont.contract_chunks)
     cache = OUT / args.flags
     cache.mkdir(parents=True, exist_ok=True)
@@ -179,6 +198,7 @@ def cmd_full(args) -> None:
         analysis, risks = asyncio.run(run_analysis_workflow(text, f"inj3-{args.flags}-{cid}"))
         rec = _record(cid, slot, analysis, risks)
         rec["flags"] = args.flags
+        rec["settings"] = _settings()
         if rec["coverage"].get("chua_kiem"):  # quota/lỗi judge: không lưu, chạy lại sau
             stalled += 1
             print(f"{cid}: có Điều chưa kiểm {rec['unchecked_clauses']}, không lưu")

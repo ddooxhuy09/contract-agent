@@ -66,7 +66,7 @@ def test_flag_on_judge_rejects_downgrades_to_info(run):
     analysis, risks = setup(True, lambda c, h: ok if h else None)
     assert ("1", _RULE) in calls and ("2", None) in calls
     r = _by_clause(risks)["Điều 1"]
-    assert r.severity == "info"
+    assert r.severity == "info" and all(f.severity == "info" for f in r.findings)
     assert "không xác nhận" in r.confidence_notes[-1] and "Câu phủ định" in r.confidence_notes[-1]
     assert analysis.coverage["chua_kiem"] == 0
     assert analysis.coverage["phat_hien"]["so_dieu_co_rui_ro"] == 0

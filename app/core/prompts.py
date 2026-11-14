@@ -238,7 +238,7 @@ CLAUSE_RISK_FINDING_TYPES = """\
   - "thieu_noi_dung": điều khoản không sai nhưng thiếu thông tin;
   - "gop_y": góp ý soạn thảo cho rõ hơn, không có sai phạm;
   - "khong_co": severity=ok.
-- Chỉ "vi_pham" được dùng severity critical hoặc warning.
+- Chỉ "vi_pham" được dùng severity critical hoặc warning. Không đủ căn cứ trong ngữ cảnh luật để kết luận vi phạm thì không dùng "vi_pham".
 """
 
 # Appended when RED_FLAG_LLM_VERIFY is on and a fixed rule fired on this Điều. {rules} is filled by the caller.

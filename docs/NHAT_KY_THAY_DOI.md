@@ -201,3 +201,10 @@ Số liệu chính để quyết định: **exact provision recall của `final_
 - Bộ mới `evaluation/injection_v3` (48 ca = 8 luật × 3 vi phạm + 3 hợp lệ, trên 3 hợp đồng nền A/B/C đủ Điều 21) để đo `JUDGE_FINDING_TYPES` + `RED_FLAG_LLM_VERIFY`. Thiết kế, cách chấm và giới hạn: `evaluation/injection_v3/README.md`.
 - **Quy tắc:** chạy `off` và `on` (cả hai cờ cùng tắt/bật), cùng commit, cùng judge Groq `openai/gpt-oss-120b`. Bật cờ mặc định khi và chỉ khi trên đủ 48/48 ca ở cả hai cấu hình: `FP(on) ≤ FP(off) − 3` và `FN(on) ≤ FN(off) + 1`. Thiếu ca thì không quyết định. Không đổi quy tắc sau khi xem kết quả.
 - Chưa chạy `full`. Sẽ gắn tag `injection-v3-frozen` trước khi chạy. Khai báo: ca do cùng mô hình viết hai cờ soạn, sau khi xem phân tích lỗi, nên bộ đo việc sửa các kiểu lỗi đã biết trên văn bản mới, không đo tỷ lệ trên hợp đồng thực tế.
+
+## 2026-11-15: rà soát trước khi chạy injection_v3 (sau tag `injection-v3-frozen`)
+- Không đổi `bases/`, `cases.jsonl`, `contracts/`, cách chấm hay quy tắc chấp nhận (`build` chạy lại cho đúng các file cũ).
+- `RED_FLAG_LLM_VERIFY`: cờ regex bị judge bác nay hạ cả `findings[].severity` xuống `info` (trước chỉ hạ mức của RiskItem, giao diện có thể vẫn hiện finding là critical).
+- `coverage.phat_hien`: `so_rui_ro` và số Điều có rủi ro không tính mục `info`. Khi cờ tắt không có mục `info` nên không đổi.
+- `JUDGE_FINDING_TYPES`: thêm vào prompt câu "không đủ căn cứ để kết luận vi phạm thì không dùng vi_pham", vì prompt gốc vẫn bảo dùng warning khi thiếu căn cứ (hai chỉ dẫn mâu thuẫn).
+- `evaluation/injection_v3/run.py` (chỉ phần chạy, không phần chấm): gọi `bind_retrieval` bằng tham số tên, không truyền `graph` (đúng với nhánh bỏ Neo4j đang làm, mặc định `LEGAL_EXPAND_BACKEND=postgres`); từ chối chạy `full` khi `app/` hoặc `evaluation/injection_v3` có thay đổi chưa commit; mỗi bản ghi lưu thêm cấu hình (`settings`).
