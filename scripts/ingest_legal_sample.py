@@ -8,10 +8,11 @@ from app.infrastructure.db.schema_loader import apply_postgres_schema
 def main() -> None:
     apply_postgres_schema()
     c = build_container()
-    try:
-        c.graph.ensure_schema()
-    except Exception:
-        pass
+    if c.graph is not None:
+        try:
+            c.graph.ensure_schema()
+        except Exception:
+            pass
     result = IngestLegalDocument(c.legal_docs, c.legal_chunks, c.embedder, c.graph).execute(
         thuoc_tinh={
             "doc_id": "sample-168",

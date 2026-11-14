@@ -47,8 +47,8 @@ Lần đầu API sẽ tải model embedding (`BAAI/bge-m3`) — có thể mất 
 docker compose up -d postgres
 powershell -File scripts\restore_db.ps1
 
-# Neo4j (neo4j.dump) — service sẽ bị stop/start trong lúc nạp
-powershell -File scripts\restore_neo4j.ps1
+# Neo4j (neo4j.dump): tuỳ chọn, chỉ cần khi LEGAL_EXPAND_BACKEND=neo4j|both (mặc định postgres)
+# docker compose --profile neo4j up -d neo4j; powershell -File scripts\restore_neo4j.ps1
 
 docker compose up -d
 ```
@@ -58,8 +58,8 @@ docker compose up -d
 ```bash
 docker compose up -d postgres
 sh scripts/restore_db.sh
-chmod +x scripts/restore_neo4j.sh
-./scripts/restore_neo4j.sh
+# Tuỳ chọn (LEGAL_EXPAND_BACKEND=neo4j|both):
+# docker compose --profile neo4j up -d neo4j && ./scripts/restore_neo4j.sh
 docker compose up -d
 ```
 

@@ -80,7 +80,7 @@ class LegalGraphRag:
         self._graph = graph
 
     def _expand(self, seed_keys: list[str]) -> dict:
-        backend = (get_settings().legal_expand_backend or "neo4j").strip().lower()
+        backend = (get_settings().legal_expand_backend or "postgres").strip().lower()
         path_keys = [k for k in (_to_ltree_key(k) for k in seed_keys) if k]
 
         neo: dict = dict(_EMPTY_EXPAND)

@@ -82,8 +82,8 @@ class Settings(BaseSettings):
     legal_rrf_weight_vector: float = 1.0
     legal_rrf_weight_fts: float = 1.0
 
-    # GraphRAG hierarchy expand: neo4j | postgres | both (merge, prefer neo4j then fill gaps)
-    legal_expand_backend: str = "neo4j"
+    # GraphRAG hierarchy expand: postgres (ltree) | neo4j | both (merge, prefer neo4j then fill gaps)
+    legal_expand_backend: str = "postgres"
 
     @property
     def upload_path(self) -> Path:

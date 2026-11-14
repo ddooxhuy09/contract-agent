@@ -39,8 +39,8 @@ Rank --> Fmt : còn HL trước, cấp VB, năm, role, score
 Fmt --> Rank : ngữ cảnh đưa vào prompt
 
 note bottom of Exp
-  Mặc định ``LEGAL_EXPAND_BACKEND=neo4j``.
-  Có thể ``postgres`` (ltree) hoặc ``merge``.
+  Mặc định ``LEGAL_EXPAND_BACKEND=postgres`` (ltree).
+  Có thể ``neo4j`` hoặc ``both`` (cần profile neo4j).
   Contract RAG (4.3a) **không** qua sơ đồ này:
   chỉ vector ``contract_chunks`` theo ``contract_id``.
 end note

@@ -38,7 +38,7 @@ class IngestLegalDocument:
         legal_docs: LegalDocumentRepository,
         legal_chunks: LegalChunkRepository,
         embedder: Embedder,
-        graph: GraphRepository,
+        graph: GraphRepository | None,
     ):
         self._docs = legal_docs
         self._chunks = legal_chunks
@@ -160,6 +160,8 @@ class IngestLegalDocument:
         graph_nodes: list[dict[str, Any]] | None,
         rel_entities: list[LegalDocRelation],
     ) -> None:
+        if self._graph is None:
+            return
         nodes = graph_nodes or [
             {
                 "path": c.path,

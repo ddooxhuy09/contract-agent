@@ -97,10 +97,11 @@ def main(argv: list[str] | None = None) -> int:
         except Exception as e:
             logger.warning("Postgres schema apply failed: %s", e)
         c = build_container()
-        try:
-            c.graph.ensure_schema()
-        except Exception as e:
-            logger.warning("Neo4j schema ensure failed: %s", e)
+        if c.graph is not None:
+            try:
+                c.graph.ensure_schema()
+            except Exception as e:
+                logger.warning("Neo4j schema ensure failed: %s", e)
         ingest = IngestLegalDocument(c.legal_docs, c.legal_chunks, c.embedder, c.graph)
         chunk_repo = c.legal_chunks
 

@@ -40,10 +40,11 @@ async def lifespan(app: FastAPI):
         apply_postgres_schema()
     except Exception as e:
         logger.warning("Postgres schema apply failed (is Docker Postgres up?): %s", e)
-    try:
-        container.graph.ensure_schema()
-    except Exception as e:
-        logger.warning("Neo4j unavailable at startup: %s", e)
+    if container.graph is not None:
+        try:
+            container.graph.ensure_schema()
+        except Exception as e:
+            logger.warning("Neo4j unavailable at startup: %s", e)
     container.analyze_pipeline = LangGraphAnalyzePipeline()
     container.qa_pipeline = LangGraphQaPipeline()
     bind_retrieval(

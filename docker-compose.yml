@@ -25,8 +25,10 @@ services:
         max-size: "10m"
         max-file: "3"
 
+  # Optional: only needed with LEGAL_EXPAND_BACKEND=neo4j|both. Start with `--profile neo4j`.
   neo4j:
     image: neo4j:5
+    profiles: ["neo4j"]
     environment:
       NEO4J_AUTH: ${NEO4J_USER:-neo4j}/${NEO4J_PASSWORD:-contractlens}
       NEO4J_PLUGINS: '[]'
@@ -92,8 +94,6 @@ services:
         fi
     depends_on:
       postgres:
-        condition: service_healthy
-      neo4j:
         condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]

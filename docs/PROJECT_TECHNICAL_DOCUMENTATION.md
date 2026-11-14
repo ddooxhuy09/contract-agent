@@ -237,7 +237,7 @@ Frontend ChatTab
   → SSE step/done → UI
 ```
 
-`LEGAL_EXPAND_BACKEND` (mặc định `neo4j`) chọn expand cây: Neo4j, Postgres ltree, hoặc merge cả hai. **Configured** qua env; code đọc ở `LegalGraphRag._expand`.
+`LEGAL_EXPAND_BACKEND` (mặc định `postgres` từ 15/11/2026; trước đó `neo4j`) chọn expand cây: Postgres ltree, Neo4j, hoặc merge cả hai. Neo4j chỉ được kết nối khi chọn `neo4j`/`both` (service compose profile `neo4j`). **Configured** qua env; code đọc ở `LegalGraphRag._expand`.
 
 ---
 
@@ -694,7 +694,7 @@ Nguồn: `.env` + `app/core/settings.py` (`extra="ignore"`). Compose override `D
 | `TOP_K_RETRIEVAL` | 5 | không | retrieve_contract |
 | `SIMILARITY_THRESHOLD` | 0.6 | không | legal search + QA weak-hit |
 | `SCHEMA_SQL_PATH` / `SCHEMA_CYPHER_PATH` | path schema | default files | schema_loader, neo4j |
-| `LEGAL_EXPAND_BACKEND` | neo4j\|postgres\|both | default neo4j | LegalGraphRag |
+| `LEGAL_EXPAND_BACKEND` | postgres\|neo4j\|both | default postgres | LegalGraphRag |
 | `API_PORT` / `FRONTEND_PORT` / `POSTGRES_PORT` / `NEO4J_BOLT_PORT` | publish ports | Compose | docker-compose |
 | `DEV_RELOAD` | uvicorn --reload | default 0 | Compose api command |
 | `VITE_API_BASE_URL` | frontend API | Compose default `:8010` | `api.js`, AuthContext |

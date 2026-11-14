@@ -128,7 +128,17 @@ class _FakeGraph:
         }
 
 
-def test_legal_graph_rag_hydrate_roles():
+import pytest  # noqa: E402
+
+
+@pytest.fixture
+def neo4j_backend(monkeypatch):
+    from app.core.settings import get_settings
+
+    monkeypatch.setattr(get_settings(), "legal_expand_backend", "neo4j")
+
+
+def test_legal_graph_rag_hydrate_roles(neo4j_backend):
     seeds = [
         RetrievedChunk(
             content="seed body",
@@ -179,7 +189,7 @@ class _FakeGraphSuperseding:
         }
 
 
-def test_repealed_seeds_yield_superseding_context():
+def test_repealed_seeds_yield_superseding_context(neo4j_backend):
     """When the graph reports repealed_by_docs, the replacement doc's text is
     fetched (via search_in_docs) and appears with role=superseding + section."""
     seeds = [

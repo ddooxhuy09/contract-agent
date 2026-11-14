@@ -43,7 +43,7 @@ class AppContainer:
     tokens: TokenService
     contract_search: ContractVectorSearch
     legal_search: LegalVectorSearch
-    graph: GraphRepository
+    graph: GraphRepository | None
     analyze_pipeline: AnalyzePipeline | None = None
     qa_pipeline: QaPipeline | None = None
 
@@ -51,11 +51,16 @@ class AppContainer:
 def build_container() -> AppContainer:
     # Lazy imports keep test collection light when torch/HF not needed
     from app.infrastructure.embeddings.hf_embedder import HuggingFaceEmbedder
+    from app.core.settings import get_settings
     from app.infrastructure.llm.gemini_chat import GeminiChatModel
-    from app.infrastructure.neo4j.graph_repository import Neo4jGraphRepository
 
     embedder = HuggingFaceEmbedder()
-    graph = Neo4jGraphRepository()
+    graph = None
+    # Neo4j is optional: only connect when the expand backend actually reads it.
+    if (get_settings().legal_expand_backend or "postgres").strip().lower() in ("neo4j", "both"):
+        from app.infrastructure.neo4j.graph_repository import Neo4jGraphRepository
+
+        graph = Neo4jGraphRepository()
     return AppContainer(
         users=PgUserRepository(),
         contracts=PgContractRepository(),
