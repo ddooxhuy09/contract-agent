@@ -80,7 +80,7 @@ def test_report_collects_findings_and_usage_apart_from_the_analysis():
     report = BuildContractReport(_Repo(_contract(analysis, [_RISK]))).execute("abcd1234-0000", _USER)
     assert report["usage"] == _USAGE
     assert "usage" not in report["analysis"]
-    assert report["summary"]["findings_by_severity"] == {"critical": 1, "warning": 0, "ok": 0}
+    assert report["summary"]["findings_by_severity"] == {"critical": 1, "warning": 0, "info": 0, "ok": 0}
     assert report["contract"]["uploaded_at"].startswith("2026-11-08")
 
 

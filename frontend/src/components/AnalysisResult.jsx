@@ -54,6 +54,18 @@ export default function AnalysisResult({
     [actionable],
   );
 
+  // "info" = drafting advice / unconfirmed keyword hits: listed under "Góp ý", not counted as risks.
+  const listedRisks = useMemo(
+    () => [
+      ...keyedRisks,
+      ...dedupeRisks((risks || []).filter((r) => r.severity === "info")).map((r, idx) => ({
+        ...r,
+        key: riskKey(r, keyedRisks.length + idx),
+      })),
+    ],
+    [keyedRisks, risks],
+  );
+
   const topIssues = useMemo(
     () =>
       keyedRisks.slice(0, 3).map((r) => {
@@ -157,7 +169,7 @@ export default function AnalysisResult({
             />
             <ContractProfile analysis={analysis} defaultOpen />
             <IssueList
-              risks={keyedRisks}
+              risks={listedRisks}
               openKey={openKey}
               onOpenKeyChange={setOpenKey}
               clausesByNumber={clausesByNumber}

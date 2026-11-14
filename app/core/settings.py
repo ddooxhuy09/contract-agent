@@ -30,6 +30,14 @@ class Settings(BaseSettings):
     # tool should not miss violations (see docs/NHAT_KY_THAY_DOI.md).
     red_flag_negation_check: bool = False
 
+    # JUDGE_FINDING_TYPES=true: the judge also labels each finding vi_pham / thieu_noi_dung / gop_y and is told a
+    # contract need not copy the law; non-violations are kept as severity "info" (shown, not counted as risks).
+    # RED_FLAG_LLM_VERIFY=true: a Điều hit by a critical fixed rule is still sent to the judge as a candidate;
+    # if the judge does not confirm a violation, the rule risk is downgraded to "info" instead of standing alone.
+    # Both off by default (= the configuration evaluated in chapter 5); see docs/NHAT_KY_THAY_DOI.md.
+    judge_finding_types: bool = False
+    red_flag_llm_verify: bool = False
+
     @property
     def gemini_api_keys(self) -> list[str]:
         """Configured Gemini keys in use order, de-duplicated, blanks dropped."""

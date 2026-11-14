@@ -7,7 +7,7 @@ from app.domain.errors import NotFoundError
 from app.domain.ports.repositories import ContractRepository
 
 REPORT_VERSION = 1
-_SEVERITY_LABEL = {"critical": "Nghiêm trọng", "warning": "Cần chú ý", "ok": "Ổn"}
+_SEVERITY_LABEL = {"critical": "Nghiêm trọng", "warning": "Cần chú ý", "info": "Góp ý", "ok": "Ổn"}
 DISCLAIMER = (
     "Kết quả phân tích và khuyến nghị của AI chỉ mang tính tham khảo, không phải tư vấn pháp lý "
     "chính thức. Vui lòng kiểm tra quy định pháp luật hiện hành và tham khảo ý kiến chuyên gia "

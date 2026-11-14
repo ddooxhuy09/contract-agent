@@ -227,6 +227,29 @@ CLAUSE_RISK_PROMPT = _compose(
     _CLAUSE_RISK_TASK,
 )
 
+# Appended after formatting (plain braces, no .format). Used only when JUDGE_FINDING_TYPES is on.
+CLAUSE_RISK_FINDING_TYPES = """\
+## Phân loại phát hiện (bắt buộc)
+- Hợp đồng KHÔNG bắt buộc chép lại nội dung luật. Điều khoản dẫn chiếu "theo quy định của pháp luật / Bộ luật Lao động" là hợp lệ; không coi việc không ghi lại mức trần, thời hạn, thủ tục mà luật đã quy định là vi phạm.
+- Nội dung "thiếu" chỉ là vấn đề pháp lý khi đó là nội dung chủ yếu bắt buộc của hợp đồng (Điều 21 khoản 1 BLLĐ 2019) hoặc khi chính điều khoản làm sai lệch quyền/nghĩa vụ luật định.
+- Đối chiếu đúng loại hợp đồng (xác định / không xác định thời hạn) và phạm vi áp dụng của văn bản trước khi áp số liệu luật.
+- Thêm vào JSON trường "loai":
+  - "vi_pham": nội dung điều khoản trái quy định bắt buộc/điều cấm, hoặc làm giảm quyền của người lao động dưới mức luật định;
+  - "thieu_noi_dung": điều khoản không sai nhưng thiếu thông tin;
+  - "gop_y": góp ý soạn thảo cho rõ hơn, không có sai phạm;
+  - "khong_co": severity=ok.
+- Chỉ "vi_pham" được dùng severity critical hoặc warning.
+"""
+
+# Appended when RED_FLAG_LLM_VERIFY is on and a fixed rule fired on this Điều. {rules} is filled by the caller.
+CLAUSE_RISK_RULE_HINT = """\
+## Kết quả quét tự động (cần kiểm chứng)
+Bộ quét từ khoá nghi điều khoản này vi phạm: {rules}.
+Bộ quét không hiểu câu phủ định ("không áp dụng…", "không được…") hay ngoại lệ hợp pháp. Đọc toàn văn điều khoản và:
+- nếu nội dung thật sự vi phạm như nghi vấn → severity=critical hoặc warning (loai="vi_pham" nếu có trường loai);
+- nếu từ khoá nằm trong câu phủ định, câu cấm, hoặc là trường hợp luật cho phép → severity=ok và nêu lý do ngắn trong issue.
+"""
+
 
 # ═══════════════════════════════════════════════════════════════════════════
 # QA — hỏi đáp có grounding
