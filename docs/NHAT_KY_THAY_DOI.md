@@ -196,3 +196,8 @@ Số liệu chính để quyết định: **exact provision recall của `final_
 - **Cả hai cờ tắt mặc định**: hành vi ứng dụng và cấu hình đã đánh giá ở chương 5 không đổi. Schema thêm giá trị `info` (cả `RiskItem` và `RiskFinding`); báo cáo xuất có thêm khoá `info` trong `findings_by_severity`.
 - **Chưa đo.** Không chạy lại bộ 48/80 ca để tuyên bố cải thiện, vì phân tích lỗi đã làm trên chính các ca đó. Muốn bật mặc định phải: viết bộ ca mới (gợi ý `injection_v3`, nhiều hợp đồng nền đã kiểm sạch Điều 21), đóng băng bằng tag, ghi trước quy tắc chấp nhận, rồi chạy cờ tắt và cờ bật trên cùng bộ, cùng judge.
 - Test: `tests/unit/test_rule_llm_verify.py` (4 test, cả hai trạng thái cờ) và 7 test mới trong `tests/unit/test_risk_flagger.py`. `pytest tests/unit tests/evaluation`: 342 passed, 1 skipped. `vite build` thành công.
+
+## 2026-11-15: bộ ca injection_v3 và quy tắc chấp nhận (khai báo trước khi chạy)
+- Bộ mới `evaluation/injection_v3` (48 ca = 8 luật × 3 vi phạm + 3 hợp lệ, trên 3 hợp đồng nền A/B/C đủ Điều 21) để đo `JUDGE_FINDING_TYPES` + `RED_FLAG_LLM_VERIFY`. Thiết kế, cách chấm và giới hạn: `evaluation/injection_v3/README.md`.
+- **Quy tắc:** chạy `off` và `on` (cả hai cờ cùng tắt/bật), cùng commit, cùng judge Groq `openai/gpt-oss-120b`. Bật cờ mặc định khi và chỉ khi trên đủ 48/48 ca ở cả hai cấu hình: `FP(on) ≤ FP(off) − 3` và `FN(on) ≤ FN(off) + 1`. Thiếu ca thì không quyết định. Không đổi quy tắc sau khi xem kết quả.
+- Chưa chạy `full`. Sẽ gắn tag `injection-v3-frozen` trước khi chạy. Khai báo: ca do cùng mô hình viết hai cờ soạn, sau khi xem phân tích lỗi, nên bộ đo việc sửa các kiểu lỗi đã biết trên văn bản mới, không đo tỷ lệ trên hợp đồng thực tế.
