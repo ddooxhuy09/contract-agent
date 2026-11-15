@@ -1,0 +1,93 @@
+{
+ "n_cases": 378,
+ "n_base_units": 154,
+ "n_quarantine": 9,
+ "n_low_confidence": 38,
+ "n_parser_mismatch": 0,
+ "n_ref_mismatch_cases": 1,
+ "n_unmapped_ref_cases": 6,
+ "layers": {
+  "V1": {
+   "pass": 378,
+   "fail": 0,
+   "n/a": 0,
+   "incomplete": 0
+  },
+  "V2": {
+   "pass": 378,
+   "fail": 0,
+   "n/a": 0,
+   "incomplete": 0
+  },
+  "V3": {
+   "pass": 377,
+   "fail": 1,
+   "n/a": 0,
+   "incomplete": 0
+  },
+  "V4": {
+   "pass": 375,
+   "fail": 3,
+   "n/a": 0,
+   "incomplete": 0
+  },
+  "V5": {
+   "pass": 378,
+   "fail": 0,
+   "n/a": 0,
+   "incomplete": 0
+  },
+  "V6": {
+   "pass": 375,
+   "fail": 3,
+   "n/a": 0,
+   "incomplete": 0
+  },
+  "V7": {
+   "pass": 342,
+   "fail": 20,
+   "n/a": 16,
+   "incomplete": 0
+  }
+ },
+ "ref_stats": {
+  "refs": 668,
+  "refs_mismatch": 1,
+  "quotes_checked": 444
+ },
+ "v5_fixed": 0,
+ "v6_duplicates": 1,
+ "v7": {
+  "units": 138,
+  "gemini_calls": 17,
+  "gemini_tokens": 60944,
+  "model": "gemini-3-flash-preview",
+  "run1_kappa": 0.9136,
+  "run1_agreement": 0.9565,
+  "run2_kappa": 0.9271,
+  "run2_agreement": 0.9638,
+  "both_runs_agree_with_label": 130,
+  "one_run_contradicts": 3,
+  "both_runs_contradict": 1,
+  "any_unclear": 4,
+  "run1_run2_agreement": 0.9638,
+  "complete_units": 138,
+  "run1_models": [
+   "gemini-2.5-flash"
+  ],
+  "run2_models": [
+   "gemini-2.5-flash",
+   "gemini-3-flash-preview"
+  ]
+ },
+ "quarantine_by_layer": {
+  "V7": 3,
+  "V4": 3,
+  "V6": 3
+ },
+ "quarantine_base_units": [
+  "LU-09",
+  "LU2-V1",
+  "OT-09"
+ ]
+}
