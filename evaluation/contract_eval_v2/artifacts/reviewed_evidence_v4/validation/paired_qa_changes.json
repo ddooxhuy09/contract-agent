@@ -1,0 +1,114 @@
+[
+  {
+    "id": "VAL-001",
+    "source_id": "TC-03-T1",
+    "baseline": 2,
+    "grounded": 2,
+    "delta": 0.0
+  },
+  {
+    "id": "VAL-002",
+    "source_id": "TC-10-T1",
+    "baseline": 2,
+    "grounded": 2,
+    "delta": 0.0
+  },
+  {
+    "id": "VAL-003",
+    "source_id": "KL-05-T1",
+    "baseline": 2,
+    "grounded": 2,
+    "delta": 0.0
+  },
+  {
+    "id": "VAL-004",
+    "source_id": "KL-08-T1",
+    "baseline": 2,
+    "grounded": 2,
+    "delta": 0.0
+  },
+  {
+    "id": "VAL-005",
+    "source_id": "LU-04-T1",
+    "baseline": 2,
+    "grounded": 2,
+    "delta": 0.0
+  },
+  {
+    "id": "VAL-006",
+    "source_id": "LU-07-T1",
+    "baseline": 2,
+    "grounded": 2,
+    "delta": 0.0
+  },
+  {
+    "id": "VAL-007",
+    "source_id": "BH-03-T1",
+    "baseline": 2,
+    "grounded": 2,
+    "delta": 0.0
+  },
+  {
+    "id": "VAL-008",
+    "source_id": "BH-06-T1",
+    "baseline": 2,
+    "grounded": 2,
+    "delta": 0.0
+  },
+  {
+    "id": "VAL-009",
+    "source_id": "OT-02-T1",
+    "baseline": 2,
+    "grounded": 2,
+    "delta": 0.0
+  },
+  {
+    "id": "VAL-010",
+    "source_id": "OT-06-T1",
+    "baseline": 2,
+    "grounded": 2,
+    "delta": 0.0
+  },
+  {
+    "id": "VAL-011",
+    "source_id": "GT-02-T1",
+    "baseline": 2,
+    "grounded": 2,
+    "delta": 0.0
+  },
+  {
+    "id": "VAL-012",
+    "source_id": "GT-06-T1",
+    "baseline": 2,
+    "grounded": 2,
+    "delta": 0.0
+  },
+  {
+    "id": "VAL-013",
+    "source_id": "TS-01-T1",
+    "baseline": 2,
+    "grounded": 2,
+    "delta": 0.0
+  },
+  {
+    "id": "VAL-014",
+    "source_id": "TS-09-T1",
+    "baseline": 2,
+    "grounded": 2,
+    "delta": 0.0
+  },
+  {
+    "id": "VAL-015",
+    "source_id": "DT-01-T1",
+    "baseline": 0,
+    "grounded": 1,
+    "delta": 0.5
+  },
+  {
+    "id": "VAL-016",
+    "source_id": "DT-09-T1",
+    "baseline": 2,
+    "grounded": 2,
+    "delta": 0.0
+  }
+]

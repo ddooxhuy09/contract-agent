@@ -1,0 +1,2871 @@
+{
+  "test": {
+    "n": 314,
+    "correctness": 0.7643312101910829,
+    "fully_correct": 0.6878980891719745,
+    "disputed_gold": 0,
+    "invalid_generations": 0,
+    "by_task": {
+      "fixed": {
+        "n": 23,
+        "correctness": 0.8260869565217391,
+        "fully_correct": 0.782608695652174,
+        "disputed_gold": 0,
+        "invalid_generations": 0
+      },
+      "legal_basis": {
+        "n": 93,
+        "correctness": 0.8279569892473119,
+        "fully_correct": 0.6559139784946236,
+        "disputed_gold": 0,
+        "invalid_generations": 0
+      },
+      "targeted_review": {
+        "n": 93,
+        "correctness": 0.8978494623655914,
+        "fully_correct": 0.8817204301075269,
+        "disputed_gold": 0,
+        "invalid_generations": 0
+      },
+      "temporal": {
+        "n": 12,
+        "correctness": 0.7916666666666666,
+        "fully_correct": 0.6666666666666666,
+        "disputed_gold": 0,
+        "invalid_generations": 0
+      },
+      "whole_contract_review": {
+        "n": 93,
+        "correctness": 0.5483870967741935,
+        "fully_correct": 0.5053763440860215,
+        "disputed_gold": 0,
+        "invalid_generations": 0
+      }
+    },
+    "without_low_confidence_sensitivity_only": {
+      "n": 279,
+      "correctness": 0.7724014336917563,
+      "fully_correct": 0.6989247311827957,
+      "disputed_gold": 0,
+      "invalid_generations": 0
+    }
+  },
+  "dev": {
+    "n": 55,
+    "correctness": 0.7636363636363637,
+    "fully_correct": 0.6545454545454545,
+    "disputed_gold": 0,
+    "invalid_generations": 0,
+    "by_task": {
+      "fixed": {
+        "n": 5,
+        "correctness": 0.7,
+        "fully_correct": 0.4,
+        "disputed_gold": 0,
+        "invalid_generations": 0
+      },
+      "legal_basis": {
+        "n": 16,
+        "correctness": 0.8125,
+        "fully_correct": 0.625,
+        "disputed_gold": 0,
+        "invalid_generations": 0
+      },
+      "targeted_review": {
+        "n": 16,
+        "correctness": 0.96875,
+        "fully_correct": 0.9375,
+        "disputed_gold": 0,
+        "invalid_generations": 0
+      },
+      "temporal": {
+        "n": 2,
+        "correctness": 0.5,
+        "fully_correct": 0.0,
+        "disputed_gold": 0,
+        "invalid_generations": 0
+      },
+      "whole_contract_review": {
+        "n": 16,
+        "correctness": 0.5625,
+        "fully_correct": 0.5625,
+        "disputed_gold": 0,
+        "invalid_generations": 0
+      }
+    },
+    "without_low_confidence_sensitivity_only": {
+      "n": 52,
+      "correctness": 0.75,
+      "fully_correct": 0.6346153846153846,
+      "disputed_gold": 0,
+      "invalid_generations": 0
+    }
+  },
+  "workflow": {
+    "n_contracts": 117,
+    "unchecked": {
+      "contracts/C001.txt": {
+        "tong_so_dieu": 5,
+        "da_kiem": 5,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 6,
+          "so_dieu_co_rui_ro": 5,
+          "dieu_chua_phat_hien_rui_ro": [],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "2",
+            "3",
+            "4",
+            "5"
+          ],
+          "do_tin_cay_trung_binh": 0.83,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C002.txt": {
+        "tong_so_dieu": 4,
+        "da_kiem": 4,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 4,
+          "so_dieu_co_rui_ro": 0,
+          "dieu_chua_phat_hien_rui_ro": [
+            "D",
+            "B",
+            "A",
+            "C"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.73,
+          "so_rui_ro_do_tin_cay_thap": 0,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C003.txt": {
+        "tong_so_dieu": 5,
+        "da_kiem": 5,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 2,
+          "so_dieu_co_rui_ro": 2,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "5"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.59,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C004.txt": {
+        "tong_so_dieu": 4,
+        "da_kiem": 4,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 2,
+          "so_dieu_co_rui_ro": 2,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.55,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C005.txt": {
+        "tong_so_dieu": 6,
+        "da_kiem": 6,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 4,
+          "so_dieu_co_rui_ro": 0,
+          "dieu_chua_phat_hien_rui_ro": [
+            "E",
+            "A",
+            "B",
+            "D",
+            "F",
+            "C"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.88,
+          "so_rui_ro_do_tin_cay_thap": 0,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C006.txt": {
+        "tong_so_dieu": 5,
+        "da_kiem": 5,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 4,
+          "so_dieu_co_rui_ro": 0,
+          "dieu_chua_phat_hien_rui_ro": [
+            "E",
+            "A",
+            "B",
+            "D",
+            "C"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.69,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C007.txt": {
+        "tong_so_dieu": 6,
+        "da_kiem": 6,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 4,
+          "so_dieu_co_rui_ro": 4,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.67,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C008.txt": {
+        "tong_so_dieu": 7,
+        "da_kiem": 7,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "7"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.77,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C009.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 9,
+          "so_dieu_co_rui_ro": 8,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "4"
+          ],
+          "do_tin_cay_trung_binh": 0.73,
+          "so_rui_ro_do_tin_cay_thap": 3,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C010.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 9,
+          "so_dieu_co_rui_ro": 8,
+          "dieu_chua_phat_hien_rui_ro": [
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.71,
+          "so_rui_ro_do_tin_cay_thap": 4,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C011.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.76,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C012.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "3",
+            "7",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.74,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C013.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "3",
+            "7",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "4"
+          ],
+          "do_tin_cay_trung_binh": 0.76,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C014.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 9,
+          "so_dieu_co_rui_ro": 8,
+          "dieu_chua_phat_hien_rui_ro": [
+            "7",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.76,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C015.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 9,
+          "so_dieu_co_rui_ro": 8,
+          "dieu_chua_phat_hien_rui_ro": [
+            "3",
+            "9",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "4"
+          ],
+          "do_tin_cay_trung_binh": 0.77,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C016.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "3",
+            "7",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "4"
+          ],
+          "do_tin_cay_trung_binh": 0.75,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C017.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 10,
+          "so_dieu_co_rui_ro": 9,
+          "dieu_chua_phat_hien_rui_ro": [
+            "7",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "4"
+          ],
+          "do_tin_cay_trung_binh": 0.78,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C018.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 10,
+        "chua_kiem": 1,
+        "ty_le_da_kiem": 0.9091,
+        "chua_kiem_chi_tiet": [
+          {
+            "clause_ref": "Điều 7",
+            "status": "unparsable"
+          }
+        ],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "7",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.72,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C019.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 9,
+          "so_dieu_co_rui_ro": 8,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "6"
+          ],
+          "do_tin_cay_trung_binh": 0.71,
+          "so_rui_ro_do_tin_cay_thap": 3,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C020.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "3",
+            "4",
+            "9",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.72,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C021.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "4",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.69,
+          "so_rui_ro_do_tin_cay_thap": 3,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C022.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 9,
+          "so_dieu_co_rui_ro": 8,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.69,
+          "so_rui_ro_do_tin_cay_thap": 4,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C023.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 10,
+        "chua_kiem": 1,
+        "ty_le_da_kiem": 0.9091,
+        "chua_kiem_chi_tiet": [
+          {
+            "clause_ref": "Điều 7",
+            "status": "unparsable"
+          }
+        ],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "3",
+            "4",
+            "7",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "6"
+          ],
+          "do_tin_cay_trung_binh": 0.74,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C024.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "7",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "6"
+          ],
+          "do_tin_cay_trung_binh": 0.73,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C025.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 6,
+          "so_dieu_co_rui_ro": 5,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "4",
+            "6",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.68,
+          "so_rui_ro_do_tin_cay_thap": 3,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C026.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "9",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.72,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C027.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 6,
+          "so_dieu_co_rui_ro": 5,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "6",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.71,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C028.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.71,
+          "so_rui_ro_do_tin_cay_thap": 3,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C029.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 10,
+        "chua_kiem": 1,
+        "ty_le_da_kiem": 0.9091,
+        "chua_kiem_chi_tiet": [
+          {
+            "clause_ref": "Điều 7",
+            "status": "unparsable"
+          }
+        ],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 6,
+          "so_dieu_co_rui_ro": 5,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "7",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "5"
+          ],
+          "do_tin_cay_trung_binh": 0.8,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C030.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "7",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.72,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C031.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "6",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.76,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C032.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 6,
+          "so_dieu_co_rui_ro": 5,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "4",
+            "7",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.74,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C033.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 10,
+        "chua_kiem": 1,
+        "ty_le_da_kiem": 0.9091,
+        "chua_kiem_chi_tiet": [
+          {
+            "clause_ref": "Điều 7",
+            "status": "unparsable"
+          }
+        ],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "7",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "5"
+          ],
+          "do_tin_cay_trung_binh": 0.78,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C034.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "7",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "5"
+          ],
+          "do_tin_cay_trung_binh": 0.79,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C035.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "5",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.74,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C036.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "3",
+            "4",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.71,
+          "so_rui_ro_do_tin_cay_thap": 3,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C037.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 6,
+          "so_dieu_co_rui_ro": 5,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "4",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "5"
+          ],
+          "do_tin_cay_trung_binh": 0.79,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C038.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 6,
+          "so_dieu_co_rui_ro": 5,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "4",
+            "7",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "5"
+          ],
+          "do_tin_cay_trung_binh": 0.81,
+          "so_rui_ro_do_tin_cay_thap": 0,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C039.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "9",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "7"
+          ],
+          "do_tin_cay_trung_binh": 0.77,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C040.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 9,
+          "so_dieu_co_rui_ro": 8,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.75,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C041.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "3",
+            "4",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.75,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C042.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 9,
+          "so_dieu_co_rui_ro": 8,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.74,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C043.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "3",
+            "4",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "7"
+          ],
+          "do_tin_cay_trung_binh": 0.76,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C044.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "3",
+            "4",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "7"
+          ],
+          "do_tin_cay_trung_binh": 0.75,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C045.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "7",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.74,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C046.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "4",
+            "7",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.73,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C047.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "3",
+            "4",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.74,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C048.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "7"
+          ],
+          "do_tin_cay_trung_binh": 0.76,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C049.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "6",
+            "10"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "8"
+          ],
+          "do_tin_cay_trung_binh": 0.77,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C050.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.7,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C051.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "7",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.71,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C052.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 9,
+          "so_dieu_co_rui_ro": 8,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "9",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.76,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C053.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "9",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "8"
+          ],
+          "do_tin_cay_trung_binh": 0.74,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C054.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.69,
+          "so_rui_ro_do_tin_cay_thap": 4,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C055.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.72,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C056.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "3",
+            "4",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "8"
+          ],
+          "do_tin_cay_trung_binh": 0.73,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C058.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.72,
+          "so_rui_ro_do_tin_cay_thap": 3,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C059.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 6,
+          "so_dieu_co_rui_ro": 5,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "4",
+            "7",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "2"
+          ],
+          "do_tin_cay_trung_binh": 0.76,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C060.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "7",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.71,
+          "so_rui_ro_do_tin_cay_thap": 3,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C061.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "4",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.74,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C062.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 6,
+          "so_dieu_co_rui_ro": 5,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "7",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.72,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C063.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 6,
+          "so_dieu_co_rui_ro": 5,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "4",
+            "7",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "2"
+          ],
+          "do_tin_cay_trung_binh": 0.78,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C064.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "2",
+            "4",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.69,
+          "so_rui_ro_do_tin_cay_thap": 3,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C065.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 6,
+          "so_dieu_co_rui_ro": 5,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "4",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "2"
+          ],
+          "do_tin_cay_trung_binh": 0.73,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C066.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 9,
+          "so_dieu_co_rui_ro": 8,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "7",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.74,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C068.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "4",
+            "9",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.71,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C069.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "4",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "10"
+          ],
+          "do_tin_cay_trung_binh": 0.76,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C070.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "4",
+            "7",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.67,
+          "so_rui_ro_do_tin_cay_thap": 3,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C071.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "7",
+            "9",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.73,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C072.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 10,
+        "chua_kiem": 1,
+        "ty_le_da_kiem": 0.9091,
+        "chua_kiem_chi_tiet": [
+          {
+            "clause_ref": "Điều 7",
+            "status": "unparsable"
+          }
+        ],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 9,
+          "so_dieu_co_rui_ro": 8,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "7",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.69,
+          "so_rui_ro_do_tin_cay_thap": 3,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C073.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 9,
+          "so_dieu_co_rui_ro": 8,
+          "dieu_chua_phat_hien_rui_ro": [
+            "3",
+            "4",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "10"
+          ],
+          "do_tin_cay_trung_binh": 0.76,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C074.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.69,
+          "so_rui_ro_do_tin_cay_thap": 3,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C075.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 9,
+          "so_dieu_co_rui_ro": 8,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "7",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "10"
+          ],
+          "do_tin_cay_trung_binh": 0.76,
+          "so_rui_ro_do_tin_cay_thap": 3,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C076.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 10,
+          "so_dieu_co_rui_ro": 9,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.69,
+          "so_rui_ro_do_tin_cay_thap": 4,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C077.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 6,
+          "so_dieu_co_rui_ro": 5,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "7",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.71,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C078.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "4",
+            "7",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.8,
+          "so_rui_ro_do_tin_cay_thap": 0,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C079.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "9"
+          ],
+          "do_tin_cay_trung_binh": 0.76,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C080.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 6,
+          "so_dieu_co_rui_ro": 5,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "4",
+            "6",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.69,
+          "so_rui_ro_do_tin_cay_thap": 3,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C081.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 6,
+          "so_dieu_co_rui_ro": 5,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "4",
+            "7",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.72,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C082.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "4",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.76,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C083.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "3",
+            "4",
+            "7",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "9"
+          ],
+          "do_tin_cay_trung_binh": 0.77,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C084.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "7",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "9"
+          ],
+          "do_tin_cay_trung_binh": 0.77,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C085.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "3",
+            "4",
+            "7",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.73,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C086.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 9,
+          "so_dieu_co_rui_ro": 8,
+          "dieu_chua_phat_hien_rui_ro": [
+            "3",
+            "4",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "9"
+          ],
+          "do_tin_cay_trung_binh": 0.77,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C087.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.74,
+          "so_rui_ro_do_tin_cay_thap": 3,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C088.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 9,
+          "so_dieu_co_rui_ro": 8,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [],
+          "do_tin_cay_trung_binh": 0.74,
+          "so_rui_ro_do_tin_cay_thap": 3,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C089.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 9,
+          "so_dieu_co_rui_ro": 8,
+          "dieu_chua_phat_hien_rui_ro": [
+            "3",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "4"
+          ],
+          "do_tin_cay_trung_binh": 0.76,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C090.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 10,
+          "so_dieu_co_rui_ro": 9,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "4"
+          ],
+          "do_tin_cay_trung_binh": 0.74,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C091.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 9,
+          "so_dieu_co_rui_ro": 8,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "9",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "4"
+          ],
+          "do_tin_cay_trung_binh": 0.76,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C092.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 9,
+          "so_dieu_co_rui_ro": 8,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "6",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "4"
+          ],
+          "do_tin_cay_trung_binh": 0.73,
+          "so_rui_ro_do_tin_cay_thap": 3,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C093.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 10,
+        "chua_kiem": 1,
+        "ty_le_da_kiem": 0.9091,
+        "chua_kiem_chi_tiet": [
+          {
+            "clause_ref": "Điều 7",
+            "status": "unparsable"
+          }
+        ],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "7",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "6"
+          ],
+          "do_tin_cay_trung_binh": 0.7,
+          "so_rui_ro_do_tin_cay_thap": 3,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C094.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "6"
+          ],
+          "do_tin_cay_trung_binh": 0.73,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C095.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "6"
+          ],
+          "do_tin_cay_trung_binh": 0.73,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C096.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 6,
+          "so_dieu_co_rui_ro": 5,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "7",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "6"
+          ],
+          "do_tin_cay_trung_binh": 0.74,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C097.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 6,
+          "so_dieu_co_rui_ro": 5,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "7",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "5"
+          ],
+          "do_tin_cay_trung_binh": 0.8,
+          "so_rui_ro_do_tin_cay_thap": 0,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C098.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "7",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "5"
+          ],
+          "do_tin_cay_trung_binh": 0.78,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C099.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "4",
+            "9",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "5"
+          ],
+          "do_tin_cay_trung_binh": 0.81,
+          "so_rui_ro_do_tin_cay_thap": 0,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C100.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "5"
+          ],
+          "do_tin_cay_trung_binh": 0.75,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C101.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "4",
+            "9",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "7"
+          ],
+          "do_tin_cay_trung_binh": 0.77,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C102.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "7"
+          ],
+          "do_tin_cay_trung_binh": 0.75,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C103.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "7"
+          ],
+          "do_tin_cay_trung_binh": 0.76,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C104.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "4",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "7"
+          ],
+          "do_tin_cay_trung_binh": 0.76,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C105.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 6,
+          "so_dieu_co_rui_ro": 5,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "4",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "8"
+          ],
+          "do_tin_cay_trung_binh": 0.73,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C106.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "9",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "8"
+          ],
+          "do_tin_cay_trung_binh": 0.76,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C108.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "7",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "8"
+          ],
+          "do_tin_cay_trung_binh": 0.77,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C109.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "9",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "2"
+          ],
+          "do_tin_cay_trung_binh": 0.75,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C110.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 10,
+        "chua_kiem": 1,
+        "ty_le_da_kiem": 0.9091,
+        "chua_kiem_chi_tiet": [
+          {
+            "clause_ref": "Điều 7",
+            "status": "unparsable"
+          }
+        ],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "3",
+            "4",
+            "7",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "2"
+          ],
+          "do_tin_cay_trung_binh": 0.77,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C111.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 6,
+          "so_dieu_co_rui_ro": 5,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "3",
+            "4",
+            "7",
+            "9",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "2"
+          ],
+          "do_tin_cay_trung_binh": 0.78,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C112.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "7",
+            "9",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "2"
+          ],
+          "do_tin_cay_trung_binh": 0.75,
+          "so_rui_ro_do_tin_cay_thap": 3,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C113.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 9,
+          "so_dieu_co_rui_ro": 8,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "9",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "10"
+          ],
+          "do_tin_cay_trung_binh": 0.75,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C114.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "9",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "10"
+          ],
+          "do_tin_cay_trung_binh": 0.77,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C115.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 9,
+          "so_dieu_co_rui_ro": 8,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "7",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "10"
+          ],
+          "do_tin_cay_trung_binh": 0.75,
+          "so_rui_ro_do_tin_cay_thap": 3,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C116.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 9,
+          "so_dieu_co_rui_ro": 8,
+          "dieu_chua_phat_hien_rui_ro": [
+            "3",
+            "4",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "10"
+          ],
+          "do_tin_cay_trung_binh": 0.75,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C117.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "7",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "9"
+          ],
+          "do_tin_cay_trung_binh": 0.77,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C118.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 9,
+          "so_dieu_co_rui_ro": 8,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "9"
+          ],
+          "do_tin_cay_trung_binh": 0.76,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C119.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 8,
+          "so_dieu_co_rui_ro": 7,
+          "dieu_chua_phat_hien_rui_ro": [
+            "4",
+            "7",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "9"
+          ],
+          "do_tin_cay_trung_binh": 0.75,
+          "so_rui_ro_do_tin_cay_thap": 1,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      },
+      "contracts/C120.txt": {
+        "tong_so_dieu": 11,
+        "da_kiem": 11,
+        "chua_kiem": 0,
+        "ty_le_da_kiem": 1.0,
+        "chua_kiem_chi_tiet": [],
+        "pham_vi": "Tỷ lệ đã kiểm = số Điều đã được quét / tổng số Điều; không đo độ đầy đủ hay độ chính xác của phát hiện.",
+        "phat_hien": {
+          "so_rui_ro": 7,
+          "so_dieu_co_rui_ro": 6,
+          "dieu_chua_phat_hien_rui_ro": [
+            "1",
+            "4",
+            "7",
+            "10",
+            "11"
+          ],
+          "dieu_chi_kiem_bang_quy_tac": [
+            "9"
+          ],
+          "do_tin_cay_trung_binh": 0.75,
+          "so_rui_ro_do_tin_cay_thap": 2,
+          "luu_y": "«Điều chưa phát hiện rủi ro» nghĩa là hệ thống chưa tìm thấy vấn đề, không phải đã chứng minh hợp lệ. Các Điều chỉ kiểm bằng quy tắc xác định đã bỏ qua bước LLM nên có thể còn rủi ro khác trong cùng Điều."
+        }
+      }
+    },
+    "note": "Execution/coverage only; exhaustive risk gold and citation adjudication required before whole-contract F1."
+  },
+  "comparability": "New task-aware rubric; do not directly claim a paired improvement over v1/v4 scores."
+}

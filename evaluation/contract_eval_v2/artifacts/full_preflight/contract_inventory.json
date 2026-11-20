@@ -1,0 +1,842 @@
+[
+  {
+    "source_path": "data/demo_contracts/CÔNG TY CỔ PHẦN CÔNG NGHỆ TƯƠNG LAI_SAI.md",
+    "input_sha256": "edb42fbba21805de176877fbc532cb0bef267aa49d43f14cfac619420dd4c5fc",
+    "snapshot": "contracts/C001.txt",
+    "characters": 3605,
+    "snapshot_sha256": "414f8dd2f6223948db323508aad8f88c3b422c640104219ac552cd984fe24fc9"
+  },
+  {
+    "source_path": "evaluation/benchmark/v04/contracts/CTR-CIV-03.docx",
+    "input_sha256": "c555fb133b32f1e2976a36058371d51b2f17cb343b85db6f97123cf0c2125292",
+    "snapshot": "contracts/C002.txt",
+    "characters": 541,
+    "snapshot_sha256": "0589335c75b7d6481f3a9dbd27a5e204bb20cbc5b9ce67425ad3328afb757f78"
+  },
+  {
+    "source_path": "evaluation/benchmark/v04/contracts/CTR-COM-04.docx",
+    "input_sha256": "7c50527247106c9c7817e970b6e472f1d38731af4bb4b0075fbf468b77288187",
+    "snapshot": "contracts/C003.txt",
+    "characters": 610,
+    "snapshot_sha256": "e9a84d8aa986437e834a92abf96f67c222b95b9718cbd170712de51919948bed"
+  },
+  {
+    "source_path": "evaluation/benchmark/v04/contracts/CTR-COM-05.docx",
+    "input_sha256": "8a16afd853c3e43fe4f5aa4ce8ca3d5b0b0322b767e0d1189f66e411ad48788f",
+    "snapshot": "contracts/C004.txt",
+    "characters": 488,
+    "snapshot_sha256": "a0f01780137772737f39be0fb988c369441dca6793d2ce0b431e930d18f85f05"
+  },
+  {
+    "source_path": "evaluation/benchmark/v04/contracts/CTR-CONS-06.docx",
+    "input_sha256": "db2a03eba11507f1b8e968f6aff11aaa0c78aba7eae8bb068dcd821a47aaedeb",
+    "snapshot": "contracts/C005.txt",
+    "characters": 842,
+    "snapshot_sha256": "24260c2812995e59659a1b781350c064c660cc94276da333897e90d1f0d06df5"
+  },
+  {
+    "source_path": "evaluation/benchmark/v04/contracts/CTR-CONS-07.docx",
+    "input_sha256": "4e0569171be4f738fcccc63d6d972c852ba958fc0459f130f216772e552f2072",
+    "snapshot": "contracts/C006.txt",
+    "characters": 636,
+    "snapshot_sha256": "826cd72cf25b24e80f0b37069077e6953c47117bce74c1ccbb55032cb4bd4330"
+  },
+  {
+    "source_path": "evaluation/benchmark/v04/contracts/CTR-CTV-02.docx",
+    "input_sha256": "113ebbc5647a6c349e96da5458271bba3054a84c4add362aa27b2fdd70f8ac6f",
+    "snapshot": "contracts/C007.txt",
+    "characters": 721,
+    "snapshot_sha256": "1f1bf321214253adc73e7883885ba302ecfa6dc9e271c6df7e5c3bda64ceb9bf"
+  },
+  {
+    "source_path": "evaluation/benchmark/v04/contracts/CTR-LAB-01.docx",
+    "input_sha256": "302706f38df6e3d9a0051bc21743916109ed6bd4f02ae3d99d97189a43331c57",
+    "snapshot": "contracts/C008.txt",
+    "characters": 912,
+    "snapshot_sha256": "306ec2a87f2b15e86fe8bed612b0424a6f851eed8a4fe8c6d25b2ed1abc1362a"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/BH-01.txt",
+    "input_sha256": "d5491c2c1a09ff74ca55e5e79467ddec375d2cf0ff9485c65973d5718faadf53",
+    "snapshot": "contracts/C009.txt",
+    "characters": 3370,
+    "snapshot_sha256": "2986a74b0127dd824c5e240f1d128ebc663facfcc0f63afe7a6f4c3c53305302"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/BH-02.txt",
+    "input_sha256": "917fd32978f5d9060abad9d74c8add33f4c8757fe021511d7af91a0ba6e02c45",
+    "snapshot": "contracts/C010.txt",
+    "characters": 3376,
+    "snapshot_sha256": "8d5f142dfc1fa742abdbff08ffa6104cba67a52a930f295d330e613dafdbfc21"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/BH-03.txt",
+    "input_sha256": "1c59f3f81bb78cdc8c439e0e2e45d41342c14ecf95e157dd248b61fc22c04b2a",
+    "snapshot": "contracts/C011.txt",
+    "characters": 3315,
+    "snapshot_sha256": "31d73ce1e1652169ea13b88881a14e1b892c0ae7d170e07b66b4178867e0556d"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/BH-04.txt",
+    "input_sha256": "b72da51e6ad6ae9a4706f88e4f5017bd005f926132b09c302e494a9447faff23",
+    "snapshot": "contracts/C012.txt",
+    "characters": 3400,
+    "snapshot_sha256": "7cbe221bc7c030caca4150888f37bf35a63727fa62b67d01f27e4efe413f8f6b"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/BH-05.txt",
+    "input_sha256": "0e65097a19e14091dbcd3e268b03bef937ef201d07018a3d13e05944c3461663",
+    "snapshot": "contracts/C013.txt",
+    "characters": 3265,
+    "snapshot_sha256": "2dcd5dc9f12f6c2ed81fc7e2d24fe9c6e376c740d8b9f12225472c2cef6101ba"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/BH-06.txt",
+    "input_sha256": "c65e964fdfc8d21e43e8bf8dc84c3bb703a2ebd79d92684fb6ce6c7469822768",
+    "snapshot": "contracts/C014.txt",
+    "characters": 3388,
+    "snapshot_sha256": "775e7ff75717e65171fd0280187c051003d6180efd9feb55f91a09dcea27b134"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/BH-07.txt",
+    "input_sha256": "04c63f5117f8fa3c0eaf5fd19fe2b93613992f6f2c5b2a5caaa30f5fe0d30b3d",
+    "snapshot": "contracts/C015.txt",
+    "characters": 3487,
+    "snapshot_sha256": "0cb06cdbdeb9aee805803d28c1cae2090e2ff410c4e57e428d33a279aea04f58"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/BH-08.txt",
+    "input_sha256": "2ec574383d1b4da4d664edf12dff1e77a7f351e2c894e1688ae7f235e80a296d",
+    "snapshot": "contracts/C016.txt",
+    "characters": 3338,
+    "snapshot_sha256": "9505d085806791e1ec45e3852c0ac3d8df7b0cc80399a22aa3ed01da7ee56301"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/BH-09.txt",
+    "input_sha256": "98508fcdba4ed41bac6dc821d034d4a2aaeb131f06ecb2b98da0317397e11041",
+    "snapshot": "contracts/C017.txt",
+    "characters": 3495,
+    "snapshot_sha256": "aa8f480c735c477b8900b7c98b18b9023f336f97a34e4af67904506fe24c789b"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/BH-10.txt",
+    "input_sha256": "8998e6d0079af921d908294370bdbc70d788ee19f6fd2a2a47df18e312eefd56",
+    "snapshot": "contracts/C018.txt",
+    "characters": 3349,
+    "snapshot_sha256": "04cf84f09e5668613248d7e7848856ece5b97231e4176b0daec6cc9657f99c59"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/DT-01.txt",
+    "input_sha256": "36f82028134db5d928eb04e01d748fc380e2013daee507d958bac5f2de534dc4",
+    "snapshot": "contracts/C019.txt",
+    "characters": 3251,
+    "snapshot_sha256": "2565f03ecee8c1d5fe6c7e8c3ef1ad13c95a1ee4e87ed97665e1f48bb185e8a8"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/DT-02.txt",
+    "input_sha256": "16b3faa66bc3f1fa5b071d905328626744ee2602ac4bf9c095573961e2d2b595",
+    "snapshot": "contracts/C020.txt",
+    "characters": 3345,
+    "snapshot_sha256": "4b40789da55947d508beded9a5150f4a1f1d46d650e7062901ddafbfb0616a69"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/DT-03.txt",
+    "input_sha256": "07341f0637f2cb35dd21bb147b3d366ef276b04368202b15aeb04ba573a4b7f0",
+    "snapshot": "contracts/C021.txt",
+    "characters": 3307,
+    "snapshot_sha256": "fc1a566a891175de78551c6ae9e9bfaccb3fdd03e04855bcc816f51c8a378331"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/DT-04.txt",
+    "input_sha256": "1c8956bcca87f1cb95df9ec527d5a80a2d03beb40a8061d2be4c0f5917e95267",
+    "snapshot": "contracts/C022.txt",
+    "characters": 3410,
+    "snapshot_sha256": "97bc6daa66f7bf87d928d0413e0cfc65bd8d3947b99796c224f77761d0913552"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/DT-05.txt",
+    "input_sha256": "03bd58dc115d63ab9e8c389f1fa18019f987f729f905c1f7e87c8d7781e6406c",
+    "snapshot": "contracts/C023.txt",
+    "characters": 3271,
+    "snapshot_sha256": "411fe179da2f539913b0cb666dd27670a6fa848c06ffe019ace751f671df5f12"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/DT-06.txt",
+    "input_sha256": "b4b504b4f09165396d2e2bbd46471f9198a41e33a586f9dc62e800f78370ee86",
+    "snapshot": "contracts/C024.txt",
+    "characters": 3445,
+    "snapshot_sha256": "fe196be2bf23680adeea61505a3b05a275dc7f2d110c12f4183718fdee5e150e"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/DT-07.txt",
+    "input_sha256": "2d11518fb3f088b5e7c8ce374aeba67dc50bd5c5903367f3c78892f2d566bba9",
+    "snapshot": "contracts/C025.txt",
+    "characters": 3313,
+    "snapshot_sha256": "2b5130f9446f2172b5dea8fdf0597a0d1eedcb601183f269eb14ec5774b86c30"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/DT-08.txt",
+    "input_sha256": "dd920dfb8af0d620aec94ca86903857292aac8631f1dc2795e17587da10a0303",
+    "snapshot": "contracts/C026.txt",
+    "characters": 3343,
+    "snapshot_sha256": "15a8b2890f184bc41e7b91635cf97e9e84e49c8c410c77a846aa40bf296c8174"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/DT-09.txt",
+    "input_sha256": "5428cd636e493b39287ace577b17342b6ab00f4fb59cfec3c785707ade8705b7",
+    "snapshot": "contracts/C027.txt",
+    "characters": 3435,
+    "snapshot_sha256": "b9ad018b9a580e0c38ffb7931b6927c5d2c6dc6edce71238745fa85ed4f89a81"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/DT-10.txt",
+    "input_sha256": "fee0d5c674b5451398172ed0d9785530341027889c2121bf9e7708443cbb68c0",
+    "snapshot": "contracts/C028.txt",
+    "characters": 3340,
+    "snapshot_sha256": "45d3923664e5c2b8aeb443f2aa88e82c076f91de5f4f3ab0442470312916830e"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/GT-01.txt",
+    "input_sha256": "517d6f984474e54d4d5e9cb8c7e4fdba05bd10c26aadebc5b3a6c72255a5ff5c",
+    "snapshot": "contracts/C029.txt",
+    "characters": 3385,
+    "snapshot_sha256": "55c6ac3f6a3ce15014eff855ca86f44684492071a2414f9d1d6b2034c9f85fae"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/GT-02.txt",
+    "input_sha256": "cef60053d82fda2c9a698c4bfe3d29d1758925b02d2f7eae02243c8a3ce2fb8e",
+    "snapshot": "contracts/C030.txt",
+    "characters": 3427,
+    "snapshot_sha256": "19462d8256c59c3c5ee613b728b84307f66740918166a8e18f2e2e3954b91ea7"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/GT-03.txt",
+    "input_sha256": "bf27c7a965a39563c652d6d8133600473a1670d046e86fb8465a398baa5b461c",
+    "snapshot": "contracts/C031.txt",
+    "characters": 3415,
+    "snapshot_sha256": "1cf9ef3164044e106b2559525e241acfe88d3ef12049cb03bb21fc1c229e7cc3"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/GT-04.txt",
+    "input_sha256": "b5b153f35d5e9517e8690ce417be9f119622398fcb119dec79fd2fe30a8406bd",
+    "snapshot": "contracts/C032.txt",
+    "characters": 3459,
+    "snapshot_sha256": "0583eb92478f1f1f885f0f21e1fc20749e61f1d2a4fb57c0c9a95f68401cb56a"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/GT-05.txt",
+    "input_sha256": "62702d9755a3d99154971befe914deb9ec7e2021f72312630eef8f38800943d7",
+    "snapshot": "contracts/C033.txt",
+    "characters": 3354,
+    "snapshot_sha256": "18dbd45d82b6fbd7c50205f59329901f604352b75764c41b1abe06f5dfa40b1f"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/GT-06.txt",
+    "input_sha256": "3de2b9ccf27f7314ce38c8b229ab3155502e1b48db48398fc5615f402e5144b5",
+    "snapshot": "contracts/C034.txt",
+    "characters": 3433,
+    "snapshot_sha256": "273f06cd304b7fc5eb69695c81c258ac45ee17963ca3fb18d28fb658c53cf5ff"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/GT-07.txt",
+    "input_sha256": "8edb31496723f6aead982a4a2d27a291469e634a82dbe8136b31f5a19a3ec5f2",
+    "snapshot": "contracts/C035.txt",
+    "characters": 3437,
+    "snapshot_sha256": "1b57aa2dece284435d51794943e5aa7ccb5539eb4d92eb6bda039f4fefc6b971"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/GT-08.txt",
+    "input_sha256": "11443b8256c2920579dfb0747671b2b497a22494f8453b9fb0b6787802e2191a",
+    "snapshot": "contracts/C036.txt",
+    "characters": 3439,
+    "snapshot_sha256": "d731a713e0f3b5ac840967f32a4a1f427237ea675a6542ec60892ae003d0412b"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/GT-09.txt",
+    "input_sha256": "18cd970164484afc2dbe4d7f82895a237af038c686d75dadea4cccab60e12de4",
+    "snapshot": "contracts/C037.txt",
+    "characters": 3404,
+    "snapshot_sha256": "528392a4a66d0ca554f4decf30957634450efdd4ffb537b262510b28dd3ba0ee"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/GT-10.txt",
+    "input_sha256": "202a859fcb10a60585e563e6b7edad26406240da2fbdfc00469cdf70356ebf47",
+    "snapshot": "contracts/C038.txt",
+    "characters": 3421,
+    "snapshot_sha256": "8a56414db5e7d1d4ad5072cf1048b183c48fbf9ec79a4cd48e063d3a407ebf75"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/KL-01.txt",
+    "input_sha256": "e5c746f7b80b623902732fd2218a49674ec6da4fcce8dd05e5cf61c05f23d8ad",
+    "snapshot": "contracts/C039.txt",
+    "characters": 3163,
+    "snapshot_sha256": "e0fce92f8320150ac11fb14e83c6417830a3a4fa92a0f59a4dbc14c9252808c9"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/KL-02.txt",
+    "input_sha256": "e63ba193b132cb49bf4f5c794c3baf6d1c88a5a4cae1fa96d2eb893b07206f81",
+    "snapshot": "contracts/C040.txt",
+    "characters": 3180,
+    "snapshot_sha256": "9e31b0817f17cf270fa84ed5cba03e80a5d55081f36f53bc47ba8341f9d5b2b1"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/KL-03.txt",
+    "input_sha256": "e816e405d9bfb35d5bbb827feaa27d74e0c1e07e53c1c271ee61a6a942ead32c",
+    "snapshot": "contracts/C041.txt",
+    "characters": 3214,
+    "snapshot_sha256": "e6a1546e5a103f4eccadf22a44f40702d98ba6a15f95ba3dee8ba657fcc05dfb"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/KL-04.txt",
+    "input_sha256": "465012c8d0ceb0a291e84434058c00ca5bd744365a8ced49a60983ef7690f9d7",
+    "snapshot": "contracts/C042.txt",
+    "characters": 3194,
+    "snapshot_sha256": "1342a650ab5179a293e64ac28d3f6537a8014222e17042e0f011cfe5a92272c9"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/KL-05.txt",
+    "input_sha256": "84640d9f54ca5d9fa6decdd574d9ee5c81351bb9282197cd32172737091f0a14",
+    "snapshot": "contracts/C043.txt",
+    "characters": 3183,
+    "snapshot_sha256": "a746d866b3e419e938cbb50ce83a5c2b54c919361918cad822960585ed7f1a4c"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/KL-06.txt",
+    "input_sha256": "bef4ea4ef070b2e349c179ce2f878cdbe22077ada8d54864dbd4324258671d3c",
+    "snapshot": "contracts/C044.txt",
+    "characters": 3259,
+    "snapshot_sha256": "96248b238e56f172c8c22cac91ea227c7b4a11e5af4549f09e98fb38900496f2"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/KL-07.txt",
+    "input_sha256": "9af2d0b64956df4bda61b17bb4ca8e01142b408df5257e778c0da9439baaed8e",
+    "snapshot": "contracts/C045.txt",
+    "characters": 3350,
+    "snapshot_sha256": "5afe27606e3aa72d91393f0e1d72fbe050dde580174ff811e7bdf0cead9e17c2"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/KL-08.txt",
+    "input_sha256": "73993f4f1d9a388cb74cce1780ccb244380889cc4cf2afc27977e846aee43fc9",
+    "snapshot": "contracts/C046.txt",
+    "characters": 3275,
+    "snapshot_sha256": "bb77b3493652212dd5e0377433cc018cd325cd800bb20e482967915ba0b425d3"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/KL-09.txt",
+    "input_sha256": "33c1ddc24bd9455d90f5113f44107e4fde8aa06ba07473179483825d29a3eda0",
+    "snapshot": "contracts/C047.txt",
+    "characters": 3213,
+    "snapshot_sha256": "685381e035468197bb47f9c8c2f76630c75467ddca4ee6fbf56eb976478e04a4"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/KL-10.txt",
+    "input_sha256": "88dfe9b08ff88e23f9e59f7afbe6d85d6507f11bc62c889ab65585091b76e750",
+    "snapshot": "contracts/C048.txt",
+    "characters": 3237,
+    "snapshot_sha256": "2948be197fb5601e56507a8d300844b6aeb75b38fc8a67ebc695e43489540203"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/LU-01.txt",
+    "input_sha256": "81ba3dc99708153068a0d98f07bc506fdc568496f09d62270d5403e9b7f986b1",
+    "snapshot": "contracts/C049.txt",
+    "characters": 3274,
+    "snapshot_sha256": "4ca5a7acb1e9dcfeb4c6000a71de4cf6679e79356b74290a089ca55e76bcee01"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/LU-02.txt",
+    "input_sha256": "51cc038176ccd445b8bf0ba25654352b00f1e195b6132ef77f12372adf67aee5",
+    "snapshot": "contracts/C050.txt",
+    "characters": 3315,
+    "snapshot_sha256": "7d2c17a20ab648aa22ed7447863eb5cc2c159ef8373fe570ac810960218aed7a"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/LU-03.txt",
+    "input_sha256": "2fdf6bb8812692030984ebb116f125a95c269cd2f17714f8e46fb03996847d46",
+    "snapshot": "contracts/C051.txt",
+    "characters": 3328,
+    "snapshot_sha256": "d9cb8a737ea5f5e5d2b3ff9c7db66407efc8e7184102e89dff7dc7f5275319ff"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/LU-04.txt",
+    "input_sha256": "011c52fc41c2807bb32b8805022676265c514fb218c7dba3da9d5078d56224cb",
+    "snapshot": "contracts/C052.txt",
+    "characters": 3377,
+    "snapshot_sha256": "7d5cfd3c496acac9a36b29c43634cb1124a0cc1fe41c79683096a5738dfad912"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/LU-05.txt",
+    "input_sha256": "b98ad5dbcf52f8538a81b334736213182123906d3a70cb1d61a6426107139fc8",
+    "snapshot": "contracts/C053.txt",
+    "characters": 3264,
+    "snapshot_sha256": "aac9ff52040e9c933db61314303185a69f796fc69de925305727dceb696a5a30"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/LU-06.txt",
+    "input_sha256": "48cf96ff7cb1068555be602122fedaf6482209317d80a70c352af36f55189bda",
+    "snapshot": "contracts/C054.txt",
+    "characters": 3359,
+    "snapshot_sha256": "367ecfb537978eb5f46b611054c2832910db91bb70df507b2010f9b665aec2ee"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/LU-07.txt",
+    "input_sha256": "937b9a8a7f10624fd905ece7b472c03b06486f5c946a6695ab9ff33d23d87dea",
+    "snapshot": "contracts/C055.txt",
+    "characters": 3416,
+    "snapshot_sha256": "630fcc39f8b640360d752b7eccf78d4b381d63f30947f593f57d62b1c85d3dc2"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/LU-08.txt",
+    "input_sha256": "7d01f2acc0ed1b780d26663f4f30f2705cf45466895fcacc4cfc0f03a289e65f",
+    "snapshot": "contracts/C056.txt",
+    "characters": 3322,
+    "snapshot_sha256": "3684f8e5b9aa7458334399b6d43d6c6e97e6a138425b081e2624ed1988f9f310"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/LU-09.txt",
+    "input_sha256": "bb37d52b830e2ff1c396dda91fb2b4aff6f4dc951b02f3964650a8fe3af5a024",
+    "snapshot": "contracts/C057.txt",
+    "characters": 3337,
+    "snapshot_sha256": "f219f8bc6ec999641b46e0c7b6e4b7ed8685baf7b8330179553a8d1a9ed4c32d"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/LU-10.txt",
+    "input_sha256": "3cf53ad0ac96206fdf4a1d619a2923ffef9893b9c1bad0b1ac7d739dada8406c",
+    "snapshot": "contracts/C058.txt",
+    "characters": 3416,
+    "snapshot_sha256": "79ee4a560d49503772cee4ca983710eea064f1917d966610fa209a411e6202f4"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/OT-01.txt",
+    "input_sha256": "de8ae27bd9168efcfe9ed5da0a981f5d8e7b48c581bfb3b5f7a47425a9aaa097",
+    "snapshot": "contracts/C059.txt",
+    "characters": 3252,
+    "snapshot_sha256": "53b6988a73e56507ccd574d7e408929cc8be171c65c8ad3e37e56d7429e60928"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/OT-02.txt",
+    "input_sha256": "e9bd1dcde2b029caa1585ff550f7a4cae074206324d88fc25521f322c67e6e5f",
+    "snapshot": "contracts/C060.txt",
+    "characters": 3348,
+    "snapshot_sha256": "b1d8bda59add53c591bea594b4c6ace388cebc08395c21170c912b7f332e7ffe"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/OT-03.txt",
+    "input_sha256": "a499a19a812948191311150c9db1fa004d024eb160246658ce464d439629fee6",
+    "snapshot": "contracts/C061.txt",
+    "characters": 3306,
+    "snapshot_sha256": "1fd5824291ed92779f5a52cc6912621ec95d5009aeb474d73e4d38ed0880ea2d"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/OT-04.txt",
+    "input_sha256": "dae1943a02b4dac28bb51f5aa408e177c6cb9f8801534169ecbb57e00a87e45c",
+    "snapshot": "contracts/C062.txt",
+    "characters": 3307,
+    "snapshot_sha256": "a00f0c674a0c70877c5c8d39c1b9cd7026356f6365d958a62c2ff5a6d5be036d"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/OT-05.txt",
+    "input_sha256": "41c1e831af7282150112d080ed0b5528452d4ce87a48c58eb8a5c96974735c46",
+    "snapshot": "contracts/C063.txt",
+    "characters": 3221,
+    "snapshot_sha256": "e9b99bdc473bb7013ce3f03587e7db0acd918dc6da97b59ee43fa71a020e80b2"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/OT-06.txt",
+    "input_sha256": "dbaf6ded3b62f395afb2e3e96bce2bb0bd403548541ab6e1cfcd437f319b50cb",
+    "snapshot": "contracts/C064.txt",
+    "characters": 3499,
+    "snapshot_sha256": "7685214ea8cb842bfbdf7ccc193519fb25bf7f2afd1c2a210522287b75900d38"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/OT-07.txt",
+    "input_sha256": "2636f3d2e03fb409fb918a9a1aae211152d885c498519eba358e31551977bcf9",
+    "snapshot": "contracts/C065.txt",
+    "characters": 3268,
+    "snapshot_sha256": "30021ebe4af5aec04dbd7663ba1bc91ffac5cfd9d434a42406340e659251bd41"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/OT-08.txt",
+    "input_sha256": "1592c27bf9b4dc50d7550d2f0d7eb939f745a2aa6be35d9f5782aa72cebb7462",
+    "snapshot": "contracts/C066.txt",
+    "characters": 3329,
+    "snapshot_sha256": "63a1ce8b77c7201d15e05d83275c6a474a29cdbae3d99d3f80e75733e5a2a233"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/OT-09.txt",
+    "input_sha256": "69e53c4a693f0aa09c67f23af1041c516a61bbc61f3481cbc6d448d309a5ae7f",
+    "snapshot": "contracts/C067.txt",
+    "characters": 3371,
+    "snapshot_sha256": "760edd822624a6991f033ba8732539569db8909909917d9d13e599dc432dc652"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/OT-10.txt",
+    "input_sha256": "3e41427eb98771044bb9e303cec43ba950993aeb13260be2a408c7d49cedbbb8",
+    "snapshot": "contracts/C068.txt",
+    "characters": 3445,
+    "snapshot_sha256": "c8009db199fc1020dab79681ca135d24a2bfecc41cac3e16f36306c6203239d3"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/TC-01.txt",
+    "input_sha256": "a5e19ceaf1e0c948c06c89a0177963f9eac909734a4c4d0f9f4990689c6bf913",
+    "snapshot": "contracts/C069.txt",
+    "characters": 3316,
+    "snapshot_sha256": "4ef09f726b99a53d46a891f715a3a0e3fb3e17aac34fa60c257f3c2dbbe9f726"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/TC-02.txt",
+    "input_sha256": "fce48307b8f21888dee22448325b81b32c3d01876a83e02fd91982b6fee8a47d",
+    "snapshot": "contracts/C070.txt",
+    "characters": 3388,
+    "snapshot_sha256": "ec8cb6e67449bc9491e8fc3942008377ab463cef380ef65c25f2f8e84e8500de"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/TC-03.txt",
+    "input_sha256": "214ed9fcb97b7794d89aaf93d476c104b8b545d73877f751934047ab6c55f275",
+    "snapshot": "contracts/C071.txt",
+    "characters": 3405,
+    "snapshot_sha256": "0b8abccba18f6ef1a4b02ea310ba4773b9fbca8a87532f5a676629f533bb543b"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/TC-04.txt",
+    "input_sha256": "3138a02ec2fd607402b0328bc6912ffa6a7884b81517ff6301e9478a8f0d49da",
+    "snapshot": "contracts/C072.txt",
+    "characters": 3374,
+    "snapshot_sha256": "63f2819c018d5f906c46a4371d836f57a079262557e1bc4484432252b4c5798f"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/TC-05.txt",
+    "input_sha256": "ffc100be4e057d33123b59f32b12a5415ecd2aea5a2c78997505f9605a5bb3fc",
+    "snapshot": "contracts/C073.txt",
+    "characters": 3282,
+    "snapshot_sha256": "bf9da74092670fc6810b153d826b537b741c59e8875342833c4e68372c6c5f50"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/TC-06.txt",
+    "input_sha256": "caadffcfbd86f6c06eb192c7491cbd4828d2d04599c0d8ef4f9b13d84a41fefe",
+    "snapshot": "contracts/C074.txt",
+    "characters": 3478,
+    "snapshot_sha256": "9a14378c6fb1ba8c5b554f35e9caa65d273eee6f78b2cbf710f1fc7baf64d553"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/TC-07.txt",
+    "input_sha256": "4b3081f8d77b241b73f5139e97b937b48b02ff149f5e8dd73a20a85ee2d01d60",
+    "snapshot": "contracts/C075.txt",
+    "characters": 3420,
+    "snapshot_sha256": "69e963569eccc2044390d713cc38ddb55a70a0a6f381fd91d4a2c8304ed54ebc"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/TC-08.txt",
+    "input_sha256": "9e8013d2e51ac0582ec384b63aed91fbd11551157a3e1a00f6b9f71e61ec42ec",
+    "snapshot": "contracts/C076.txt",
+    "characters": 3340,
+    "snapshot_sha256": "729885db0cbde85be9a339669d9f9c40af8f57dc1e207c44043840b221a75ee7"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/TC-09.txt",
+    "input_sha256": "f5918bd6eb712763a6196de776534b810d40b5f63e278fde41afc115c1a52c4c",
+    "snapshot": "contracts/C077.txt",
+    "characters": 3409,
+    "snapshot_sha256": "8d2a450e843e62a5f7281e2e12c6a3cd626bed176afb685dc8848b966cc4f1bc"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/TC-10.txt",
+    "input_sha256": "4296796b8bf6900d50a0571deede019630f3a64142529e173a2568853549e7cb",
+    "snapshot": "contracts/C078.txt",
+    "characters": 3380,
+    "snapshot_sha256": "e2e5229c09e1b514113da6f5d1eb6f879bdc062b4430212e31ef7c43021dce96"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/TS-01.txt",
+    "input_sha256": "2098a82557185964aefe50953870deb98454e6a2fdaec8b4279da2bd39a85b72",
+    "snapshot": "contracts/C079.txt",
+    "characters": 3253,
+    "snapshot_sha256": "9e1837619c05d9f7211b66c7693642a6bbb2f752c62720ddcb659c26ae298c08"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/TS-02.txt",
+    "input_sha256": "a10061b529aecddf890787659a609b735eabac93d19d5a236cab28981a960723",
+    "snapshot": "contracts/C080.txt",
+    "characters": 3298,
+    "snapshot_sha256": "a3a7e7d4713166de81a2dd01752609b037f88a1e70e86e18780205ff963c74c2"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/TS-03.txt",
+    "input_sha256": "30745e11677343e54822f9069ebd6ffdc3a5520dd795e4628ad9993315f1639c",
+    "snapshot": "contracts/C081.txt",
+    "characters": 3287,
+    "snapshot_sha256": "538ccb7dcb75a8f9ed29ecfcf92c1a29584c99e644dc03376fb26bff5e032f85"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/TS-04.txt",
+    "input_sha256": "2f1f8dc40f0323bf0e346a7ec6c25b96dcd6d86dd84a0cc807b18d81b127b5ac",
+    "snapshot": "contracts/C082.txt",
+    "characters": 3306,
+    "snapshot_sha256": "8b9dc7d0edb5183750d12edf93209eeb1d96ff2b7647164eda1fe722c5691027"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/TS-05.txt",
+    "input_sha256": "3d2d7a486240f5a14fe034d34222fda0521630f65089ad3a238d7582d381dc9d",
+    "snapshot": "contracts/C083.txt",
+    "characters": 3253,
+    "snapshot_sha256": "ef77fb7722d146e6764fb7f7de05846d7167e4d0a5b6c31f83443012dbda2c1a"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/TS-06.txt",
+    "input_sha256": "90900b85e25226612587cf5f47ae5ec8d72de908c0212e84d417ab9b7d8b7d3b",
+    "snapshot": "contracts/C084.txt",
+    "characters": 3293,
+    "snapshot_sha256": "b4f1f94e6159c58af6450bb0d13c9408308170bbb5199e3e2c33df9aff829fbe"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/TS-07.txt",
+    "input_sha256": "d3d823fe4b3f879989b71d2f61715ff2a5f1e7382804a03a6512abcaa4a78561",
+    "snapshot": "contracts/C085.txt",
+    "characters": 3441,
+    "snapshot_sha256": "92298efad5a12bfd96041d8fad752239a901159cfe6ba45673450b207d28e51c"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/TS-08.txt",
+    "input_sha256": "ba5695bb4572fe79adf65fcf9cca6027046c6caab879cc8a800d414511ff041c",
+    "snapshot": "contracts/C086.txt",
+    "characters": 3307,
+    "snapshot_sha256": "8db150958b12464af51c01edddca05611a2302d9bf658bd72c761c74dd19f1c5"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/TS-09.txt",
+    "input_sha256": "d1d7b874b886fc3851edc4d0ea1cc3460965d0a3711cc214a36f1a755ed4bf14",
+    "snapshot": "contracts/C087.txt",
+    "characters": 3444,
+    "snapshot_sha256": "716503b4da9fe3e581958c743ff9fd2da8fc9e8419e7c829526ecd49ffbe62a0"
+  },
+  {
+    "source_path": "evaluation/injection/contracts/TS-10.txt",
+    "input_sha256": "cb0dae3dd63aef5384eaeb82c557dd8a2f212522a003b9f68c906d81c8b3c7fd",
+    "snapshot": "contracts/C088.txt",
+    "characters": 3428,
+    "snapshot_sha256": "ff085accb0a9901892e0abc8de0c447ec19c80f61bbf5db3bb400685328b5175"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/BH2-C1.txt",
+    "input_sha256": "06f281bf7009a4895367701ddff434efabe3d7f10947c123e9c364bedb58339b",
+    "snapshot": "contracts/C089.txt",
+    "characters": 3291,
+    "snapshot_sha256": "080cad6e77633c108090c0c57d98488dd83b8f1043f2cb238610841cc2cd1a0a"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/BH2-C2.txt",
+    "input_sha256": "7e521628703f75ce2b3876989e15cfad069e6bf99cc2b40b56b299c3a9332929",
+    "snapshot": "contracts/C090.txt",
+    "characters": 3269,
+    "snapshot_sha256": "d9d7ba252feeffcc0bf9dd6df40125c6b490b5597f8f01c26d2fa27f637df240"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/BH2-V1.txt",
+    "input_sha256": "b2d21d547c841f56d22bd6e9dd2d9fbb192629a493fc6c48efbbf4bd63e278de",
+    "snapshot": "contracts/C091.txt",
+    "characters": 3277,
+    "snapshot_sha256": "b43ba7ac088330f5990c0160b88e14d030c0198af97cb9b5c3ca3c11a41b3d68"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/BH2-V2.txt",
+    "input_sha256": "6d5b5828ce4f5ffff43ccb68dd4ce1f3cdc24a40f089fdb947f4123c36fb4e83",
+    "snapshot": "contracts/C092.txt",
+    "characters": 3251,
+    "snapshot_sha256": "07bac7e5c888c38700d64445f6c2f2a66293850c8a6268388be983770b06c4f3"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/DT2-C1.txt",
+    "input_sha256": "33fb496df93087ef54b4730a2673ee02b2256edd1c6c1c22f1763085c5c85901",
+    "snapshot": "contracts/C093.txt",
+    "characters": 3257,
+    "snapshot_sha256": "36b9ff2999a0650b6fb76a2c440bc460ec82a016000a17d4918578382f64cdac"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/DT2-C2.txt",
+    "input_sha256": "be9079551938bf4966140cabb62560ac28ed1cb23784b5a5df3fd6af2ea93790",
+    "snapshot": "contracts/C094.txt",
+    "characters": 3334,
+    "snapshot_sha256": "9b8a0e64025cbf99e8744c90c9961d2d34fcec64644691b9bff5af3e4361b155"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/DT2-V1.txt",
+    "input_sha256": "ea31a14f9c2a36717674c2a41978401ddf363d759f76a24a6851c62922f417de",
+    "snapshot": "contracts/C095.txt",
+    "characters": 3265,
+    "snapshot_sha256": "fa368fb662444dd2811ec6fed686ede0e1202f914fe431a74f365a34badf072f"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/DT2-V2.txt",
+    "input_sha256": "ec7d91561547e3ae2980f2624837c477e0e334585398973d1b19f0abc51c55b4",
+    "snapshot": "contracts/C096.txt",
+    "characters": 3280,
+    "snapshot_sha256": "78f806471810023d11ad42808d1e2686efe3980e5490e1bc855390c0a86e3ad9"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/GT2-C1.txt",
+    "input_sha256": "4c0fda7b2a16ea42fe9e67925f63c12ee2377842eefc477ee20f4584fe181633",
+    "snapshot": "contracts/C097.txt",
+    "characters": 3372,
+    "snapshot_sha256": "f871bd7dcc786679cad3f5c52c0855cb92a4ff429a3be9d161f6be62b8113546"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/GT2-C2.txt",
+    "input_sha256": "db0f841092686e819f252e42dbb07840b27f39aa6c9260031e1541b4ae1efc8e",
+    "snapshot": "contracts/C098.txt",
+    "characters": 3371,
+    "snapshot_sha256": "1b769d0c6177a94f7d731364bd42f58857202498d2eff1b162bb97ab76afca57"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/GT2-V1.txt",
+    "input_sha256": "4b785cf59ed328907b2577e53a36279a06871ed5234e61c9a65f017d80395aae",
+    "snapshot": "contracts/C099.txt",
+    "characters": 3371,
+    "snapshot_sha256": "49ebb6f079b3682f56d636718b7d9d2ff171b298b1df3077eb6993e4bcd47f38"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/GT2-V2.txt",
+    "input_sha256": "6ea99ba6714285419a679def0c8a826cc47bfa65e29c04f5ba7ef380710d15d5",
+    "snapshot": "contracts/C100.txt",
+    "characters": 3362,
+    "snapshot_sha256": "d253cfd2554b596fce8f832852e733d1737c81b9c5668dd7f1bc693f9fa02781"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/KL2-C1.txt",
+    "input_sha256": "a154b917d493c081850a4e209ab8a77aa83bc9f5345ce37da5437901428c3d03",
+    "snapshot": "contracts/C101.txt",
+    "characters": 3125,
+    "snapshot_sha256": "a8f5ce25f97f4a34f507eba1d2c613e0fc56e5e594f8d8f03f7b2692d59b6ef3"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/KL2-C2.txt",
+    "input_sha256": "20ff66ae9681cd9a6ac91b557f24633ead3b3bda26a53b51406dfb11ec3d7374",
+    "snapshot": "contracts/C102.txt",
+    "characters": 3167,
+    "snapshot_sha256": "922fe589ee427220f562526ff64db5f36fdeb62df01eab2d7e77cc82a172e726"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/KL2-V1.txt",
+    "input_sha256": "66ae4bdd9251115aff57122babfc1bf830bbd8111b438829e7a5796d63fcc00a",
+    "snapshot": "contracts/C103.txt",
+    "characters": 3164,
+    "snapshot_sha256": "69494a8bac8cb3c77708e232299f8d06dc270fc38696abbace828a310b963211"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/KL2-V2.txt",
+    "input_sha256": "5ba70866894ad8b8818786c68004203d6517da1afe2df0b37f90fc015a33a9f2",
+    "snapshot": "contracts/C104.txt",
+    "characters": 3163,
+    "snapshot_sha256": "809467b7d06cfa930d43f952dfbdd6e09af22901985473d6981b09d0a1b4b423"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/LU2-C1.txt",
+    "input_sha256": "d9b7f3adca000564eaa5762259637a55a978578c60142304f7b0b73b87b307b0",
+    "snapshot": "contracts/C105.txt",
+    "characters": 3270,
+    "snapshot_sha256": "ff109b5ea5977191bed091cc719e6d320647420efea0d62539c6e66c9cce4665"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/LU2-C2.txt",
+    "input_sha256": "538642052c5c12c29d6992a964ac7cfdd06af154440e148bf05a0ecd5acf0d3e",
+    "snapshot": "contracts/C106.txt",
+    "characters": 3259,
+    "snapshot_sha256": "a43fcaebb9a595220c9235ad0019d2de851b9c2904d7299cad10a76ca9ff5e67"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/LU2-V1.txt",
+    "input_sha256": "77fba3bbe41faef73f1e1d39cae94d818b8163271d02b30a7b531801342e8729",
+    "snapshot": "contracts/C107.txt",
+    "characters": 3265,
+    "snapshot_sha256": "74d8d92a907730a2fd027a159037ff033a4081601685388da68d591c77bb2437"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/LU2-V2.txt",
+    "input_sha256": "93d39bf6a383972265143c2ee988fb64aa9d9787fb761c855a563cd1ea88f2a4",
+    "snapshot": "contracts/C108.txt",
+    "characters": 3260,
+    "snapshot_sha256": "2500d256321ae5b7491882da695f746f8d2e9b5d9e7e3c97ecf030ec3a965725"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/OT2-C1.txt",
+    "input_sha256": "d069c79a3b4157d01ad0cbdbaa4fc39315aaa30c218854c10268fe7eacf43508",
+    "snapshot": "contracts/C109.txt",
+    "characters": 3143,
+    "snapshot_sha256": "f29a715c8c286ae3e77cc393b6b159d5744fc8560dafdcae7bff93bae0303cb4"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/OT2-C2.txt",
+    "input_sha256": "12308506e2a54ebe83b1819d0e5d928356ce2a664afd5789c0eeb8383659e906",
+    "snapshot": "contracts/C110.txt",
+    "characters": 3184,
+    "snapshot_sha256": "aa630e4abe6ae18791b774421fc06614bb0c5ec2ae19b90ddc1815171c2eeba6"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/OT2-V1.txt",
+    "input_sha256": "ed528cf7c4a24bd5e70b81b208d45409c9d6ec7f4a51346864b46259eaafe014",
+    "snapshot": "contracts/C111.txt",
+    "characters": 3139,
+    "snapshot_sha256": "8a280a47650fa9aac4976b21a061905b6cc3e66427c7cec4b25228c660d6acb1"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/OT2-V2.txt",
+    "input_sha256": "e60cfda7e92a9b717ad16c3984df6932aaa472c466efcc14c7da0439a8c1ca02",
+    "snapshot": "contracts/C112.txt",
+    "characters": 3167,
+    "snapshot_sha256": "fb4f4bed5922c1af5fd816baad183d61ac224fd4a1bb57bb88c0163f029f0bda"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/TC2-C1.txt",
+    "input_sha256": "04a62cf5da742364ce8d9902ffc95d987a08a1261f99922e5ef5edbdab89bcf3",
+    "snapshot": "contracts/C113.txt",
+    "characters": 3315,
+    "snapshot_sha256": "c71f9efc5d5b7dd3de6ccb04380785856a12f7075a6fa8e4ebf326b55ee65ac9"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/TC2-C2.txt",
+    "input_sha256": "10f64d4b9f26eed0bb46672773e7f6c97d40be01be93056304600e91d8543a1d",
+    "snapshot": "contracts/C114.txt",
+    "characters": 3303,
+    "snapshot_sha256": "246a9867bdced0e1445322272c32f0769ea51b6a10f3af1c0c558611eda89c6a"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/TC2-V1.txt",
+    "input_sha256": "610ab5e7c99970b4a59bfcbfcc72dffe69f598e34d5ec2b9ba992bdd4501bf6a",
+    "snapshot": "contracts/C115.txt",
+    "characters": 3294,
+    "snapshot_sha256": "6ed0c9b02829fd5215bac968b103797ac41434ce508a051035e18b7cb4ee374b"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/TC2-V2.txt",
+    "input_sha256": "fa3b0d8defede484840805933e8d8601d7941335bab1d956ef92d9829badd4e2",
+    "snapshot": "contracts/C116.txt",
+    "characters": 3289,
+    "snapshot_sha256": "b66ef3330250fbae26f86751d7a83dcb2f90c3d687e8bfba28dda853a2c33422"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/TS2-C1.txt",
+    "input_sha256": "14d61f4318e40a95386d1a5d0b20fead17604d28931e6f09ac928c2f22878fb9",
+    "snapshot": "contracts/C117.txt",
+    "characters": 3290,
+    "snapshot_sha256": "e0a421e587851408dfe5942dc9b9200eadf2e933ee2063dd1f772c141b2683c4"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/TS2-C2.txt",
+    "input_sha256": "477322244ae6656117eb9205722b17bb659af99cb252548452c3861dac669a31",
+    "snapshot": "contracts/C118.txt",
+    "characters": 3281,
+    "snapshot_sha256": "02bff9a4f4e5c86f1c947dbf7a95593f40269af7a927163e954cda7faede653f"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/TS2-V1.txt",
+    "input_sha256": "f2a748c19475cab789112410872c7298c065bd29ab05ca52c92f388defbf4637",
+    "snapshot": "contracts/C119.txt",
+    "characters": 3256,
+    "snapshot_sha256": "a6bb1ba8fd17d399991090f27f0751f74ef30e833c6aa6e945478434da133e70"
+  },
+  {
+    "source_path": "evaluation/injection_v2/contracts/TS2-V2.txt",
+    "input_sha256": "1776c5beb644dff95bd762c4ffa36d1d782126416265bf27619f155b6cd5b406",
+    "snapshot": "contracts/C120.txt",
+    "characters": 3224,
+    "snapshot_sha256": "8f8c6d541b82f1202211c1381fcea5b96610549f82f5018afbddb03d38313283"
+  }
+]

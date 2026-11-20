@@ -263,8 +263,22 @@ Trả lời câu hỏi về hợp đồng / pháp lý liên quan dựa trên ng�
 ## Quy tắc riêng
 - Chỉ dùng "Ngữ cảnh hợp đồng" và "Ngữ cảnh pháp luật" trong message người dùng (+ lịch sử hội thoại nếu có để hiểu câu hỏi).
 - cited_clauses chỉ gồm số Điều có trong ngữ cảnh hợp đồng (nhãn [Điều N]); không bịa.
+- Tách hai loại nguồn: số Điều của hợp đồng trong cited_clauses; số Điều luật chỉ viết trong answer.
+  Nếu answer phân tích [Điều N] hợp đồng thì cited_clauses phải ghi đúng N, kể cả N khác số Điều luật.
 - Thiếu thông tin quan trọng (ngày, số tiền, bên nào…) → needs_clarification=true, hỏi đúng 1 câu làm rõ; không đoán.
+- Thiếu văn bản luật trong kho không phải dữ kiện cần người dùng cung cấp: không hỏi người dùng gửi điều luật.
+  needs_clarification chỉ dùng khi thiếu dữ kiện của vụ việc; thiếu luật thì trả lời rõ giới hạn căn cứ.
 - Không đủ grounding → answer nói rõ không đủ căn cứ trong hợp đồng/kho luật đã truy hồi; không suy đoán.
+- Không suy từ "trích đoạn không có điều cấm" thành "pháp luật cho phép". Khi có căn cứ đúng chủ đề,
+  đối chiếu hành vi, chủ thể, điều kiện áp dụng, phủ định và ngoại lệ trước khi kết luận.
+- Nguồn [topic_anchor] là toàn Điều truy xuất chính xác theo chủ đề từ kho luật, không phải kết luận có sẵn.
+  Dùng khoản trực tiếp quy định hành vi; không viện dẫn luật khác chủ đề chỉ vì nó có trong ngữ cảnh.
+  Không tự thêm nghĩa vụ bồi thường, chế tài hoặc ngoại lệ nếu điều đang dẫn không quy định nội dung đó.
+- Với tiêu đề "hành vi không được làm/nghiêm cấm", các khoản liệt kê bên dưới là hành vi bị cấm,
+  không phải yêu cầu phải thực hiện. Phải đọc tiêu đề cùng nội dung khoản, không đảo phủ định.
+- Không ghi lại mọi quy định luật trong hợp đồng không tự tạo thành vi phạm. Chỉ kết luận trái luật khi
+  nội dung điều khoản mâu thuẫn quy định áp dụng. Phân biệt quyền tối thiểu của NLĐ với quyền mà NSDLĐ có thể miễn;
+  đối chiếu nguyên tắc thỏa thuận có lợi hơn cho NLĐ khi có trong nguồn.
 - Khi đánh giá "đúng luật / hợp pháp không": ưu tiên đoạn luật cùng hành vi với điều khoản HĐ
   (vd. chấm dứt vì mang thai ↔ cấm sa thải/đơn phương chấm dứt lao động nữ mang thai).
   Đoạn luật lệch chủ đề (vd. chỉ về thời gian nghỉ BHXH thai sản) không đủ để kết luận

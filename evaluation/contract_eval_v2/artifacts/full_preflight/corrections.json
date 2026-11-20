@@ -1,0 +1,905 @@
+[
+  {
+    "id": "MIX-017",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [
+      {
+        "doc": "19/2023/QH15",
+        "article": 25,
+        "clause": 1,
+        "v04_id": "CON-25.1",
+        "doc_id": "161263",
+        "lquery": "161263.*.D25.K1.*"
+      }
+    ],
+    "new": [
+      {
+        "doc": "19/2023/QH15",
+        "article": 25,
+        "clause": 1,
+        "point": null,
+        "provision_id": "CON-25.1",
+        "source_url": "https://vbpl.vn/tiengiang/Pages/vbpq-print.aspx?ItemID=161263"
+      }
+    ]
+  },
+  {
+    "id": "TEMP-006",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [],
+    "new": [
+      {
+        "doc": "20/2023/QH15",
+        "article": 53,
+        "clause": 1,
+        "point": null,
+        "provision_id": "E23-53.1",
+        "source_url": "https://vbpl.moj.gov.vn/bothongtin/Pages/vbpq-toanvan.aspx?ItemID=165913"
+      },
+      {
+        "doc": "20/2023/QH15",
+        "article": 52,
+        "clause": 1,
+        "point": null,
+        "provision_id": "E23-52.1",
+        "source_url": "https://vbpl.moj.gov.vn/bothongtin/Pages/vbpq-toanvan.aspx?ItemID=165913"
+      }
+    ]
+  },
+  {
+    "id": "MIX-018",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [
+      {
+        "doc": "20/2023/QH15",
+        "article": 36,
+        "clause": 3,
+        "v04_id": "E-36.3",
+        "doc_id": "165913",
+        "lquery": "165913.*.D36.K3.*"
+      },
+      {
+        "doc": "19/2023/QH15",
+        "article": 25,
+        "clause": 2,
+        "v04_id": "CON-25.2",
+        "doc_id": "161263",
+        "lquery": "161263.*.D25.K2.*"
+      }
+    ],
+    "new": [
+      {
+        "doc": "20/2023/QH15",
+        "article": 36,
+        "clause": 3,
+        "point": null,
+        "provision_id": "E-36.3",
+        "source_url": "https://vbpl.moj.gov.vn/bothongtin/Pages/vbpq-toanvan.aspx?ItemID=165913"
+      },
+      {
+        "doc": "19/2023/QH15",
+        "article": 25,
+        "clause": 2,
+        "point": null,
+        "provision_id": "CON-25.2",
+        "source_url": "https://vbpl.vn/tiengiang/Pages/vbpq-print.aspx?ItemID=161263"
+      }
+    ]
+  },
+  {
+    "id": "TEMP-014",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [],
+    "new": [
+      {
+        "doc": "10/2012/QH13",
+        "article": 20,
+        "clause": 1,
+        "point": null,
+        "provision_id": "L12-20.1",
+        "source_url": "https://vanban.chinhphu.vn/?classid=1&docid=163542&orggroupid=1&pageid=27160"
+      }
+    ]
+  },
+  {
+    "id": "MIX-007",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [
+      {
+        "doc": "45/2019/QH14",
+        "article": 13,
+        "clause": 1,
+        "v04_id": "LAB-13.1",
+        "doc_id": "139264",
+        "lquery": "139264.*.D13.K1.*"
+      },
+      {
+        "doc": "41/2024/QH15",
+        "article": 2,
+        "clause": 1,
+        "v04_id": "SI-2.1.a",
+        "doc_id": "175027",
+        "lquery": "175027.*.D2.K1.*"
+      }
+    ],
+    "new": [
+      {
+        "doc": "45/2019/QH14",
+        "article": 13,
+        "clause": 1,
+        "point": null,
+        "provision_id": "LAB-13.1",
+        "source_url": "https://vanban.chinhphu.vn/?classid=1&docid=198540&orggroupid=1&pageid=27160"
+      },
+      {
+        "doc": "41/2024/QH15",
+        "article": 2,
+        "clause": 1,
+        "point": "a",
+        "provision_id": "SI-2.1.a",
+        "source_url": "https://xaydungchinhsach.chinhphu.vn/toan-van-luat-so-41-2024-qh15-bao-hiem-xa-hoi-119240723163650489.htm"
+      }
+    ]
+  },
+  {
+    "id": "MIX-006",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [
+      {
+        "doc": "45/2019/QH14",
+        "article": 13,
+        "clause": 1,
+        "v04_id": "LAB-13.1",
+        "doc_id": "139264",
+        "lquery": "139264.*.D13.K1.*"
+      }
+    ],
+    "new": [
+      {
+        "doc": "45/2019/QH14",
+        "article": 13,
+        "clause": 1,
+        "point": null,
+        "provision_id": "LAB-13.1",
+        "source_url": "https://vanban.chinhphu.vn/?classid=1&docid=198540&orggroupid=1&pageid=27160"
+      }
+    ]
+  },
+  {
+    "id": "MIX-012",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [],
+    "new": [
+      {
+        "doc": "36/2005/QH11",
+        "article": 301,
+        "clause": null,
+        "point": null,
+        "provision_id": "COM-301",
+        "source_url": "https://vbpl.vn/hanam/Pages/vbpq-toanvan.aspx?ItemID=26117"
+      }
+    ]
+  },
+  {
+    "id": "TEMP-009",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [],
+    "new": [
+      {
+        "doc": "19/2023/QH15",
+        "article": 80,
+        "clause": 1,
+        "point": "a",
+        "provision_id": "C23-80.1.a",
+        "source_url": "https://vbpl.moj.gov.vn/botuphap/Pages/vbpq-toanvan.aspx?ItemID=161263"
+      },
+      {
+        "doc": "19/2023/QH15",
+        "article": 79,
+        "clause": 2,
+        "point": null,
+        "provision_id": "C23-79.2",
+        "source_url": "https://vbpl.moj.gov.vn/botuphap/Pages/vbpq-toanvan.aspx?ItemID=161263"
+      },
+      {
+        "doc": "59/2010/QH12",
+        "article": 16,
+        "clause": 1,
+        "point": "b",
+        "provision_id": "C10-16.1.b",
+        "source_url": "https://vanban.chinhphu.vn/?docid=98755&pageid=27160"
+      }
+    ]
+  },
+  {
+    "id": "MIX-019",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [
+      {
+        "doc": "19/2023/QH15",
+        "article": 24,
+        "clause": null,
+        "v04_id": "CON-24",
+        "doc_id": "161263",
+        "lquery": "161263.*.D24.*"
+      }
+    ],
+    "new": [
+      {
+        "doc": "19/2023/QH15",
+        "article": 24,
+        "clause": null,
+        "point": null,
+        "provision_id": "CON-24",
+        "source_url": "https://vbpl.vn/tiengiang/Pages/vbpq-print.aspx?ItemID=161263"
+      }
+    ]
+  },
+  {
+    "id": "MIX-005",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [
+      {
+        "doc": "84/2015/QH13",
+        "article": 7,
+        "clause": 2,
+        "v04_id": "SAFE-7.2.b",
+        "doc_id": "70811",
+        "lquery": "70811.*.D7.K2.*"
+      }
+    ],
+    "new": [
+      {
+        "doc": "84/2015/QH13",
+        "article": 7,
+        "clause": 2,
+        "point": "b",
+        "provision_id": "SAFE-7.2.b",
+        "source_url": "https://vbpl.vn/TW/Pages/vbpq-toanvan.aspx?ItemID=70811"
+      }
+    ]
+  },
+  {
+    "id": "MIX-003",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [
+      {
+        "doc": "45/2019/QH14",
+        "article": 98,
+        "clause": 1,
+        "v04_id": "LAB-98.1.b",
+        "doc_id": "139264",
+        "lquery": "139264.*.D98.K1.*"
+      }
+    ],
+    "new": [
+      {
+        "doc": "45/2019/QH14",
+        "article": 98,
+        "clause": 1,
+        "point": "b",
+        "provision_id": "LAB-98.1.b",
+        "source_url": "https://vanban.chinhphu.vn/?classid=1&docid=198540&orggroupid=1&pageid=27160"
+      }
+    ]
+  },
+  {
+    "id": "MIX-004",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [
+      {
+        "doc": "45/2019/QH14",
+        "article": 168,
+        "clause": 1,
+        "v04_id": "LAB-168.1",
+        "doc_id": "139264",
+        "lquery": "139264.*.D168.K1.*"
+      },
+      {
+        "doc": "41/2024/QH15",
+        "article": 2,
+        "clause": 1,
+        "v04_id": "SI-2.1.a",
+        "doc_id": "175027",
+        "lquery": "175027.*.D2.K1.*"
+      },
+      {
+        "doc": "41/2024/QH15",
+        "article": 13,
+        "clause": 1,
+        "v04_id": "SI-13.1",
+        "doc_id": "175027",
+        "lquery": "175027.*.D13.K1.*"
+      }
+    ],
+    "new": [
+      {
+        "doc": "45/2019/QH14",
+        "article": 168,
+        "clause": 1,
+        "point": null,
+        "provision_id": "LAB-168.1",
+        "source_url": "https://vanban.chinhphu.vn/?classid=1&docid=198540&orggroupid=1&pageid=27160"
+      },
+      {
+        "doc": "41/2024/QH15",
+        "article": 2,
+        "clause": 1,
+        "point": "a",
+        "provision_id": "SI-2.1.a",
+        "source_url": "https://xaydungchinhsach.chinhphu.vn/toan-van-luat-so-41-2024-qh15-bao-hiem-xa-hoi-119240723163650489.htm"
+      },
+      {
+        "doc": "41/2024/QH15",
+        "article": 13,
+        "clause": 1,
+        "point": null,
+        "provision_id": "SI-13.1",
+        "source_url": "https://xaydungchinhsach.chinhphu.vn/toan-van-luat-so-41-2024-qh15-bao-hiem-xa-hoi-119240723163650489.htm"
+      }
+    ]
+  },
+  {
+    "id": "MIX-008",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [
+      {
+        "doc": "45/2019/QH14",
+        "article": 13,
+        "clause": 1,
+        "v04_id": "LAB-13.1",
+        "doc_id": "139264",
+        "lquery": "139264.*.D13.K1.*"
+      },
+      {
+        "doc": "45/2019/QH14",
+        "article": 17,
+        "clause": 1,
+        "v04_id": "LAB-17.1",
+        "doc_id": "139264",
+        "lquery": "139264.*.D17.K1.*"
+      }
+    ],
+    "new": [
+      {
+        "doc": "45/2019/QH14",
+        "article": 13,
+        "clause": 1,
+        "point": null,
+        "provision_id": "LAB-13.1",
+        "source_url": "https://vanban.chinhphu.vn/?classid=1&docid=198540&orggroupid=1&pageid=27160"
+      },
+      {
+        "doc": "45/2019/QH14",
+        "article": 17,
+        "clause": 1,
+        "point": null,
+        "provision_id": "LAB-17.1",
+        "source_url": "https://vanban.chinhphu.vn/?classid=1&docid=198540&orggroupid=1&pageid=27160"
+      }
+    ]
+  },
+  {
+    "id": "TEMP-011",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [],
+    "new": [
+      {
+        "doc": "35/2022/NĐ-CP",
+        "article": 73,
+        "clause": 1,
+        "point": null,
+        "provision_id": "N35-73.1",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Thuong-mai/Nghi-dinh-35-2022-ND-CP-quan-ly-khu-cong-nghiep-kinh-te-482305.aspx"
+      },
+      {
+        "doc": "145/2020/NĐ-CP",
+        "article": 4,
+        "clause": 2,
+        "point": null,
+        "provision_id": "N145-4.2",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Thuong-mai/Nghi-dinh-35-2022-ND-CP-quan-ly-khu-cong-nghiep-kinh-te-482305.aspx"
+      }
+    ]
+  },
+  {
+    "id": "MIX-020",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [
+      {
+        "doc": "19/2023/QH15",
+        "article": 25,
+        "clause": 2,
+        "v04_id": "CON-25.2",
+        "doc_id": "161263",
+        "lquery": "161263.*.D25.K2.*"
+      },
+      {
+        "doc": "20/2023/QH15",
+        "article": 36,
+        "clause": 3,
+        "v04_id": "E-36.3",
+        "doc_id": "165913",
+        "lquery": "165913.*.D36.K3.*"
+      }
+    ],
+    "new": [
+      {
+        "doc": "19/2023/QH15",
+        "article": 25,
+        "clause": 2,
+        "point": null,
+        "provision_id": "CON-25.2",
+        "source_url": "https://vbpl.vn/tiengiang/Pages/vbpq-print.aspx?ItemID=161263"
+      },
+      {
+        "doc": "20/2023/QH15",
+        "article": 36,
+        "clause": 3,
+        "point": null,
+        "provision_id": "E-36.3",
+        "source_url": "https://vbpl.moj.gov.vn/bothongtin/Pages/vbpq-toanvan.aspx?ItemID=165913"
+      }
+    ]
+  },
+  {
+    "id": "MIX-013",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [
+      {
+        "doc": "20/2023/QH15",
+        "article": 35,
+        "clause": 1,
+        "v04_id": "E-35.1",
+        "doc_id": "165913",
+        "lquery": "165913.*.D35.K1.*"
+      }
+    ],
+    "new": [
+      {
+        "doc": "20/2023/QH15",
+        "article": 35,
+        "clause": 1,
+        "point": null,
+        "provision_id": "E-35.1",
+        "source_url": "https://vbpl.moj.gov.vn/bothongtin/Pages/vbpq-toanvan.aspx?ItemID=165913"
+      },
+      {
+        "doc": "36/2005/QH11",
+        "article": 24,
+        "clause": 1,
+        "point": null,
+        "provision_id": "COM-24.1",
+        "source_url": "https://vbpl.vn/hanam/Pages/vbpq-toanvan.aspx?ItemID=26117"
+      }
+    ]
+  },
+  {
+    "id": "MIX-014",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [
+      {
+        "doc": "20/2023/QH15",
+        "article": 36,
+        "clause": 3,
+        "v04_id": "E-36.3",
+        "doc_id": "165913",
+        "lquery": "165913.*.D36.K3.*"
+      }
+    ],
+    "new": [
+      {
+        "doc": "20/2023/QH15",
+        "article": 36,
+        "clause": 3,
+        "point": null,
+        "provision_id": "E-36.3",
+        "source_url": "https://vbpl.moj.gov.vn/bothongtin/Pages/vbpq-toanvan.aspx?ItemID=165913"
+      },
+      {
+        "doc": "36/2005/QH11",
+        "article": 301,
+        "clause": null,
+        "point": null,
+        "provision_id": "COM-301",
+        "source_url": "https://vbpl.vn/hanam/Pages/vbpq-toanvan.aspx?ItemID=26117"
+      }
+    ]
+  },
+  {
+    "id": "TEMP-010",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [],
+    "new": [
+      {
+        "doc": "145/2020/NĐ-CP",
+        "article": 4,
+        "clause": 2,
+        "point": null,
+        "provision_id": "N145-4.2",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Thuong-mai/Nghi-dinh-35-2022-ND-CP-quan-ly-khu-cong-nghiep-kinh-te-482305.aspx"
+      }
+    ]
+  },
+  {
+    "id": "TEMP-003",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [],
+    "new": [
+      {
+        "doc": "51/2005/QH11",
+        "article": 33,
+        "clause": null,
+        "point": null,
+        "provision_id": "E05-33",
+        "source_url": "https://vanban.chinhphu.vn/?docid=29675&pageid=27160"
+      },
+      {
+        "doc": "51/2005/QH11",
+        "article": 34,
+        "clause": null,
+        "point": null,
+        "provision_id": "E05-34",
+        "source_url": "https://vanban.chinhphu.vn/?docid=29675&pageid=27160"
+      }
+    ]
+  },
+  {
+    "id": "MIX-009",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [],
+    "new": [
+      {
+        "doc": "91/2015/QH13",
+        "article": 328,
+        "clause": 1,
+        "point": null,
+        "provision_id": "CIV-328.1",
+        "source_url": "https://btllang.mod.gov.vn/van-ban/vbpq-do-nha-nuoc-ban-hanh/5001-bo-luat-dan-su-2015.html"
+      }
+    ]
+  },
+  {
+    "id": "MIX-002",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [
+      {
+        "doc": "45/2019/QH14",
+        "article": 17,
+        "clause": 2,
+        "v04_id": "LAB-17.2",
+        "doc_id": "139264",
+        "lquery": "139264.*.D17.K2.*"
+      }
+    ],
+    "new": [
+      {
+        "doc": "45/2019/QH14",
+        "article": 17,
+        "clause": 2,
+        "point": null,
+        "provision_id": "LAB-17.2",
+        "source_url": "https://vanban.chinhphu.vn/?classid=1&docid=198540&orggroupid=1&pageid=27160"
+      }
+    ]
+  },
+  {
+    "id": "TEMP-001",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [],
+    "new": [
+      {
+        "doc": "58/2014/QH13",
+        "article": 2,
+        "clause": 1,
+        "point": "a",
+        "provision_id": "SI14-2.1.a",
+        "source_url": "https://vbpl.moj.gov.vn/bonoivu/Pages/vbpq-print.aspx?ItemID=46744"
+      }
+    ]
+  },
+  {
+    "id": "TEMP-013",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [],
+    "new": [
+      {
+        "doc": "35/2022/NĐ-CP",
+        "article": 73,
+        "clause": 1,
+        "point": null,
+        "provision_id": "N35-73.1",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Thuong-mai/Nghi-dinh-35-2022-ND-CP-quan-ly-khu-cong-nghiep-kinh-te-482305.aspx"
+      },
+      {
+        "doc": "10/2024/NĐ-CP",
+        "article": 49,
+        "clause": 1,
+        "point": null,
+        "provision_id": "N10-49.1",
+        "source_url": "https://hethongphapluat.com/nghi-dinh-10-2024-nd-cp-quy-dinh-ve-khu-cong-nghe-cao.html"
+      }
+    ]
+  },
+  {
+    "id": "MIX-011",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [],
+    "new": [
+      {
+        "doc": "36/2005/QH11",
+        "article": 301,
+        "clause": null,
+        "point": null,
+        "provision_id": "COM-301",
+        "source_url": "https://vbpl.vn/hanam/Pages/vbpq-toanvan.aspx?ItemID=26117"
+      }
+    ]
+  },
+  {
+    "id": "TEMP-012",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [],
+    "new": [
+      {
+        "doc": "10/2024/NĐ-CP",
+        "article": 49,
+        "clause": 1,
+        "point": null,
+        "provision_id": "N10-49.1",
+        "source_url": "https://hethongphapluat.com/nghi-dinh-10-2024-nd-cp-quy-dinh-ve-khu-cong-nghe-cao.html"
+      },
+      {
+        "doc": "145/2020/NĐ-CP",
+        "article": 4,
+        "clause": 4,
+        "point": null,
+        "provision_id": "N145-4.4",
+        "source_url": "https://hethongphapluat.com/nghi-dinh-10-2024-nd-cp-quy-dinh-ve-khu-cong-nghe-cao.html"
+      },
+      {
+        "doc": "35/2022/NĐ-CP",
+        "article": 73,
+        "clause": 1,
+        "point": null,
+        "provision_id": "N35-73.1",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Thuong-mai/Nghi-dinh-35-2022-ND-CP-quan-ly-khu-cong-nghiep-kinh-te-482305.aspx"
+      }
+    ]
+  },
+  {
+    "id": "MIX-016",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [
+      {
+        "doc": "19/2023/QH15",
+        "article": 25,
+        "clause": 3,
+        "v04_id": "CON-25.3",
+        "doc_id": "161263",
+        "lquery": "161263.*.D25.K3.*"
+      }
+    ],
+    "new": [
+      {
+        "doc": "19/2023/QH15",
+        "article": 25,
+        "clause": 3,
+        "point": null,
+        "provision_id": "CON-25.3",
+        "source_url": "https://vbpl.vn/tiengiang/Pages/vbpq-print.aspx?ItemID=161263"
+      }
+    ]
+  },
+  {
+    "id": "MIX-015",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [
+      {
+        "doc": "19/2023/QH15",
+        "article": 25,
+        "clause": 2,
+        "v04_id": "CON-25.2",
+        "doc_id": "161263",
+        "lquery": "161263.*.D25.K2.*"
+      }
+    ],
+    "new": [
+      {
+        "doc": "19/2023/QH15",
+        "article": 25,
+        "clause": 2,
+        "point": null,
+        "provision_id": "CON-25.2",
+        "source_url": "https://vbpl.vn/tiengiang/Pages/vbpq-print.aspx?ItemID=161263"
+      }
+    ]
+  },
+  {
+    "id": "TEMP-005",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [],
+    "new": [
+      {
+        "doc": "20/2023/QH15",
+        "article": 53,
+        "clause": 1,
+        "point": null,
+        "provision_id": "E23-53.1",
+        "source_url": "https://vbpl.moj.gov.vn/bothongtin/Pages/vbpq-toanvan.aspx?ItemID=165913"
+      },
+      {
+        "doc": "51/2005/QH11",
+        "article": 34,
+        "clause": null,
+        "point": null,
+        "provision_id": "E05-34",
+        "source_url": "https://vanban.chinhphu.vn/?docid=29675&pageid=27160"
+      },
+      {
+        "doc": "20/2023/QH15",
+        "article": 52,
+        "clause": 2,
+        "point": null,
+        "provision_id": "E23-52.2",
+        "source_url": "https://vbpl.moj.gov.vn/bothongtin/Pages/vbpq-toanvan.aspx?ItemID=165913"
+      }
+    ]
+  },
+  {
+    "id": "TEMP-008",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [],
+    "new": [
+      {
+        "doc": "19/2023/QH15",
+        "article": 25,
+        "clause": 2,
+        "point": null,
+        "provision_id": "C23-25.2",
+        "source_url": "https://vbpl.moj.gov.vn/botuphap/Pages/vbpq-toanvan.aspx?ItemID=161263"
+      },
+      {
+        "doc": "19/2023/QH15",
+        "article": 79,
+        "clause": 1,
+        "point": null,
+        "provision_id": "C23-79.1",
+        "source_url": "https://vbpl.moj.gov.vn/botuphap/Pages/vbpq-toanvan.aspx?ItemID=161263"
+      }
+    ]
+  },
+  {
+    "id": "MIX-001",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [
+      {
+        "doc": "45/2019/QH14",
+        "article": 17,
+        "clause": 1,
+        "v04_id": "LAB-17.1",
+        "doc_id": "139264",
+        "lquery": "139264.*.D17.K1.*"
+      }
+    ],
+    "new": [
+      {
+        "doc": "45/2019/QH14",
+        "article": 17,
+        "clause": 1,
+        "point": null,
+        "provision_id": "LAB-17.1",
+        "source_url": "https://vanban.chinhphu.vn/?classid=1&docid=198540&orggroupid=1&pageid=27160"
+      }
+    ]
+  },
+  {
+    "id": "MIX-010",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [
+      {
+        "doc": "45/2019/QH14",
+        "article": 13,
+        "clause": 1,
+        "v04_id": "LAB-13.1",
+        "doc_id": "139264",
+        "lquery": "139264.*.D13.K1.*"
+      }
+    ],
+    "new": [
+      {
+        "doc": "45/2019/QH14",
+        "article": 13,
+        "clause": 1,
+        "point": null,
+        "provision_id": "LAB-13.1",
+        "source_url": "https://vanban.chinhphu.vn/?classid=1&docid=198540&orggroupid=1&pageid=27160"
+      },
+      {
+        "doc": "91/2015/QH13",
+        "article": 385,
+        "clause": null,
+        "point": null,
+        "provision_id": "CIV-385",
+        "source_url": "https://btllang.mod.gov.vn/van-ban/vbpq-do-nha-nuoc-ban-hanh/5001-bo-luat-dan-su-2015.html"
+      }
+    ]
+  },
+  {
+    "id": "TEMP-007",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [],
+    "new": [
+      {
+        "doc": "59/2010/QH12",
+        "article": 16,
+        "clause": 1,
+        "point": "b",
+        "provision_id": "C10-16.1.b",
+        "source_url": "https://vanban.chinhphu.vn/?docid=98755&pageid=27160"
+      }
+    ]
+  },
+  {
+    "id": "TEMP-004",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [],
+    "new": [
+      {
+        "doc": "20/2023/QH15",
+        "article": 52,
+        "clause": 1,
+        "point": null,
+        "provision_id": "E23-52.1",
+        "source_url": "https://vbpl.moj.gov.vn/bothongtin/Pages/vbpq-toanvan.aspx?ItemID=165913"
+      },
+      {
+        "doc": "20/2023/QH15",
+        "article": 52,
+        "clause": 2,
+        "point": null,
+        "provision_id": "E23-52.2",
+        "source_url": "https://vbpl.moj.gov.vn/bothongtin/Pages/vbpq-toanvan.aspx?ItemID=165913"
+      }
+    ]
+  },
+  {
+    "id": "TEMP-002",
+    "change": "restore_required_refs_from_original_provision_catalog",
+    "old": [],
+    "new": [
+      {
+        "doc": "41/2024/QH15",
+        "article": 2,
+        "clause": 1,
+        "point": "a",
+        "provision_id": "SI24-2.1.a",
+        "source_url": "https://xaydungchinhsach.chinhphu.vn/toan-van-luat-so-41-2024-qh15-bao-hiem-xa-hoi-119240723163650489.htm"
+      },
+      {
+        "doc": "41/2024/QH15",
+        "article": 13,
+        "clause": 1,
+        "point": null,
+        "provision_id": "SI24-13.1",
+        "source_url": "https://xaydungchinhsach.chinhphu.vn/toan-van-luat-so-41-2024-qh15-bao-hiem-xa-hoi-119240723163650489.htm"
+      },
+      {
+        "doc": "41/2024/QH15",
+        "article": 140,
+        "clause": 1,
+        "point": null,
+        "provision_id": "SI24-140.1",
+        "source_url": "https://xaydungchinhsach.chinhphu.vn/toan-van-luat-so-41-2024-qh15-bao-hiem-xa-hoi-119240723163650489.htm"
+      },
+      {
+        "doc": "41/2024/QH15",
+        "article": 140,
+        "clause": 2,
+        "point": null,
+        "provision_id": "SI24-140.2",
+        "source_url": "https://xaydungchinhsach.chinhphu.vn/toan-van-luat-so-41-2024-qh15-bao-hiem-xa-hoi-119240723163650489.htm"
+      }
+    ]
+  }
+]

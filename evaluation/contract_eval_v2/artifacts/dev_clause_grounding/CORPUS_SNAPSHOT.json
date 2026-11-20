@@ -1,0 +1,9 @@
+{
+  "database_container": "contractlens-eval-01a154eb-postgres-1",
+  "legal_documents": 137151,
+  "legal_embeddings": 1004988,
+  "legal_document_relations": 660960,
+  "snapshot_kind": "counts_only_not_a_full_content_hash",
+  "read_only_legal_corpus": true,
+  "contract_indexing": "32 synthetic dev contracts under separate evaluation user"
+}

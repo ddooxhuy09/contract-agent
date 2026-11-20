@@ -1,0 +1,25 @@
+{
+  "authorized_by_user": true,
+  "started_utc": "2026-11-18T03:13:18.956699+00:00",
+  "generation_model": "openai/gpt-oss-120b",
+  "judge_model": "qwen/qwen3.8-27b",
+  "retrieval_mode": "vector_plus_existing_production_evidence_anchors",
+  "qa_test": 314,
+  "qa_dev": 55,
+  "workflow_contracts": 117,
+  "focal_workflow_labels": {
+    "test": 93,
+    "dev": 16
+  },
+  "primary_score_includes_low_confidence_and_disputed_gold": true,
+  "no_score_seeking_reruns": true,
+  "application_code_lock": "run_code.json",
+  "dataset_manifest_sha256": "c21535964074dd8f624fc5201f983f885ed539a267c15789617f717275bfebdd",
+  "long_term_QA_memory": false,
+  "qa_checkpoint": "MemorySaver_fresh_thread_each_question",
+  "whole_workflow_F1": null,
+  "focal_F1_scope": "only_preannotated_clauses_after_full_text_pipeline",
+  "raw_user_pdf_sent": false,
+  "human_legal_expert_required_to_run": false,
+  "caveat": "No expert signoff; report all cases and ambiguity, do not claim real-world legal certification"
+}

@@ -1,0 +1,16 @@
+{
+  "scope": "one_actual_API_case_not_part_of_369_QA_or_117_workflows",
+  "authentication_overridden": false,
+  "LLM_stubbed": false,
+  "steps": {
+    "register": 200,
+    "login": 200,
+    "upload_docx": 200,
+    "analyze": 200,
+    "chat": 200,
+    "persisted_history": 200
+  },
+  "contract_id": "7c008ddf-7b5d-4733-ac5e-b2fdc7208a16",
+  "status": "failed_smoke_assertion",
+  "failure": "Smoke expected at least two history entries; API schema groups a question and answer in one entry. Correct assertion then repeat; production code unchanged."
+}

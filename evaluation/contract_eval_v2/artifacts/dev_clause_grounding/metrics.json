@@ -1,0 +1,167 @@
+{
+  "scope": "dev only; derived from 16 previously known source cases; not an independent test",
+  "n_questions": 80,
+  "n_base_cases": 16,
+  "retrieval": {
+    "baseline": {
+      "expected": 80,
+      "completed": 80,
+      "legal_scored": 72,
+      "legal_recall@5": 0.041666666666666664,
+      "by_variant": {
+        "T1": {
+          "n": 16,
+          "recall@5": 0.0
+        },
+        "T2": {
+          "n": 16,
+          "recall@5": 0.125
+        },
+        "T3": {
+          "n": 8,
+          "recall@5": 0.125
+        },
+        "paraphrase": {
+          "n": 16,
+          "recall@5": 0.0
+        },
+        "renumbered": {
+          "n": 16,
+          "recall@5": 0.0
+        }
+      }
+    },
+    "reference_only": {
+      "expected": 80,
+      "completed": 80,
+      "legal_scored": 72,
+      "legal_recall@5": 0.041666666666666664,
+      "by_variant": {
+        "T1": {
+          "n": 16,
+          "recall@5": 0.0
+        },
+        "T2": {
+          "n": 16,
+          "recall@5": 0.125
+        },
+        "T3": {
+          "n": 8,
+          "recall@5": 0.125
+        },
+        "paraphrase": {
+          "n": 16,
+          "recall@5": 0.0
+        },
+        "renumbered": {
+          "n": 16,
+          "recall@5": 0.0
+        }
+      }
+    },
+    "grounded": {
+      "expected": 80,
+      "completed": 80,
+      "legal_scored": 72,
+      "legal_recall@5": 0.3472222222222222,
+      "by_variant": {
+        "T1": {
+          "n": 16,
+          "recall@5": 0.4375
+        },
+        "T2": {
+          "n": 16,
+          "recall@5": 0.125
+        },
+        "T3": {
+          "n": 8,
+          "recall@5": 0.125
+        },
+        "paraphrase": {
+          "n": 16,
+          "recall@5": 0.53125
+        },
+        "renumbered": {
+          "n": 16,
+          "recall@5": 0.40625
+        }
+      }
+    }
+  },
+  "paired_recall_delta": 0.3055555555555556,
+  "paired_recall_delta_ci95_cluster": [
+    0.176056338028169,
+    0.45714285714285713
+  ],
+  "qa": {
+    "baseline": {
+      "expected": 32,
+      "completed": 32,
+      "judged": 32,
+      "valid_generation": 32,
+      "correctness": 0.515625,
+      "fully_correct": 0.40625,
+      "conclusion_match": 0.59375,
+      "source_clause_hit": 0.28125,
+      "latency_p50_ms": 2537.45,
+      "faithfulness": 0.5376344086021505,
+      "faithfulness_scored": 31,
+      "false_alarm": {
+        "numerator": 2,
+        "denominator": 16
+      },
+      "confusion": {
+        "violation": {
+          "violation": 7,
+          "compliant": 2,
+          "unclear": 7
+        },
+        "compliant": {
+          "violation": 2,
+          "compliant": 12,
+          "unclear": 2
+        }
+      }
+    },
+    "grounded": {
+      "expected": 32,
+      "completed": 32,
+      "judged": 32,
+      "valid_generation": 32,
+      "correctness": 0.78125,
+      "fully_correct": 0.71875,
+      "conclusion_match": 0.8125,
+      "source_clause_hit": 0.5625,
+      "latency_p50_ms": 3064.25,
+      "faithfulness": 0.8222222222222222,
+      "faithfulness_scored": 30,
+      "false_alarm": {
+        "numerator": 0,
+        "denominator": 16
+      },
+      "confusion": {
+        "violation": {
+          "violation": 10,
+          "compliant": 3,
+          "unclear": 3
+        },
+        "compliant": {
+          "violation": 0,
+          "compliant": 16,
+          "unclear": 0
+        }
+      }
+    }
+  },
+  "paired_qa_delta": 0.265625,
+  "paired_qa_delta_ci95_cluster": [
+    0.09375,
+    0.46875
+  ],
+  "qa_changes": {
+    "improved": 13,
+    "regressed": 2,
+    "unchanged": 17
+  },
+  "warning": "LLM judge not human-calibrated on these answers; no cross-run comparison to v1 QA score"
+}

@@ -1,0 +1,26 @@
+{
+  "baseline": "v3 production snapshot; new baseline calls, not copied scores",
+  "candidate": "focused primary evidence + context article 1 + one same-model evidence review",
+  "judge": "unchanged Groq Qwen prompt and rubric",
+  "data": {
+    "regression_test": "9353e5113c2405e6b2640e25b5b24aa8206da24ae5c24935ac27166899a61dc9",
+    "fresh_source_checked": "45f2cfe6ba9e6e22bb4fc2e1e227e5202ffdd2825247f5e904e383b3cea2e097",
+    "validation": "fd7935b275230d7070d3a473e95240b8e77a4f2afb536a6071673ad20d8fbceb"
+  },
+  "candidate_sha256": {
+    "app/agents/qa_agent.py": "c12c2469e916c19f5695b536c0109efbc1da9b48772867221dce5a66b73766f6",
+    "app/agents/qa_evidence.py": "87a47190736b8ce04668d1ca0c2a3d91c7db12715f78aa7bc2ae464389b2160a",
+    "app/infrastructure/retrieval/query_rewrite.py": "612b049acef7b94625bb4388656e3937a32696c1077da0904d71ed1869a627cc",
+    "app/core/prompts.py": "44707438f3c2261f1dab6fa4408766a2782f9f3614023b73a0eff89e63964172"
+  },
+  "reference_sha256": {
+    "experiment.py.txt": "1e10741a5327acf7b86c0fe421bcb2cd3e00148221c7754e4bb0c0344726a79c",
+    "prompts.py.txt": "804bff1e9ef81541e393a85378cc8395e07b9953a3057f693951c31f23bcbb2f",
+    "qa_agent.py.txt": "56a4cd710bd629c299be827138504fb755165ffd0e7c4263f90ed4d83a90173c",
+    "qa_evidence.py.txt": "b904801c2c06a782bb5ef4eb6bedad034ee30274d7b6bf3e13c18e07f5e95068",
+    "QA_SYSTEM_PROMPT.txt": "59f6e82690a9702a6d8069d74501dc60db33b7da6bfc1b1a600de9cbd36cad84",
+    "query_rewrite.py.txt": "612b049acef7b94625bb4388656e3937a32696c1077da0904d71ed1869a627cc"
+  },
+  "selection_rule": "one run per system; report errors/regressions; no label or rubric edits",
+  "limitations": "40 cases used for v3 diagnosis; 16 validation cases not used for those changes but belong to previously evaluated v1; synthetic and not expert validated"
+}

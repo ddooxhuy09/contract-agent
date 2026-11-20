@@ -12,7 +12,6 @@ from __future__ import annotations
 import collections
 import csv
 import json
-import re
 import subprocess
 import sys
 from pathlib import Path

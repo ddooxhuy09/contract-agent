@@ -1,0 +1,2162 @@
+[
+  {
+    "id": "DEV-001-1",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "BH-05",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 1171.2
+  },
+  {
+    "id": "DEV-001-1",
+    "system": "reference_only",
+    "variant": "T1",
+    "base_case_id": "BH-05",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 315.1
+  },
+  {
+    "id": "DEV-001-1",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "BH-05",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 816.0
+  },
+  {
+    "id": "DEV-001-2",
+    "system": "grounded",
+    "variant": "T2",
+    "base_case_id": "BH-05",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 889.8
+  },
+  {
+    "id": "DEV-001-2",
+    "system": "reference_only",
+    "variant": "T2",
+    "base_case_id": "BH-05",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 304.6
+  },
+  {
+    "id": "DEV-001-2",
+    "system": "baseline",
+    "variant": "T2",
+    "base_case_id": "BH-05",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 273.7
+  },
+  {
+    "id": "DEV-001-3",
+    "system": "baseline",
+    "variant": "T3",
+    "base_case_id": "BH-05",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 744.6
+  },
+  {
+    "id": "DEV-001-3",
+    "system": "reference_only",
+    "variant": "T3",
+    "base_case_id": "BH-05",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 309.3
+  },
+  {
+    "id": "DEV-001-3",
+    "system": "grounded",
+    "variant": "T3",
+    "base_case_id": "BH-05",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 310.6
+  },
+  {
+    "id": "DEV-001-4",
+    "system": "grounded",
+    "variant": "paraphrase",
+    "base_case_id": "BH-05",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 667.3
+  },
+  {
+    "id": "DEV-001-4",
+    "system": "reference_only",
+    "variant": "paraphrase",
+    "base_case_id": "BH-05",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 1022.5
+  },
+  {
+    "id": "DEV-001-4",
+    "system": "baseline",
+    "variant": "paraphrase",
+    "base_case_id": "BH-05",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 284.1
+  },
+  {
+    "id": "DEV-001-5",
+    "system": "baseline",
+    "variant": "renumbered",
+    "base_case_id": "BH-05",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 522.6
+  },
+  {
+    "id": "DEV-001-5",
+    "system": "reference_only",
+    "variant": "renumbered",
+    "base_case_id": "BH-05",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 308.0
+  },
+  {
+    "id": "DEV-001-5",
+    "system": "grounded",
+    "variant": "renumbered",
+    "base_case_id": "BH-05",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 775.8
+  },
+  {
+    "id": "DEV-002-1",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "BH-07",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 787.6
+  },
+  {
+    "id": "DEV-002-1",
+    "system": "reference_only",
+    "variant": "T1",
+    "base_case_id": "BH-07",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 317.2
+  },
+  {
+    "id": "DEV-002-1",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "BH-07",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 301.1
+  },
+  {
+    "id": "DEV-002-2",
+    "system": "baseline",
+    "variant": "T2",
+    "base_case_id": "BH-07",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 247.4
+  },
+  {
+    "id": "DEV-002-2",
+    "system": "reference_only",
+    "variant": "T2",
+    "base_case_id": "BH-07",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 268.9
+  },
+  {
+    "id": "DEV-002-2",
+    "system": "grounded",
+    "variant": "T2",
+    "base_case_id": "BH-07",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 264.4
+  },
+  {
+    "id": "DEV-002-3",
+    "system": "grounded",
+    "variant": "T3",
+    "base_case_id": "BH-07",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 321.8
+  },
+  {
+    "id": "DEV-002-3",
+    "system": "reference_only",
+    "variant": "T3",
+    "base_case_id": "BH-07",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 306.3
+  },
+  {
+    "id": "DEV-002-3",
+    "system": "baseline",
+    "variant": "T3",
+    "base_case_id": "BH-07",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 303.1
+  },
+  {
+    "id": "DEV-002-4",
+    "system": "baseline",
+    "variant": "paraphrase",
+    "base_case_id": "BH-07",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 283.0
+  },
+  {
+    "id": "DEV-002-4",
+    "system": "reference_only",
+    "variant": "paraphrase",
+    "base_case_id": "BH-07",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 287.8
+  },
+  {
+    "id": "DEV-002-4",
+    "system": "grounded",
+    "variant": "paraphrase",
+    "base_case_id": "BH-07",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 803.3
+  },
+  {
+    "id": "DEV-002-5",
+    "system": "grounded",
+    "variant": "renumbered",
+    "base_case_id": "BH-07",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 708.2
+  },
+  {
+    "id": "DEV-002-5",
+    "system": "reference_only",
+    "variant": "renumbered",
+    "base_case_id": "BH-07",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 281.1
+  },
+  {
+    "id": "DEV-002-5",
+    "system": "baseline",
+    "variant": "renumbered",
+    "base_case_id": "BH-07",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 294.4
+  },
+  {
+    "id": "DEV-003-1",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "DT-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 313.6
+  },
+  {
+    "id": "DEV-003-1",
+    "system": "reference_only",
+    "variant": "T1",
+    "base_case_id": "DT-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 308.5
+  },
+  {
+    "id": "DEV-003-1",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "DT-04",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 925.5
+  },
+  {
+    "id": "DEV-003-2",
+    "system": "grounded",
+    "variant": "T2",
+    "base_case_id": "DT-04",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 732.5
+  },
+  {
+    "id": "DEV-003-2",
+    "system": "reference_only",
+    "variant": "T2",
+    "base_case_id": "DT-04",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 258.7
+  },
+  {
+    "id": "DEV-003-2",
+    "system": "baseline",
+    "variant": "T2",
+    "base_case_id": "DT-04",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 271.6
+  },
+  {
+    "id": "DEV-003-3",
+    "system": "baseline",
+    "variant": "T3",
+    "base_case_id": "DT-04",
+    "recall@5": 0.0,
+    "contract_hit": false,
+    "ms": 326.6
+  },
+  {
+    "id": "DEV-003-3",
+    "system": "reference_only",
+    "variant": "T3",
+    "base_case_id": "DT-04",
+    "recall@5": 0.0,
+    "contract_hit": false,
+    "ms": 328.0
+  },
+  {
+    "id": "DEV-003-3",
+    "system": "grounded",
+    "variant": "T3",
+    "base_case_id": "DT-04",
+    "recall@5": 0.0,
+    "contract_hit": false,
+    "ms": 348.1
+  },
+  {
+    "id": "DEV-003-4",
+    "system": "grounded",
+    "variant": "paraphrase",
+    "base_case_id": "DT-04",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 826.1
+  },
+  {
+    "id": "DEV-003-4",
+    "system": "reference_only",
+    "variant": "paraphrase",
+    "base_case_id": "DT-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 289.7
+  },
+  {
+    "id": "DEV-003-4",
+    "system": "baseline",
+    "variant": "paraphrase",
+    "base_case_id": "DT-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 278.9
+  },
+  {
+    "id": "DEV-003-5",
+    "system": "baseline",
+    "variant": "renumbered",
+    "base_case_id": "DT-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 469.1
+  },
+  {
+    "id": "DEV-003-5",
+    "system": "reference_only",
+    "variant": "renumbered",
+    "base_case_id": "DT-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 305.2
+  },
+  {
+    "id": "DEV-003-5",
+    "system": "grounded",
+    "variant": "renumbered",
+    "base_case_id": "DT-04",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 631.7
+  },
+  {
+    "id": "DEV-004-1",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "DT-08",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 589.8
+  },
+  {
+    "id": "DEV-004-1",
+    "system": "reference_only",
+    "variant": "T1",
+    "base_case_id": "DT-08",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 330.7
+  },
+  {
+    "id": "DEV-004-1",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "DT-08",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 307.5
+  },
+  {
+    "id": "DEV-004-2",
+    "system": "baseline",
+    "variant": "T2",
+    "base_case_id": "DT-08",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 248.2
+  },
+  {
+    "id": "DEV-004-2",
+    "system": "reference_only",
+    "variant": "T2",
+    "base_case_id": "DT-08",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 245.8
+  },
+  {
+    "id": "DEV-004-2",
+    "system": "grounded",
+    "variant": "T2",
+    "base_case_id": "DT-08",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 284.9
+  },
+  {
+    "id": "DEV-004-3",
+    "system": "grounded",
+    "variant": "T3",
+    "base_case_id": "DT-08",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 321.9
+  },
+  {
+    "id": "DEV-004-3",
+    "system": "reference_only",
+    "variant": "T3",
+    "base_case_id": "DT-08",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 327.8
+  },
+  {
+    "id": "DEV-004-3",
+    "system": "baseline",
+    "variant": "T3",
+    "base_case_id": "DT-08",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 307.5
+  },
+  {
+    "id": "DEV-004-4",
+    "system": "baseline",
+    "variant": "paraphrase",
+    "base_case_id": "DT-08",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 277.4
+  },
+  {
+    "id": "DEV-004-4",
+    "system": "reference_only",
+    "variant": "paraphrase",
+    "base_case_id": "DT-08",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 280.7
+  },
+  {
+    "id": "DEV-004-4",
+    "system": "grounded",
+    "variant": "paraphrase",
+    "base_case_id": "DT-08",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 579.6
+  },
+  {
+    "id": "DEV-004-5",
+    "system": "grounded",
+    "variant": "renumbered",
+    "base_case_id": "DT-08",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 598.5
+  },
+  {
+    "id": "DEV-004-5",
+    "system": "reference_only",
+    "variant": "renumbered",
+    "base_case_id": "DT-08",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 342.5
+  },
+  {
+    "id": "DEV-004-5",
+    "system": "baseline",
+    "variant": "renumbered",
+    "base_case_id": "DT-08",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 337.5
+  },
+  {
+    "id": "DEV-005-1",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "GT-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 310.5
+  },
+  {
+    "id": "DEV-005-1",
+    "system": "reference_only",
+    "variant": "T1",
+    "base_case_id": "GT-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 307.8
+  },
+  {
+    "id": "DEV-005-1",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "GT-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 724.1
+  },
+  {
+    "id": "DEV-005-2",
+    "system": "grounded",
+    "variant": "T2",
+    "base_case_id": "GT-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 636.2
+  },
+  {
+    "id": "DEV-005-2",
+    "system": "reference_only",
+    "variant": "T2",
+    "base_case_id": "GT-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 329.3
+  },
+  {
+    "id": "DEV-005-2",
+    "system": "baseline",
+    "variant": "T2",
+    "base_case_id": "GT-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 325.9
+  },
+  {
+    "id": "DEV-005-3",
+    "system": "baseline",
+    "variant": "T3",
+    "base_case_id": "GT-03",
+    "recall@5": 1.0,
+    "contract_hit": false,
+    "ms": 324.0
+  },
+  {
+    "id": "DEV-005-3",
+    "system": "reference_only",
+    "variant": "T3",
+    "base_case_id": "GT-03",
+    "recall@5": 1.0,
+    "contract_hit": false,
+    "ms": 315.7
+  },
+  {
+    "id": "DEV-005-3",
+    "system": "grounded",
+    "variant": "T3",
+    "base_case_id": "GT-03",
+    "recall@5": 1.0,
+    "contract_hit": false,
+    "ms": 321.3
+  },
+  {
+    "id": "DEV-005-4",
+    "system": "grounded",
+    "variant": "paraphrase",
+    "base_case_id": "GT-03",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 600.7
+  },
+  {
+    "id": "DEV-005-4",
+    "system": "reference_only",
+    "variant": "paraphrase",
+    "base_case_id": "GT-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 283.9
+  },
+  {
+    "id": "DEV-005-4",
+    "system": "baseline",
+    "variant": "paraphrase",
+    "base_case_id": "GT-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 298.9
+  },
+  {
+    "id": "DEV-005-5",
+    "system": "baseline",
+    "variant": "renumbered",
+    "base_case_id": "GT-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 539.9
+  },
+  {
+    "id": "DEV-005-5",
+    "system": "reference_only",
+    "variant": "renumbered",
+    "base_case_id": "GT-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 324.4
+  },
+  {
+    "id": "DEV-005-5",
+    "system": "grounded",
+    "variant": "renumbered",
+    "base_case_id": "GT-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 613.5
+  },
+  {
+    "id": "DEV-006-1",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "GT-09",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 672.5
+  },
+  {
+    "id": "DEV-006-1",
+    "system": "reference_only",
+    "variant": "T1",
+    "base_case_id": "GT-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 303.7
+  },
+  {
+    "id": "DEV-006-1",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "GT-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 293.4
+  },
+  {
+    "id": "DEV-006-2",
+    "system": "baseline",
+    "variant": "T2",
+    "base_case_id": "GT-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 300.7
+  },
+  {
+    "id": "DEV-006-2",
+    "system": "reference_only",
+    "variant": "T2",
+    "base_case_id": "GT-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 323.3
+  },
+  {
+    "id": "DEV-006-2",
+    "system": "grounded",
+    "variant": "T2",
+    "base_case_id": "GT-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 278.4
+  },
+  {
+    "id": "DEV-006-3",
+    "system": "grounded",
+    "variant": "T3",
+    "base_case_id": "GT-09",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 344.1
+  },
+  {
+    "id": "DEV-006-3",
+    "system": "reference_only",
+    "variant": "T3",
+    "base_case_id": "GT-09",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 296.6
+  },
+  {
+    "id": "DEV-006-3",
+    "system": "baseline",
+    "variant": "T3",
+    "base_case_id": "GT-09",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 310.6
+  },
+  {
+    "id": "DEV-006-4",
+    "system": "baseline",
+    "variant": "paraphrase",
+    "base_case_id": "GT-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 266.9
+  },
+  {
+    "id": "DEV-006-4",
+    "system": "reference_only",
+    "variant": "paraphrase",
+    "base_case_id": "GT-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 292.9
+  },
+  {
+    "id": "DEV-006-4",
+    "system": "grounded",
+    "variant": "paraphrase",
+    "base_case_id": "GT-09",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 683.0
+  },
+  {
+    "id": "DEV-006-5",
+    "system": "grounded",
+    "variant": "renumbered",
+    "base_case_id": "GT-09",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 627.1
+  },
+  {
+    "id": "DEV-006-5",
+    "system": "reference_only",
+    "variant": "renumbered",
+    "base_case_id": "GT-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 315.3
+  },
+  {
+    "id": "DEV-006-5",
+    "system": "baseline",
+    "variant": "renumbered",
+    "base_case_id": "GT-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 311.8
+  },
+  {
+    "id": "DEV-007-1",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "KL-02",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 296.4
+  },
+  {
+    "id": "DEV-007-1",
+    "system": "reference_only",
+    "variant": "T1",
+    "base_case_id": "KL-02",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 372.8
+  },
+  {
+    "id": "DEV-007-1",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "KL-02",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 623.0
+  },
+  {
+    "id": "DEV-007-2",
+    "system": "grounded",
+    "variant": "T2",
+    "base_case_id": "KL-02",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 798.1
+  },
+  {
+    "id": "DEV-007-2",
+    "system": "reference_only",
+    "variant": "T2",
+    "base_case_id": "KL-02",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 369.9
+  },
+  {
+    "id": "DEV-007-2",
+    "system": "baseline",
+    "variant": "T2",
+    "base_case_id": "KL-02",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 387.7
+  },
+  {
+    "id": "DEV-007-3",
+    "system": "baseline",
+    "variant": "T3",
+    "base_case_id": "KL-02",
+    "recall@5": 0.0,
+    "contract_hit": false,
+    "ms": 317.7
+  },
+  {
+    "id": "DEV-007-3",
+    "system": "reference_only",
+    "variant": "T3",
+    "base_case_id": "KL-02",
+    "recall@5": 0.0,
+    "contract_hit": false,
+    "ms": 300.2
+  },
+  {
+    "id": "DEV-007-3",
+    "system": "grounded",
+    "variant": "T3",
+    "base_case_id": "KL-02",
+    "recall@5": 0.0,
+    "contract_hit": false,
+    "ms": 351.1
+  },
+  {
+    "id": "DEV-007-4",
+    "system": "grounded",
+    "variant": "paraphrase",
+    "base_case_id": "KL-02",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 574.9
+  },
+  {
+    "id": "DEV-007-4",
+    "system": "reference_only",
+    "variant": "paraphrase",
+    "base_case_id": "KL-02",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 466.9
+  },
+  {
+    "id": "DEV-007-4",
+    "system": "baseline",
+    "variant": "paraphrase",
+    "base_case_id": "KL-02",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 494.2
+  },
+  {
+    "id": "DEV-007-5",
+    "system": "baseline",
+    "variant": "renumbered",
+    "base_case_id": "KL-02",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 853.3
+  },
+  {
+    "id": "DEV-007-5",
+    "system": "reference_only",
+    "variant": "renumbered",
+    "base_case_id": "KL-02",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 395.5
+  },
+  {
+    "id": "DEV-007-5",
+    "system": "grounded",
+    "variant": "renumbered",
+    "base_case_id": "KL-02",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 1117.0
+  },
+  {
+    "id": "DEV-008-1",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "KL-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 924.1
+  },
+  {
+    "id": "DEV-008-1",
+    "system": "reference_only",
+    "variant": "T1",
+    "base_case_id": "KL-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 346.7
+  },
+  {
+    "id": "DEV-008-1",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "KL-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 309.9
+  },
+  {
+    "id": "DEV-008-2",
+    "system": "baseline",
+    "variant": "T2",
+    "base_case_id": "KL-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 362.8
+  },
+  {
+    "id": "DEV-008-2",
+    "system": "reference_only",
+    "variant": "T2",
+    "base_case_id": "KL-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 363.6
+  },
+  {
+    "id": "DEV-008-2",
+    "system": "grounded",
+    "variant": "T2",
+    "base_case_id": "KL-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 366.4
+  },
+  {
+    "id": "DEV-008-3",
+    "system": "grounded",
+    "variant": "T3",
+    "base_case_id": "KL-09",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 343.1
+  },
+  {
+    "id": "DEV-008-3",
+    "system": "reference_only",
+    "variant": "T3",
+    "base_case_id": "KL-09",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 322.3
+  },
+  {
+    "id": "DEV-008-3",
+    "system": "baseline",
+    "variant": "T3",
+    "base_case_id": "KL-09",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 310.7
+  },
+  {
+    "id": "DEV-008-4",
+    "system": "baseline",
+    "variant": "paraphrase",
+    "base_case_id": "KL-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 277.9
+  },
+  {
+    "id": "DEV-008-4",
+    "system": "reference_only",
+    "variant": "paraphrase",
+    "base_case_id": "KL-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 302.6
+  },
+  {
+    "id": "DEV-008-4",
+    "system": "grounded",
+    "variant": "paraphrase",
+    "base_case_id": "KL-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 610.7
+  },
+  {
+    "id": "DEV-008-5",
+    "system": "grounded",
+    "variant": "renumbered",
+    "base_case_id": "KL-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 605.5
+  },
+  {
+    "id": "DEV-008-5",
+    "system": "reference_only",
+    "variant": "renumbered",
+    "base_case_id": "KL-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 339.5
+  },
+  {
+    "id": "DEV-008-5",
+    "system": "baseline",
+    "variant": "renumbered",
+    "base_case_id": "KL-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 308.8
+  },
+  {
+    "id": "DEV-009-1",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "LU-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 303.2
+  },
+  {
+    "id": "DEV-009-1",
+    "system": "reference_only",
+    "variant": "T1",
+    "base_case_id": "LU-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 318.9
+  },
+  {
+    "id": "DEV-009-1",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "LU-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 523.3
+  },
+  {
+    "id": "DEV-009-2",
+    "system": "grounded",
+    "variant": "T2",
+    "base_case_id": "LU-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 519.7
+  },
+  {
+    "id": "DEV-009-2",
+    "system": "reference_only",
+    "variant": "T2",
+    "base_case_id": "LU-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 329.5
+  },
+  {
+    "id": "DEV-009-2",
+    "system": "baseline",
+    "variant": "T2",
+    "base_case_id": "LU-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 317.3
+  },
+  {
+    "id": "DEV-009-3",
+    "system": "baseline",
+    "variant": "T3",
+    "base_case_id": "LU-03",
+    "recall@5": 0.0,
+    "contract_hit": false,
+    "ms": 303.2
+  },
+  {
+    "id": "DEV-009-3",
+    "system": "reference_only",
+    "variant": "T3",
+    "base_case_id": "LU-03",
+    "recall@5": 0.0,
+    "contract_hit": false,
+    "ms": 312.3
+  },
+  {
+    "id": "DEV-009-3",
+    "system": "grounded",
+    "variant": "T3",
+    "base_case_id": "LU-03",
+    "recall@5": 0.0,
+    "contract_hit": false,
+    "ms": 288.0
+  },
+  {
+    "id": "DEV-009-4",
+    "system": "grounded",
+    "variant": "paraphrase",
+    "base_case_id": "LU-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 553.3
+  },
+  {
+    "id": "DEV-009-4",
+    "system": "reference_only",
+    "variant": "paraphrase",
+    "base_case_id": "LU-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 282.7
+  },
+  {
+    "id": "DEV-009-4",
+    "system": "baseline",
+    "variant": "paraphrase",
+    "base_case_id": "LU-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 259.6
+  },
+  {
+    "id": "DEV-009-5",
+    "system": "baseline",
+    "variant": "renumbered",
+    "base_case_id": "LU-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 468.3
+  },
+  {
+    "id": "DEV-009-5",
+    "system": "reference_only",
+    "variant": "renumbered",
+    "base_case_id": "LU-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 370.6
+  },
+  {
+    "id": "DEV-009-5",
+    "system": "grounded",
+    "variant": "renumbered",
+    "base_case_id": "LU-03",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 591.3
+  },
+  {
+    "id": "DEV-010-1",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "LU-10",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 607.0
+  },
+  {
+    "id": "DEV-010-1",
+    "system": "reference_only",
+    "variant": "T1",
+    "base_case_id": "LU-10",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 323.4
+  },
+  {
+    "id": "DEV-010-1",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "LU-10",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 327.5
+  },
+  {
+    "id": "DEV-010-2",
+    "system": "baseline",
+    "variant": "T2",
+    "base_case_id": "LU-10",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 275.6
+  },
+  {
+    "id": "DEV-010-2",
+    "system": "reference_only",
+    "variant": "T2",
+    "base_case_id": "LU-10",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 304.8
+  },
+  {
+    "id": "DEV-010-2",
+    "system": "grounded",
+    "variant": "T2",
+    "base_case_id": "LU-10",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 295.3
+  },
+  {
+    "id": "DEV-010-3",
+    "system": "grounded",
+    "variant": "T3",
+    "base_case_id": "LU-10",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 323.9
+  },
+  {
+    "id": "DEV-010-3",
+    "system": "reference_only",
+    "variant": "T3",
+    "base_case_id": "LU-10",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 303.4
+  },
+  {
+    "id": "DEV-010-3",
+    "system": "baseline",
+    "variant": "T3",
+    "base_case_id": "LU-10",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 313.2
+  },
+  {
+    "id": "DEV-010-4",
+    "system": "baseline",
+    "variant": "paraphrase",
+    "base_case_id": "LU-10",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 307.9
+  },
+  {
+    "id": "DEV-010-4",
+    "system": "reference_only",
+    "variant": "paraphrase",
+    "base_case_id": "LU-10",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 300.3
+  },
+  {
+    "id": "DEV-010-4",
+    "system": "grounded",
+    "variant": "paraphrase",
+    "base_case_id": "LU-10",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 636.4
+  },
+  {
+    "id": "DEV-010-5",
+    "system": "grounded",
+    "variant": "renumbered",
+    "base_case_id": "LU-10",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 606.7
+  },
+  {
+    "id": "DEV-010-5",
+    "system": "reference_only",
+    "variant": "renumbered",
+    "base_case_id": "LU-10",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 293.8
+  },
+  {
+    "id": "DEV-010-5",
+    "system": "baseline",
+    "variant": "renumbered",
+    "base_case_id": "LU-10",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 328.4
+  },
+  {
+    "id": "DEV-011-1",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "OT-05",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 316.1
+  },
+  {
+    "id": "DEV-011-1",
+    "system": "reference_only",
+    "variant": "T1",
+    "base_case_id": "OT-05",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 308.4
+  },
+  {
+    "id": "DEV-011-1",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "OT-05",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 661.2
+  },
+  {
+    "id": "DEV-011-2",
+    "system": "grounded",
+    "variant": "T2",
+    "base_case_id": "OT-05",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 629.8
+  },
+  {
+    "id": "DEV-011-2",
+    "system": "reference_only",
+    "variant": "T2",
+    "base_case_id": "OT-05",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 267.9
+  },
+  {
+    "id": "DEV-011-2",
+    "system": "baseline",
+    "variant": "T2",
+    "base_case_id": "OT-05",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 275.9
+  },
+  {
+    "id": "DEV-011-3",
+    "system": "baseline",
+    "variant": "T3",
+    "base_case_id": "OT-05",
+    "recall@5": 0.0,
+    "contract_hit": false,
+    "ms": 303.3
+  },
+  {
+    "id": "DEV-011-3",
+    "system": "reference_only",
+    "variant": "T3",
+    "base_case_id": "OT-05",
+    "recall@5": 0.0,
+    "contract_hit": false,
+    "ms": 301.3
+  },
+  {
+    "id": "DEV-011-3",
+    "system": "grounded",
+    "variant": "T3",
+    "base_case_id": "OT-05",
+    "recall@5": 0.0,
+    "contract_hit": false,
+    "ms": 313.4
+  },
+  {
+    "id": "DEV-011-4",
+    "system": "grounded",
+    "variant": "paraphrase",
+    "base_case_id": "OT-05",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 559.2
+  },
+  {
+    "id": "DEV-011-4",
+    "system": "reference_only",
+    "variant": "paraphrase",
+    "base_case_id": "OT-05",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 257.9
+  },
+  {
+    "id": "DEV-011-4",
+    "system": "baseline",
+    "variant": "paraphrase",
+    "base_case_id": "OT-05",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 270.2
+  },
+  {
+    "id": "DEV-011-5",
+    "system": "baseline",
+    "variant": "renumbered",
+    "base_case_id": "OT-05",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 445.1
+  },
+  {
+    "id": "DEV-011-5",
+    "system": "reference_only",
+    "variant": "renumbered",
+    "base_case_id": "OT-05",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 332.0
+  },
+  {
+    "id": "DEV-011-5",
+    "system": "grounded",
+    "variant": "renumbered",
+    "base_case_id": "OT-05",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 594.6
+  },
+  {
+    "id": "DEV-012-1",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "OT-10",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 619.2
+  },
+  {
+    "id": "DEV-012-1",
+    "system": "reference_only",
+    "variant": "T1",
+    "base_case_id": "OT-10",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 362.6
+  },
+  {
+    "id": "DEV-012-1",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "OT-10",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 387.9
+  },
+  {
+    "id": "DEV-012-2",
+    "system": "baseline",
+    "variant": "T2",
+    "base_case_id": "OT-10",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 430.6
+  },
+  {
+    "id": "DEV-012-2",
+    "system": "reference_only",
+    "variant": "T2",
+    "base_case_id": "OT-10",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 289.3
+  },
+  {
+    "id": "DEV-012-2",
+    "system": "grounded",
+    "variant": "T2",
+    "base_case_id": "OT-10",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 267.8
+  },
+  {
+    "id": "DEV-012-3",
+    "system": "grounded",
+    "variant": "T3",
+    "base_case_id": "OT-10",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 332.5
+  },
+  {
+    "id": "DEV-012-3",
+    "system": "reference_only",
+    "variant": "T3",
+    "base_case_id": "OT-10",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 345.6
+  },
+  {
+    "id": "DEV-012-3",
+    "system": "baseline",
+    "variant": "T3",
+    "base_case_id": "OT-10",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 295.0
+  },
+  {
+    "id": "DEV-012-4",
+    "system": "baseline",
+    "variant": "paraphrase",
+    "base_case_id": "OT-10",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 292.3
+  },
+  {
+    "id": "DEV-012-4",
+    "system": "reference_only",
+    "variant": "paraphrase",
+    "base_case_id": "OT-10",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 304.8
+  },
+  {
+    "id": "DEV-012-4",
+    "system": "grounded",
+    "variant": "paraphrase",
+    "base_case_id": "OT-10",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 1034.7
+  },
+  {
+    "id": "DEV-012-5",
+    "system": "grounded",
+    "variant": "renumbered",
+    "base_case_id": "OT-10",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 1027.8
+  },
+  {
+    "id": "DEV-012-5",
+    "system": "reference_only",
+    "variant": "renumbered",
+    "base_case_id": "OT-10",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 324.7
+  },
+  {
+    "id": "DEV-012-5",
+    "system": "baseline",
+    "variant": "renumbered",
+    "base_case_id": "OT-10",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 302.9
+  },
+  {
+    "id": "DEV-013-1",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "TC-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 534.7
+  },
+  {
+    "id": "DEV-013-1",
+    "system": "reference_only",
+    "variant": "T1",
+    "base_case_id": "TC-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 330.4
+  },
+  {
+    "id": "DEV-013-1",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "TC-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 834.4
+  },
+  {
+    "id": "DEV-013-2",
+    "system": "grounded",
+    "variant": "T2",
+    "base_case_id": "TC-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 980.4
+  },
+  {
+    "id": "DEV-013-2",
+    "system": "reference_only",
+    "variant": "T2",
+    "base_case_id": "TC-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 315.6
+  },
+  {
+    "id": "DEV-013-2",
+    "system": "baseline",
+    "variant": "T2",
+    "base_case_id": "TC-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 282.7
+  },
+  {
+    "id": "DEV-013-3",
+    "system": "baseline",
+    "variant": "T3",
+    "base_case_id": "TC-04",
+    "recall@5": 0.0,
+    "contract_hit": false,
+    "ms": 325.0
+  },
+  {
+    "id": "DEV-013-3",
+    "system": "reference_only",
+    "variant": "T3",
+    "base_case_id": "TC-04",
+    "recall@5": 0.0,
+    "contract_hit": false,
+    "ms": 316.2
+  },
+  {
+    "id": "DEV-013-3",
+    "system": "grounded",
+    "variant": "T3",
+    "base_case_id": "TC-04",
+    "recall@5": 0.0,
+    "contract_hit": false,
+    "ms": 312.9
+  },
+  {
+    "id": "DEV-013-4",
+    "system": "grounded",
+    "variant": "paraphrase",
+    "base_case_id": "TC-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 747.5
+  },
+  {
+    "id": "DEV-013-4",
+    "system": "reference_only",
+    "variant": "paraphrase",
+    "base_case_id": "TC-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 1157.2
+  },
+  {
+    "id": "DEV-013-4",
+    "system": "baseline",
+    "variant": "paraphrase",
+    "base_case_id": "TC-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 310.5
+  },
+  {
+    "id": "DEV-013-5",
+    "system": "baseline",
+    "variant": "renumbered",
+    "base_case_id": "TC-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 469.5
+  },
+  {
+    "id": "DEV-013-5",
+    "system": "reference_only",
+    "variant": "renumbered",
+    "base_case_id": "TC-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 344.0
+  },
+  {
+    "id": "DEV-013-5",
+    "system": "grounded",
+    "variant": "renumbered",
+    "base_case_id": "TC-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 659.4
+  },
+  {
+    "id": "DEV-014-1",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "TC-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 709.5
+  },
+  {
+    "id": "DEV-014-1",
+    "system": "reference_only",
+    "variant": "T1",
+    "base_case_id": "TC-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 322.6
+  },
+  {
+    "id": "DEV-014-1",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "TC-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 306.5
+  },
+  {
+    "id": "DEV-014-2",
+    "system": "baseline",
+    "variant": "T2",
+    "base_case_id": "TC-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 274.5
+  },
+  {
+    "id": "DEV-014-2",
+    "system": "reference_only",
+    "variant": "T2",
+    "base_case_id": "TC-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 264.0
+  },
+  {
+    "id": "DEV-014-2",
+    "system": "grounded",
+    "variant": "T2",
+    "base_case_id": "TC-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 277.6
+  },
+  {
+    "id": "DEV-014-3",
+    "system": "grounded",
+    "variant": "T3",
+    "base_case_id": "TC-09",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 321.6
+  },
+  {
+    "id": "DEV-014-3",
+    "system": "reference_only",
+    "variant": "T3",
+    "base_case_id": "TC-09",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 315.8
+  },
+  {
+    "id": "DEV-014-3",
+    "system": "baseline",
+    "variant": "T3",
+    "base_case_id": "TC-09",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 312.6
+  },
+  {
+    "id": "DEV-014-4",
+    "system": "baseline",
+    "variant": "paraphrase",
+    "base_case_id": "TC-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 268.7
+  },
+  {
+    "id": "DEV-014-4",
+    "system": "reference_only",
+    "variant": "paraphrase",
+    "base_case_id": "TC-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 288.7
+  },
+  {
+    "id": "DEV-014-4",
+    "system": "grounded",
+    "variant": "paraphrase",
+    "base_case_id": "TC-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 673.1
+  },
+  {
+    "id": "DEV-014-5",
+    "system": "grounded",
+    "variant": "renumbered",
+    "base_case_id": "TC-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 787.0
+  },
+  {
+    "id": "DEV-014-5",
+    "system": "reference_only",
+    "variant": "renumbered",
+    "base_case_id": "TC-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 468.9
+  },
+  {
+    "id": "DEV-014-5",
+    "system": "baseline",
+    "variant": "renumbered",
+    "base_case_id": "TC-09",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 750.8
+  },
+  {
+    "id": "DEV-015-1",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "TS-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 551.1
+  },
+  {
+    "id": "DEV-015-1",
+    "system": "reference_only",
+    "variant": "T1",
+    "base_case_id": "TS-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 519.1
+  },
+  {
+    "id": "DEV-015-1",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "TS-04",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 1499.0
+  },
+  {
+    "id": "DEV-015-2",
+    "system": "grounded",
+    "variant": "T2",
+    "base_case_id": "TS-04",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 1322.7
+  },
+  {
+    "id": "DEV-015-2",
+    "system": "reference_only",
+    "variant": "T2",
+    "base_case_id": "TS-04",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 710.3
+  },
+  {
+    "id": "DEV-015-2",
+    "system": "baseline",
+    "variant": "T2",
+    "base_case_id": "TS-04",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 410.1
+  },
+  {
+    "id": "DEV-015-3",
+    "system": "baseline",
+    "variant": "T3",
+    "base_case_id": "TS-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 342.1
+  },
+  {
+    "id": "DEV-015-3",
+    "system": "reference_only",
+    "variant": "T3",
+    "base_case_id": "TS-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 332.1
+  },
+  {
+    "id": "DEV-015-3",
+    "system": "grounded",
+    "variant": "T3",
+    "base_case_id": "TS-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 302.3
+  },
+  {
+    "id": "DEV-015-4",
+    "system": "grounded",
+    "variant": "paraphrase",
+    "base_case_id": "TS-04",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 733.3
+  },
+  {
+    "id": "DEV-015-4",
+    "system": "reference_only",
+    "variant": "paraphrase",
+    "base_case_id": "TS-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 285.7
+  },
+  {
+    "id": "DEV-015-4",
+    "system": "baseline",
+    "variant": "paraphrase",
+    "base_case_id": "TS-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 305.5
+  },
+  {
+    "id": "DEV-015-5",
+    "system": "baseline",
+    "variant": "renumbered",
+    "base_case_id": "TS-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 482.5
+  },
+  {
+    "id": "DEV-015-5",
+    "system": "reference_only",
+    "variant": "renumbered",
+    "base_case_id": "TS-04",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 312.8
+  },
+  {
+    "id": "DEV-015-5",
+    "system": "grounded",
+    "variant": "renumbered",
+    "base_case_id": "TS-04",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 634.3
+  },
+  {
+    "id": "DEV-016-1",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "TS-06",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 1233.6
+  },
+  {
+    "id": "DEV-016-1",
+    "system": "reference_only",
+    "variant": "T1",
+    "base_case_id": "TS-06",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 781.6
+  },
+  {
+    "id": "DEV-016-1",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "TS-06",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 315.3
+  },
+  {
+    "id": "DEV-016-2",
+    "system": "baseline",
+    "variant": "T2",
+    "base_case_id": "TS-06",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 390.9
+  },
+  {
+    "id": "DEV-016-2",
+    "system": "reference_only",
+    "variant": "T2",
+    "base_case_id": "TS-06",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 365.1
+  },
+  {
+    "id": "DEV-016-2",
+    "system": "grounded",
+    "variant": "T2",
+    "base_case_id": "TS-06",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 373.5
+  },
+  {
+    "id": "DEV-016-3",
+    "system": "grounded",
+    "variant": "T3",
+    "base_case_id": "TS-06",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 454.1
+  },
+  {
+    "id": "DEV-016-3",
+    "system": "reference_only",
+    "variant": "T3",
+    "base_case_id": "TS-06",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 319.6
+  },
+  {
+    "id": "DEV-016-3",
+    "system": "baseline",
+    "variant": "T3",
+    "base_case_id": "TS-06",
+    "recall@5": null,
+    "contract_hit": false,
+    "ms": 305.9
+  },
+  {
+    "id": "DEV-016-4",
+    "system": "baseline",
+    "variant": "paraphrase",
+    "base_case_id": "TS-06",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 291.0
+  },
+  {
+    "id": "DEV-016-4",
+    "system": "reference_only",
+    "variant": "paraphrase",
+    "base_case_id": "TS-06",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 294.2
+  },
+  {
+    "id": "DEV-016-4",
+    "system": "grounded",
+    "variant": "paraphrase",
+    "base_case_id": "TS-06",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 656.5
+  },
+  {
+    "id": "DEV-016-5",
+    "system": "grounded",
+    "variant": "renumbered",
+    "base_case_id": "TS-06",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 647.9
+  },
+  {
+    "id": "DEV-016-5",
+    "system": "reference_only",
+    "variant": "renumbered",
+    "base_case_id": "TS-06",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 322.8
+  },
+  {
+    "id": "DEV-016-5",
+    "system": "baseline",
+    "variant": "renumbered",
+    "base_case_id": "TS-06",
+    "recall@5": 0.0,
+    "contract_hit": true,
+    "ms": 329.7
+  }
+]

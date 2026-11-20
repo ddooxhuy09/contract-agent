@@ -1,0 +1,75 @@
+{
+  "source_files": {
+    "cases.jsonl": "27f806d2d8598ab1636fa2989a614fcd04a015607a6104c8e8af54e37cfc072e",
+    "split.json": "49613079799752f018e08ce9bea2d71be67a97b01b7afcc4f323491a0677f74c",
+    "verification.jsonl": "3ff160a45dfd6638a9da4c0b6f85b72e8956e2a1396cd059430e88c8279ceb77"
+  },
+  "frozen_files_match": {
+    "cases.jsonl": true,
+    "gold.jsonl": true,
+    "inputs_no_gold.jsonl": true,
+    "split.json": true,
+    "quarantine.jsonl": true,
+    "verification.jsonl": true
+  },
+  "before_exclusion": {
+    "questions": 378,
+    "base_cases": 154
+  },
+  "after_exclusion": {
+    "questions": 369,
+    "base_cases": 151
+  },
+  "splits": {
+    "dev": {
+      "questions": 55,
+      "base_cases": 23,
+      "sources": {
+        "injection": 48,
+        "v04": 7
+      },
+      "templates": {
+        "T1": 16,
+        "T2": 16,
+        "T3": 16,
+        "fixed": 7
+      }
+    },
+    "test": {
+      "questions": 314,
+      "base_cases": 128,
+      "sources": {
+        "injection": 186,
+        "injection_v2": 93,
+        "contract_qa": 8,
+        "v04": 27
+      },
+      "templates": {
+        "T1": 93,
+        "T2": 93,
+        "T3": 93,
+        "fixed": 35
+      }
+    }
+  },
+  "base_id_overlap": [],
+  "kept_low_confidence": 38,
+  "human_review": {
+    "rows": 112,
+    "user_approved": 0
+  },
+  "separate_gold": {
+    "rows": 30,
+    "ann1_co_rui_ro": 0,
+    "ann2_co_rui_ro": 0,
+    "expert_final": 0
+  },
+  "gates": {
+    "frozen_integrity": "pass",
+    "human_confirmed_gold": "not_complete",
+    "independent_new_holdout": "not_created",
+    "dev_negation_v2_coverage": "missing",
+    "temporal_test_only": "v1 report uses all 34 v04 cases; 27 test and 7 dev",
+    "full_analysis_workflow_v1": "not_measured_by_evaluate_clause_score"
+  }
+}

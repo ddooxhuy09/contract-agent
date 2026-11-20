@@ -1,0 +1,290 @@
+[
+  {
+    "id": "VAL-001",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "TC-03",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 3083.2
+  },
+  {
+    "id": "VAL-001",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "TC-03",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 7111.7
+  },
+  {
+    "id": "VAL-002",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "TC-10",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 7578.6
+  },
+  {
+    "id": "VAL-002",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "TC-10",
+    "recall@5": 0.5,
+    "contract_hit": true,
+    "ms": 4443.5
+  },
+  {
+    "id": "VAL-003",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "KL-05",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 2950.1
+  },
+  {
+    "id": "VAL-003",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "KL-05",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 6111.8
+  },
+  {
+    "id": "VAL-004",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "KL-08",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 7276.4
+  },
+  {
+    "id": "VAL-004",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "KL-08",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 3041.2
+  },
+  {
+    "id": "VAL-005",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "LU-04",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 2798.3
+  },
+  {
+    "id": "VAL-005",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "LU-04",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 7382.2
+  },
+  {
+    "id": "VAL-006",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "LU-07",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 6565.9
+  },
+  {
+    "id": "VAL-006",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "LU-07",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 2256.2
+  },
+  {
+    "id": "VAL-007",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "BH-03",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 2950.1
+  },
+  {
+    "id": "VAL-007",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "BH-03",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 5716.1
+  },
+  {
+    "id": "VAL-008",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "BH-06",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 7528.8
+  },
+  {
+    "id": "VAL-008",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "BH-06",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 2690.3
+  },
+  {
+    "id": "VAL-009",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "OT-02",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 3737.9
+  },
+  {
+    "id": "VAL-009",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "OT-02",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 4112.6
+  },
+  {
+    "id": "VAL-010",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "OT-06",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 5175.1
+  },
+  {
+    "id": "VAL-010",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "OT-06",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 2618.8
+  },
+  {
+    "id": "VAL-011",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "GT-02",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 2345.3
+  },
+  {
+    "id": "VAL-011",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "GT-02",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 5170.1
+  },
+  {
+    "id": "VAL-012",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "GT-06",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 5484.1
+  },
+  {
+    "id": "VAL-012",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "GT-06",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 1988.0
+  },
+  {
+    "id": "VAL-013",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "TS-01",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 2699.2
+  },
+  {
+    "id": "VAL-013",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "TS-01",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 6158.9
+  },
+  {
+    "id": "VAL-014",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "TS-09",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 8062.4
+  },
+  {
+    "id": "VAL-014",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "TS-09",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 2461.6
+  },
+  {
+    "id": "VAL-015",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "DT-01",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 3682.3
+  },
+  {
+    "id": "VAL-015",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "DT-01",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 6711.1
+  },
+  {
+    "id": "VAL-016",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "DT-09",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 7532.5
+  },
+  {
+    "id": "VAL-016",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "DT-09",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 2660.2
+  }
+]

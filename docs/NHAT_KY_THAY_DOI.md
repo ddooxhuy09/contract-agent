@@ -1,5 +1,26 @@
 # Nhật ký thay đổi theo kế hoạch 1 tuần
 
+## 2026-11-18: v4 — kiểm chứng bản nháp theo bằng chứng thật
+
+- V3 tăng retrieval/nguồn nhưng còn ca đảo nghĩa điều cấm, nhầm thiếu chi tiết với vi phạm và viện dẫn lệch phạm vi. Giữ toàn bộ kết quả v3, không sửa rubric hoặc gold để nâng điểm.
+- V4 bổ sung Điều 1 của hợp đồng, căn cứ nguyên tắc và quyền tiếp cận Tòa án theo chủ đề, bỏ vector lệch phạm vi khi đã có căn cứ; model sinh kiểm chứng bản nháp một lần, lỗi thì giữ bản nháp. Không đổi API, node/cạnh, retry kỹ thuật hoặc checkpointer.
+- Đóng băng trước kết quả: 32 regression + 8 ca có nguồn đã dùng chẩn đoán, thêm 16 validation không trùng ca gốc các vòng trước. Cả hai cấu hình gọi model thật; judge/rubric giữ nguyên. Không gọi 16 ca là benchmark pháp lý mới độc lập vì vẫn thuộc v1 từng được đánh giá.
+- Test không integration cuối: 381 passed, 1 skipped. Sửa harness dùng một event loop cho nhiều split để tránh client HTTP cache trỏ loop đã đóng; có test hồi quy. Kết quả QA, chi phí và các ca còn sai: `docs/bo_test_hoi_dong/CAI_THIEN_V4_KET_QUA.md`. Không tự cập nhật cờ hiệu lực BHXH 2024 dù phát hiện dữ liệu cần audit.
+
+## 2026-11-18: vòng nghiên cứu v3 — căn cứ đúng chủ đề và QA có viện dẫn
+
+- Tham khảo CRAG/ALCE và đối chiếu nguồn Chính phủ, gồm văn bản hợp nhất 125/VBHN-VPQH; nguồn và phạm vi áp dụng ghi ở `evaluation/contract_eval_v2/RESEARCH_NOTES.md`.
+- `qa_evidence.py` lấy Điều luật thật theo chủ đề, kiểm phạm vi/ngày, ghép văn bản và bỏ phần lặp/tràn Điều; không chứa nhãn hoặc id test. Query bỏ số thứ tự hợp đồng, giữ số Điều luật; prompt và xác minh `cited_clauses` phân biệt hai loại nguồn.
+- Protocol chốt trước kết quả: baseline v2 từ snapshot, candidate mới, cùng model/judge/rubric. Đo dev, 32 regression cân bằng từ test v1 và 8 ca thử việc/nghỉ phép mới có nguồn; không sửa gold hoặc xóa test.lock.
+- Test không integration: 379 passed, 1 skipped. Kết quả đo thật và các ca giảm điểm: `docs/bo_test_hoi_dong/NGHIEN_CUU_V3_KET_QUA.md`.
+
+## 2026-11-18: QA dùng nội dung Điều được hỏi và thí nghiệm dev có đối chứng
+
+- `_retrieve_contract_docs` ưu tiên số Điều hợp đồng nêu trong câu hỏi qua port `ContractChunkRepository`; không dùng gold và không thêm SQL trong agent. Tham chiếu có tên luật/nghị định được phân biệt với số Điều hợp đồng.
+- `ground_qa_retrieval_query` bổ sung nội dung Điều thực tìm được khi truy xuất luật. Câu hỏi không nêu số Điều giữ truy vấn trước đó. Không đổi API, auth, prompt sinh, streaming, node/cạnh, retry hoặc checkpointer.
+- `evaluation/contract_eval_v2/`: audit chất lượng v1, bộ dev 80 câu từ 16 ca gốc (thêm paraphrase và đổi số Điều), ba cấu hình retrieval đối chứng, hai cấu hình QA, ngữ cảnh thực dùng để chấm, CI lấy mẫu theo ca gốc. Không chỉnh v1, không mở khóa test, không tuyên bố đây là test giữ kín mới.
+- Bộ đánh giá và phép sửa có 17 test mới. Toàn bộ test không integration trong container: 372 passed, 1 skipped. Báo cáo so sánh: `docs/bo_test_hoi_dong/CAI_THIEN_V2_KET_QUA_VA_BANG_CHUNG.md`.
+
 Ghi lại các quyết định và thay đổi so với kế hoạch gốc. Mốc đối chiếu: tag `baseline-tuan-0` (commit `dd1782f`).
 
 ## Ngày 1

@@ -1,0 +1,13 @@
+{
+  "observed_in_isolated_corpus": {
+    "doc_id": "175027",
+    "doc_num": "41/2024/QH15",
+    "status_flag": 2
+  },
+  "official_sources": [
+    "https://xaydungchinhsach.chinhphu.vn/toan-van-luat-so-41-2024-qh15-bao-hiem-xa-hoi-119240723163650489.htm",
+    "https://xaydungchinhsach.chinhphu.vn/ho-tro-nguoi-huong-lap-lai-van-ban-uy-quyen-nhan-luong-huu-hoac-chuyen-sang-nhan-qua-tai-khoan-ca-nhan-11926051209085909.htm"
+  ],
+  "status": "needs_version_effectivity_audit; no metadata override applied",
+  "related_case": "BH-09; specialized BHXH/BHYT conditions need source verification, not label-matching rules"
+}

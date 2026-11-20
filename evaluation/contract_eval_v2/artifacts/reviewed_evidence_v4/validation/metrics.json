@@ -1,0 +1,109 @@
+{
+  "scope": "previously_v1_evaluated_cases_not_used_in_v2_v3_diagnosis",
+  "n_questions": 16,
+  "n_base_cases": 16,
+  "retrieval": {
+    "baseline": {
+      "expected": 16,
+      "completed": 16,
+      "legal_scored": 16,
+      "legal_recall@5": 0.9375,
+      "by_variant": {
+        "T1": {
+          "n": 16,
+          "recall@5": 0.9375
+        }
+      }
+    },
+    "grounded": {
+      "expected": 16,
+      "completed": 16,
+      "legal_scored": 16,
+      "legal_recall@5": 0.9375,
+      "by_variant": {
+        "T1": {
+          "n": 16,
+          "recall@5": 0.9375
+        }
+      }
+    }
+  },
+  "paired_recall_delta": 0.0,
+  "paired_recall_delta_ci95_cluster": [
+    0.0,
+    0.0
+  ],
+  "qa": {
+    "baseline": {
+      "expected": 16,
+      "completed": 16,
+      "judged": 16,
+      "valid_generation": 16,
+      "correctness": 0.9375,
+      "fully_correct": 0.9375,
+      "conclusion_match": 0.9375,
+      "source_clause_hit": 1.0,
+      "latency_p50_ms": 2748.75,
+      "faithfulness": 0.9791666666666666,
+      "faithfulness_scored": 16,
+      "false_alarm": {
+        "numerator": 0,
+        "denominator": 8
+      },
+      "confusion": {
+        "violation": {
+          "violation": 7,
+          "compliant": 1,
+          "unclear": 0
+        },
+        "compliant": {
+          "violation": 0,
+          "compliant": 8,
+          "unclear": 0
+        }
+      }
+    },
+    "grounded": {
+      "expected": 16,
+      "completed": 16,
+      "judged": 16,
+      "valid_generation": 16,
+      "correctness": 0.96875,
+      "fully_correct": 0.9375,
+      "conclusion_match": 1.0,
+      "source_clause_hit": 1.0,
+      "latency_p50_ms": 6638.5,
+      "faithfulness": 0.984375,
+      "faithfulness_scored": 16,
+      "false_alarm": {
+        "numerator": 0,
+        "denominator": 8
+      },
+      "confusion": {
+        "violation": {
+          "violation": 8,
+          "compliant": 0,
+          "unclear": 0
+        },
+        "compliant": {
+          "violation": 0,
+          "compliant": 8,
+          "unclear": 0
+        }
+      }
+    }
+  },
+  "paired_qa_delta": 0.03125,
+  "paired_qa_delta_ci95_cluster": [
+    0.0,
+    0.09375
+  ],
+  "qa_changes": {
+    "improved": 1,
+    "regressed": 0,
+    "unchanged": 15
+  },
+  "warning": "LLM judge not human-calibrated on these answers; no cross-run comparison to v1 QA score",
+  "baseline": "v3 production snapshot; new baseline calls, not copied scores",
+  "candidate": "focused primary evidence + context article 1 + one same-model evidence review"
+}

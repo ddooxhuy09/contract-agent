@@ -1,0 +1,109 @@
+{
+  "scope": "new_synthetic_cases_source_checked_but_author_knows_code",
+  "n_questions": 8,
+  "n_base_cases": 8,
+  "retrieval": {
+    "baseline": {
+      "expected": 8,
+      "completed": 8,
+      "legal_scored": 8,
+      "legal_recall@5": 1.0,
+      "by_variant": {
+        "T1": {
+          "n": 8,
+          "recall@5": 1.0
+        }
+      }
+    },
+    "grounded": {
+      "expected": 8,
+      "completed": 8,
+      "legal_scored": 8,
+      "legal_recall@5": 1.0,
+      "by_variant": {
+        "T1": {
+          "n": 8,
+          "recall@5": 1.0
+        }
+      }
+    }
+  },
+  "paired_recall_delta": 0.0,
+  "paired_recall_delta_ci95_cluster": [
+    0.0,
+    0.0
+  ],
+  "qa": {
+    "baseline": {
+      "expected": 8,
+      "completed": 8,
+      "judged": 8,
+      "valid_generation": 8,
+      "correctness": 1.0,
+      "fully_correct": 1.0,
+      "conclusion_match": 1.0,
+      "source_clause_hit": 0.75,
+      "latency_p50_ms": 2770.7,
+      "faithfulness": 1.0,
+      "faithfulness_scored": 8,
+      "false_alarm": {
+        "numerator": 0,
+        "denominator": 4
+      },
+      "confusion": {
+        "violation": {
+          "violation": 4,
+          "compliant": 0,
+          "unclear": 0
+        },
+        "compliant": {
+          "violation": 0,
+          "compliant": 4,
+          "unclear": 0
+        }
+      }
+    },
+    "grounded": {
+      "expected": 8,
+      "completed": 8,
+      "judged": 8,
+      "valid_generation": 8,
+      "correctness": 0.8125,
+      "fully_correct": 0.75,
+      "conclusion_match": 0.875,
+      "source_clause_hit": 1.0,
+      "latency_p50_ms": 3077.35,
+      "faithfulness": 0.8333333333333334,
+      "faithfulness_scored": 8,
+      "false_alarm": {
+        "numerator": 1,
+        "denominator": 4
+      },
+      "confusion": {
+        "violation": {
+          "violation": 4,
+          "compliant": 0,
+          "unclear": 0
+        },
+        "compliant": {
+          "violation": 1,
+          "compliant": 3,
+          "unclear": 0
+        }
+      }
+    }
+  },
+  "paired_qa_delta": -0.1875,
+  "paired_qa_delta_ci95_cluster": [
+    -0.4375,
+    0.0
+  ],
+  "qa_changes": {
+    "improved": 0,
+    "regressed": 2,
+    "unchanged": 6
+  },
+  "warning": "LLM judge not human-calibrated on these answers; no cross-run comparison to v1 QA score",
+  "baseline": "v2_grounded_snapshot",
+  "candidate": "researched_topic_evidence"
+}

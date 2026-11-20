@@ -1,0 +1,364 @@
+{
+  "n": 38,
+  "with_rule_findings": 27,
+  "cases": [
+    {
+      "id": "OT-07-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Hợp đồng bắt làm thêm và/hoặc tuyên bố không trả lương làm thêm giờ."
+      ],
+      "finding_keys": [
+        "ot_unpaid"
+      ]
+    },
+    {
+      "id": "OT-08-T1",
+      "deterministic_findings": false,
+      "issues": [
+        "Điều khoản không quy định giới hạn thời gian làm thêm giờ trong một ngày, trái yêu cầu của Điều 107 Bộ luật Lao động."
+      ],
+      "finding_keys": []
+    },
+    {
+      "id": "BH-06-T1",
+      "deterministic_findings": false,
+      "issues": [
+        "Điều 4.1 dùng cụm từ “trên mức tiền lương ghi trong hợp đồng” gây hiểu lầm về cách tính đóng bảo hiểm, có thể không phù hợp với quy định pháp luật."
+      ],
+      "finding_keys": []
+    },
+    {
+      "id": "BH-08-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Hai bên thỏa thuận Công ty không đóng BHXH/BHYT bắt buộc."
+      ],
+      "finding_keys": [
+        "no_bhxh"
+      ]
+    },
+    {
+      "id": "BH-09-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Hai bên thỏa thuận Công ty không đóng BHXH/BHYT bắt buộc."
+      ],
+      "finding_keys": [
+        "no_bhxh"
+      ]
+    },
+    {
+      "id": "GT-06-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Hợp đồng yêu cầu NLĐ giao bản gốc CCCD/bằng cấp cho Công ty giữ."
+      ],
+      "finding_keys": [
+        "retain_id_papers"
+      ]
+    },
+    {
+      "id": "GT-08-T1",
+      "deterministic_findings": false,
+      "issues": [
+        "Điều 5 cho phép công ty lưu bản sao có chứng thực hoặc bản scan các giấy tờ của người lao động mà Bộ luật Lao động không quy định quyền hoặc nghĩa vụ này."
+      ],
+      "finding_keys": []
+    },
+    {
+      "id": "GT-10-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Hợp đồng yêu cầu NLĐ giao bản gốc CCCD/bằng cấp cho Công ty giữ."
+      ],
+      "finding_keys": [
+        "retain_id_papers"
+      ]
+    },
+    {
+      "id": "DT-06-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Buộc NLĐ bồi thường «chi phí đào tạo» bằng số tháng lương cố định, không gắn với hợp đồng đào tạo nghề và chi phí thực tế có chứng từ."
+      ],
+      "finding_keys": [
+        "training_cost_flat"
+      ]
+    },
+    {
+      "id": "DT-10-T1",
+      "deterministic_findings": false,
+      "issues": [
+        "Điều 6.1 không bao gồm các nội dung bắt buộc theo Điều 62 Bộ luật Lao động 2019 như địa điểm, thời gian, tiền lương trong thời gian đào tạo, chi phí đào tạo và trách nhiệm hoàn trả chi phí, cũng như trách nhiệm của người lao động."
+      ],
+      "finding_keys": []
+    },
+    {
+      "id": "KL-06-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Công ty tự đặt hình thức kỷ luật phạt tiền và khấu trừ lương."
+      ],
+      "finding_keys": [
+        "fine_deduct_wage"
+      ]
+    },
+    {
+      "id": "KL-10-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Công ty tự đặt hình thức kỷ luật phạt tiền và khấu trừ lương."
+      ],
+      "finding_keys": [
+        "fine_deduct_wage"
+      ]
+    },
+    {
+      "id": "LU-06-T1",
+      "deterministic_findings": false,
+      "issues": [
+        "Điều 8.1 quy định người lao động phải báo trước ít nhất 30 ngày mà không phân biệt loại hợp đồng, trái với quy định của Bộ luật Lao động về các thời hạn báo trước khác nhau."
+      ],
+      "finding_keys": []
+    },
+    {
+      "id": "LU-07-T1",
+      "deterministic_findings": false,
+      "issues": [
+        "Điều 8.1 chỉ quy định bồi thường nửa tháng tiền lương và tiền lương ngày không báo trước, nhưng không nêu khoản bồi thường chi phí đào tạo theo Điều 40 khoản 3 của Bộ luật Lao động."
+      ],
+      "finding_keys": []
+    },
+    {
+      "id": "LU-08-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Điều khoản tước lương tháng cuối khi NLĐ chấm dứt trước hạn."
+      ],
+      "finding_keys": [
+        "forfeit_wage_quit"
+      ]
+    },
+    {
+      "id": "TS-07-T1",
+      "deterministic_findings": false,
+      "issues": [
+        "Điều khoản không quy định người lao động phải báo trước cho người sử dụng lao động và kèm theo ý kiến của cơ sở khám bệnh, chữa bệnh, trái quy định Nghị định 85/2015/NĐ‑CP."
+      ],
+      "finding_keys": []
+    },
+    {
+      "id": "TS-08-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Cho phép NSDLĐ đơn phương chấm dứt khi NLĐ kết hôn hoặc mang thai."
+      ],
+      "finding_keys": [
+        "terminate_pregnancy"
+      ]
+    },
+    {
+      "id": "TS-09-T1",
+      "deterministic_findings": false,
+      "issues": [
+        "Điều 9.2 chỉ nêu việc nghỉ và hưởng lương nhưng không quy định thời lượng tối thiểu (30 phút hành kinh, 60 phút nuôi con dưới 12 tháng) theo quy định của pháp luật, gây rủi ro vi phạm."
+      ],
+      "finding_keys": []
+    },
+    {
+      "id": "TS-10-T1",
+      "deterministic_findings": false,
+      "issues": [
+        "Điều 9.1 cho phép công ty đơn phương chấm dứt hợp đồng khi lao động nữ không hoàn thành công việc mà không có ngoại lệ cho lao động mang thai, nghỉ thai sản hoặc nuôi con dưới 12 tháng, trái quy định Điều 37 Bộ luật Lao động."
+      ],
+      "finding_keys": []
+    },
+    {
+      "id": "TC-07-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Hạn chế quyền khởi kiện / trao quyền quyết định tranh chấp một phía cho Giám đốc."
+      ],
+      "finding_keys": [
+        "ban_lawsuit"
+      ]
+    },
+    {
+      "id": "TC-08-T1",
+      "deterministic_findings": false,
+      "issues": [
+        "Điều 10.1 không có căn cứ pháp lý trong các văn bản luật được cung cấp, nên có nguy cơ không được tòa án công nhận."
+      ],
+      "finding_keys": []
+    },
+    {
+      "id": "TC-10-T1",
+      "deterministic_findings": false,
+      "issues": [
+        "Điều khoản quy định thẩm quyền Tòa án dựa trên nơi cư trú của người lao động, trong khi pháp luật không quy định như vậy và có thể gây xung đột với quy định về địa bàn thẩm quyền giải quyết tranh chấp lao động."
+      ],
+      "finding_keys": []
+    },
+    {
+      "id": "OT2-C1-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Hợp đồng bắt làm thêm và/hoặc tuyên bố không trả lương làm thêm giờ."
+      ],
+      "finding_keys": [
+        "ot_unpaid"
+      ]
+    },
+    {
+      "id": "OT2-C2-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Hợp đồng bắt làm thêm và/hoặc tuyên bố không trả lương làm thêm giờ."
+      ],
+      "finding_keys": [
+        "ot_unpaid"
+      ]
+    },
+    {
+      "id": "BH2-C1-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Hai bên thỏa thuận Công ty không đóng BHXH/BHYT bắt buộc."
+      ],
+      "finding_keys": [
+        "no_bhxh"
+      ]
+    },
+    {
+      "id": "BH2-C2-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Hai bên thỏa thuận Công ty không đóng BHXH/BHYT bắt buộc."
+      ],
+      "finding_keys": [
+        "no_bhxh"
+      ]
+    },
+    {
+      "id": "GT2-C1-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Hợp đồng yêu cầu NLĐ giao bản gốc CCCD/bằng cấp cho Công ty giữ."
+      ],
+      "finding_keys": [
+        "retain_id_papers"
+      ]
+    },
+    {
+      "id": "GT2-C2-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Hợp đồng yêu cầu NLĐ giao bản gốc CCCD/bằng cấp cho Công ty giữ."
+      ],
+      "finding_keys": [
+        "retain_id_papers"
+      ]
+    },
+    {
+      "id": "DT2-C1-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Buộc NLĐ bồi thường «chi phí đào tạo» bằng số tháng lương cố định, không gắn với hợp đồng đào tạo nghề và chi phí thực tế có chứng từ."
+      ],
+      "finding_keys": [
+        "training_cost_flat"
+      ]
+    },
+    {
+      "id": "DT2-C2-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Buộc NLĐ bồi thường «chi phí đào tạo» bằng số tháng lương cố định, không gắn với hợp đồng đào tạo nghề và chi phí thực tế có chứng từ."
+      ],
+      "finding_keys": [
+        "training_cost_flat"
+      ]
+    },
+    {
+      "id": "KL2-C1-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Công ty tự đặt hình thức kỷ luật phạt tiền và khấu trừ lương."
+      ],
+      "finding_keys": [
+        "fine_deduct_wage"
+      ]
+    },
+    {
+      "id": "KL2-C2-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Công ty tự đặt hình thức kỷ luật phạt tiền và khấu trừ lương."
+      ],
+      "finding_keys": [
+        "fine_deduct_wage"
+      ]
+    },
+    {
+      "id": "LU2-C1-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Điều khoản tước lương tháng cuối khi NLĐ chấm dứt trước hạn."
+      ],
+      "finding_keys": [
+        "forfeit_wage_quit"
+      ]
+    },
+    {
+      "id": "LU2-C2-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Điều khoản tước lương tháng cuối khi NLĐ chấm dứt trước hạn."
+      ],
+      "finding_keys": [
+        "forfeit_wage_quit"
+      ]
+    },
+    {
+      "id": "TS2-C1-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Cho phép NSDLĐ đơn phương chấm dứt khi NLĐ kết hôn hoặc mang thai."
+      ],
+      "finding_keys": [
+        "terminate_pregnancy"
+      ]
+    },
+    {
+      "id": "TS2-C2-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Cho phép NSDLĐ đơn phương chấm dứt khi NLĐ kết hôn hoặc mang thai."
+      ],
+      "finding_keys": [
+        "terminate_pregnancy"
+      ]
+    },
+    {
+      "id": "TC2-C1-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Hạn chế quyền khởi kiện / trao quyền quyết định tranh chấp một phía cho Giám đốc."
+      ],
+      "finding_keys": [
+        "ban_lawsuit"
+      ]
+    },
+    {
+      "id": "TC2-C2-T1",
+      "deterministic_findings": true,
+      "issues": [
+        "Hạn chế quyền khởi kiện / trao quyền quyết định tranh chấp một phía cho Giám đốc."
+      ],
+      "finding_keys": [
+        "ban_lawsuit"
+      ]
+    }
+  ]
+}

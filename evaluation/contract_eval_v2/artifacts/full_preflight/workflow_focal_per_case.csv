@@ -1,0 +1,110 @@
+﻿id,base_case_id,split,source_set,rule_id,gold,expected_positive,predicted_positive,parser_found_focal,issues,matched_issues
+OT-01-T1,OT-01,test,injection,ot_unpaid,violation,True,True,True,,Hợp đồng bắt làm thêm và/hoặc tuyên bố không trả lương làm thêm giờ.
+OT-02-T1,OT-02,test,injection,ot_unpaid,violation,True,True,True,,"Điều 2.2 cấm người lao động yêu cầu thanh toán thêm cho thời gian làm việc ngoài giờ hành chính, trái quy định bắt buộc trả lương làm thêm giờ của Bộ luật Lao động."
+OT-03-T1,OT-03,test,injection,ot_unpaid,violation,True,True,True,,"Điều 2.2 buộc người lao động phải làm thêm ít nhất 50 giờ/tháng, không trả tiền công, trái quy định của Bộ luật Lao động về thời gian và trả lương làm thêm giờ."
+OT-04-T1,OT-04,test,injection,ot_unpaid,violation,True,True,True,,"Điều 2.2 quy định trả giờ làm thêm theo đơn giá 100% mà không áp dụng hệ số nhân, trái quy định về mức trả tối thiểu cho giờ làm thêm của Bộ luật Lao động."
+OT-05-T1,OT-05,dev,injection,ot_unpaid,violation,True,True,True,,Hợp đồng bắt làm thêm và/hoặc tuyên bố không trả lương làm thêm giờ.
+OT-06-T1,OT-06,test,injection,ot_unpaid,compliant,False,False,True,,
+OT-07-T1,OT-07,test,injection,ot_unpaid,compliant,False,True,True,low_confidence,Hợp đồng bắt làm thêm và/hoặc tuyên bố không trả lương làm thêm giờ.
+OT-08-T1,OT-08,test,injection,ot_unpaid,compliant,False,True,True,,"Điều khoản không quy định giới hạn thời gian làm thêm giờ trong một ngày, trái yêu cầu của Điều 107 Bộ luật Lao động."
+OT-10-T1,OT-10,dev,injection,ot_unpaid,compliant,False,True,True,low_confidence,Điều khoản không quy định giới hạn số giờ làm thêm theo yêu cầu của Bộ luật Lao động.
+BH-01-T1,BH-01,test,injection,no_bhxh,violation,True,True,True,,Hai bên thỏa thuận Công ty không đóng BHXH/BHYT bắt buộc.
+BH-02-T1,BH-02,test,injection,no_bhxh,violation,True,True,True,,"Điều 4.1 cho phép người sử dụng lao động miễn trừ hoàn toàn nghĩa vụ đóng bảo hiểm xã hội, bảo hiểm y tế và bảo hiểm thất nghiệp, trái quy định bắt buộc của Bộ luật Lao động."
+BH-03-T1,BH-03,test,injection,no_bhxh,violation,True,True,True,,"Điều 4.1 cho phép công ty không trích nộp BHXH, BHYT, BHTN và chỉ chi trả chênh lệch bằng tiền mặt, trái quy định bắt buộc của pháp luật."
+BH-04-T1,BH-04,test,injection,no_bhxh,violation,True,True,True,,"Điều 4.1 cho phép không kê khai bảo hiểm xã hội trong 12 tháng, trái quy định pháp luật về bảo hiểm xã hội, bảo hiểm y tế và bảo hiểm thất nghiệp."
+BH-05-T1,BH-05,dev,injection,no_bhxh,violation,True,True,True,,Hai bên thỏa thuận Công ty không đóng BHXH/BHYT bắt buộc.
+BH-06-T1,BH-06,test,injection,no_bhxh,compliant,False,True,True,,"Điều 4.1 dùng cụm từ “trên mức tiền lương ghi trong hợp đồng” gây hiểu lầm về cách tính đóng bảo hiểm, có thể không phù hợp với quy định pháp luật."
+BH-07-T1,BH-07,dev,injection,no_bhxh,compliant,False,True,True,,Hai bên thỏa thuận Công ty không đóng BHXH/BHYT bắt buộc.
+BH-08-T1,BH-08,test,injection,no_bhxh,compliant,False,True,True,,Hai bên thỏa thuận Công ty không đóng BHXH/BHYT bắt buộc.
+BH-09-T1,BH-09,test,injection,no_bhxh,compliant,False,True,True,low_confidence;specialist_BHXH_BHYT_and_time_review,Hai bên thỏa thuận Công ty không đóng BHXH/BHYT bắt buộc.
+BH-10-T1,BH-10,test,injection,no_bhxh,compliant,False,False,True,,
+GT-01-T1,GT-01,test,injection,retain_id_papers,violation,True,True,True,,Hợp đồng yêu cầu NLĐ giao bản gốc CCCD/bằng cấp cho Công ty giữ.
+GT-02-T1,GT-02,test,injection,retain_id_papers,violation,True,True,True,,"Điều 5 yêu cầu người lao động nộp bản chính văn bằng đại học và chứng chỉ nghề cho công ty bảo quản, nhưng không có căn cứ pháp lý trong Bộ luật Lao động hiện hành."
+GT-03-T1,GT-03,dev,injection,retain_id_papers,violation,True,True,True,,"Điều 5.1 cho phép công ty tạm giữ thẻ Căn cước công dân và hộ chiếu gốc của người lao động trong 12 tháng, nhưng không có căn cứ pháp lý trong Bộ luật Lao động cho phép việc này."
+GT-04-T1,GT-04,test,injection,retain_id_papers,violation,True,True,True,,"Điều khoản bắt buộc người lao động ký gửi toàn bộ giấy tờ gốc (CMND/CCCD, bằng tốt nghiệp, chứng chỉ hành nghề) không có căn cứ trong Bộ luật Lao động hiện hành."
+GT-05-T1,GT-05,test,injection,retain_id_papers,violation,True,True,True,,Hợp đồng yêu cầu NLĐ giao bản gốc CCCD/bằng cấp cho Công ty giữ.
+GT-06-T1,GT-06,test,injection,retain_id_papers,compliant,False,True,True,,Hợp đồng yêu cầu NLĐ giao bản gốc CCCD/bằng cấp cho Công ty giữ.
+GT-07-T1,GT-07,test,injection,retain_id_papers,compliant,False,False,True,,
+GT-08-T1,GT-08,test,injection,retain_id_papers,compliant,False,True,True,,Điều 5 cho phép công ty lưu bản sao có chứng thực hoặc bản scan các giấy tờ của người lao động mà Bộ luật Lao động không quy định quyền hoặc nghĩa vụ này.
+GT-09-T1,GT-09,dev,injection,retain_id_papers,compliant,False,True,True,,Hợp đồng yêu cầu NLĐ giao bản gốc CCCD/bằng cấp cho Công ty giữ.
+GT-10-T1,GT-10,test,injection,retain_id_papers,compliant,False,True,True,,Hợp đồng yêu cầu NLĐ giao bản gốc CCCD/bằng cấp cho Công ty giữ.
+DT-01-T1,DT-01,test,injection,training_cost_flat,violation,True,True,True,low_confidence;training_contract_and_actual_cost_conditions,"Buộc NLĐ bồi thường «chi phí đào tạo» bằng số tháng lương cố định, không gắn với hợp đồng đào tạo nghề và chi phí thực tế có chứng từ."
+DT-02-T1,DT-02,test,injection,training_cost_flat,violation,True,True,True,training_contract_and_actual_cost_conditions,"Điều 6.1 quy định người lao động phải hoàn lại phí đào tạo cố định 6 tháng lương cơ bản, không phụ thuộc vào chi phí thực tế của công ty, trái với nguyên tắc chi phí đào tạo phải dựa trên thực tế và không được vượt mức chi phí thực tế."
+DT-03-T1,DT-03,test,injection,training_cost_flat,violation,True,True,True,training_contract_and_actual_cost_conditions,"Điều 6.1 yêu cầu người lao động đền bù phí đào tạo nội bộ 3 tháng lương khi nghỉ việc trong 18 tháng, nhưng không có căn cứ pháp lý rõ ràng về mức bồi hoàn và cách tính, có thể vi phạm nguyên tắc hợp lý, gây tranh chấp."
+DT-04-T1,DT-04,dev,injection,training_cost_flat,violation,True,True,True,training_contract_and_actual_cost_conditions,"Điều 6.1 quy định người lao động phải trả cho công ty một khoản bằng 12 lần mức lương tháng khi nghỉ việc trước 36 tháng, bất kể đã tham gia đào tạo hay chưa, vi phạm nguyên tắc không thu học phí và chỉ được hoàn trả chi phí đào tạo thực tế theo luật."
+DT-05-T1,DT-05,test,injection,training_cost_flat,violation,True,True,True,low_confidence;training_contract_and_actual_cost_conditions,"Buộc NLĐ bồi thường «chi phí đào tạo» bằng số tháng lương cố định, không gắn với hợp đồng đào tạo nghề và chi phí thực tế có chứng từ."
+DT-06-T1,DT-06,test,injection,training_cost_flat,compliant,False,True,True,training_contract_and_actual_cost_conditions,"Buộc NLĐ bồi thường «chi phí đào tạo» bằng số tháng lương cố định, không gắn với hợp đồng đào tạo nghề và chi phí thực tế có chứng từ."
+DT-07-T1,DT-07,test,injection,training_cost_flat,compliant,False,False,True,training_contract_and_actual_cost_conditions,
+DT-08-T1,DT-08,dev,injection,training_cost_flat,compliant,False,True,True,training_contract_and_actual_cost_conditions,"Điều 6.1 không quy định cụ thể thời gian và mức giảm dần của chi phí đào tạo, gây mơ hồ và rủi ro tranh chấp."
+DT-09-T1,DT-09,test,injection,training_cost_flat,compliant,False,False,True,training_contract_and_actual_cost_conditions,
+DT-10-T1,DT-10,test,injection,training_cost_flat,compliant,False,True,True,training_contract_and_actual_cost_conditions,"Điều 6.1 không bao gồm các nội dung bắt buộc theo Điều 62 Bộ luật Lao động 2019 như địa điểm, thời gian, tiền lương trong thời gian đào tạo, chi phí đào tạo và trách nhiệm hoàn trả chi phí, cũng như trách nhiệm của người lao động."
+KL-01-T1,KL-01,test,injection,fine_deduct_wage,violation,True,True,True,,Công ty tự đặt hình thức kỷ luật phạt tiền và khấu trừ lương.
+KL-02-T1,KL-02,dev,injection,fine_deduct_wage,violation,True,True,True,,"Điều 7.1 quy định trừ tiền lương 200.000 đ và 100.000 đ cho mỗi lần đi làm muộn hoặc quên chấm công, trái quy định của Nghị định 27/2014/NĐ‑CP về hình thức kỷ luật lao động."
+KL-03-T1,KL-03,test,injection,fine_deduct_wage,violation,True,True,True,,"Điều 7.1 cho phép cắt 10 % lương tháng như hình thức kỷ luật, nhưng Nghị định 27/2014/NĐ‑CP Điều 26 chỉ cho phép khiển trách hoặc chấm dứt hợp đồng, không cho phép trừ lương."
+KL-04-T1,KL-04,test,injection,fine_deduct_wage,violation,True,True,True,,"Điều 7.1 quy định phạt tiền 200.000 đồng cho lỗi vi phạm kỷ luật nhẹ, nhưng Nghị định 27/2014/NĐ‑CP chỉ cho phép khiển trách và Nghị định 12/2022/NĐ‑CP quy định mức phạt tối thiểu cho người sử dụng lao động từ 5.000.000 đồng, không cho phép áp dụng hình thức phạt tiền đối với người lao động."
+KL-05-T1,KL-05,test,injection,fine_deduct_wage,violation,True,True,True,,Công ty tự đặt hình thức kỷ luật phạt tiền và khấu trừ lương.
+KL-06-T1,KL-06,test,injection,fine_deduct_wage,compliant,False,True,True,,Công ty tự đặt hình thức kỷ luật phạt tiền và khấu trừ lương.
+KL-07-T1,KL-07,test,injection,fine_deduct_wage,compliant,False,False,True,,
+KL-08-T1,KL-08,test,injection,fine_deduct_wage,compliant,False,False,True,,
+KL-09-T1,KL-09,dev,injection,fine_deduct_wage,compliant,False,True,True,,"Điều 7.1 không dựa trên quy định cụ thể của Bộ luật Lao động về việc không trả lương và không áp dụng hình thức kỷ luật, gây rủi ro vi phạm pháp luật."
+KL-10-T1,KL-10,test,injection,fine_deduct_wage,compliant,False,True,True,,Công ty tự đặt hình thức kỷ luật phạt tiền và khấu trừ lương.
+LU-01-T1,LU-01,test,injection,forfeit_wage_quit,violation,True,True,True,,Điều khoản tước lương tháng cuối khi NLĐ chấm dứt trước hạn.
+LU-02-T1,LU-02,test,injection,forfeit_wage_quit,violation,True,True,True,,"Điều khoản cho phép công ty giữ lại toàn bộ tiền lương cuối cùng nếu người lao động không báo trước 30 ngày, trái với quy định về thời hạn báo trước và nguyên tắc trả lương."
+LU-03-T1,LU-03,dev,injection,forfeit_wage_quit,violation,True,True,True,,"Điều 8.1 quy định người lao động tự ý nghỉ việc sẽ mất toàn bộ tiền lương và phụ cấp của 30 ngày gần nhất và chuyển vào quỹ công ty, trái quy định của Bộ luật Lao động về thời gian báo trước và không cho phép tịch thu tiền lương đã trả."
+LU-04-T1,LU-04,test,injection,forfeit_wage_quit,violation,True,True,True,,"Điều 8.1 quy định không trả tiền lương kỳ thanh toán cuối cùng và coi đó là khoản đền bù cho công ty khi người lao động chấm dứt hợp đồng trái pháp luật, trái quy định của Bộ luật Lao động."
+LU-05-T1,LU-05,test,injection,forfeit_wage_quit,violation,True,True,True,,Điều khoản tước lương tháng cuối khi NLĐ chấm dứt trước hạn.
+LU-06-T1,LU-06,test,injection,forfeit_wage_quit,compliant,False,True,True,low_confidence;conditional_verdict_not_absolute,"Điều 8.1 quy định người lao động phải báo trước ít nhất 30 ngày mà không phân biệt loại hợp đồng, trái với quy định của Bộ luật Lao động về các thời hạn báo trước khác nhau."
+LU-07-T1,LU-07,test,injection,forfeit_wage_quit,compliant,False,True,True,,"Điều 8.1 chỉ quy định bồi thường nửa tháng tiền lương và tiền lương ngày không báo trước, nhưng không nêu khoản bồi thường chi phí đào tạo theo Điều 40 khoản 3 của Bộ luật Lao động."
+LU-08-T1,LU-08,test,injection,forfeit_wage_quit,compliant,False,True,True,,Điều khoản tước lương tháng cuối khi NLĐ chấm dứt trước hạn.
+LU-10-T1,LU-10,dev,injection,forfeit_wage_quit,compliant,False,True,True,conditional_verdict_not_absolute,Điều khoản không nêu rõ thời hạn báo trước theo quy định của Bộ luật Lao động và quy định bồi thường bắt buộc ngay cả khi luật cho phép nghỉ không báo trước.
+TS-01-T1,TS-01,test,injection,terminate_pregnancy,violation,True,True,True,,Cho phép NSDLĐ đơn phương chấm dứt khi NLĐ kết hôn hoặc mang thai.
+TS-02-T1,TS-02,test,injection,terminate_pregnancy,violation,True,True,True,,"Điều 9.1 cho phép công ty tự động chấm dứt hợp đồng khi lao động nữ mang thai trong 24 tháng đầu, trái quy định cấm người sử dụng lao động đơn phương chấm dứt vì mang thai."
+TS-03-T1,TS-03,test,injection,terminate_pregnancy,violation,True,True,True,,"Điều 9.1 cho phép công ty chấm dứt hợp đồng lao động nữ khi lập gia đình mà không trả bất kỳ khoản bồi thường nào, vi phạm quy định về thời gian thông báo và trợ cấp thôi việc của Bộ luật Lao động."
+TS-04-T1,TS-04,dev,injection,terminate_pregnancy,violation,True,True,True,,"Điều 9.1 cho phép công ty sa thải ngay lao động nữ đang nghỉ thai sản hoặc nuôi con dưới 12 tháng tuổi nếu không đạt chỉ tiêu doanh số, vi phạm quy định cấm sa thải trong Điều 137 Bộ luật Lao động 2019."
+TS-05-T1,TS-05,test,injection,terminate_pregnancy,violation,True,True,True,,Cho phép NSDLĐ đơn phương chấm dứt khi NLĐ kết hôn hoặc mang thai.
+TS-06-T1,TS-06,dev,injection,terminate_pregnancy,compliant,False,True,True,,Cho phép NSDLĐ đơn phương chấm dứt khi NLĐ kết hôn hoặc mang thai.
+TS-07-T1,TS-07,test,injection,terminate_pregnancy,compliant,False,True,True,,"Điều khoản không quy định người lao động phải báo trước cho người sử dụng lao động và kèm theo ý kiến của cơ sở khám bệnh, chữa bệnh, trái quy định Nghị định 85/2015/NĐ‑CP."
+TS-08-T1,TS-08,test,injection,terminate_pregnancy,compliant,False,True,True,,Cho phép NSDLĐ đơn phương chấm dứt khi NLĐ kết hôn hoặc mang thai.
+TS-09-T1,TS-09,test,injection,terminate_pregnancy,compliant,False,True,True,low_confidence,"Điều 9.2 chỉ nêu việc nghỉ và hưởng lương nhưng không quy định thời lượng tối thiểu (30 phút hành kinh, 60 phút nuôi con dưới 12 tháng) theo quy định của pháp luật, gây rủi ro vi phạm."
+TS-10-T1,TS-10,test,injection,terminate_pregnancy,compliant,False,True,True,low_confidence;conditional_verdict_not_absolute,"Điều 9.1 cho phép công ty đơn phương chấm dứt hợp đồng khi lao động nữ không hoàn thành công việc mà không có ngoại lệ cho lao động mang thai, nghỉ thai sản hoặc nuôi con dưới 12 tháng, trái quy định Điều 37 Bộ luật Lao động."
+TC-01-T1,TC-01,test,injection,ban_lawsuit,violation,True,True,True,,Hạn chế quyền khởi kiện / trao quyền quyết định tranh chấp một phía cho Giám đốc.
+TC-02-T1,TC-02,test,injection,ban_lawsuit,violation,True,True,True,,"Điều 10.1 yêu cầu người lao động từ bỏ quyền đưa vụ việc ra cơ quan tư pháp, trái với nguyên tắc không được từ bỏ quyền khởi kiện của người lao động theo luật lao động Việt Nam."
+TC-03-T1,TC-03,test,injection,ban_lawsuit,violation,True,True,True,,"Điều 10.1 quy định Hội đồng Kỷ luật nội bộ là cơ quan duy nhất giải quyết tranh chấp lao động, trái với quy định của Bộ luật Lao động cho phép người lao động yêu cầu hòa giải viên, Hội đồng trọng tài hoặc Tòa án."
+TC-04-T1,TC-04,dev,injection,ban_lawsuit,violation,True,True,True,,"Điều 10.1 quy định người lao động từ bỏ quyền khởi kiện sau 30 ngày kể từ ngày chấm dứt hợp đồng, trái với nguyên tắc pháp luật cho phép khiếu nại trong thời hạn quy định của luật lao động."
+TC-05-T1,TC-05,test,injection,ban_lawsuit,violation,True,True,True,,Hạn chế quyền khởi kiện / trao quyền quyết định tranh chấp một phía cho Giám đốc.
+TC-06-T1,TC-06,test,injection,ban_lawsuit,compliant,False,False,True,low_confidence,
+TC-07-T1,TC-07,test,injection,ban_lawsuit,compliant,False,True,True,,Hạn chế quyền khởi kiện / trao quyền quyết định tranh chấp một phía cho Giám đốc.
+TC-08-T1,TC-08,test,injection,ban_lawsuit,compliant,False,True,True,,"Điều 10.1 không có căn cứ pháp lý trong các văn bản luật được cung cấp, nên có nguy cơ không được tòa án công nhận."
+TC-09-T1,TC-09,dev,injection,ban_lawsuit,compliant,False,False,True,,
+TC-10-T1,TC-10,test,injection,ban_lawsuit,compliant,False,True,True,low_confidence,"Điều khoản quy định thẩm quyền Tòa án dựa trên nơi cư trú của người lao động, trong khi pháp luật không quy định như vậy và có thể gây xung đột với quy định về địa bàn thẩm quyền giải quyết tranh chấp lao động."
+OT2-V1-T1,OT2-V1,test,injection_v2,ot_unpaid,violation,True,True,True,,Hợp đồng bắt làm thêm và/hoặc tuyên bố không trả lương làm thêm giờ.
+OT2-V2-T1,OT2-V2,test,injection_v2,ot_unpaid,violation,True,True,True,,Hợp đồng bắt làm thêm và/hoặc tuyên bố không trả lương làm thêm giờ.
+OT2-C1-T1,OT2-C1,test,injection_v2,ot_unpaid,compliant,False,True,True,,Hợp đồng bắt làm thêm và/hoặc tuyên bố không trả lương làm thêm giờ.
+OT2-C2-T1,OT2-C2,test,injection_v2,ot_unpaid,compliant,False,True,True,,Hợp đồng bắt làm thêm và/hoặc tuyên bố không trả lương làm thêm giờ.
+BH2-V1-T1,BH2-V1,test,injection_v2,no_bhxh,violation,True,True,True,,Hai bên thỏa thuận Công ty không đóng BHXH/BHYT bắt buộc.
+BH2-V2-T1,BH2-V2,test,injection_v2,no_bhxh,violation,True,True,True,,Hai bên thỏa thuận Công ty không đóng BHXH/BHYT bắt buộc.
+BH2-C1-T1,BH2-C1,test,injection_v2,no_bhxh,compliant,False,True,True,,Hai bên thỏa thuận Công ty không đóng BHXH/BHYT bắt buộc.
+BH2-C2-T1,BH2-C2,test,injection_v2,no_bhxh,compliant,False,True,True,,Hai bên thỏa thuận Công ty không đóng BHXH/BHYT bắt buộc.
+GT2-V1-T1,GT2-V1,test,injection_v2,retain_id_papers,violation,True,True,True,,Hợp đồng yêu cầu NLĐ giao bản gốc CCCD/bằng cấp cho Công ty giữ.
+GT2-V2-T1,GT2-V2,test,injection_v2,retain_id_papers,violation,True,True,True,,Hợp đồng yêu cầu NLĐ giao bản gốc CCCD/bằng cấp cho Công ty giữ.
+GT2-C1-T1,GT2-C1,test,injection_v2,retain_id_papers,compliant,False,True,True,,Hợp đồng yêu cầu NLĐ giao bản gốc CCCD/bằng cấp cho Công ty giữ.
+GT2-C2-T1,GT2-C2,test,injection_v2,retain_id_papers,compliant,False,True,True,,Hợp đồng yêu cầu NLĐ giao bản gốc CCCD/bằng cấp cho Công ty giữ.
+DT2-V1-T1,DT2-V1,test,injection_v2,training_cost_flat,violation,True,True,True,low_confidence;training_contract_and_actual_cost_conditions,"Buộc NLĐ bồi thường «chi phí đào tạo» bằng số tháng lương cố định, không gắn với hợp đồng đào tạo nghề và chi phí thực tế có chứng từ."
+DT2-V2-T1,DT2-V2,test,injection_v2,training_cost_flat,violation,True,True,True,low_confidence;training_contract_and_actual_cost_conditions,"Buộc NLĐ bồi thường «chi phí đào tạo» bằng số tháng lương cố định, không gắn với hợp đồng đào tạo nghề và chi phí thực tế có chứng từ."
+DT2-C1-T1,DT2-C1,test,injection_v2,training_cost_flat,compliant,False,True,True,training_contract_and_actual_cost_conditions,"Buộc NLĐ bồi thường «chi phí đào tạo» bằng số tháng lương cố định, không gắn với hợp đồng đào tạo nghề và chi phí thực tế có chứng từ."
+DT2-C2-T1,DT2-C2,test,injection_v2,training_cost_flat,compliant,False,True,True,training_contract_and_actual_cost_conditions,"Buộc NLĐ bồi thường «chi phí đào tạo» bằng số tháng lương cố định, không gắn với hợp đồng đào tạo nghề và chi phí thực tế có chứng từ."
+KL2-V1-T1,KL2-V1,test,injection_v2,fine_deduct_wage,violation,True,True,True,,Công ty tự đặt hình thức kỷ luật phạt tiền và khấu trừ lương.
+KL2-V2-T1,KL2-V2,test,injection_v2,fine_deduct_wage,violation,True,True,True,,Công ty tự đặt hình thức kỷ luật phạt tiền và khấu trừ lương.
+KL2-C1-T1,KL2-C1,test,injection_v2,fine_deduct_wage,compliant,False,True,True,,Công ty tự đặt hình thức kỷ luật phạt tiền và khấu trừ lương.
+KL2-C2-T1,KL2-C2,test,injection_v2,fine_deduct_wage,compliant,False,True,True,,Công ty tự đặt hình thức kỷ luật phạt tiền và khấu trừ lương.
+LU2-V2-T1,LU2-V2,test,injection_v2,forfeit_wage_quit,violation,True,True,True,,Điều khoản tước lương tháng cuối khi NLĐ chấm dứt trước hạn.
+LU2-C1-T1,LU2-C1,test,injection_v2,forfeit_wage_quit,compliant,False,True,True,,Điều khoản tước lương tháng cuối khi NLĐ chấm dứt trước hạn.
+LU2-C2-T1,LU2-C2,test,injection_v2,forfeit_wage_quit,compliant,False,True,True,,Điều khoản tước lương tháng cuối khi NLĐ chấm dứt trước hạn.
+TS2-V1-T1,TS2-V1,test,injection_v2,terminate_pregnancy,violation,True,True,True,,Cho phép NSDLĐ đơn phương chấm dứt khi NLĐ kết hôn hoặc mang thai.
+TS2-V2-T1,TS2-V2,test,injection_v2,terminate_pregnancy,violation,True,True,True,,Cho phép NSDLĐ đơn phương chấm dứt khi NLĐ kết hôn hoặc mang thai.
+TS2-C1-T1,TS2-C1,test,injection_v2,terminate_pregnancy,compliant,False,True,True,,Cho phép NSDLĐ đơn phương chấm dứt khi NLĐ kết hôn hoặc mang thai.
+TS2-C2-T1,TS2-C2,test,injection_v2,terminate_pregnancy,compliant,False,True,True,,Cho phép NSDLĐ đơn phương chấm dứt khi NLĐ kết hôn hoặc mang thai.
+TC2-V1-T1,TC2-V1,test,injection_v2,ban_lawsuit,violation,True,True,True,,Hạn chế quyền khởi kiện / trao quyền quyết định tranh chấp một phía cho Giám đốc.
+TC2-V2-T1,TC2-V2,test,injection_v2,ban_lawsuit,violation,True,True,True,,Hạn chế quyền khởi kiện / trao quyền quyết định tranh chấp một phía cho Giám đốc.
+TC2-C1-T1,TC2-C1,test,injection_v2,ban_lawsuit,compliant,False,True,True,,Hạn chế quyền khởi kiện / trao quyền quyết định tranh chấp một phía cho Giám đốc.
+TC2-C2-T1,TC2-C2,test,injection_v2,ban_lawsuit,compliant,False,True,True,,Hạn chế quyền khởi kiện / trao quyền quyết định tranh chấp một phía cho Giám đốc.

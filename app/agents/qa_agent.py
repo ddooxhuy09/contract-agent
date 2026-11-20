@@ -5,6 +5,7 @@ from typing import Annotated, TypedDict
 from collections.abc import AsyncGenerator
 
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage, trim_messages
+from langchain_core.documents import Document
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
 
@@ -21,9 +22,13 @@ from app.core.prompts import (
 from app.core.settings import get_settings
 from app.domain.errors import NotFoundError
 from app.agents.labor_red_flags import matching_law_blurbs
+from app.agents.qa_evidence import augment_legal_evidence
+from app.infrastructure.retrieval.context import get_contract_chunks
 from app.infrastructure.retrieval.query_rewrite import (
     augment_qa_retrieval_query,
+    contract_clause_references,
     expand_legal_topic_query,
+    ground_qa_retrieval_query,
     rewrite_qa_query,
 )
 from app.schemas.contract import ChatHistoryItem, ChatResponse
@@ -57,6 +62,7 @@ class QAState(TypedDict):
     _has_context: bool
     _contract_context: str
     _legal_context: str
+    _legal_evidence: list[dict]
     _valid_clause_numbers: list[str]
     # Self-correcting loop bookkeeping (reset each invocation via answer_question).
     query: str
@@ -84,7 +90,7 @@ def _format_legal_context(docs) -> str:
     if not docs:
         return "Không có dữ liệu pháp luật liên quan."
     return "\n\n".join(
-        f"[{d.metadata.get('doc_number') or d.metadata.get('title') or 'Nguồn'}] {d.page_content}" for d in docs
+        f"[{d.metadata.get('doc_number') or d.metadata.get('title') or 'Nguồn'} | {d.metadata.get('role', 'retrieved')}] {d.page_content}" for d in docs
     )
 
 
@@ -98,18 +104,51 @@ def _best_score(docs) -> float | None:
     return max(scores) if scores else None
 
 
+def _retrieve_contract_docs(question: str, contract_id: str) -> list[Document]:
+    docs = retrieve_contract(question, contract_id)
+    refs = contract_clause_references(question)
+    if not refs:
+        return docs
+    repo = get_contract_chunks()
+    if repo is None:
+        return docs
+    exact = []
+    for number in refs:
+        text = repo.get_text_by_clause(contract_id, number)
+        if text:
+            exact.append(Document(page_content=text, metadata={"clause_number": number}))
+    if not exact:
+        return docs
+    numbers = {d.metadata["clause_number"] for d in exact}
+    context = repo.get_text_by_clause(contract_id, "1") if "1" not in numbers else None
+    if context:
+        exact.append(Document(page_content=context, metadata={"clause_number": "1"}))
+        numbers.add("1")
+    return (exact + [d for d in docs if d.metadata.get("clause_number") not in numbers])[:max(len(docs), len(exact))]
+
+
 async def _retrieve_node(state: QAState) -> dict:
     question = state.get("query") or state["messages"][-1].content
     history = state["messages"][:-1]
     # Follow-ups like "đúng luật không?" must carry topics (mang thai + chấm dứt),
     # not the prior AI conclusion about "nghỉ thai sản" — that poisoned BHXH retrieval.
-    legal_query = augment_qa_retrieval_query(question, history)
-    contract_docs = retrieve_contract(question, state["contract_id"])
+    contract_docs = _retrieve_contract_docs(question, state["contract_id"])
+    refs = set(contract_clause_references(question))
+    legal_query = ground_qa_retrieval_query(
+        question, history,
+        [d.page_content for d in contract_docs if d.metadata.get("clause_number") in refs],
+    )
     legal_docs = retrieve_legal(
         legal_query,
         k=5,
         title=legal_query,
         as_of_date=state.get("as_of_date"),
+    )
+    focused = [d.page_content for d in contract_docs if d.metadata.get("clause_number") in refs]
+    focus = "\n".join(focused) if focused else question
+    legal_docs = augment_legal_evidence(
+        legal_docs, focus, state.get("as_of_date"),
+        contract_context="\n".join(d.page_content for d in contract_docs),
     )
     memory = await load_qa_memory(state["contract_id"])
 
@@ -117,7 +156,8 @@ async def _retrieve_node(state: QAState) -> dict:
     legal_ctx = _format_legal_context(legal_docs)[:6000]
     # Deterministic BLLĐ blurbs when contract/Q match known illegal labor patterns
     # (pregnancy fire, keep CCCD, …) so wrong vector seeds can't blank the answer.
-    blurbs = matching_law_blurbs(f"{question}\n{legal_query}\n{contract_ctx}")
+    has_anchors = any(d.metadata.get("role") == "topic_anchor" for d in legal_docs)
+    blurbs = [] if has_anchors else matching_law_blurbs(f"{question}\n{legal_query}\n{contract_ctx}")
     if blurbs:
         legal_ctx = ("\n\n".join(blurbs) + "\n\n" + legal_ctx).strip()[:6000]
 
@@ -131,6 +171,7 @@ async def _retrieve_node(state: QAState) -> dict:
         "_max_score": _best_score(contract_docs + legal_docs),
         "_contract_context": contract_ctx,
         "_legal_context": legal_ctx or "Không có dữ liệu pháp luật liên quan.",
+        "_legal_evidence": [{key: d.metadata.get(key) for key in ("path", "score", "role", "doc_number")} for d in legal_docs],
         "_valid_clause_numbers": [d.metadata.get("clause_number") for d in contract_docs],
         "_long_term_memory": memory,
     }
@@ -204,6 +245,33 @@ def _route_after_generate(state: QAState) -> str:
     return "finalize"
 
 
+def _verified_contract_citations(cited, valid: set[str]) -> list[str]:
+    if not isinstance(cited, list):
+        return []
+    return list(dict.fromkeys(str(c).strip() for c in cited if isinstance(c, (str, int)) and str(c).strip() in valid))
+
+
+async def _review_qa_result(result, human_content, chat_model):
+    """One evidence check, not a score-driven retry; retain the draft on failure."""
+    instruction = (
+        "Kiểm chứng và sửa bản nháp dưới đây bằng đúng ngữ cảnh. Không có đáp án chuẩn. "
+        "Đọc tiêu đề điều luật: danh sách sau 'không được làm/nghiêm cấm' là hành vi bị cấm, không phải nghĩa vụ. "
+        "Kiểm điều kiện, phủ định, chủ thể và quyền được thỏa thuận có lợi hơn cho NLĐ. "
+        "Không coi điều khoản không chép toàn bộ luật là vi phạm; không áp điều kiện của trường hợp khác. "
+        "Không viện dẫn ngoài nguồn; chỉ hỏi lại khi thật sự thiếu dữ kiện thiết yếu chưa có trong hợp đồng. "
+        "Giữ nguyên bản nháp nếu đúng; trả JSON cùng schema, chỉ answer cuối cùng và cited_clauses hợp đồng.\n"
+        f"BẢN NHÁP:\n{json.dumps(result, ensure_ascii=False)}\nNGỮ CẢNH VÀ CÂU HỎI:\n{human_content}"
+    )
+    try:
+        raw = (await chat_model.ainvoke([SystemMessage(content=QA_SYSTEM_PROMPT), HumanMessage(content=instruction)])).content
+        reviewed = parse_json_object(raw)
+        if reviewed and (reviewed.get("answer") or reviewed.get("clarification_question")):
+            return reviewed
+    except Exception:
+        logger.warning("QA evidence review unavailable; retaining draft")
+    return result
+
+
 async def _generate_node(state: QAState) -> dict:
     question = state["messages"][-1].content
     attempts = state.get("generate_attempts", 0) + 1
@@ -243,6 +311,9 @@ async def _generate_node(state: QAState) -> dict:
         logger.error("QA parse failed for contract %s, attempt %s (graph will retry)", state["contract_id"], attempts)
         return {"generate_attempts": attempts, "_parse_ok": False}
 
+    if any(d.get("role") == "topic_anchor" for d in state.get("_legal_evidence", [])):
+        result = await _review_qa_result(result, human_content, chat_model)
+
     if result.get("needs_clarification"):
         clarification = (result.get("clarification_question") or "").strip() or _GENERATION_FAILED_ANSWER
         ai_message = AIMessage(
@@ -261,8 +332,8 @@ async def _generate_node(state: QAState) -> dict:
     # that actually came back from retrieval, so a hallucinated "Điều 99" can't slip through.
     valid_clause_numbers = set(state.get("_valid_clause_numbers") or [])
     cited_clauses = result.get("cited_clauses") or []
-    verified_clauses = [c for c in cited_clauses if c in valid_clause_numbers]
-    dropped = set(cited_clauses) - set(verified_clauses)
+    verified_clauses = _verified_contract_citations(cited_clauses, valid_clause_numbers)
+    dropped = [str(c) for c in cited_clauses if str(c).strip() not in verified_clauses] if isinstance(cited_clauses, list) else []
     if dropped:
         logger.error(f"Contract {state['contract_id']}: dropped unverifiable cited clause(s) {dropped}")
 

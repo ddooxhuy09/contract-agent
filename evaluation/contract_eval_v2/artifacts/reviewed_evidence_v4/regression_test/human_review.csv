@@ -1,0 +1,363 @@
+﻿id,system,question,answer,reference_label,judge_reason,human_score,human_notes
+REG-001,baseline,Điều 10 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 10 của hợp đồng trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 188 khoản 1 Bộ luật Lao động 45/2019/QH14 quy định tranh chấp lao động cá nhân phải được giải quyết qua hòa giải, trọng tài hoặc tòa án; không cho phép các bên tự quyết định giải quyết nội bộ và không cho phép từ bỏ quyền khởi kiện.
+- Điều 180 Bộ luật Lao động nhấn mạnh nguyên tắc tôn trọng quyền tự định đoạt và giải quyết tranh chấp qua các cơ quan, tổ chức, cá nhân có thẩm quyền, không cho phép bên nào tự ý loại trừ quyền của người lao động.
+- Do đó, việc quy định “Ban Giám đốc Công ty” là cơ quan duy nhất giải quyết và người lao động từ bỏ quyền đưa vụ việc ra cơ quan tư pháp là trái với các quy định bắt buộc trên.
+Khuyến nghị: Điều chỉnh Điều 10, cho phép giải quyết tranh chấp theo quy trình pháp luật (hòa giải, trọng tài, tòa án) và không yêu cầu người lao động từ bỏ quyền khởi kiện.",violation,"Kết luận đúng nhưng căn cứ pháp lý sai. Câu trả lời viện dẫn Điều 188 (thủ tục hòa giải) và Điều 180 (nguyên tắc) để bác bỏ quyền tự định đoạt, trong khi ngữ cảnh pháp lý thực tế cung cấp Điều 187 (thẩm quyền giải quyết tranh chấp cá nhân thuộc về Hòa giải viên, Trọng tài, Tòa án) và Điều 179 (nguyên tắc chung) mới là cơ sở trực tiếp chứng minh việc giao thẩm quyền cho Ban Giám đốc là trái luật. Việc viện dẫn sai điều luật làm giảm độ chính xác của lập luận.",,
+REG-002,baseline,Điều 10 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 10 của hợp đồng không trái quy định của Bộ luật Lao động; nó phù hợp và thậm chí củng cố nghĩa vụ của người sử dụng lao động không được cản trở, không trù dập người lao động khi thực hiện quyền khiếu nại, hòa giải hoặc khởi kiện.
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 180 quy định nguyên tắc giải quyết tranh chấp lao động, trong đó nhấn mạnh việc bảo đảm quyền tham gia và không cản trở các bên trong quá trình giải quyết tranh chấp.
+- Các quy định về thẩm quyền và trình tự giải quyết tranh chấp (Điều 187, 188) cũng cho phép người lao động khiếu nại, hòa giải, khởi kiện và không có quy định nào cấm người sử dụng lao động cam kết không cản trở quyền này.
+(Khuyến nghị: duy trì điều khoản này; nếu muốn chi tiết hơn, có thể tham khảo các quy định chung về bảo vệ quyền lợi người lao động trong Bộ luật Lao động.)",compliant,"Kết luận đúng. Điều 10 hợp đồng cam kết không cản trở quyền khiếu nại, hòa giải, khởi kiện của NLĐ, hoàn toàn phù hợp với nguyên tắc giải quyết tranh chấp (Điều 180) và thẩm quyền (Điều 187) của Bộ luật Lao động. Các căn cứ pháp lý được trích dẫn trong câu trả lời đều có trong ngữ cảnh và hỗ trợ cho kết luận.",,
+REG-003,baseline,Điều 7 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 7 của hợp đồng trái quy định pháp luật lao động.
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 127 khoản 2: cấm xử lý kỷ luật bằng hình thức phạt tiền.
+- Bộ luật Lao động 45/2019/QH14, Điều 124: các hình thức kỷ luật chỉ gồm khiển trách, kéo dài thời hạn nâng lương, cách chức, sa thải; không có hình thức phạt tiền.
+Khuyến nghị: sửa Điều 7, loại bỏ hình phạt tiền và áp dụng các hình thức kỷ luật hợp pháp theo Bộ luật Lao động.",violation,"Kết luận đúng. Điều 7 quy định phạt tiền, vi phạm Điều 127 khoản 2 (cấm phạt tiền) và Điều 124 (không có hình thức phạt tiền) của Bộ luật Lao động 2019. Các căn cứ pháp lý được trích dẫn chính xác và phù hợp với ngữ cảnh.",,
+REG-004,baseline,Điều 7 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 7 của hợp đồng không trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 124 Bộ luật Lao động 45/2019/QH14 quy định các hình thức kỷ luật hợp pháp gồm khiển trách, kéo dài thời hạn nâng lương không quá 06 tháng, cách chức và sa thải, trùng khớp với nội dung Điều 7.2 của hợp đồng.
+- Điều 127 Bộ luật Lao động 45/2019/QH14 nghiêm cấm việc phạt tiền, cắt lương thay cho kỷ luật; Điều 7.1 của hợp đồng khẳng định công ty không áp dụng hình thức này, phù hợp với quy định trên.
+Do đó, các quy định trong Điều 7 của hợp đồng là hợp pháp và không vi phạm pháp luật lao động.",compliant,"Kết luận đúng. Căn cứ Điều 124 và Điều 127 BLLĐ 2019 trong ngữ cảnh pháp lý hỗ trợ hoàn toàn cho lập luận rằng Điều 7 hợp đồng (không phạt tiền, các hình thức kỷ luật đúng luật) là hợp pháp.",,
+REG-005,baseline,Điều 8 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 8 của hợp đồng trái quy định của Bộ luật Lao động.
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 94: người sử dụng lao động phải trả lương đầy đủ, đúng hạn cho người lao động; không được hạn chế hoặc không trả lương cho thời kỳ làm việc.
+- Bộ luật Lao động 45/2019/QH14, Điều 48 khoản 1: trong thời hạn 14 ngày kể từ ngày chấm dứt hợp đồng, hai bên phải thanh toán đầy đủ các khoản tiền có liên quan đến quyền lợi của mỗi bên, bao gồm tiền lương.
+- Bộ luật Lao động 45/2019/QH14, Điều 40: khi người lao động đơn phương chấm dứt hợp đồng trái pháp luật, người lao động không được nhận trợ cấp thôi việc, nhưng không có quy định nào cho phép người sử dụng lao động không trả lương của tháng cuối cùng; người lao động vẫn có quyền nhận tiền lương đã làm việc.
+=> Do đó, việc quy định trong Điều 8 rằng người lao động không được nhận lương của tháng cuối cùng khi tự nguyện chấm dứt hợp đồng là trái với các quy định trên.
+Khuyến nghị: sửa Điều 8, cho phép người lao động nhận đầy đủ tiền lương cho thời gian làm việc, đồng thời áp dụng các nghĩa vụ bồi thường theo Điều 40 nếu chấm dứt trái pháp luật.",violation,"Kết luận đúng. Điều 8 hợp đồng quy định NLĐ không được nhận lương tháng cuối cùng khi đơn phương chấm dứt là trái với Điều 94 (nguyên tắc trả lương đầy đủ, đúng hạn) và Điều 48 (nghĩa vụ thanh toán đầy đủ khi chấm dứt HĐLĐ) của Bộ luật Lao động. Các căn cứ pháp lý được trích dẫn trong câu trả lời đều có trong ngữ cảnh và phù hợp với kết luận.",,
+REG-006,baseline,Điều 8 của hợp đồng có trái quy định pháp luật lao động không?,Hợp đồng lao động này là dạng thời hạn xác định hay không xác định?,compliant,"Câu trả lời là một câu hỏi ngược lại thay vì đưa ra kết luận về tính hợp pháp của Điều 8, do đó không trả lời được câu hỏi đặt ra.",,
+REG-007,baseline,Điều 4 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 4 của hợp đồng trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 168 Bộ luật Lao động 45/2019/QH14 quy định người sử dụng lao động và người lao động phải tham gia bảo hiểm xã hội (bảo hiểm y tế, bảo hiểm thất nghiệp) bắt buộc; việc không kê khai lao động với cơ quan bảo hiểm xã hội trong 12 tháng vi phạm nghĩa vụ này.
+- Phụ cấp tiền mặt không thay thế được nghĩa vụ tham gia bảo hiểm xã hội theo quy định pháp luật.
+Khuyến nghị: sửa đổi Điều 4 để thực hiện đăng ký bảo hiểm xã hội ngay khi hợp đồng có hiệu lực và không dùng phụ cấp tiền mặt thay thế bảo hiểm.",violation,"Kết luận đúng. Căn cứ Điều 168 khoản 1 BLĐ 2019, nghĩa vụ tham gia BHXH bắt buộc là bắt buộc, không thể thỏa thuận loại trừ. Khoản 3 chỉ áp dụng cho đối tượng không thuộc diện bắt buộc, trong khi hợp đồng lao động thông thường thuộc diện bắt buộc. Việc thỏa thuận không kê khai 12 tháng đầu là trái luật.",,
+REG-008,baseline,Điều 4 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 4 của hợp đồng có một phần trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 4 hợp đồng quy định nếu người lao động không hưởng lương từ 14 ngày trở lên trong tháng, cả hai bên không đóng BHXH, BHYT và thời gian này không tính để hưởng bảo hiểm xã hội (trừ thai sản).
+- Điều 168 Bộ luật Lao động 45/2019/QH14 quy định người sử dụng lao động và người lao động phải tham gia BHXH, BHYT, BHTN bắt buộc hàng tháng; không có ngoại lệ cho BHXH, BHYT dù người lao động không nhận lương.
+- Điều 33 Nghị định 74/2025/QH15 cho phép không đóng BHTN khi người lao động không hưởng lương từ 14 ngày trở lên, nên phần không đóng BHTN của Điều 4 là phù hợp.
+Do đó, phần không đóng BHXH, BHYT của Điều 4 trái với quy định bắt buộc của pháp luật, trong khi phần không đóng BHTN (theo Điều 33) là hợp pháp.
+Khuyến nghị: sửa lại Điều 4, giữ nguyên nghĩa vụ đóng BHXH, BHYT ngay cả khi người lao động không hưởng lương; chỉ áp dụng miễn đóng BHTN theo quy định của Điều 33 khi người lao động không nhận lương từ 14 ngày trở lên.",compliant,"Câu trả lời kết luận sai (violation) trong khi nhãn tham chiếu là compliant. Cụ thể, việc không đóng BHXH/BHYT khi nghỉ không hưởng lương từ 14 ngày trở lên là phù hợp với quy định pháp luật (thường dựa trên Luật BHXH và các văn bản hướng dẫn, mặc dù ngữ cảnh pháp luật cung cấp không trích dẫn trực tiếp điều khoản này nhưng nhãn tham chiếu xác nhận tính hợp lệ). Câu trả lời đã áp dụng sai Điều 168 BLĐL để kết luận trái luật, trong khi thực tế quy định này không cấm việc miễn đóng trong trường hợp cụ thể đó theo các văn bản chuyên ngành. Phần về BHTN được trả lời đúng nhưng không cứu vãn được kết luận tổng thể sai.",,
+REG-009,baseline,Điều 2 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 2.2 của hợp đồng trái quy định pháp luật lao động; Điều 2.1 không vi phạm.
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 98 quy định mức trả lương làm thêm giờ tối thiểu: ngày thường ≥150%, ngày nghỉ tuần ≥200%, ngày lễ, tết ≥300% (không tính thêm ngày lễ). → Điều 2.2 chỉ trả 100% nên thấp hơn mức pháp luật yêu cầu.
+- Bộ luật Lao động, Điều 105 quy định thời giờ làm việc bình thường không quá 08 giờ/ngày, 48 giờ/tuần; hợp đồng quy định 08 giờ/ngày, 40 giờ/tuần → phù hợp.
+- Điều 11.2 hợp đồng yêu cầu tuân thủ Bộ luật Lao động, do đó điều 2.2 vi phạm.
+Khuyến nghị: sửa đổi Điều 2.2, áp dụng các hệ số trả lương làm thêm giờ theo quy định của Điều 98 (≥150%/≥200%/≥300% tùy ngày), và ghi rõ cách tính trong hợp đồng.",violation,"Câu trả lời xác định đúng Điều 2.2 vi phạm pháp luật do trả lương làm thêm giờ 100% thấp hơn mức tối thiểu 150% quy định tại Điều 98 BLĐ 2019. Đồng thời, xác định đúng Điều 2.1 (40 giờ/tuần) tuân thủ Điều 105 BLĐ 2019. Các căn cứ pháp lý và lập luận đều chính xác và phù hợp với ngữ cảnh.",,
+REG-010,baseline,Điều 2 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 2 của hợp đồng không vi phạm trực tiếp các quy định về thời giờ làm việc và mức trả tiền tăng ca của Bộ luật Lao động, nhưng còn thiếu quy định về giới hạn thời gian tăng ca trong một ngày nên chưa hoàn toàn đáp ứng yêu cầu pháp luật.
+Căn cứ:
+- Điều 105 BLĐ 45/2019/QH14 quy định thời giờ làm việc bình thường không quá 08 giờ/ngày → hợp đồng quy định 08 giờ/ngày, phù hợp.
+- Điều 107 BLĐ quy định (1) tăng ca phải có sự đồng ý của người lao động → hợp đồng có quy định đồng ý, phù hợp.
+- Điều 107 khoản b) quy định không quá 50 % số giờ làm việc bình thường trong 01 ngày (tối đa 4 giờ/ngày nếu làm 8 giờ) và không quá 40 giờ/tháng → hợp đồng quy định tối đa 30 giờ/tháng, đáp ứng giới hạn tháng nhưng không nêu giới hạn ngày, do đó có khả năng vi phạm yêu cầu ngày.
+- Điều 98 BLĐ quy định mức trả tiền tăng ca tối thiểu: 150 % ngày thường, 200 % ngày nghỉ tuần, 300 % ngày lễ/tết → hợp đồng áp dụng đúng các mức này, phù hợp.
+Khuyến nghị: bổ sung điều khoản quy định thời gian tăng ca không vượt quá 50 % số giờ làm việc bình thường trong một ngày (tối đa 4 giờ/ngày) để hoàn toàn tuân thủ Điều 107.",compliant,"Kết luận sai so với nhãn tham chiếu (compliant). Hợp đồng quy định tối đa 30 giờ/tháng, thấp hơn giới hạn pháp luật 40 giờ/tháng, do đó tự động tuân thủ giới hạn ngày (vì 30h/tháng không thể nào vượt quá 4h/ngày nếu phân bổ đều, và ngay cả khi dồn, giới hạn tháng chặt hơn). Việc thiếu điều khoản giới hạn ngày không cấu thành vi phạm khi giới hạn tháng đã được quy định chặt chẽ hơn hoặc tương đương.",,
+REG-011,baseline,Điều 5 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 5 của hợp đồng trái quy định pháp luật lao động.
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 17 khoản 1: người sử dụng lao động không được giữ bản chính giấy tờ, bằng cấp, chứng chỉ của người lao động.
+- Bộ luật Lao động 45/2019/QH14, Điều 165 khoản 3: giữ giấy tờ tùy thân của người lao động là hành vi bị nghiêm cấm.
+Do đó, việc công ty giữ bản gốc bằng cấp cao nhất của người lao động để lưu hồ sơ vi phạm các quy định trên.
+Khuyến nghị: sửa Điều 5, chỉ giữ bản sao hoặc trả lại bản gốc cho người lao động và lưu trữ bản sao trong hồ sơ nhân sự.",violation,Kết luận đúng. Căn cứ Điều 17 khoản 1 BLĐL 2019 (giữ bản chính văn bằng) và Điều 165 khoản 3 (giữ giấy tờ tùy thân) đều được hỗ trợ bởi ngữ cảnh pháp luật. Việc công ty giữ bản gốc bằng cấp cao nhất vi phạm quy định.,,
+REG-012,baseline,Điều 5 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 5 của hợp đồng không trái quy định pháp luật lao động.
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 17 khoản 1: người sử dụng lao động không được giữ bản chính giấy tờ tùy thân, văn bằng, chứng chỉ của người lao động. Hợp đồng chỉ yêu cầu người lao động xuất trình bản chính để đối chiếu và công ty trả lại ngay sau khi kiểm tra, không giữ lại, nên không vi phạm.
+- Điều 21 của Bộ luật Lao động quy định nội dung hợp đồng phải có thông tin cá nhân; việc yêu cầu xuất trình bản chính để xác minh là phù hợp.
+Khuyến nghị: Khi thực hiện, công ty nên ghi lại thời gian nhận và trả lại giấy tờ, lưu trữ biên bản xác nhận để tránh tranh chấp.",compliant,"Kết luận đúng. Căn cứ Điều 17 khoản 1 BLĐL 2019 cấm giữ bản chính giấy tờ, trong khi Điều 5 hợp đồng chỉ yêu cầu xuất trình để đối chiếu và trả lại ngay, không vi phạm. Việc viện dẫn Điều 21 về nội dung hợp đồng (thông tin cá nhân) cũng phù hợp để giải thích lý do cần đối chiếu giấy tờ.",,
+REG-013,baseline,Điều 9 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 9 của hợp đồng trái quy định của Bộ luật Lao động.
+Căn cứ:
+- Điều 9 hợp đồng quy định hợp đồng lao động ""đương nhiên hết hiệu lực"" khi NLĐ nữ có thai trong 24 tháng đầu làm việc.
+- Điều 137, khoản 3 Bộ luật Lao động 45/2019/QH14: người sử dụng lao động không được sa thải hoặc đơn phương chấm dứt hợp đồng vì lý do mang thai; nếu hợp đồng hết hạn trong thời gian mang thai thì ưu tiên ký hợp đồng mới, không cho phép tự động chấm dứt.
+- Điều 138 và Điều 35 quy định quyền đơn phương chấm dứt hoặc tạm hoãn hợp đồng chỉ do người lao động (với giấy chứng nhận y tế) và không cho phép người sử dụng lao động tự động chấm dứt.
+- Do đó, quy định trong Điều 9 của hợp đồng vi phạm cấm sa thải/đơn phương chấm dứt vì mang thai và không phù hợp với thời gian 24 tháng không có trong luật.
+Khuyến nghị: sửa Điều 9 để loại bỏ việc tự động chấm dứt hợp đồng; thay thế bằng quy định cho phép người lao động có quyền đơn phương chấm dứt hoặc tạm hoãn hợp đồng theo Điều 138, hoặc ưu tiên ký hợp đồng mới theo Điều 137.",violation,"Kết luận đúng. Căn cứ Điều 137 khoản 3 BLĐL 2019 cấm sa thải/chấm dứt vì mang thai và ưu tiên ký mới, cùng Điều 138 quy định quyền của NLĐ, việc quy định 'đương nhiên hết hiệu lực' tại Điều 9 hợp đồng là trái luật.",,
+REG-014,baseline,Điều 9 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 9 của hợp đồng không trái quy định của Bộ luật Lao động.
+Căn cứ:
+- Điều 138 của Bộ luật Lao động 45/2019/QH14 cho phép lao động nữ mang thai có xác nhận y tế về nguy cơ ảnh hưởng xấu tới thai nhi được đơn phương chấm dứt hoặc tạm hoãn hợp đồng, và quy định thời hạn báo trước phải theo chỉ định của cơ sở khám bệnh.
+- Điều 9 của hợp đồng quy định tương tự: quyền đơn phương chấm dứt hoặc tạm hoãn và thời hạn báo trước theo chỉ định của cơ sở khám bệnh, không có nội dung nào trái với quy định pháp luật.
+Khuyến nghị: Khi thực hiện quyền này, người lao động cần thông báo kèm xác nhận y tế cho người sử dụng lao động để tuân thủ đầy đủ quy định của Điều 138.",compliant,"Kết luận đúng. Điều 9 hợp đồng quy định quyền đơn phương chấm dứt/tạm hoãn của lao động nữ mang thai và thời hạn báo trước theo chỉ định y tế, hoàn toàn phù hợp với Điều 138 Bộ luật Lao động 2019 được cung cấp trong ngữ cảnh pháp lý.",,
+REG-015,baseline,Điều 6 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 6 của hợp đồng có khả năng trái quy định pháp luật lao động.
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 62 quy định chi phí đào tạo phải được xác định dựa trên các khoản chi có chứng từ hợp lệ và trách nhiệm hoàn trả phải dựa trên chi phí đào tạo thực tế.
+- Bộ luật Lao động 45/2019/QH14, Điều 40 quy định người lao động khi đơn phương chấm dứt hợp đồng phải hoàn trả chi phí đào tạo theo quy định tại Điều 62.
+- Điều 6 của hợp đồng quy định người lao động phải hoàn lại khoản phí đào tạo hội nhập bằng sáu tháng lương cơ bản, không phụ thuộc vào chi phí thực tế đã chi của công ty, do đó không đáp ứng yêu cầu “chi phí đào tạo thực tế” của Điều 62 và có thể vi phạm quy định về hoàn trả chi phí đào tạo của Điều 40.
+Khuyến nghị: Điều chỉnh Điều 6 để xác định khoản hoàn trả dựa trên chi phí đào tạo thực tế (theo chứng từ) hoặc tham chiếu rõ ràng tới chi phí đã được thống nhất trong hợp đồng đào tạo, tránh áp dụng mức cố định không liên quan đến chi phí thực tế.",violation,"Câu trả lời xác định đúng kết luận vi phạm dựa trên việc Điều 6 quy định mức hoàn trả cố định không dựa trên chi phí thực tế, trái với yêu cầu về chi phí đào tạo có chứng từ hợp lệ tại Điều 62 và nghĩa vụ hoàn trả theo Điều 40 BLĐ 2019.",,
+REG-016,baseline,Điều 6 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 6 của hợp đồng không trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 62 Bộ luật Lao động 45/2019/QH14 quy định phải ký hợp đồng đào tạo nghề riêng, làm 02 bản và quy định chi phí đào tạo, trách nhiệm hoàn trả.
+- Điều 40 Bộ luật Lao động 45/2019/QH14 quy định người lao động khi đơn phương chấm dứt hợp đồng trái pháp luật phải bồi thường chi phí đào tạo theo quy định tại Điều 62.
+- Điều 6 hợp đồng yêu cầu ký hợp đồng đào tạo riêng (6.1) và quy định bồi thường chi phí đào tạo khi chấm dứt trái pháp luật (6.2), phù hợp với các quy định trên.
+Khuyến nghị: Đảm bảo nội dung chi phí đào tạo và trách nhiệm bồi thường được ghi rõ, có chứng từ hợp lệ trong hợp đồng đào tạo nghề để tránh tranh chấp.",compliant,"Câu trả lời xác định đúng kết luận (không trái luật) và viện dẫn chính xác các căn cứ pháp luật (Điều 62, Điều 40 BLLĐ 2019) phù hợp với ngữ cảnh hợp đồng và văn bản pháp luật được cung cấp.",,
+REG-017,baseline,Điều 10 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 10 của hợp đồng trái quy định pháp luật lao động.
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 187 quy định Tòa án nhân dân là một trong các cơ quan có thẩm quyền giải quyết tranh chấp lao động cá nhân.
+- Bộ luật Lao động 45/2019/QH14, Điều 188 cho phép các tranh chấp (bao gồm chấm dứt hợp đồng, bồi thường…) không bắt buộc phải qua hòa giải và các bên có quyền yêu cầu Tòa án giải quyết.
+- Nghị định 27/2014/NĐ-CP, Điều 27 cho phép người lao động và người sử dụng lao động yêu cầu Tòa án giải quyết tranh chấp lao động khi không thống nhất.
+Do đó, việc quy định người lao động ""không được khởi kiện Công ty ra Tòa án"" là cấm đoán quyền khởi kiện hợp pháp, vi phạm các quy định trên.
+Khuyến nghị: Loại bỏ hoặc sửa đổi Điều 10 để cho phép người lao động có quyền khởi kiện Tòa án (hoặc thực hiện hòa giải trước theo quy định), tránh vi phạm pháp luật và rủi ro vô hiệu hợp đồng.",violation,"Kết luận đúng. Căn cứ Điều 187 và 188 BLĐ 2019 trong ngữ cảnh xác nhận Tòa án là cơ quan có thẩm quyền và các bên có quyền yêu cầu giải quyết tranh chấp, do đó điều khoản cấm khởi kiện là vi phạm.",,
+REG-018,baseline,Điều 10 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 10 của hợp đồng có khả năng trái quy định pháp luật lao động.
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 188 quy định tranh chấp lao động cá nhân phải được giải quyết qua hòa giải viên lao động trước khi yêu cầu Hội đồng trọng tài hoặc Tòa án, trừ một số trường hợp cụ thể (ví dụ: tranh chấp về chấm dứt hợp đồng, bồi thường khi chấm dứt hợp đồng…).
+- Điều 187 quy định thẩm quyền giải quyết tranh chấp lao động bao gồm hòa giải viên, Hội đồng trọng tài và Tòa án; việc bỏ qua hòa giải và cho phép NLĐ khởi kiện trực tiếp Tòa án không phù hợp với quy trình pháp luật.
+- Điều 27 NĐ-CP 27/2014 cũng nhấn mạnh việc thương lượng, hòa giải trước khi khởi kiện.
+Điều 10 của hợp đồng cho phép NLĐ khởi kiện ra Tòa án mà không qua hòa giải, không giới hạn trong các trường hợp ngoại lệ được luật cho phép, do đó vi phạm nguyên tắc giải quyết tranh chấp (Điều 188, khoản 1 và 7).
+Khuyến nghị: sửa đổi Điều 10 để quy định rằng NLĐ có quyền khởi kiện ra Tòa án sau khi đã thực hiện hòa giải (hoặc trong các trường hợp luật cho phép không qua hòa giải), đồng thời không cấm Giám đốc quyết định cuối cùng nếu luật không cấm.",compliant,"Kết luận sai. Điều 10 chỉ quy định NLĐ có quyền khởi kiện ra Tòa án, đây là quyền cơ bản được pháp luật bảo đảm (Điều 187 BLĐ 2019). Việc hợp đồng không nhắc đến thủ tục hòa giải bắt buộc không cấu thành vi phạm pháp luật, vì thủ tục tố tụng do pháp luật quy định, không cần ghi trong hợp đồng. Câu trả lời đã gán ghép sai quy định và đưa ra kết luận trái ngược với thực tế pháp lý.",,
+REG-019,baseline,Điều 7 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 7 của hợp đồng trái quy định pháp luật lao động.
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 127: cấm sử dụng hình thức phạt tiền hoặc cắt lương để xử lý kỷ luật lao động.
+- Bộ luật Lao động 45/2019/QH14, Điều 124: các hình thức kỷ luật được phép chỉ gồm khiển trách, kéo dài thời hạn nâng lương, cách chức, sa thải; không có hình thức phạt tiền.
+- Bộ luật Lao động 45/2019/QH14, Điều 102: khấu trừ tiền lương chỉ được thực hiện để bồi thường thiệt hại tài sản, không được dùng cho hình thức kỷ luật.
+Khuyến nghị: sửa đổi Điều 7, loại bỏ hình thức phạt tiền; áp dụng các hình thức kỷ luật hợp pháp theo Điều 124 và thực hiện kỷ luật bằng biên bản, không khấu trừ tiền lương.",violation,"Kết luận đúng. Các căn cứ pháp lý (Điều 127, 124, 102 BLĐ 2019) được trích dẫn chính xác và phù hợp với ngữ cảnh pháp luật được cung cấp, chứng minh rõ ràng việc phạt tiền là vi phạm.",,
+REG-020,baseline,Điều 7 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 7 của hợp đồng không trái quy định pháp luật lao động mà còn phản ánh đúng cấm pháp lý.
+Căn cứ:
+- Điều 7 hợp đồng quy định việc phạt tiền và khấu trừ lương thay cho kỷ luật là hành vi bị cấm.
+- Bộ luật Lao động 45/2019/QH14, Điều 127 khoản 2 cấm ""Phạt tiền, cắt lương thay việc xử lý kỷ luật lao động"".
+- Bộ luật Lao động, Điều 102 khoản 1 cho phép khấu trừ lương chỉ trong trường hợp bồi thường thiệt hại tài sản, không phải hình thức kỷ luật.
+Do đó, nội dung Điều 7 phù hợp và không vi phạm pháp luật.",compliant,"Câu trả lời xác định đúng rằng Điều 7 hợp đồng (quy định cấm phạt tiền/cắt lương thay kỷ luật) là phù hợp pháp luật. Các căn cứ pháp lý được trích dẫn (Điều 127 khoản 2, Điều 102 khoản 1 BLĐ 2019) đều chính xác và có trong ngữ cảnh, hỗ trợ đầy đủ cho kết luận.",,
+REG-021,baseline,Điều 8 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 8.2 của hợp đồng vi phạm quy định của Bộ luật Lao động.
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 48 1 quy định trong vòng 14 ngày kể từ ngày chấm dứt hợp đồng, người sử dụng lao động phải thanh toán đầy đủ các khoản tiền có liên quan đến quyền lợi của người lao động, không có ngoại lệ cho việc không trả lương cuối tháng hay không bồi hoàn ngày phép còn lại.
+- Bộ luật Lao động 45/2019/QH14, Điều 94 yêu cầu người sử dụng lao động phải trả lương đầy đủ, đúng hạn cho người lao động; việc không trả lương cuối tháng là vi phạm nguyên tắc trả lương.
+- Do đó, việc công ty “không đền bù ngày phép và không trả lương tháng cuối” trái với nghĩa vụ thanh toán quyền lợi của người lao động theo Điều 48 và nguyên tắc trả lương theo Điều 94.
+Khuyến nghị:
+- Điều chỉnh Điều 8.2 để phù hợp với quy định pháp luật, cam kết trả lương cuối tháng và bồi hoàn ngày phép chưa sử dụng khi chấm dứt hợp đồng.
+- Nếu đã ký hợp đồng, người lao động có thể yêu cầu công ty thực hiện nghĩa vụ thanh toán theo quy định pháp luật và có thể khởi kiện để bảo vệ quyền lợi.",violation,Kết luận vi phạm là đúng. Căn cứ Điều 48 khoản 1 và Điều 94 khoản 1 Bộ luật Lao động được cung cấp trong ngữ cảnh hỗ trợ đầy đủ cho lập luận rằng việc không trả lương tháng cuối và không thanh toán các khoản quyền lợi (bao gồm ngày phép) khi chấm dứt hợp đồng là trái pháp luật.,,
+REG-022,baseline,Điều 8 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 8 của hợp đồng không trái quy định của Bộ luật Lao động.
+Căn cứ:
+- Điều 94 Bộ luật Lao động 45/2019/QH14 quy định người sử dụng lao động phải trả lương đầy đủ, đúng hạn cho người lao động; không có quy định nào cấm việc trả lương khi người lao động tự chấm dứt hợp đồng.
+- Điều 48 Bộ luật Lao động 45/2019/QH14 quy định trong vòng 14 ngày kể từ ngày chấm dứt hợp đồng, người sử dụng lao động phải thanh toán đầy đủ các khoản tiền liên quan đến quyền lợi của người lao động, trong đó có tiền lương.
+- Do đó, cam kết ""Công ty tuyệt đối không tước lương của NLĐ khi NLĐ chấm dứt hợp đồng; lương được thanh toán đầy đủ"" phù hợp và thậm chí củng cố nghĩa vụ pháp lý của người sử dụng lao động.
+Khuyến nghị: Không cần sửa đổi Điều 8; chỉ cần thực hiện đúng thời hạn thanh toán theo Điều 48.",compliant,"Kết luận đúng. Căn cứ Điều 94 và Điều 48 BLĐL được trích dẫn trong ngữ cảnh pháp lý hỗ trợ cho việc trả lương đầy đủ và đúng hạn, phù hợp với cam kết tại Điều 8 hợp đồng.",,
+REG-023,baseline,Điều 4 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 4 của hợp đồng trái quy định pháp luật lao động.
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 168: người sử dụng lao động phải tham gia bảo hiểm xã hội, bảo hiểm y tế, bảo hiểm thất nghiệp; không được thoái thác trách nhiệm này.
+- Nghị định 44/2013/NĐ‑CP, Điều 4: người sử dụng lao động có trách nhiệm tham gia và chi trả bảo hiểm; nếu không tham gia phải chi trả khoản tiền tương đương mức đóng bảo hiểm.
+- Nghị định 27/2014/NĐ‑CP, Điều 19: người sử dụng lao động phải chi trả thêm khoản tiền tương đương mức đóng bảo hiểm xã hội, bảo hiểm y tế để người lao động tự lo bảo hiểm.
+Do đó, việc quy định trong Điều 4 hợp đồng rằng ""Công ty không đóng BHXH, BHYT cho NLĐ; NLĐ tự chịu trách nhiệm về bảo hiểm của mình"" vi phạm các quy định trên.
+Khuyến nghị: sửa đổi Điều 4 để công ty tham gia và đóng bảo hiểm bắt buộc cho người lao động, hoặc nếu muốn người lao động tự lo thì công ty phải chi trả khoản tiền tương đương mức đóng bảo hiểm theo quy định của pháp luật.",violation,Kết luận đúng. Căn cứ Điều 168 BLĐL 2019 (khoản 1 và 3) trong ngữ cảnh pháp luật xác định nghĩa vụ tham gia BHXH/BHYT bắt buộc hoặc chi trả khoản tiền tương đương. Các nghị định được trích dẫn cũng hỗ trợ luận điểm này. Mệnh đề trong hợp đồng vi phạm quy định này.,,
+REG-024,baseline,Điều 4 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 4 của hợp đồng không trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 4 hợp đồng quy định việc không đóng BHXH, BHYT là trái pháp luật và công ty sẽ đóng đầy đủ.
+- Điều 168 Bộ luật Lao động 45/2019/QH14 quy định người sử dụng lao động và người lao động phải tham gia bảo hiểm xã hội, bảo hiểm y tế và bảo hiểm thất nghiệp; việc thỏa thuận không đóng bảo hiểm là cấm.
+Do đó, nội dung Điều 4 chỉ khẳng định tính hợp pháp của việc đóng bảo hiểm và không vi phạm pháp luật.",compliant,Câu trả lời xác định đúng kết luận (compliant) dựa trên việc trích dẫn chính xác nội dung Điều 4 hợp đồng (khẳng định việc không đóng BHXH là trái pháp luật và cam kết đóng đầy đủ) và căn cứ pháp lý Điều 168 Bộ luật Lao động 2019. Các mệnh đề đều được ngữ cảnh hỗ trợ.,,
+REG-025,baseline,Điều 2 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 2 hợp đồng trái quy định của pháp luật lao động.
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 98 quy định người lao động làm thêm giờ phải được trả lương ít nhất 150% (ngày thường), 200% (ngày nghỉ) hoặc 300% (ngày lễ) và/hoặc phụ cấp làm việc ban đêm.
+- Bộ luật Lao động 45/2019/QH14, Điều 107 quy định thời gian làm thêm giờ phải được trả lương và chỉ được thực hiện khi có sự đồng ý của người lao động.
+- Nghị định 27/2014/NĐ‑CP, Điều 15 khoản 3 yêu cầu trả tiền lương làm thêm giờ theo quy định của Bộ luật Lao động.
+Do đó, việc quy định “Thời gian làm thêm giờ không được tính thêm tiền lương làm thêm” là vi phạm pháp luật và không có hiệu lực.
+Khuyến nghị: sửa đổi Điều 2 thành “Thời gian làm thêm giờ được trả lương theo tỷ lệ tối thiểu quy định tại Điều 98 và Điều 107 của Bộ luật Lao động” và thực hiện thanh toán đầy đủ cho người lao động.",violation,"Kết luận đúng. Căn cứ Điều 98 và Điều 107 Bộ luật Lao động 2019 trong ngữ cảnh xác nhận nghĩa vụ trả lương làm thêm giờ và điều kiện thực hiện, từ đó khẳng định Điều 2 hợp đồng (không tính lương thêm giờ) là vi phạm.",,
+REG-026,baseline,Điều 2 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 2 của hợp đồng không trái quy định pháp luật lao động mà còn có tính bảo vệ người lao động cao hơn. 
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 98 quy định người sử dụng lao động phải trả lương làm thêm giờ theo mức tối thiểu; do đó việc cấm mọi hành vi không trả lương làm thêm giờ là phù hợp và thậm chí nghiêm ngặt hơn quy định pháp luật.
+- Bộ luật Lao động, Điều 107 quy định việc làm thêm giờ phải có sự đồng ý của người lao động và tuân thủ các giới hạn về thời gian; Điều 2 của hợp đồng không mâu thuẫn với các yêu cầu này mà chỉ đề cập đến việc trả lương.
+Khuyến nghị: Đảm bảo thực hiện các điều kiện của Điều 107 (đồng ý của người lao động, giới hạn thời gian) khi áp dụng làm thêm giờ để tránh vi phạm các quy định khác.",compliant,"Kết luận đúng. Điều 2.2 cấm hành vi không trả lương làm thêm giờ, phù hợp với nghĩa vụ bắt buộc của người sử dụng lao động theo Điều 98 BLĐ 2019. Việc viện dẫn Điều 107 để xác nhận không mâu thuẫn với quy định về điều kiện làm thêm giờ là hợp lý.",,
+REG-027,baseline,Điều 5 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 5 của hợp đồng trái quy định của Bộ luật Lao động.
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 17 khoản 1: Người sử dụng lao động không được giữ bản chính giấy tờ tùy thân, văn bằng, chứng chỉ của người lao động.
+- Điều 5 hợp đồng yêu cầu người lao động bàn giao bản gốc Căn cước công dân và bằng cấp cho công ty giữ trong suốt thời gian làm việc, vi phạm cấm trên.
+Khuyến nghị: Điều chỉnh Điều 5, chỉ yêu cầu người lao động cung cấp bản sao (có công chứng) hoặc giữ bản gốc chỉ trong thời gian cần thiết theo quy định pháp luật; trả lại bản gốc ngay khi không còn nhu cầu.",violation,Câu trả lời xác định đúng kết luận vi phạm dựa trên Điều 5 hợp đồng (giữ bản gốc CCCD và bằng cấp) và căn cứ chính xác vào Điều 17 khoản 1 Bộ luật Lao động 2019 được cung cấp trong ngữ cảnh pháp lý.,,
+REG-028,baseline,Điều 5 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 5 của hợp đồng trái quy định của Bộ luật Lao động.
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 17 khoản 1 quy định người sử dụng lao động phải giữ bản chính giấy tờ tùy thân, văn bằng, chứng chỉ của người lao động.
+- Điều 5 hợp đồng quy định công ty không giữ bản gốc CCCD, bằng cấp hay bất kỳ giấy tờ tùy thân nào của người lao động, chỉ lưu bản sao, trái với yêu cầu pháp luật.
+Khuyến nghị: Điều chỉnh Điều 5 để phù hợp, cho phép công ty giữ bản gốc giấy tờ theo quy định pháp luật hoặc bổ sung điều khoản cho phép lưu trữ bản sao chỉ khi có sự đồng ý bằng văn bản của người lao động và tuân thủ quy định bảo mật.",compliant,"Câu trả lời kết luận sai. Điều 17 khoản 1 Bộ luật Lao động cấm người sử dụng lao động giữ bản chính giấy tờ, do đó việc công ty không giữ bản gốc (chỉ lưu bản sao) là tuân thủ pháp luật, không phải vi phạm.",,
+REG-029,baseline,Điều 9 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 9 hợp đồng trái quy định của Bộ luật Lao động.
+Căn cứ:
+- Điều 137, Bộ luật Lao động 45/2019/QH14: người sử dụng lao động không được sa thải hoặc đơn phương chấm dứt hợp đồng vì lý do mang thai.
+- Điều 138 cho phép lao động nữ mang thai tự chấm dứt hợp đồng khi có chỉ định y tế, không cho phép người sử dụng lao động chấm dứt.
+- Điều 9 hợp đồng quy định công ty có quyền chấm dứt hợp đồng khi người lao động mang thai, mâu thuẫn trực tiếp với cấm trên.
+Khuyến nghị: sửa đổi Điều 9, loại bỏ quyền chấm dứt khi mang thai; nếu cần, quy định chỉ cho phép chuyển công việc nhẹ hơn hoặc tạm hoãn theo Điều 138.",violation,"Câu trả lời xác định đúng kết luận vi phạm dựa trên Điều 9.2 của hợp đồng cho phép chấm dứt khi mang thai, mâu thuẫn trực tiếp với Điều 137 khoản 3 Bộ luật Lao động cấm sa thải/chấm dứt vì lý do mang thai. Các căn cứ pháp lý được trích dẫn chính xác và phù hợp với ngữ cảnh.",,
+REG-030,baseline,Điều 9 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 9 của hợp đồng không trái quy định pháp luật lao động. 
+Căn cứ: 
+- Điều 9 hợp đồng quy định công ty không thực hiện chấm dứt hợp đồng với lao động nữ vì kết hôn hoặc mang thai và khẳng định pháp luật cấm. 
+- Điều 137 Bộ luật Lao động 45/2019/QH14 cấm người sử dụng lao động sa thải hoặc đơn phương chấm dứt hợp đồng lao động vì lý do kết hôn, mang thai, nghỉ thai sản, nuôi con dưới 12 tháng tuổi (trừ một số trường hợp ngoại lệ). 
+Do đó, nội dung Điều 9 chỉ khẳng định và tuân thủ quy định cấm của pháp luật, không gây mâu thuẫn.",compliant,"Câu trả lời xác định đúng Điều 9 hợp đồng chỉ tái khẳng định quy định cấm sa thải lao động nữ vì lý do kết hôn/mang thai, phù hợp với Điều 137 khoản 3 Bộ luật Lao động 2019 được cung cấp trong ngữ cảnh pháp lý. Kết luận 'không trái quy định' là chính xác và có căn cứ.",,
+REG-031,baseline,Điều 6 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 6 của hợp đồng không trái quy định của Bộ luật Lao động.
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 40 quy định người lao động khi đơn phương chấm dứt hợp đồng phải bồi thường chi phí đào tạo (theo Điều 62) và có thể bồi thường nửa tháng lương.
+- Bộ luật Lao động 45/2019/QH14, Điều 62 cho phép quy định trách nhiệm hoàn trả chi phí đào tạo trong hợp đồng, không quy định mức tối đa cụ thể.
+- Điều 6 hợp đồng chỉ định mức bồi thường tương đương 6 tháng lương nếu nghỉ việc trong 24 tháng đầu, là một hình thức bồi thường chi phí đào tạo được phép quy định trong hợp đồng và không vi phạm các quy định trên.
+Khuyến nghị: Đảm bảo mức bồi thường không vượt quá chi phí đào tạo thực tế; nếu có thể, ghi rõ cách tính chi phí để tránh tranh chấp.",violation,"Câu trả lời kết luận 'không trái quy định' (compliant) nhưng nhãn tham chiếu là 'violation'. Lỗi chính là không nhận ra rằng Điều 62 khoản 1 BLĐL yêu cầu phải ký kết 'hợp đồng đào tạo nghề' riêng biệt, trong khi hợp đồng này chỉ có điều khoản chung, dẫn đến việc quy định mức bồi thường cố định 6 tháng lương mà không có căn cứ chi phí thực tế (Điều 62 khoản 3) là vi phạm.",,
+REG-032,baseline,Điều 6 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 6 của hợp đồng không trái quy định của Bộ luật Lao động.
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 62 quy định rằng hợp đồng đào tạo phải nêu rõ chi phí đào tạo và trách nhiệm hoàn trả, nhưng không bắt buộc người lao động phải bồi hoàn chi phí.
+- Điều 40 quy định người lao động phải hoàn trả chi phí đào tạo chỉ trong trường hợp chấm dứt hợp đồng trái pháp luật và có quy định trong hợp đồng đào tạo. Khi hợp đồng không quy định người lao động phải bồi hoàn (như Điều 6), việc không bồi hoàn chi phí đào tạo nội bộ là hợp pháp.
+- Do đó, việc quy định “NLĐ không phải bồi thường chi phí đào tạo đối với các khóa đào tạo nội bộ do Công ty tổ chức” là hợp lệ và không vi phạm pháp luật.",compliant,"Kết luận đúng. Căn cứ Điều 62 và Điều 40 BLĐ 2019, nghĩa vụ hoàn trả chi phí đào tạo chỉ phát sinh khi có hợp đồng đào tạo và chấm dứt trái pháp luật. Việc quy định NLĐ không phải bồi thường cho đào tạo nội bộ là hợp pháp, không trái luật.",,
+REG-001,grounded,Điều 10 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 10 của hợp đồng trái quy định của Bộ luật Lao động.
+Căn cứ:
+- Điều 187 của Bộ luật Lao động quy định thẩm quyền giải quyết tranh chấp lao động cá nhân chỉ thuộc Hòa giải viên, Hội đồng trọng tài lao động và Tòa án nhân dân; Ban Giám đốc Công ty không nằm trong danh sách này.
+- Điều 188 quy định tranh chấp lao động cá nhân phải được giải quyết qua hòa giải viên lao động (và sau đó là trọng tài hoặc tòa án) và không cho phép các bên tự ý từ bỏ quyền đưa vụ việc ra các cơ quan này.
+- Điều 10 hợp đồng giao thẩm quyền cho Ban Giám đốc và yêu cầu người lao động từ bỏ quyền khởi kiện, trái với các quy định trên, do đó vi phạm pháp luật.
+Khuyến nghị: Sửa Điều 10, loại bỏ nội dung giao thẩm quyền cho Ban Giám đốc và yêu cầu từ bỏ quyền khởi kiện; thay thế bằng quy định cho phép giải quyết tranh chấp theo quy trình của Điều 187‑188 (hòa giải, trọng tài, tòa án).",violation,"Kết luận đúng. Căn cứ Điều 187 BLĐS (có trong ngữ cảnh) xác định thẩm quyền giải quyết tranh chấp thuộc Hòa giải viên, Trọng tài và Tòa án, không bao gồm Ban Giám đốc. Do đó, thỏa thuận giao thẩm quyền cho Ban Giám đốc và từ bỏ quyền khởi kiện là trái pháp luật.",,
+REG-002,grounded,Điều 10 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 10 của hợp đồng không trái quy định của pháp luật lao động.
+Căn cứ:
+- Điều 10 hợp đồng quy định công ty không cản trở, không trù dập người lao động khi thực hiện quyền khiếu nại, hòa giải hoặc khởi kiện.
+- Bộ luật Lao động (Điều 187, 188, 190) quy định quyền của người lao động được yêu cầu hòa giải, trọng tài hoặc tòa án và quy trình giải quyết tranh chấp; không có quy định cho phép người sử dụng lao động can thiệp hay cản trở các quyền này, do đó việc cấm can thiệp là phù hợp và không mâu thuẫn.
+Khuyến nghị: Giữ nguyên nội dung Điều 10; không cần sửa đổi.",compliant,"Kết luận đúng. Điều 10 hợp đồng cam kết không cản trở quyền khiếu nại, hòa giải, khởi kiện của NLĐ, hoàn toàn phù hợp với nguyên tắc bảo vệ quyền lợi NLĐ và các quy định về giải quyết tranh chấp (Điều 187, 188, 190 BLĐ) được nêu trong ngữ cảnh pháp lý. Không có căn cứ cho thấy điều khoản này vi phạm pháp luật.",,
+REG-003,grounded,Điều 7 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 7 của hợp đồng trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 127 Bộ luật Lao động 45/2019/QH14 nghiêm cấm việc xử lý kỷ luật bằng hình thức phạt tiền.
+- Điều 124 Bộ luật Lao động 45/2019/QH14 chỉ cho phép các hình thức kỷ luật: khiển trách, kéo dài thời hạn nâng lương, cách chức, sa thải; không có quy định về phạt tiền.
+Do đó, quy định “vi phạm nội quy lao động bị áp dụng hình thức kỷ luật phạt tiền” trong Điều 7.1 là không hợp pháp.
+Khuyến nghị: sửa Điều 7 để loại bỏ hình thức phạt tiền, thay bằng một trong các hình thức kỷ luật được pháp luật cho phép.",violation,"Câu trả lời xác định đúng kết luận vi phạm dựa trên Điều 7.1 của hợp đồng (phạt tiền). Các căn cứ pháp lý được trích dẫn (Điều 127 khoản 2 cấm phạt tiền, Điều 124 liệt kê các hình thức kỷ luật không có phạt tiền) đều chính xác và có trong ngữ cảnh pháp luật được cung cấp.",,
+REG-004,grounded,Điều 7 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 7 của hợp đồng không trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 7 hợp đồng quy định không áp dụng phạt tiền, cắt lương và chỉ dùng các hình thức khiển trách, kéo dài thời hạn nâng lương ≤06 tháng, cách chức, sa thải.
+- Điều 127/45‑2019/QH14 cấm sử dụng phạt tiền, cắt lương làm hình thức kỷ luật.
+- Điều 124/45‑2019/QH14 cho phép các hình thức kỷ luật nêu trong hợp đồng (khiển trách, kéo dài thời hạn nâng lương ≤06 tháng, cách chức, sa thải).",compliant,"Câu trả lời xác định đúng kết luận tuân thủ pháp luật. Các mệnh đề về nội dung Điều 7 hợp đồng, cấm phạt tiền/cắt lương (Điều 127) và danh mục hình thức kỷ luật hợp lệ (Điều 124) đều được hỗ trợ trực tiếp bởi ngữ cảnh hợp đồng và pháp luật được cung cấp.",,
+REG-005,grounded,Điều 8 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 8 của hợp đồng trái quy định của Bộ luật Lao động.
+Căn cứ:
+- Điều 94 Luật Lao động quy định người sử dụng lao động phải trả lương đầy đủ, đúng hạn cho người lao động và không được hạn chế quyền nhận lương.
+- Điều 48 Luật Lao động quy định trong vòng 14 ngày kể từ ngày chấm dứt hợp đồng, hai bên phải thanh toán đầy đủ các khoản tiền có liên quan đến quyền lợi của người lao động, không có ngoại lệ cho việc không trả lương cuối cùng.
+- Điều 40 Luật Lao động chỉ quy định người lao động không được nhận trợ cấp thôi việc và phải bồi thường cho người sử dụng lao động khi đơn phương chấm dứt trái pháp luật; không cho phép người sử dụng lao động từ chối trả lương đã làm việc.
+Do đó, việc quy định “NLĐ đơn phương chấm dứt hợp đồng trước thời hạn thì không được nhận lương của tháng cuối cùng làm việc” vi phạm nguyên tắc trả lương và nghĩa vụ thanh toán khi chấm dứt hợp đồng.
+Khuyến nghị: sửa Điều 8, cho phép người lao động nhận lương cho thời gian làm việc thực tế và áp dụng các khoản bồi thường theo Điều 40 nếu chấm dứt trái pháp luật.",violation,"Kết luận đúng. Các căn cứ pháp lý (Điều 94, 48, 40 BLĐ 2019) được trích dẫn chính xác từ ngữ cảnh và hỗ trợ đầy đủ cho lập luận rằng việc không trả lương tháng cuối cùng là vi phạm nghĩa vụ trả lương và thanh toán khi chấm dứt hợp đồng.",,
+REG-006,grounded,Điều 8 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 8 của hợp đồng không trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 48 Bộ luật Lao động quy định trong vòng 14 ngày làm việc kể từ ngày chấm dứt hợp đồng, bên sử dụng lao động phải thanh toán đầy đủ các khoản tiền có liên quan. Điều 8 của hợp đồng quy định công ty thanh toán đầy đủ tiền lương và các khoản được hưởng trong thời hạn 14 ngày, nên phù hợp.
+- Điều 40 Bộ luật Lao động quy định người lao động khi đơn phương chấm dứt hợp đồng phải thông báo trước ít nhất 30 ngày. Điều 8 quy định NLĐ phải báo trước ít nhất 30 ngày, nên không vi phạm.
+- Các quy định trên không có điều cấm nào bị vi phạm bởi nội dung Điều 8; do đó điều khoản này hợp pháp.
+Khuyến nghị: Thực hiện đúng thời hạn thông báo 30 ngày và thanh toán trong 14 ngày theo quy định.",compliant,"Kết luận đúng nhưng căn cứ pháp lý sai. Điều 40 BLĐL 2019 quy định về trách nhiệm khi chấm dứt trái pháp luật, không phải nghĩa vụ báo trước 30 ngày (đây là Điều 35). Do đó, lập luận về Điều 40 là thiếu căn cứ phù hợp.",,
+REG-007,grounded,Điều 4 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 4 của hợp đồng vi phạm quy định bắt buộc tham gia bảo hiểm xã hội, y tế và thất nghiệp của Bộ luật Lao động.
+Căn cứ:
+- Điều 4 hợp đồng cho phép không kê khai bảo hiểm xã hội trong 12 tháng đầu và trả phụ cấp tiền mặt thay thế.
+- Điều 168 Bộ luật Lao động 45/2019/QH14 quy định người sử dụng lao động và người lao động phải tham gia bảo hiểm xã hội, bảo hiểm y tế, bảo hiểm thất nghiệp bắt buộc; chỉ khi người lao động không thuộc đối tượng bắt buộc mới được người sử dụng trả khoản tiền thay thế (Điều 168 điểm 3).
+- Vì hợp đồng không xác định NLĐ là trường hợp không thuộc đối tượng bắt buộc, việc không kê khai bảo hiểm xã hội là trái pháp luật.
+Khuyến nghị: Điều 4 cần sửa lại để đăng ký bảo hiểm xã hội, y tế, thất nghiệp ngay từ ngày ký hợp đồng; nếu muốn tăng thu nhập thực lĩnh, có thể thỏa thuận phụ cấp bổ sung nhưng không được bỏ qua nghĩa vụ tham gia bảo hiểm bắt buộc.",violation,Câu trả lời xác định đúng kết luận vi phạm dựa trên Điều 4 hợp đồng (không kê khai BHXH 12 tháng đầu) và Điều 168 Bộ luật Lao động (nghĩa vụ tham gia BHXH bắt buộc). Các mệnh đề về nội dung hợp đồng và căn cứ pháp luật đều được ngữ cảnh hỗ trợ đầy đủ.,,
+REG-008,grounded,Điều 4 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 4.2 của hợp đồng trái quy định của Bộ luật Lao động.
+Căn cứ:
+- Điều 168, Bộ luật Lao động 45/2019/QH14 quy định người sử dụng lao động và người lao động phải tham gia bảo hiểm xã hội, bảo hiểm y tế, bảo hiểm thất nghiệp bắt buộc và không có quy định cho phép không đóng bảo hiểm khi người lao động nghỉ việc không hưởng lương (ngoại trừ trường hợp nghỉ thai sản).
+- Điều 4.2 hợp đồng cho phép cả hai bên không đóng BHXH, BHYT khi người lao động nghỉ việc không hưởng lương từ 14 ngày trở lên, trái với yêu cầu bắt buộc của pháp luật.
+Khuyến nghị: sửa khoản 4.2 để duy trì việc đóng bảo hiểm bắt buộc trong mọi thời kỳ nghỉ việc (trừ trường hợp pháp luật cho phép như nghỉ thai sản).",compliant,"Kết luận sai. Căn cứ Điều 168 khoản 3 BLĐL 2019, người lao động nghỉ việc không hưởng lương từ 14 ngày trở lên không thuộc đối tượng tham gia BHXH bắt buộc, do đó thỏa thuận tại Điều 4.2 là hợp pháp (compliant).",,
+REG-009,grounded,Điều 2 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 2.2 của hợp đồng vi phạm quy định bắt buộc của Bộ luật Lao động.
+Căn cứ:
+- Điều 2.2 hợp đồng quy định giờ làm thêm được trả theo đơn giá giờ làm việc bình thường (100%) và không áp dụng hệ số nhân.
+- Điều 98, khoản 1, mục a‑c của Bộ luật Lao động 45/2019/QH14 quy định mức tối thiểu trả tiền lương làm thêm giờ: ít nhất 150% vào ngày thường, 200% vào ngày nghỉ hằng tuần và 300% vào ngày lễ, tết.
+- Vì mức trả 100% thấp hơn mức tối thiểu do luật quy định, nên điều khoản này trái quy định bắt buộc và không thể được thỏa thuận giảm.
+Khuyến nghị: sửa Điều 2.2 thành trả lương làm thêm giờ theo tỷ lệ tối thiểu của pháp luật (150%/200%/300% tương ứng) và ghi rõ việc thực hiện phải có sự đồng ý của người lao động theo Điều 107.",violation,Câu trả lời xác định đúng vi phạm tại Điều 2.2 (trả 100% thay vì tối thiểu 150%/200%/300% theo Điều 98 BLĐ 2019) và trích dẫn đúng căn cứ pháp luật trong ngữ cảnh.,,
+REG-010,grounded,Điều 2 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 2 của hợp đồng không trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 98 Bộ luật Lao động 45/2019/QH14 quy định mức trả lương làm thêm giờ tối thiểu là 150% (ngày thường), 200% (ngày nghỉ tuần) và 300% (ngày lễ, tết); hợp đồng áp dụng đúng các mức này.
+- Điều 107 Bộ luật Lao động 45/2019/QH14 quy định: (1) làm thêm giờ phải có sự đồng ý của người lao động; (2) tổng thời gian làm thêm không quá 40 giờ/tháng và không vượt quá 50% số giờ làm việc bình thường trong một ngày; (3) các bên có thể quy định mức giới hạn thấp hơn (ví dụ 30 giờ/tháng) mà không vi phạm pháp luật. Điều 2 của hợp đồng giới hạn tối đa 30 giờ/tháng và yêu cầu sự đồng ý của NLĐ, nên đáp ứng các yêu cầu trên.",compliant,Câu trả lời xác định đúng kết luận tuân thủ pháp luật. Các luận điểm về mức lương làm thêm (Điều 98) và giới hạn thời gian làm thêm (Điều 107) đều được hỗ trợ trực tiếp bởi ngữ cảnh hợp đồng và văn bản pháp luật được cung cấp. Việc hợp đồng quy định giới hạn 30 giờ/tháng (thấp hơn mức trần 40 giờ) và yêu cầu sự đồng ý của NLĐ là hoàn toàn hợp lệ.,,
+REG-011,grounded,Điều 5 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 5 của hợp đồng trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 5 hợp đồng quy định công ty giữ bản gốc bằng cấp cao nhất của người lao động.
+- Điều 17, khoản 1, Nghị định 45/2019/QH14 cấm người sử dụng lao động giữ bản chính giấy tờ tùy thân, văn bằng, chứng chỉ của người lao động.
+Khuyến nghị: Điều chỉnh Điều 5 thành ""Công ty giữ bản sao có công chứng/bản sao có xác nhận của bằng cấp và trả lại bản gốc cho người lao động"".",violation,Câu trả lời xác định đúng hành vi vi phạm (giữ bản gốc bằng cấp) dựa trên Điều 5 hợp đồng và căn cứ đúng vào Điều 17 khoản 1 Nghị định 45/2019/QH14 được cung cấp trong ngữ cảnh pháp lý.,,
+REG-012,grounded,Điều 5 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 5 của hợp đồng không trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 5 hợp đồng chỉ yêu cầu người lao động xuất trình bản chính giấy tờ tùy thân và bằng cấp để đối chiếu, sau đó công ty trả lại ngay bản chính cho người lao động, không giữ lại bản chính.
+- Điều 17 Nghị định 45/2019/QH14 cấm người sử dụng lao động giữ bản chính giấy tờ tùy thân, văn bằng, chứng chỉ của người lao động. Vì hợp đồng không giữ lại bản chính mà trả lại ngay, nên không vi phạm quy định này.
+Khuyến nghị: Ghi biên bản xác nhận việc trả lại bản chính ngay sau khi đối chiếu để tránh tranh chấp.",compliant,Câu trả lời xác định đúng kết luận (không vi phạm) dựa trên việc đối chiếu Điều 5 hợp đồng (trả lại ngay bản chính) với Điều 17 Nghị định 45/2019 (cấm giữ bản chính). Các mệnh đề đều có căn cứ trong ngữ cảnh.,,
+REG-013,grounded,Điều 9 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 9 của hợp đồng trái quy định của Bộ luật Lao động.
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 137: người sử dụng lao động không được sa thải hoặc đơn phương chấm dứt hợp đồng lao động vì lý do mang thai; nếu hợp đồng hết hạn trong thời gian mang thai thì phải ưu tiên ký hợp đồng mới, không được tự động chấm dứt.
+- Bộ luật Lao động 45/2019/QH14, Điều 138: lao động nữ mang thai chỉ được đơn phương chấm dứt hoặc tạm hoãn hợp đồng khi có giấy chứng nhận y tế xác nhận việc tiếp tục làm việc gây hại cho thai nhi và phải thông báo cho người sử dụng lao động.
+- Điều 9 hợp đồng quy định tự động chấm dứt hợp đồng khi NLĐ nữ có thai trong 24 tháng đầu làm việc, mà không cần giấy chứng nhận y tế và không có thỏa thuận của người lao động, vi phạm cả Điều 137 (cấm chấm dứt vì mang thai) và Điều 138 (điều kiện chấm dứt/tạm hoãn).
+Khuyến nghị: sửa đổi Điều 9, loại bỏ quy định chấm dứt tự động; thay thế bằng quy định cho phép NLĐ nữ mang thai yêu cầu tạm hoãn hoặc tự chấm dứt hợp đồng theo Điều 138 và bảo đảm không bị sa thải trái pháp luật.",violation,Câu trả lời xác định đúng kết luận vi phạm. Các mệnh đề pháp lý được trích dẫn (Điều 137 khoản 3 cấm sa thải/chấm dứt vì mang thai và ưu tiên ký mới; Điều 138 khoản 1 quy định điều kiện chấm dứt/tạm hoãn) đều chính xác và phù hợp với ngữ cảnh pháp luật được cung cấp. Lập luận rằng Điều 9 hợp đồng (chấm dứt tự động khi có thai) vi phạm các quy định này là có căn cứ.,,
+REG-014,grounded,Điều 9 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 9 của hợp đồng không trái quy định của Bộ luật Lao động.
+Căn cứ:
+- Hợp đồng quy định NLĐ nữ mang thai có giấy chứng nhận y tế về việc tiếp tục làm việc sẽ ảnh hưởng xấu tới thai nhi có quyền đơn phương chấm dứt hoặc tạm hoãn hợp đồng, thời hạn báo trước theo chỉ định của cơ sở khám bệnh, chữa bệnh. ([Điều 9])
+- Bộ luật Lao động, Điều 138.1 cho phép lao động nữ mang thai trong trường hợp có xác nhận y tế như trên được quyền đơn phương chấm dứt hoặc tạm hoãn hợp đồng và phải thông báo kèm giấy chứng nhận. (Điều 138)
+Do nội dung Điều 9 phản ánh đúng quyền và thủ tục do Điều 138 quy định, nên không có sự trái pháp luật.",compliant,Câu trả lời xác định đúng kết luận (không trái luật) và viện dẫn chính xác Điều 138 Bộ luật Lao động cùng nội dung Điều 9 hợp đồng để chứng minh sự phù hợp.,,
+REG-015,grounded,Điều 6 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 6 của hợp đồng có khả năng trái quy định pháp luật lao động.
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 62 quy định chi phí đào tạo và trách nhiệm hoàn trả phải dựa trên chi phí thực tế đã chi và phải được nêu rõ trong hợp đồng đào tạo.
+- Bộ luật Lao động 45/2019/QH14, Điều 40 quy định người lao động khi đơn phương chấm dứt hợp đồng phải hoàn trả chi phí đào tạo ""theo quy định tại Điều 62""; nghĩa là phải trả lại chi phí thực tế, không được quy định mức cố định không liên quan tới chi phí thực tế.
+- Bộ luật Lao động 45/2019/QH14, Điều 15 quy định hợp đồng không được trái pháp luật; các thỏa thuận không được gây bất lợi cho người lao động so với quy định pháp luật.
+- Điều 6 hợp đồng quy định người lao động phải hoàn lại khoản phí đào tạo tương đương sáu tháng lương cơ bản, ""không phụ thuộc chi phí Công ty thực tế đã chi"". Hình thức này không dựa trên chi phí thực tế, có thể vượt quá chi phí thực tế và gây bất lợi cho người lao động, do đó không phù hợp với yêu cầu của Điều 62 và Điều 40.
+Khuyến nghị: Điều chỉnh Điều 6 để quy định rằng người lao động chỉ phải hoàn trả chi phí đào tạo thực tế đã chi (theo chứng từ) hoặc mức phí không vượt quá chi phí thực tế, đồng thời nêu rõ cách tính và chứng minh chi phí.",violation,"Câu trả lời xác định đúng kết luận vi phạm dựa trên việc Điều 6 quy định mức hoàn trả cố định không dựa trên chi phí thực tế, trái với Điều 62 và Điều 40 BLĐL. Các căn cứ pháp lý được trích dẫn chính xác và phù hợp với ngữ cảnh.",,
+REG-016,grounded,Điều 6 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 6 của hợp đồng không trái quy định của Bộ luật Lao động.
+Căn cứ:
+- Điều 62 Bộ luật Lao động 45/2019/QH14 quy định khi người lao động được cử đi đào tạo bằng kinh phí của người sử dụng lao động phải ký hợp đồng đào tạo nghề riêng, làm 02 bản và nêu rõ chi phí đào tạo và trách nhiệm hoàn trả. Điều 6.1 của hợp đồng yêu cầu ký hợp đồng đào tạo riêng, phù hợp với quy định này.
+- Điều 40 Bộ luật Lao động 45/2019/QH14 quy định người lao động chấm dứt hợp đồng trái pháp luật phải bồi thường chi phí đào tạo theo Điều 62. Điều 6.2 của hợp đồng quy định NLĐ phải bồi hoàn chi phí đào tạo thực tế khi chấm dứt trái pháp luật, đồng nhất với quy định trên.
+(Khuyến nghị: Khi ký hợp đồng đào tạo riêng, đảm bảo nội dung của hợp đồng đào tạo đáp ứng đầy đủ các mục a‑đ của Điều 62 để tránh tranh chấp.)",compliant,"Câu trả lời xác định đúng kết luận (không trái luật) và viện dẫn chính xác Điều 62 (yêu cầu ký hợp đồng đào tạo riêng) và Điều 40 khoản 3 (nghĩa vụ hoàn trả chi phí đào tạo khi chấm dứt trái pháp luật) của Bộ luật Lao động 2019, phù hợp với ngữ cảnh hợp đồng và pháp luật.",,
+REG-017,grounded,Điều 10 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 10 của hợp đồng trái quy định của Bộ luật Lao động.
+Căn cứ:
+- Điều 10 hợp đồng cấm người lao động khởi kiện công ty ra Tòa án về tranh chấp.
+- Bộ luật Lao động, Điều 187 quy định Tòa án nhân dân là một trong các cơ quan có thẩm quyền giải quyết tranh chấp lao động cá nhân.
+- Bộ luật Lao động, Điều 190 quy định thời hiệu yêu cầu Tòa án giải quyết tranh chấp lao động cá nhân, khẳng định quyền khởi kiện Tòa án được pháp luật bảo đảm.
+- Khi pháp luật quy định cơ quan có thẩm quyền, các bên không được thoả thuận loại bỏ hoặc hạn chế quyền sử dụng cơ quan đó; do đó, việc cấm người lao động khởi kiện Tòa án là vi phạm pháp luật.
+Khuyến nghị: Xóa hoặc sửa đổi Điều 10 để cho phép người lao động khởi kiện Tòa án theo quy định của pháp luật; có thể quy định ưu tiên hòa giải hoặc trọng tài trước, nhưng không được cấm hoàn toàn quyền khởi kiện.",violation,"Kết luận đúng. Điều 10 hợp đồng cấm khởi kiện ra Tòa án, vi phạm Điều 187 BLĐ 2019 (Tòa án là cơ quan có thẩm quyền) và nguyên tắc bảo đảm quyền khởi kiện. Các căn cứ pháp lý được trích dẫn (Điều 187, 190) đều có trong ngữ cảnh pháp luật và hỗ trợ cho lập luận.",,
+REG-018,grounded,Điều 10 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 10 của hợp đồng không trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 10 hợp đồng quy định công ty không để Giám đốc quyết định cuối cùng các tranh chấp lao động; người lao động có quyền khởi kiện ra Tòa án.
+- Điều 187 Bộ luật Lao động quy định thẩm quyền giải quyết tranh chấp lao động cá nhân chỉ thuộc Hòa giải viên lao động, Hội đồng trọng tài lao động và Tòa án nhân dân, không có quy định cho Giám đốc công ty quyết định cuối cùng.
+- Do đó, việc hợp đồng loại trừ quyền quyết định của Giám đốc và cho phép người lao động khởi kiện Tòa án không vi phạm pháp luật; ngược lại, còn bảo vệ quyền lợi người lao động.
+Khuyến nghị: Giữ nguyên Điều 10 như hiện tại.",compliant,"Kết luận đúng. Căn cứ Điều 187 BLĐL xác nhận thẩm quyền giải quyết tranh chấp thuộc về Hòa giải viên, Trọng tài và Tòa án, không thuộc Giám đốc. Do đó, điều khoản loại trừ quyền quyết định của Giám đốc và cho phép khởi kiện ra Tòa là hợp pháp và phù hợp với quy định pháp luật.",,
+REG-019,grounded,Điều 7 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 7.2 của hợp đồng trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 127 Bộ luật Lao động (45/2019/QH14) nghiêm cấm việc phạt tiền như hình thức kỷ luật.
+- Điều 124 Bộ luật Lao động (45/2019/QH14) quy định chỉ có bốn hình thức kỷ luật: khiển trách, kéo dài thời hạn nâng lương, cách chức, sa thải; không có hình thức phạt tiền.
+- Điều 102 Bộ luật Lao động (45/2019/QH14) cho phép khấu trừ tiền lương chỉ để bồi thường thiệt hại tài sản và không được vượt quá 30% lương thực trả; không cho phép khấu trừ tiền lương để thực hiện hình thức kỷ luật.
+Khuyến nghị: Loại bỏ hình thức phạt tiền và khấu trừ vào tiền lương; thay thế bằng các hình thức kỷ luật hợp pháp theo Điều 124 hoặc chỉ khấu trừ khi có thiệt hại thực tế và không vượt mức 30% lương.",violation,"Kết luận đúng. Các căn cứ pháp lý (Điều 127, 124, 102 BLĐ 2019) được trích dẫn chính xác và phù hợp với ngữ cảnh pháp luật được cung cấp, chứng minh rõ ràng việc phạt tiền và khấu trừ lương để kỷ luật là vi phạm.",,
+REG-020,grounded,Điều 7 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 7 của hợp đồng không trái quy định pháp luật lao động mà còn phản ánh đúng các quy định cấm việc phạt tiền và khấu trừ lương thay cho kỷ luật.
+Căn cứ:
+- Luật 45/2019/QH14, Điều 127 khoản 2: cấm phạt tiền, cắt lương thay cho xử lý kỷ luật lao động.
+- Luật 45/2019/QH14, Điều 102 khoản 1: khấu trừ tiền lương chỉ được thực hiện để bồi thường thiệt hại tài sản, không được dùng thay cho kỷ luật.
+(Điều 7 hợp đồng)",compliant,"Kết luận đúng. Điều 7 hợp đồng xác nhận việc cấm phạt tiền/khấu trừ lương thay kỷ luật, phù hợp với Điều 127 khoản 2 và Điều 102 của Bộ luật Lao động 2019 được cung cấp trong ngữ cảnh.",,
+REG-021,grounded,Điều 8 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 8 của hợp đồng trái quy định của Bộ luật Lao động.
+Căn cứ:
+- Điều 48 Bộ luật Lao động 45/2019/QH14 quy định người sử dụng lao động phải thanh toán đầy đủ các khoản tiền liên quan đến quyền lợi của người lao động trong vòng 14 ngày kể từ ngày chấm dứt hợp đồng, không có ngoại lệ cho trường hợp người lao động nghỉ việc trước hạn.
+- Điều 94 Bộ luật Lao động 45/2019/QH14 quy định người sử dụng lao động phải trả lương đầy đủ, đúng hạn cho người lao động.
+- Điều 8 hợp đồng quy định công ty không đền bù ngày phép và không trả lương tháng cuối cho người lao động nghỉ việc trước hạn, trái với các quy định trên.
+Khuyến nghị: Điều 8 cần sửa lại, cho phép thanh toán đầy đủ tiền lương và bồi thường ngày phép cho người lao động khi chấm dứt hợp đồng theo quy định của pháp luật.",violation,"Kết luận đúng nhưng giải thích sai căn cứ pháp lý. Điều 8 quy định không trả lương tháng cuối là vi phạm Điều 94 (trả lương đầy đủ) và Điều 48 (thanh toán quyền lợi). Tuy nhiên, việc 'không đền bù ngày phép' (nghỉ phép năm) không bị cấm tuyệt đối khi NLĐ đơn phương chấm dứt trái pháp luật (Điều 40 chỉ quy định mất trợ cấp thôi việc và bồi thường, không nói đến mất phép năm), do đó lập luận rằng Điều 8 trái luật hoàn toàn về cả hai điểm là thiếu chính xác.",,
+REG-022,grounded,Điều 8 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 8.2 của hợp đồng không trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 94 Bộ luật Lao động 45/2019/QH14 quy định người sử dụng lao động phải trả lương đầy đủ, đúng hạn và không được can thiệp vào quyền tự quyết chi tiêu lương; không có quy định cho phép tước lương.
+- Điều 48 Bộ luật Lao động 45/2019/QH14 quy định người sử dụng lao động phải thanh toán đầy đủ các khoản tiền liên quan đến quyền lợi của người lao động trong thời hạn quy định.
+- Điều 8.2 của hợp đồng cam kết ""công ty tuyệt đối không tước lương của NLĐ khi NLĐ chấm dứt hợp đồng; lương được thanh toán đầy đủ"", nên phù hợp và thậm chí có lợi hơn so với quy định pháp luật.
+Khuyến nghị: Không cần sửa đổi, duy trì điều khoản này để bảo vệ quyền lợi người lao động.",compliant,"Kết luận đúng. Căn cứ Điều 94 và 48 BLĐL 2019 trong ngữ cảnh hỗ trợ việc trả lương đầy đủ, đúng hạn và nghĩa vụ thanh toán khi chấm dứt HĐLĐ. Điều 8.2 hợp đồng cam kết không tước lương, phù hợp và không trái pháp luật.",,
+REG-023,grounded,Điều 4 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 4 của hợp đồng trái quy định của Bộ luật Lao động.
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 168 quy định người sử dụng lao động phải tham gia và đóng bảo hiểm xã hội, bảo hiểm y tế, bảo hiểm thất nghiệp cho người lao động. Điều 4 hợp đồng quy định công ty không đóng bất kỳ loại bảo hiểm nào và để người lao động tự chịu trách nhiệm, nên vi phạm nghĩa vụ bắt buộc của người sử dụng lao động theo quy định này.
+Khuyến nghị: Điều chỉnh Điều 4 để công ty thực hiện đóng bảo hiểm xã hội, bảo hiểm y tế và bảo hiểm thất nghiệp cho người lao động theo mức tối thiểu do pháp luật quy định; nếu muốn người lao động tự chịu một phần, phải đảm bảo mức đóng tối thiểu của người sử dụng lao động vẫn được thực hiện và ghi rõ trong hợp đồng.",violation,"Kết luận đúng. Căn cứ Điều 168 khoản 1 BLĐL 2019, nghĩa vụ tham gia BHXH, BHYT, BHTN là bắt buộc, không thể thỏa thuận loại trừ. Điều 4 hợp đồng vi phạm quy định này.",,
+REG-024,grounded,Điều 4 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 4 của hợp đồng không trái quy định pháp luật lao động; nội dung phù hợp với quy định bắt buộc tham gia và đóng bảo hiểm xã hội, bảo hiểm y tế.
+Căn cứ:
+- Điều 4 hợp đồng: quy định việc không đóng BHXH, BHYT là trái pháp luật và công ty sẽ đóng đầy đủ cho người lao động.
+- Điều 168 Bộ luật Lao động 45/2019/QH14: người sử dụng lao động và người lao động phải tham gia bảo hiểm xã hội, bảo hiểm y tế; người sử dụng lao động có trách nhiệm đóng bảo hiểm cho người lao động.
+Do đó, điều khoản không vi phạm pháp luật.",compliant,"Câu trả lời xác định đúng kết luận (không trái luật) dựa trên việc trích dẫn chính xác nội dung Điều 4 của hợp đồng (cam kết đóng đầy đủ BHXH, BHYT) và căn cứ pháp lý Điều 168 Bộ luật Lao động 2019 về nghĩa vụ tham gia bảo hiểm bắt buộc. Các mệnh đề đều được ngữ cảnh hỗ trợ.",,
+REG-025,grounded,Điều 2 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 2.2 của hợp đồng trái quy định của Bộ luật Lao động.
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 98 quy định người lao động làm thêm giờ phải được trả lương ít nhất 150% (ngày thường), 200% (ngày nghỉ tuần) hoặc 300% (ngày lễ, tết) so với mức lương bình thường; do đó không thể quy định ""không được tính thêm tiền lương làm thêm"".
+- Bộ luật Lao động 45/2019/QH14, Điều 107 quy định thời gian làm thêm giờ là thời gian làm việc ngoài giờ làm việc bình thường và phải trả lương theo quy định; không có quy định cho phép không trả tiền lương.
+Khuyến nghị: Sửa đổi khoản 2.2 thành ""Thời gian làm thêm giờ được trả lương theo mức tối thiểu quy định tại Điều 98 của Bộ luật Lao động"".",violation,"Kết luận đúng. Căn cứ Điều 98 BLĐ 2019 (bắt buộc trả lương làm thêm giờ tối thiểu 150%) và Điều 107 (quy định về làm thêm giờ) trong ngữ cảnh pháp luật được cung cấp, việc hợp đồng quy định 'không tính thêm tiền lương' là trái pháp luật.",,
+REG-026,grounded,Điều 2 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 2 của hợp đồng không trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 2 hợp đồng quy định công ty nghiêm cấm mọi hành vi không trả lương làm thêm giờ cho NLĐ, tức là cam kết luôn trả lương làm thêm giờ.
+- Điều 98 và Điều 107 Bộ luật Lao động 45/2019/QH14 quy định người sử dụng lao động phải trả lương làm thêm giờ và chỉ được sử dụng làm thêm giờ khi đáp ứng các yêu cầu pháp luật (đồng ý của NLĐ, giới hạn thời gian, …). Điều 2 của hợp đồng không phủ nhận các yêu cầu này mà chỉ tăng cường quyền lợi của NLĐ, nên không mâu thuẫn mà còn có lợi cho NLĐ.
+Khuyến nghị: Không cần sửa đổi Điều 2; có thể bổ sung ghi rõ việc sử dụng làm thêm giờ phải tuân thủ các điều kiện của Điều 107 để tránh hiểu lầm.",compliant,"Câu trả lời xác định đúng kết luận (không trái luật) dựa trên việc Điều 2 hợp đồng cam kết trả lương làm thêm giờ, phù hợp và có lợi hơn so với quy định tối thiểu tại Điều 98 và Điều 107 Bộ luật Lao động. Các căn cứ pháp lý được trích dẫn chính xác và phù hợp với ngữ cảnh.",,
+REG-027,grounded,Điều 5 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 5 của hợp đồng trái quy định của Nghị định 45/2019/QH14.
+Căn cứ:
+- Điều 5 hợp đồng quy định người lao động phải bàn giao bản gốc Căn cước công dân và bằng cấp cho công ty giữ trong suốt thời gian làm việc.
+- Điều 17, khoản 1, Nghị định 45/2019/QH14 cấm người sử dụng lao động giữ bản chính giấy tờ tùy thân, văn bằng, chứng chỉ của người lao động.
+Khuyến nghị: sửa Điều 5, cho phép người lao động nộp bản sao hoặc chỉ giao bản gốc trong thời gian ngắn và phải trả lại ngay khi chấm dứt hợp đồng, hoặc có thỏa thuận riêng về việc giữ bản gốc.",violation,Câu trả lời xác định đúng hành vi vi phạm (giữ bản gốc giấy tờ) dựa trên Điều 5 hợp đồng và căn cứ đúng vào Điều 17 khoản 1 Nghị định 45/2019/QH14 được cung cấp trong ngữ cảnh pháp lý.,,
+REG-028,grounded,Điều 5 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 5 của hợp đồng không trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 5 hợp đồng quy định công ty không giữ bản gốc CCCD, bằng cấp hay giấy tờ tùy thân của người lao động, chỉ lưu bản sao.
+- Điều 17 Nghị định 45/2019/QH14 cấm người sử dụng lao động giữ bản chính giấy tờ tùy thân, văn bằng, chứng chỉ của người lao động. Vì hợp đồng quy định không giữ bản gốc, nên phù hợp và thậm chí tuân thủ quy định cấm giữ bản chính.
+(Khuyến nghị: Tiếp tục thực hiện theo quy định này và bảo quản bản sao an toàn.)",compliant,Câu trả lời xác định đúng kết luận (tuân thủ) dựa trên việc đối chiếu Điều 5 hợp đồng (không giữ bản gốc) với Điều 17 Nghị định 45/2019 (cấm giữ bản chính). Các mệnh đề thực chất đều được ngữ cảnh hợp đồng và pháp luật hỗ trợ.,,
+REG-029,grounded,Điều 9 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 9 hợp đồng trái quy định của Bộ luật Lao động.
+Căn cứ:
+- Điều 137, Bộ luật Lao động 45/2019/QH14 quy định người sử dụng lao động không được sa thải hoặc đơn phương chấm dứt hợp đồng lao động vì lý do mang thai.
+- Điều 137 khoản 2 yêu cầu người sử dụng lao động phải bố trí lại hoặc chuyển sang công việc nhẹ hơn cho lao động nữ mang thai, không cho phép việc chấm dứt hợp đồng.
+- Điều 9.2 hợp đồng lại ghi ""có quyền chấm dứt hợp đồng khi NLĐ mang thai"", mâu thuẫn trực tiếp với cấm trên.
+Khuyến nghị: Loại bỏ hoặc sửa đổi Điều 9.2, thay bằng quy định công ty không được chấm dứt hợp đồng vì mang thai; nếu công việc gây nguy hiểm phải bố trí lại hoặc chuyển sang công việc nhẹ hơn theo Điều 137.",violation,"Kết luận đúng. Căn cứ Điều 137 khoản 3 BLĐ 2019 cấm sa thải/chấm dứt HĐLĐ vì lý do mang thai, trong khi Điều 9.2 hợp đồng lại cho phép chấm dứt, dẫn đến mâu thuẫn trực tiếp và vi phạm pháp luật.",,
+REG-030,grounded,Điều 9 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 9 của hợp đồng không trái quy định pháp luật lao động; nội dung cấm chấm dứt hợp đồng vì kết hôn hoặc mang thai phù hợp và thậm chí bảo vệ người lao động nữ mạnh hơn quy định pháp luật.
+Căn cứ:
+- Bộ luật Lao động 45/2019/QH14, Điều 137 khoản 3: người sử dụng lao động không được sa thải hoặc đơn phương chấm dứt hợp đồng lao động vì lý do kết hôn, mang thai, nghỉ thai sản, nuôi con dưới 12 tháng tuổi, trừ một số ngoại lệ.
+- Điều 9 hợp đồng quy định công ty không bao giờ thực hiện việc chấm dứt vì lý do trên và khẳng định pháp luật cấm.
+(Điều 9 là quy định có lợi hơn cho người lao động, không vi phạm pháp luật)",compliant,"Kết luận đúng. Điều 9 hợp đồng cam kết không chấm dứt hợp đồng vì lý do kết hôn/mang thai, phù hợp với Điều 137 khoản 3 Bộ luật Lao động 2019 cấm hành vi này. Việc quy định 'không bao giờ thực hiện' là cam kết có lợi hơn hoặc tương đương cho người lao động, không trái pháp luật.",,
+REG-031,grounded,Điều 6 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 6 của hợp đồng không trái quy định pháp luật lao động hiện hành.
+Căn cứ:
+- Điều 6 hợp đồng quy định NLĐ phải bồi thường chi phí đào tạo tương đương 06 tháng lương nếu nghỉ việc trong 24 tháng đầu.
+- Điều 62 Bộ luật Lao động 45/2019/QH14 quy định người sử dụng lao động và người lao động phải ký hợp đồng đào tạo, trong đó phải quy định chi phí đào tạo và trách nhiệm hoàn trả chi phí đào tạo; không quy định cụ thể mức bồi thường.
+- Điều 40 Bộ luật Lao động 45/2019/QH14 quy định NLĐ khi đơn phương chấm dứt phải hoàn trả chi phí đào tạo theo Điều 62, không cấm việc quy định số tiền cố định, chỉ yêu cầu phải trả chi phí thực tế.
+Do đó, điều khoản không vi phạm pháp luật, nhưng để tránh tranh chấp, doanh nghiệp nên chứng minh rằng số tiền 06 tháng lương tương đương chi phí đào tạo thực tế (có chứng từ hợp lệ).",violation,"Kết luận sai. Điều 62 BLĐS quy định chi phí đào tạo phải có chứng từ hợp lệ và bao gồm các khoản chi cụ thể. Việc quy định mức bồi thường cố định (06 tháng lương) mà không gắn với chi phí thực tế có chứng từ là trái quy định, trong khi câu trả lời lại kết luận là hợp pháp.",,
+REG-032,grounded,Điều 6 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 6 của hợp đồng không trái quy định của Bộ luật Lao động.
+Căn cứ:
+- Điều 62 BLĐ 45/2019/QH14 quy định chi phí đào tạo và trách nhiệm hoàn trả chỉ áp dụng khi có hợp đồng đào tạo nghề có quy định về thời hạn cam kết làm việc và các nội dung chi phí; nếu không ký hợp đồng đào tạo nghề, người lao động không bị bắt buộc hoàn trả chi phí đào tạo nội bộ.
+- Điều 40 quy định người lao động phải hoàn trả chi phí đào tạo chỉ trong trường hợp chấm dứt hợp đồng trái pháp luật và có quy định trong hợp đồng đào tạo; không áp dụng cho các khóa đào tạo nội bộ thông thường.
+- Điều 4 BLĐ 45/2019/QH14 khuyến khích các thỏa thuận có lợi hơn cho người lao động; việc quy định người lao động không phải bồi hoàn chi phí đào tạo nội bộ là thỏa thuận có lợi hơn, do đó được phép.
+Khuyến nghị: Giữ nguyên Điều 6. Nếu công ty muốn thu hồi chi phí đào tạo trong trường hợp có cam kết thời hạn làm việc sau đào tạo, cần ký riêng hợp đồng đào tạo nghề theo Điều 62.",compliant,"Kết luận đúng. Căn cứ Điều 62 BLĐ 2019, nghĩa vụ hoàn trả chi phí đào tạo chỉ phát sinh khi có hợp đồng đào tạo nghề riêng. Điều 6 hợp đồng quy định NLĐ không phải bồi thường chi phí đào tạo nội bộ là thỏa thuận có lợi hơn cho NLĐ, phù hợp với Điều 4 và không trái pháp luật.",,

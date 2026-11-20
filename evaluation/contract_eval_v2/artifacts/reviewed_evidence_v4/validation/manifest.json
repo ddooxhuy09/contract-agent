@@ -1,0 +1,30 @@
+{
+  "purpose": "previously_v1_evaluated_cases_not_used_in_v2_v3_diagnosis",
+  "independent_test": false,
+  "source_split": "v1/test/injection",
+  "source_sha256": "27f806d2d8598ab1636fa2989a614fcd04a015607a6104c8e8af54e37cfc072e",
+  "n_questions": 16,
+  "n_base_cases": 16,
+  "files": {
+    "contracts/C001.txt": "214ed9fcb97b7794d89aaf93d476c104b8b545d73877f751934047ab6c55f275",
+    "contracts/C002.txt": "4296796b8bf6900d50a0571deede019630f3a64142529e173a2568853549e7cb",
+    "contracts/C003.txt": "84640d9f54ca5d9fa6decdd574d9ee5c81351bb9282197cd32172737091f0a14",
+    "contracts/C004.txt": "73993f4f1d9a388cb74cce1780ccb244380889cc4cf2afc27977e846aee43fc9",
+    "contracts/C005.txt": "011c52fc41c2807bb32b8805022676265c514fb218c7dba3da9d5078d56224cb",
+    "contracts/C006.txt": "937b9a8a7f10624fd905ece7b472c03b06486f5c946a6695ab9ff33d23d87dea",
+    "contracts/C007.txt": "1c59f3f81bb78cdc8c439e0e2e45d41342c14ecf95e157dd248b61fc22c04b2a",
+    "contracts/C008.txt": "c65e964fdfc8d21e43e8bf8dc84c3bb703a2ebd79d92684fb6ce6c7469822768",
+    "contracts/C009.txt": "e9bd1dcde2b029caa1585ff550f7a4cae074206324d88fc25521f322c67e6e5f",
+    "contracts/C010.txt": "dbaf6ded3b62f395afb2e3e96bce2bb0bd403548541ab6e1cfcd437f319b50cb",
+    "contracts/C011.txt": "cef60053d82fda2c9a698c4bfe3d29d1758925b02d2f7eae02243c8a3ce2fb8e",
+    "contracts/C012.txt": "3de2b9ccf27f7314ce38c8b229ab3155502e1b48db48398fc5615f402e5144b5",
+    "contracts/C013.txt": "2098a82557185964aefe50953870deb98454e6a2fdaec8b4279da2bd39a85b72",
+    "contracts/C014.txt": "d1d7b874b886fc3851edc4d0ea1cc3460965d0a3711cc214a36f1a755ed4bf14",
+    "contracts/C015.txt": "36f82028134db5d928eb04e01d748fc380e2013daee507d958bac5f2de534dc4",
+    "contracts/C016.txt": "5428cd636e493b39287ace577b17342b6ab00f4fb59cfec3c785707ade8705b7",
+    "inputs.jsonl": "ab747a44df93cebc527dee0755b522f98e0e88420347683e8e6cc7189dc72a55",
+    "gold.jsonl": "d7d1ce4ee797bfec6b19ea5cc752a23f2a8b7ce3ec88c2bee78944c9ac11c973"
+  },
+  "seed": 20261120,
+  "selection": "one violating and one compliant per rule, disjoint from all v2/v3 cases"
+}

@@ -1,0 +1,34 @@
+# **CÔNG TY CỔ PHẦN CÔNG NGHỆ TƯƠNG LAI** 
+
+# **CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM Độc lập – Tự do – Hạnh phúc** 
+
+**HỢP ĐỒNG LAO ĐỘNG** Số: 204/2026/HĐLĐ 
+
+- Căn cứ Bộ luật Lao động số 45/2019/QH14 ngày 20/11/2019; 
+
+- Căn cứ Bộ luật Dân sự số 91/2015/QH13 ngày 24/11/2015; 
+
+- Căn cứ vào nhu cầu và khả năng của Các Bên. 
+
+Hôm nay ngày 15 tháng 07 năm 2026, tại TP. Hồ Chí Minh, chúng tôi gồm có: 
+
+**Người sử dụng lao động: CÔNG TY CỔ PHẦN CÔNG NGHỆ TƯƠNG LAI** Địa chỉ: Tòa nhà Bitexco, Số 2 Hải Triều, Quận 1, TP. Hồ Chí Minh Mã số doanh nghiệp: 0312345678 Người đại diện: Nguyễn Văn Viễn ; Chức vụ: Giám đốc Điều hành _(Sau đây gọi tắt là: “NSDLĐ” hoặc “Công ty”)_ 
+
+# và 
+
+**Người lao động: Ông Trần Minh Nhật** Ngày sinh: 12/05/2002 Số CCCD: 079099123456 ; Ngày cấp: 15/08/2022 ; Nơi cấp: Cục Cảnh sát QLHC về TTXH _(Sau đây gọi tắt là: “NLĐ”)_ 
+
+**Điều 1: Thời hạn và công việc hợp đồng** 1.1. Loại hợp đồng lao động: Xác định thời hạn. 1.2. Thời hạn từ ngày 01/08/2026 đến hết ngày 31/01/2027. 1.3. Đơn vị làm việc: Phòng Nghiên cứu và Phát triển AI. 1.4. Chức vụ/chức danh: Thực tập sinh MLOps. 1.5. Nội dung công việc: Trực quan hóa kiến trúc mô hình AI, ứng dụng Vision Transformers vào các bài toán phân loại và khoanh vùng trên hình ảnh y tế. Xử lý dữ liệu đầu vào và thực hiện chỉnh sửa bối cảnh hình ảnh phục vụ huấn luyện mô hình. 
+
+**Điều 2: Chế độ làm việc** 2.1. Thời giờ làm việc: 8 tiếng/ngày. Tuy nhiên, do tính chất cấp bách của các dự án AI, NLĐ có trách nhiệm làm thêm giờ (bao gồm buổi tối, ngày nghỉ cuối tuần và ngày Lễ) bất cứ khi nào quản lý yêu cầu. Thời gian làm thêm giờ này được xem là trách nhiệm cống hiến để học hỏi và sẽ không được tính thêm tiền lương làm thêm giờ. 
+
+**Điều 3: Quyền lợi và nghĩa vụ của Người lao động** 3.1. Quyền lợi (i) Mức lương: 8.500.000 VNĐ/tháng (Tám triệu năm trăm nghìn đồng). (ii) Chế độ Bảo hiểm: Nhằm tối ưu hóa mức thu nhập thực nhận cho NLĐ, hai bên thống nhất Công ty sẽ không tham gia đóng Bảo hiểm Xã hội, Bảo hiểm Y tế bắt buộc. Thay vào đó, Công ty sẽ hỗ trợ một khoản tương đương 5% mức lương cơ bản và cộng trực tiếp vào tiền lương hàng tháng của NLĐ. 3.2. Nghĩa vụ (i) Giữ bí mật tuyệt đối các thông tin mô hình học máy. (ii) Để đảm bảo tính cam kết trong công việc, NLĐ đồng ý bàn giao bản gốc Căn cước công dân và Bằng cấp cao nhất cho Phòng Nhân sự Công ty lưu giữ trong suốt thời hạn có hiệu lực của hợp đồng này. (iii) Trường hợp NLĐ đơn phương chấm dứt Hợp đồng trước thời hạn, NLĐ không những không được nhận lương của tháng cuối cùng làm việc mà còn phải bồi thường cho Công ty chi phí đào tạo tương đương 3 tháng tiền lương. 
+
+**Điều 4: Quyền hạn và nghĩa vụ của Người sử dụng lao động** 4.1. Quyền hạn (i) Kiểm tra, giám sát công việc. Nếu NLĐ đi làm muộn, nộp báo cáo trễ hạn hoặc làm hỏng cấu trúc dữ liệu, Công ty có quyền áp dụng hình thức kỷ luật phạt tiền từ 500.000 VNĐ đến 2.000.000 VNĐ cho mỗi lần vi phạm bằng cách khấu trừ trực tiếp vào tiền lương hàng tháng. (ii) Công ty có quyền đơn phương chấm dứt hợp đồng lao động ngay lập tức và không cần báo trước nếu NLĐ kết hôn hoặc thông báo mang thai trong vòng 12 tháng đầu tiên kể từ ngày ký hợp đồng. 
+
+**Điều 5: Điều khoản thi hành** 5.1. Hai Bên cam kết hoàn toàn tự nguyện khi ký kết. Mọi tranh chấp phát sinh từ Hợp đồng này nếu không thể thương lượng sẽ do Giám đốc Công ty đưa ra quyết định cuối cùng và NLĐ không được quyền khởi kiện ra Tòa án. 5.2. Hợp đồng này được lập thành 02 bản, mỗi bên giữ một bản và có hiệu lực từ ngày ký. 
+
+**NGƯỜI LAO ĐỘNG** _(Ký tên, ghi rõ họ tên)_ 
+
+**NGƯỜI SỬ DỤNG LAO ĐỘNG** _(Ký tên, ghi rõ họ tên, đóng dấu)_ 
+

@@ -6,7 +6,7 @@ Phạm vi: hợp đồng lao động. Đây không phải tư vấn pháp lý; x
 
 ## Giới hạn
 
-- Chưa đo được độ chính xác của câu trả lời hỏi đáp. Bộ gold set có chuyên gia kiểm đang được xây dựng (`evaluation/gold/`); số đo đầu ra ở `evaluation_results/RESULTS_TUAN.md` kèm cỡ mẫu và khoảng tin cậy. Chưa kiểm chứng trên hợp đồng ngoài bộ dữ liệu.
+- Đã chạy full 369 câu QA và 117 hợp đồng (18/11/2026): test QA correctness 76,4%, đúng đủ 68,8%; F1 tại 93 Điều test có nhãn sau toàn workflow là 71,2%, với báo nhầm cao. Xem [báo cáo full và nguyên nhân lỗi](docs/bo_test_hoi_dong/KET_QUA_FULL_QA_WORKFLOW.md). Kết quả tự động trên dữ liệu tổng hợp, không phải xác nhận pháp lý. [Báo cáo v1](docs/bo_test_hoi_dong/KET_QUA_BO_TEST_V1.md) là mốc lịch sử theo cách chấm cũ; F1 0,86 ở đó đo trên Điều đã chỉ sẵn. Chưa có gold đầy đủ mọi rủi ro để công bố F1 toàn hợp đồng.
 - Điều khoản mà mô hình không đánh giá được (lỗi, hết quota, JSON hỏng) được báo là "chưa kiểm" trong `analysis.coverage`, không phải "ổn".
 - Một nhà cung cấp LLM mỗi lần chạy, chọn bằng `LLM_PROVIDER`: mặc định `groq` (model `openai/gpt-oss-120b`, cấu hình đã dùng để đánh giá), tuỳ chọn `gemini`. Tham số `provider` của API chỉ có một giá trị.
 - Không hỗ trợ `.doc` (chuyển sang `.docx`) và PDF dạng ảnh quét không có lớp chữ (tải ảnh `.png/.jpg` để dùng OCR). Giới hạn tải lên 10 MB.
@@ -103,6 +103,12 @@ python -m pytest tests/integration -q                  # cần stack đang chạ
 Test unit không cần Postgres/Gemini (hiện 227 passed, 1 skipped khi có thư mục `data/` và `evaluation_results/`; clone mới không có hai thư mục này sẽ fail 17 test đọc dữ liệu, xem `docs/test_baseline.txt`).
 
 ## Đánh giá
+
+Kết quả mới nhất: [`CAI_THIEN_V4_KET_QUA.md`](docs/bo_test_hoi_dong/CAI_THIEN_V4_KET_QUA.md). V4 thêm một lượt model kiểm chứng căn cứ, bổ sung bối cảnh hợp đồng và giảm nguồn lệch phạm vi; so với v3 trên 40 ca regression và 16 ca validation chưa dùng sửa v4. Đây là đánh giá QA câu hỏi chỉ rõ Điều, không thay điểm toàn test v1 hoặc workflow phân tích.
+
+Vòng cải tiến có nghiên cứu v3: [`NGHIEN_CUU_V3_KET_QUA.md`](docs/bo_test_hoi_dong/NGHIEN_CUU_V3_KET_QUA.md), phương pháp và nguồn sơ cấp ở [`RESEARCH_NOTES.md`](evaluation/contract_eval_v2/RESEARCH_NOTES.md). QA bổ sung truy xuất Điều luật chính xác theo chủ đề, ghép căn cứ trong đúng Điều và phân biệt nguồn hợp đồng với nguồn luật. So sánh thật với bản v2 trên dev, 32 ca regression từ test v1 và 8 ca giả lập mới đối chiếu nguồn Chính phủ; không sửa nhãn/rubric hoặc coi các nhóm này là benchmark pháp lý độc lập.
+
+Thí nghiệm cải thiện QA sau v1 ở [`evaluation/contract_eval_v2/`](evaluation/contract_eval_v2/README.md): 80 câu dev từ 16 ca gốc, có đổi cách hỏi và số Điều; so sánh tìm luật chỉ từ câu hỏi với tìm luật có nội dung Điều hợp đồng. Đây là phép đo phát triển có đối chứng, không phải test giữ kín mới. Kết quả và giới hạn: [`CAI_THIEN_V2_KET_QUA_VA_BANG_CHUNG.md`](docs/bo_test_hoi_dong/CAI_THIEN_V2_KET_QUA_VA_BANG_CHUNG.md).
 
 Kết quả đánh giá thực nghiệm nằm ở [`docs/CHUONG_DANH_GIA_THUC_NGHIEM.md`](docs/CHUONG_DANH_GIA_THUC_NGHIEM.md) (chương 5), tóm tắt hai bộ test để trình bày ở [`docs/bo_test_hoi_dong/`](docs/bo_test_hoi_dong/), số liệu thô và báo cáo ở [`evaluation_results/`](evaluation_results/). Cấu hình được đánh giá: truy xuất **vector-only**, judge **Groq `openai/gpt-oss-120b`** (nhiệt độ 0), `RED_FLAG_NEGATION_CHECK` **tắt** (mặc định). Các bộ ca đã đóng băng (tag `injection-frozen`, `injection-v2-frozen`, `legalqa-split-frozen`) không được sửa. Checklist buổi demo: [`docs/DEMO_CHECKLIST.md`](docs/DEMO_CHECKLIST.md).
 

@@ -1,0 +1,9 @@
+{
+  "scorer_sha256": "e81e3c7191ecaeedb5f840b6ebc0b95b76feceabd947037a8cd3984f00443983",
+  "correctness": "0-2 normalized; full population; cluster bootstrap by base_case_id seed 20261118, 1000 samples",
+  "retrieval": "macro recall of (doc_number,article) in first five actual QA evidence records; references restored before run; report denominator",
+  "source_clause_hit": "any annotated contract clause explicitly cited by model; report denominator",
+  "workflow_detection": "critical or warning at same annotated focal clause after full text pipeline; all other clause findings unannotated, not FP",
+  "whole_contract_F1": null,
+  "judge_reference_disputes": "keep in primary denominator and report separately"
+}

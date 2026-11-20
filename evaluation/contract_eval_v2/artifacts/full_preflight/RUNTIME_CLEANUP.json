@@ -1,0 +1,6 @@
+{
+  "isolated_postgres_restored_to_stopped": true,
+  "evaluation_volume_preserved": true,
+  "other_services_not_stopped": true,
+  "no_commit_or_push": true
+}

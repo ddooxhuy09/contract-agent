@@ -1,0 +1,7 @@
+{
+  "targeted_review": "Đánh giá Điều được hỏi trong toàn bộ dữ kiện hợp đồng. Nêu điều kiện, ngoại lệ và căn cứ; không bắt buộc chép mọi Điều trong danh sách ref.",
+  "legal_basis": "Trả lời căn cứ và giải thích liên hệ với nội dung. Không bắt buộc kết luận violation/compliant khi câu hỏi chỉ hỏi căn cứ.",
+  "whole_contract_review": "Tìm rủi ro trong toàn hợp đồng. Gold chỉ chú thích lỗi bơm; phát hiện bổ sung phải được kiểm với nội dung và luật, không tự tính là báo nhầm.",
+  "temporal": "Dựa vào ngày đánh giá, ngày giao kết, điều chuyển tiếp và đáp án tham chiếu; không ép nhãn violation/compliant.",
+  "fixed": "Chấm đúng ý câu hỏi và reference facts; câu hỏi nhận diện quan hệ, nội dung còn thiếu không bị ép kết luận vi phạm."
+}

@@ -1,0 +1,370 @@
+{
+  "metrics": {
+    "dev": {
+      "scope": "dev_only_regression_and_metamorphic_experiment",
+      "n_questions": 80,
+      "n_base_cases": 16,
+      "retrieval": {
+        "baseline": {
+          "expected": 80,
+          "completed": 80,
+          "legal_scored": 72,
+          "legal_recall@5": 0.3472222222222222,
+          "by_variant": {
+            "T1": {
+              "n": 16,
+              "recall@5": 0.4375
+            },
+            "T2": {
+              "n": 16,
+              "recall@5": 0.125
+            },
+            "T3": {
+              "n": 8,
+              "recall@5": 0.125
+            },
+            "paraphrase": {
+              "n": 16,
+              "recall@5": 0.53125
+            },
+            "renumbered": {
+              "n": 16,
+              "recall@5": 0.40625
+            }
+          }
+        },
+        "grounded": {
+          "expected": 80,
+          "completed": 80,
+          "legal_scored": 72,
+          "legal_recall@5": 0.8472222222222222,
+          "by_variant": {
+            "T1": {
+              "n": 16,
+              "recall@5": 0.9375
+            },
+            "T2": {
+              "n": 16,
+              "recall@5": 0.9375
+            },
+            "T3": {
+              "n": 8,
+              "recall@5": 0.125
+            },
+            "paraphrase": {
+              "n": 16,
+              "recall@5": 0.9375
+            },
+            "renumbered": {
+              "n": 16,
+              "recall@5": 0.9375
+            }
+          }
+        }
+      },
+      "paired_recall_delta": 0.5,
+      "paired_recall_delta_ci95_cluster": [
+        0.37857142857142856,
+        0.6197183098591549
+      ],
+      "qa": {
+        "baseline": {
+          "expected": 32,
+          "completed": 32,
+          "judged": 32,
+          "valid_generation": 32,
+          "correctness": 0.765625,
+          "fully_correct": 0.71875,
+          "conclusion_match": 0.78125,
+          "source_clause_hit": 0.40625,
+          "latency_p50_ms": 3204.55,
+          "faithfulness": 0.7661290322580645,
+          "faithfulness_scored": 31,
+          "false_alarm": {
+            "numerator": 1,
+            "denominator": 16
+          },
+          "confusion": {
+            "violation": {
+              "violation": 10,
+              "compliant": 3,
+              "unclear": 3
+            },
+            "compliant": {
+              "violation": 1,
+              "compliant": 15,
+              "unclear": 0
+            }
+          }
+        },
+        "grounded": {
+          "expected": 32,
+          "completed": 32,
+          "judged": 32,
+          "valid_generation": 32,
+          "correctness": 1.0,
+          "fully_correct": 1.0,
+          "conclusion_match": 1.0,
+          "source_clause_hit": 1.0,
+          "latency_p50_ms": 2687.7,
+          "faithfulness": 1.0,
+          "faithfulness_scored": 32,
+          "false_alarm": {
+            "numerator": 0,
+            "denominator": 16
+          },
+          "confusion": {
+            "violation": {
+              "violation": 16,
+              "compliant": 0,
+              "unclear": 0
+            },
+            "compliant": {
+              "violation": 0,
+              "compliant": 16,
+              "unclear": 0
+            }
+          }
+        }
+      },
+      "paired_qa_delta": 0.234375,
+      "paired_qa_delta_ci95_cluster": [
+        0.0625,
+        0.421875
+      ],
+      "qa_changes": {
+        "improved": 9,
+        "regressed": 0,
+        "unchanged": 23
+      },
+      "warning": "LLM judge not human-calibrated on these answers; no cross-run comparison to v1 QA score",
+      "baseline": "v2_grounded_snapshot",
+      "candidate": "researched_topic_evidence"
+    },
+    "regression_test": {
+      "scope": "frozen_v1_regression_subset_not_new_independent_holdout",
+      "n_questions": 32,
+      "n_base_cases": 32,
+      "retrieval": {
+        "baseline": {
+          "expected": 32,
+          "completed": 32,
+          "legal_scored": 32,
+          "legal_recall@5": 0.5520833333333334,
+          "by_variant": {
+            "T1": {
+              "n": 32,
+              "recall@5": 0.5520833333333334
+            }
+          }
+        },
+        "grounded": {
+          "expected": 32,
+          "completed": 32,
+          "legal_scored": 32,
+          "legal_recall@5": 0.9375,
+          "by_variant": {
+            "T1": {
+              "n": 32,
+              "recall@5": 0.9375
+            }
+          }
+        }
+      },
+      "paired_recall_delta": 0.3854166666666667,
+      "paired_recall_delta_ci95_cluster": [
+        0.2760416666666667,
+        0.5
+      ],
+      "qa": {
+        "baseline": {
+          "expected": 32,
+          "completed": 32,
+          "judged": 32,
+          "valid_generation": 32,
+          "correctness": 0.8125,
+          "fully_correct": 0.78125,
+          "conclusion_match": 0.875,
+          "source_clause_hit": 0.28125,
+          "latency_p50_ms": 2793.95,
+          "faithfulness": 0.8494623655913979,
+          "faithfulness_scored": 31,
+          "false_alarm": {
+            "numerator": 1,
+            "denominator": 16
+          },
+          "confusion": {
+            "violation": {
+              "violation": 14,
+              "compliant": 0,
+              "unclear": 2
+            },
+            "compliant": {
+              "violation": 1,
+              "compliant": 14,
+              "unclear": 1
+            }
+          }
+        },
+        "grounded": {
+          "expected": 32,
+          "completed": 32,
+          "judged": 32,
+          "valid_generation": 32,
+          "correctness": 0.84375,
+          "fully_correct": 0.84375,
+          "conclusion_match": 0.84375,
+          "source_clause_hit": 0.96875,
+          "latency_p50_ms": 2954.0,
+          "faithfulness": 0.8924731182795699,
+          "faithfulness_scored": 31,
+          "false_alarm": {
+            "numerator": 3,
+            "denominator": 16
+          },
+          "confusion": {
+            "violation": {
+              "violation": 15,
+              "compliant": 0,
+              "unclear": 1
+            },
+            "compliant": {
+              "violation": 3,
+              "compliant": 12,
+              "unclear": 1
+            }
+          }
+        }
+      },
+      "paired_qa_delta": 0.03125,
+      "paired_qa_delta_ci95_cluster": [
+        -0.09375,
+        0.15625
+      ],
+      "qa_changes": {
+        "improved": 4,
+        "regressed": 2,
+        "unchanged": 26
+      },
+      "warning": "LLM judge not human-calibrated on these answers; no cross-run comparison to v1 QA score",
+      "baseline": "v2_grounded_snapshot",
+      "candidate": "researched_topic_evidence"
+    },
+    "fresh_source_checked": {
+      "scope": "new_synthetic_cases_source_checked_but_author_knows_code",
+      "n_questions": 8,
+      "n_base_cases": 8,
+      "retrieval": {
+        "baseline": {
+          "expected": 8,
+          "completed": 8,
+          "legal_scored": 8,
+          "legal_recall@5": 1.0,
+          "by_variant": {
+            "T1": {
+              "n": 8,
+              "recall@5": 1.0
+            }
+          }
+        },
+        "grounded": {
+          "expected": 8,
+          "completed": 8,
+          "legal_scored": 8,
+          "legal_recall@5": 1.0,
+          "by_variant": {
+            "T1": {
+              "n": 8,
+              "recall@5": 1.0
+            }
+          }
+        }
+      },
+      "paired_recall_delta": 0.0,
+      "paired_recall_delta_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "qa": {
+        "baseline": {
+          "expected": 8,
+          "completed": 8,
+          "judged": 8,
+          "valid_generation": 8,
+          "correctness": 1.0,
+          "fully_correct": 1.0,
+          "conclusion_match": 1.0,
+          "source_clause_hit": 0.75,
+          "latency_p50_ms": 2770.7,
+          "faithfulness": 1.0,
+          "faithfulness_scored": 8,
+          "false_alarm": {
+            "numerator": 0,
+            "denominator": 4
+          },
+          "confusion": {
+            "violation": {
+              "violation": 4,
+              "compliant": 0,
+              "unclear": 0
+            },
+            "compliant": {
+              "violation": 0,
+              "compliant": 4,
+              "unclear": 0
+            }
+          }
+        },
+        "grounded": {
+          "expected": 8,
+          "completed": 8,
+          "judged": 8,
+          "valid_generation": 8,
+          "correctness": 0.8125,
+          "fully_correct": 0.75,
+          "conclusion_match": 0.875,
+          "source_clause_hit": 1.0,
+          "latency_p50_ms": 3077.35,
+          "faithfulness": 0.8333333333333334,
+          "faithfulness_scored": 8,
+          "false_alarm": {
+            "numerator": 1,
+            "denominator": 4
+          },
+          "confusion": {
+            "violation": {
+              "violation": 4,
+              "compliant": 0,
+              "unclear": 0
+            },
+            "compliant": {
+              "violation": 1,
+              "compliant": 3,
+              "unclear": 0
+            }
+          }
+        }
+      },
+      "paired_qa_delta": -0.1875,
+      "paired_qa_delta_ci95_cluster": [
+        -0.4375,
+        0.0
+      ],
+      "qa_changes": {
+        "improved": 0,
+        "regressed": 2,
+        "unchanged": 6
+      },
+      "warning": "LLM judge not human-calibrated on these answers; no cross-run comparison to v1 QA score",
+      "baseline": "v2_grounded_snapshot",
+      "candidate": "researched_topic_evidence"
+    }
+  },
+  "usage": {
+    "generation_calls": 149,
+    "generation_tokens": 556651,
+    "judge_calls": 144,
+    "judge_tokens": 336615
+  },
+  "protocol_sha256": "a9fd722500e45df3a999acf94ffaa03b0ba601624c6fd5a846f6d91b48bb3e28"
+}
