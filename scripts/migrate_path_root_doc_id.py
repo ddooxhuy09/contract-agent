@@ -112,13 +112,25 @@ def migrate(cur) -> dict:
     stats["path_relations_unmapped_root"] = cur.fetchone()[0]
 
     # Chunks under an Điều that has no hierarchy row: the tree was taken by a same-số-hiệu doc.
+    # Every doc sharing a sanitized số hiệu is listed too: the doc that took the tree may now
+    # hold stray Điều of the other one, which only a re-ingest (delete_doc_content) removes.
     cur.execute(
         """
-        SELECT e.doc_id, count(DISTINCT e.root_path)
-        FROM legal_embeddings e
-        WHERE e.root_path IS NOT NULL
-          AND NOT EXISTS (SELECT 1 FROM legal_articles a WHERE a.path = e.root_path)
-        GROUP BY 1 ORDER BY 2 DESC
+        SELECT doc_id, max(missing) FROM (
+            SELECT e.doc_id, count(DISTINCT e.root_path) AS missing
+            FROM legal_embeddings e
+            WHERE e.root_path IS NOT NULL
+              AND NOT EXISTS (SELECT 1 FROM legal_articles a WHERE a.path = e.root_path)
+            GROUP BY 1
+            UNION ALL
+            SELECT d.doc_id, 0 FROM legal_documents d
+            WHERE d.doc_num <> '' AND EXISTS (SELECT 1 FROM legal_parts p WHERE p.doc_id = d.doc_id)
+              AND sanitize_doc_id_for_ltree(d.doc_num) IN (
+                  SELECT sanitize_doc_id_for_ltree(d2.doc_num) FROM legal_documents d2
+                  WHERE d2.doc_num <> ''
+                    AND EXISTS (SELECT 1 FROM legal_parts p2 WHERE p2.doc_id = d2.doc_id)
+                  GROUP BY 1 HAVING count(*) > 1)
+        ) x GROUP BY 1 ORDER BY 2 DESC, 1
         """
     )
     stats["need_reingest"] = cur.fetchall()
@@ -146,7 +158,7 @@ def main(argv: list[str] | None = None) -> int:
     need = stats.pop("need_reingest")
     for k, v in stats.items():
         print(f"{k}: {v}")
-    print(f"need re-ingest (doc_id, missing Điều): {len(need)}")
+    print(f"need re-ingest (doc_id, missing articles): {len(need)}")
     for doc_id, n in need[:50]:
         print(f"  {doc_id}: {n}")
     print("COMMITTED" if args.apply else "DRY RUN - rolled back")
