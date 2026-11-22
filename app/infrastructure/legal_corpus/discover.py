@@ -5,7 +5,8 @@ from pathlib import Path
 
 from app.core.logging import logger
 
-REQUIRED = ("thuoc_tinh.json", "muc_luc.json", "van_ban.md")
+# muc_luc.json is optional: derived from van_ban.md when absent (muc_luc_derive).
+REQUIRED = ("thuoc_tinh.json", "van_ban.md")
 
 
 def is_document_folder(path: Path) -> bool:

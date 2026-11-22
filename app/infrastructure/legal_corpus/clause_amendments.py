@@ -1,7 +1,7 @@
-"""Parse clause_amendments.json → legal_path_relations rows (ltree by doc_num).
+"""Parse clause_amendments.json → legal_path_relations rows.
 
-Paths use sanitized số hiệu as root label (e.g. ``100_2015_QH13.P2.C2.D134.K1.g``),
-not portal doc_id, so RAG / logs stay human-readable.
+Paths use the same root as every other table: sanitized portal doc_id
+(e.g. ``96122.P2.C2.D134.K1.g``). doc_num is not unique, so it is kept only as row metadata.
 
 Edge direction: sourceProvision (VB sửa) → targetProvision (điều khoản bị tác động).
 Same-doc and cross-doc both land in ``legal_path_relations``.
@@ -15,9 +15,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from app.infrastructure.legal_corpus.muc_luc_derive import read_muc_luc
 from app.infrastructure.legal_corpus.muc_luc_paths import (
     build_muc_luc_index,
-    sanitize_doc_id_for_ltree,
+    to_ltree_path,
 )
 from app.infrastructure.legal_corpus.thuoc_tinh_mapper import map_thuoc_tinh
 
@@ -87,21 +88,6 @@ class PathRelationRow:
     source_doc_num: str | None = None
     target_doc_num: str | None = None
     note: str | None = None
-
-
-def sanitize_doc_num_for_ltree(doc_num: str) -> str:
-    """``100/2015/QH13`` → ``100_2015_QH13`` (same rules as legal_documents.path)."""
-    return sanitize_doc_id_for_ltree(doc_num)
-
-
-def to_doc_num_ltree(doc_num: str, structural: str | None) -> str | None:
-    root = sanitize_doc_num_for_ltree(doc_num)
-    if not structural:
-        return root or None
-    struct = structural.strip().lstrip(".")
-    if not struct:
-        return root or None
-    return f"{root}.{struct}"
 
 
 def ref_type_from_amend_type(type_code: Any) -> str:
@@ -240,7 +226,7 @@ def parse_clause_amendments(
         if not structural:
             warnings.append(f"target muc_luc id not found: {target_id}")
             continue
-        target_path = to_doc_num_ltree(target_doc_num, structural)
+        target_path = to_ltree_path(target_doc_id, structural)
         if not target_path:
             warnings.append(f"bad target path for {target_id}")
             continue
@@ -254,16 +240,15 @@ def parse_clause_amendments(
             if not isinstance(src, dict):
                 continue
             src_doc_id = str(src.get("documentId") or "") or None
+            if not src_doc_id:
+                warnings.append(
+                    f"source has no documentId titleDocument={src.get('titleDocument')!r}"
+                )
+                continue
             src_doc_num = doc_num_resolver.resolve(
                 src_doc_id,
                 title_document=src.get("titleDocument"),
             )
-            if not src_doc_num:
-                warnings.append(
-                    f"cannot resolve doc_num for source doc_id={src_doc_id!r} "
-                    f"titleDocument={src.get('titleDocument')!r}"
-                )
-                continue
 
             # Same-doc: prefer local muc_luc if source id is present
             src_id = str(src.get("id") or "")
@@ -281,7 +266,7 @@ def parse_clause_amendments(
                 )
                 continue
 
-            source_path = to_doc_num_ltree(src_doc_num, src_structural)
+            source_path = to_ltree_path(src_doc_id, src_structural)
             if not source_path:
                 continue
 
@@ -334,16 +319,10 @@ def load_clause_amendments_folder(
     thuoc_tinh = map_thuoc_tinh(
         json.loads((folder / "thuoc_tinh.json").read_text(encoding="utf-8"))
     )
-    muc_luc = json.loads((folder / "muc_luc.json").read_text(encoding="utf-8"))
-    if not isinstance(muc_luc, list):
-        muc_luc = list(muc_luc.get("children") or []) if isinstance(muc_luc, dict) else []
+    muc_luc = read_muc_luc(folder, (folder / "van_ban.md").read_text(encoding="utf-8"))
 
     target_doc_id = str(thuoc_tinh["doc_id"])
     target_doc_num = str(thuoc_tinh.get("doc_num") or "")
-    if not target_doc_num:
-        meta["skipped"] = True
-        meta["reason"] = "missing doc_num in thuoc_tinh"
-        return [], [], meta
 
     resolver = doc_num_resolver or DocNumResolver(by_doc_id={target_doc_id: target_doc_num})
     # Ensure local doc always resolves

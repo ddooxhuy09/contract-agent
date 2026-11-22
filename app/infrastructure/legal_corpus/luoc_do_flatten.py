@@ -5,6 +5,13 @@ from __future__ import annotations
 from typing import Any
 
 
+def _bucket_docs(bucket: Any) -> list[dict[str, Any]]:
+    """Old crawler: ``{count, documents: [...]}``; scripts/crawl_vbpl: plain ``[...]``."""
+    if isinstance(bucket, list):
+        return [d for d in bucket if isinstance(d, dict)]
+    return list((bucket or {}).get("documents") or [])
+
+
 def flatten_luoc_do(raw: dict[str, Any] | None) -> tuple[list[dict[str, str]], dict[str, dict[str, Any]]]:
     """Return (relations, stub_docs_by_id).
 
@@ -52,12 +59,12 @@ def flatten_luoc_do(raw: dict[str, Any] | None) -> tuple[list[dict[str, str]], d
         )
 
     for rel_type, bucket in (raw.get("relations") or {}).items():
-        for doc in (bucket or {}).get("documents") or []:
+        for doc in _bucket_docs(bucket):
             other = _remember(doc)
             _add(doc_id, other, str(rel_type))
 
     for rel_type, bucket in (raw.get("relations_incoming") or {}).items():
-        for doc in (bucket or {}).get("documents") or []:
+        for doc in _bucket_docs(bucket):
             other = _remember(doc)
             # Incoming edge of type T means other --T--> this doc
             _add(other, doc_id, str(rel_type))

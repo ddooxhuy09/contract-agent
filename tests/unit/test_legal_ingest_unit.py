@@ -55,6 +55,9 @@ class FakeLegalChunks:
     def count_for_doc(self, doc_id):
         return sum(1 for c in self.chunks if getattr(c, "doc_id", None) == doc_id)
 
+    def delete_doc_content(self, doc_id):
+        self.chunks = [c for c in self.chunks if getattr(c, "doc_id", None) != doc_id]
+
 
 
 class FakeEmbedder:

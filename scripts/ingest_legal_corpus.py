@@ -16,6 +16,7 @@ from pathlib import Path
 from app.application.use_cases.legal_ingest import IngestLegalDocument
 from app.core.logging import logger
 from app.infrastructure.container import build_container
+from app.infrastructure.db.connection import transaction
 from app.infrastructure.db.schema_loader import apply_postgres_schema
 from app.infrastructure.legal_corpus.assemble import load_document_folder
 from app.infrastructure.legal_corpus.checkpoint import (
@@ -155,14 +156,17 @@ def main(argv: list[str] | None = None) -> int:
                 ingested_this_run += 1
                 continue
             assert ingest is not None
-            result = ingest.execute(
-                thuoc_tinh=artifacts["thuoc_tinh"],
-                chunks=artifacts["chunks"],
-                relations=artifacts["relations"],
-                stub_docs=artifacts.get("stub_docs"),
-                legal_nodes=artifacts.get("legal_nodes"),
-                path_relations=artifacts.get("path_relations"),
-            )
+            # One transaction per document: a failure leaves nothing behind, so
+            # "has chunks in DB" (resume check above) means "fully ingested".
+            with transaction():
+                result = ingest.execute(
+                    thuoc_tinh=artifacts["thuoc_tinh"],
+                    chunks=artifacts["chunks"],
+                    relations=artifacts["relations"],
+                    stub_docs=artifacts.get("stub_docs"),
+                    legal_nodes=artifacts.get("legal_nodes"),
+                    path_relations=artifacts.get("path_relations"),
+                )
             mark_completed(
                 ck_path,
                 doc_id=result["doc_id"],

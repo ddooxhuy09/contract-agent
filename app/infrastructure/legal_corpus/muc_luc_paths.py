@@ -383,8 +383,8 @@ def graph_nodes_as_legal_nodes(
 ) -> list[dict[str, Any]]:
     """Hierarchy node dicts for PG upsert (7 tables via LegalChunkRepository.upsert_nodes).
 
-    ``path_root`` defaults to ``doc_id``; pass ``doc_num`` to align with
-    ``legal_documents.path`` (e.g. ``100_2015_QH13.P1``).
+    ``path_root`` defaults to ``doc_id``, the root used by every table
+    (``legal_documents.path``, ``legal_embeddings.path``), e.g. ``96122.P1``.
     """
     root = path_root or doc_id
     doc_root = to_ltree_path(root, None)

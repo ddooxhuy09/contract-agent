@@ -9,6 +9,7 @@ from typing import Any
 from app.infrastructure.legal_corpus.appendix import appendix_graph_nodes, build_appendix_chunks
 from app.infrastructure.legal_corpus.internal_refs import extract_path_relations
 from app.infrastructure.legal_corpus.luoc_do_flatten import flatten_luoc_do
+from app.infrastructure.legal_corpus.muc_luc_derive import read_muc_luc
 from app.infrastructure.legal_corpus.muc_luc_paths import (
     build_muc_luc_index,
     chunk_ref_to_ltree,
@@ -71,8 +72,8 @@ def load_document_folder(folder: Path | str) -> dict[str, Any]:
     """
     folder = Path(folder)
     thuoc_tinh_raw = json.loads((folder / "thuoc_tinh.json").read_text(encoding="utf-8"))
-    muc_luc = json.loads((folder / "muc_luc.json").read_text(encoding="utf-8"))
     van_ban = (folder / "van_ban.md").read_text(encoding="utf-8")
+    muc_luc = read_muc_luc(folder, van_ban)
 
     luoc_do_raw = None
     luoc_path = folder / "luoc_do.json"
@@ -81,8 +82,9 @@ def load_document_folder(folder: Path | str) -> dict[str, Any]:
 
     thuoc_tinh = map_thuoc_tinh(thuoc_tinh_raw, full_text=van_ban)
     doc_id = str(thuoc_tinh["doc_id"])
-    # Hierarchy tree (legal_nodes) rooted by số hiệu when available (matches legal_documents.path)
-    path_root = str(thuoc_tinh.get("doc_num") or doc_id)
+    # One ltree root for every table: sanitize(doc_id). doc_num is not unique
+    # ("Không số", Đ/-// collapse to "_"), and chunks are already keyed by doc_id.
+    path_root = doc_id
 
     index = build_muc_luc_index(muc_luc)
     body_chunks = build_body_chunks(van_ban, index, doc_id)

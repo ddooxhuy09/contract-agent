@@ -102,7 +102,9 @@ class IngestLegalDocument:
         vectors = self._embedder.embed_documents(texts) if texts else []
         entities = []
         doc_status = int(thuoc_tinh.get("status_flag") or 1)
-        default_eff = doc_status in (1, 5)
+        # Searchable unless hết hiệu lực (2) / chưa có hiệu lực (3); status 4 is a document-level
+        # "partly expired" flag, not a reason to hide every chunk (same rule as trg_hier_emb_eff).
+        default_eff = doc_status not in (2, 3)
         for i, c in enumerate(chunks):
             path = c.get("path") or (
                 chunk_ref_to_ltree(c["chunk_ref"]) if c.get("chunk_ref") else None
@@ -160,15 +162,20 @@ class IngestLegalDocument:
         legal_nodes: list[dict[str, Any]] | None = None,
         path_relations: list[dict[str, str]] | None = None,
     ) -> dict[str, Any]:
+        """Callers wrap this in one DB transaction (scripts/ingest_legal_corpus: transaction())."""
         doc_id = str(thuoc_tinh["doc_id"])
+        # Embed first: the slow / failure-prone step runs before any write.
+        entities = self._build_chunks(thuoc_tinh, doc_id, chunks)
+
         doc = self._build_document(thuoc_tinh, doc_id)
         self._docs.upsert(doc)
+        # Re-ingest replaces the document's content; stale paths must not linger in RAG.
+        self._chunks.delete_doc_content(doc_id)
 
         node_rows = legal_nodes or []
         if node_rows:
             self._upsert_nodes(thuoc_tinh, doc_id, node_rows)
 
-        entities = self._build_chunks(thuoc_tinh, doc_id, chunks)
         self._chunks.upsert_many(entities)
 
         rel_entities = [
