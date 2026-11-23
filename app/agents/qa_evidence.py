@@ -42,7 +42,7 @@ def topic_articles(text: str) -> tuple[int, ...]:
 def _article_text(rows: list[tuple]) -> str:
     lines = []
     seen = set()
-    for text, path in sorted(rows, key=lambda r: re.sub(r"\d+", lambda m: m.group().zfill(6), r[1])):
+    for text, _path in sorted(rows, key=lambda r: re.sub(r"\d+", lambda m: m.group().zfill(6), r[1])):
         for line in trim_to_provision(text, max_chars=12000).splitlines():
             if line not in seen:
                 seen.add(line)
