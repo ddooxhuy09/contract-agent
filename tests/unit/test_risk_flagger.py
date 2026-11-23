@@ -315,3 +315,22 @@ def test_no_rule_hint_no_hint_section(env, monkeypatch):
     env.llm_outputs.append(_llm())
     rf.evaluate_clause(CLAUSE, contract_id="c1")
     assert "Kết quả quét tự động" not in env.prompts[0]
+
+
+def test_topic_anchor_replaces_context_and_enables_finding_types(env, monkeypatch):
+    _flags(monkeypatch, False)
+    anchor = SimpleNamespace(page_content="Điều 17", metadata={"role": "topic_anchor", "path": "x.D17.K1"})
+    seen = {}
+
+    def fake_augment(docs, focus, as_of_date, *, contract_context=""):
+        seen["focus"] = focus
+        return [anchor]
+
+    monkeypatch.setattr(rf, "augment_legal_evidence", fake_augment)
+    env.llm_outputs.append(_llm(loai="thieu_noi_dung"))
+    risk = rf.evaluate_clause(CLAUSE, contract_id="c1")
+    assert seen["focus"].startswith("Chấm dứt\n")
+    assert "LEGAL-CTX(1)" in env.prompts[0]
+    # Governing Điều is in context, so missing-content advice is not counted as a risk even with the flag off.
+    assert "Phân loại phát hiện" in env.prompts[0]
+    assert risk.severity == "info" and risk.finding_type == "thieu_noi_dung"

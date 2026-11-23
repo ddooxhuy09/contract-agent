@@ -1,0 +1,2432 @@
+[
+ {
+  "path": "baseline/stage_a/vector/test/legal_qa_path/recall@5",
+  "dec": 2,
+  "text": "0,11"
+ },
+ {
+  "path": "baseline/stage_a/vector/test/legal_qa_path/recall@5_ci95/0",
+  "dec": 2,
+  "text": "0,08"
+ },
+ {
+  "path": "baseline/stage_a/vector/test/legal_qa_path/recall@5_ci95/1",
+  "dec": 2,
+  "text": "0,15"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path/recall@5",
+  "dec": 2,
+  "text": "0,76"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path/recall@5_ci95/0",
+  "dec": 2,
+  "text": "0,71"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path/recall@5_ci95/1",
+  "dec": 2,
+  "text": "0,81"
+ },
+ {
+  "path": "baseline/stage_a/vector/test/legal_qa_path/mrr",
+  "dec": 2,
+  "text": "0,12"
+ },
+ {
+  "path": "baseline/stage_a/vector/test/legal_qa_path/mrr_ci95/0",
+  "dec": 2,
+  "text": "0,09"
+ },
+ {
+  "path": "baseline/stage_a/vector/test/legal_qa_path/mrr_ci95/1",
+  "dec": 2,
+  "text": "0,17"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path/mrr",
+  "dec": 2,
+  "text": "0,76"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path/mrr_ci95/0",
+  "dec": 2,
+  "text": "0,71"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path/mrr_ci95/1",
+  "dec": 2,
+  "text": "0,81"
+ },
+ {
+  "path": "baseline/stage_a/vector/test/legal_clause_path/recall@5",
+  "dec": 2,
+  "text": "0,54"
+ },
+ {
+  "path": "baseline/stage_a/vector/test/legal_clause_path/recall@5_ci95/0",
+  "dec": 2,
+  "text": "0,49"
+ },
+ {
+  "path": "baseline/stage_a/vector/test/legal_clause_path/recall@5_ci95/1",
+  "dec": 2,
+  "text": "0,59"
+ },
+ {
+  "path": "stage_a/vector/test/legal_clause_path/recall@5",
+  "dec": 2,
+  "text": "0,54"
+ },
+ {
+  "path": "stage_a/vector/test/legal_clause_path/recall@5_ci95/0",
+  "dec": 2,
+  "text": "0,49"
+ },
+ {
+  "path": "stage_a/vector/test/legal_clause_path/recall@5_ci95/1",
+  "dec": 2,
+  "text": "0,59"
+ },
+ {
+  "path": "baseline/stage_a/hybrid/test/legal_qa_path/recall@5",
+  "dec": 2,
+  "text": "0,16"
+ },
+ {
+  "path": "baseline/stage_a/hybrid/test/legal_qa_path/recall@5_ci95/0",
+  "dec": 2,
+  "text": "0,12"
+ },
+ {
+  "path": "baseline/stage_a/hybrid/test/legal_qa_path/recall@5_ci95/1",
+  "dec": 2,
+  "text": "0,20"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path/recall@5",
+  "dec": 2,
+  "text": "0,76"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path/recall@5_ci95/0",
+  "dec": 2,
+  "text": "0,71"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path/recall@5_ci95/1",
+  "dec": 2,
+  "text": "0,81"
+ },
+ {
+  "path": "baseline/stage_a/hybrid/test/legal_qa_path/mrr",
+  "dec": 2,
+  "text": "0,09"
+ },
+ {
+  "path": "baseline/stage_a/hybrid/test/legal_qa_path/mrr_ci95/0",
+  "dec": 2,
+  "text": "0,06"
+ },
+ {
+  "path": "baseline/stage_a/hybrid/test/legal_qa_path/mrr_ci95/1",
+  "dec": 2,
+  "text": "0,11"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path/mrr",
+  "dec": 2,
+  "text": "0,75"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path/mrr_ci95/0",
+  "dec": 2,
+  "text": "0,70"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path/mrr_ci95/1",
+  "dec": 2,
+  "text": "0,80"
+ },
+ {
+  "path": "baseline/stage_a/hybrid/test/legal_clause_path/recall@5",
+  "dec": 2,
+  "text": "0,54"
+ },
+ {
+  "path": "baseline/stage_a/hybrid/test/legal_clause_path/recall@5_ci95/0",
+  "dec": 2,
+  "text": "0,49"
+ },
+ {
+  "path": "baseline/stage_a/hybrid/test/legal_clause_path/recall@5_ci95/1",
+  "dec": 2,
+  "text": "0,59"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_clause_path/recall@5",
+  "dec": 2,
+  "text": "0,54"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_clause_path/recall@5_ci95/0",
+  "dec": 2,
+  "text": "0,49"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_clause_path/recall@5_ci95/1",
+  "dec": 2,
+  "text": "0,59"
+ },
+ {
+  "path": "baseline/stage_b/detect/test/micro/f1",
+  "dec": 2,
+  "text": "0,86"
+ },
+ {
+  "path": "baseline/stage_b/detect/test/f1_ci95/0",
+  "dec": 2,
+  "text": "0,80"
+ },
+ {
+  "path": "baseline/stage_b/detect/test/f1_ci95/1",
+  "dec": 2,
+  "text": "0,92"
+ },
+ {
+  "path": "stage_b/detect/test/micro/f1",
+  "dec": 2,
+  "text": "0,83"
+ },
+ {
+  "path": "stage_b/detect/test/f1_ci95/0",
+  "dec": 2,
+  "text": "0,76"
+ },
+ {
+  "path": "stage_b/detect/test/f1_ci95/1",
+  "dec": 2,
+  "text": "0,89"
+ },
+ {
+  "path": "baseline/stage_b/detect/test/micro/precision",
+  "dec": 2,
+  "text": "0,76"
+ },
+ {
+  "path": "baseline/stage_b/detect/test/precision_ci95/0",
+  "dec": 2,
+  "text": "0,67"
+ },
+ {
+  "path": "baseline/stage_b/detect/test/precision_ci95/1",
+  "dec": 2,
+  "text": "0,85"
+ },
+ {
+  "path": "stage_b/detect/test/micro/precision",
+  "dec": 2,
+  "text": "0,72"
+ },
+ {
+  "path": "stage_b/detect/test/precision_ci95/0",
+  "dec": 2,
+  "text": "0,63"
+ },
+ {
+  "path": "stage_b/detect/test/precision_ci95/1",
+  "dec": 2,
+  "text": "0,81"
+ },
+ {
+  "path": "baseline/stage_b/detect/test/micro/recall",
+  "dec": 2,
+  "text": "0,98"
+ },
+ {
+  "path": "baseline/stage_b/detect/test/recall_ci95/0",
+  "dec": 2,
+  "text": "0,95"
+ },
+ {
+  "path": "baseline/stage_b/detect/test/recall_ci95/1",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_b/detect/test/micro/recall",
+  "dec": 2,
+  "text": "0,98"
+ },
+ {
+  "path": "stage_b/detect/test/recall_ci95/0",
+  "dec": 2,
+  "text": "0,95"
+ },
+ {
+  "path": "stage_b/detect/test/recall_ci95/1",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "baseline/stage_b/detect/test/near_miss_fp_rate",
+  "dec": 2,
+  "text": "0,41"
+ },
+ {
+  "path": "baseline/stage_b/detect/test/near_miss_fp_rate_ci95/0",
+  "dec": 2,
+  "text": "0,27"
+ },
+ {
+  "path": "baseline/stage_b/detect/test/near_miss_fp_rate_ci95/1",
+  "dec": 2,
+  "text": "0,55"
+ },
+ {
+  "path": "stage_b/detect/test/near_miss_fp_rate",
+  "dec": 2,
+  "text": "0,51"
+ },
+ {
+  "path": "stage_b/detect/test/near_miss_fp_rate_ci95/0",
+  "dec": 2,
+  "text": "0,39"
+ },
+ {
+  "path": "stage_b/detect/test/near_miss_fp_rate_ci95/1",
+  "dec": 2,
+  "text": "0,65"
+ },
+ {
+  "path": "baseline/stage_b/detect/test/citation_gold_article_rate",
+  "dec": 2,
+  "text": "0,58"
+ },
+ {
+  "path": "stage_b/detect/test/citation_gold_article_rate",
+  "dec": 2,
+  "text": "0,60"
+ },
+ {
+  "path": "baseline/stage_b/qa/test/correctness_norm",
+  "dec": 2,
+  "text": "0,51"
+ },
+ {
+  "path": "baseline/stage_b/qa/test/correctness_norm_ci95/0",
+  "dec": 2,
+  "text": "0,47"
+ },
+ {
+  "path": "baseline/stage_b/qa/test/correctness_norm_ci95/1",
+  "dec": 2,
+  "text": "0,56"
+ },
+ {
+  "path": "stage_b/qa/test/correctness_norm",
+  "dec": 2,
+  "text": "0,72"
+ },
+ {
+  "path": "stage_b/qa/test/correctness_norm_ci95/0",
+  "dec": 2,
+  "text": "0,68"
+ },
+ {
+  "path": "stage_b/qa/test/correctness_norm_ci95/1",
+  "dec": 2,
+  "text": "0,76"
+ },
+ {
+  "path": "baseline/stage_b/qa/test/correctness_full",
+  "dec": 2,
+  "text": "0,40"
+ },
+ {
+  "path": "baseline/stage_b/qa/test/correctness_full_ci95/0",
+  "dec": 2,
+  "text": "0,35"
+ },
+ {
+  "path": "baseline/stage_b/qa/test/correctness_full_ci95/1",
+  "dec": 2,
+  "text": "0,46"
+ },
+ {
+  "path": "stage_b/qa/test/correctness_full",
+  "dec": 2,
+  "text": "0,62"
+ },
+ {
+  "path": "stage_b/qa/test/correctness_full_ci95/0",
+  "dec": 2,
+  "text": "0,56"
+ },
+ {
+  "path": "stage_b/qa/test/correctness_full_ci95/1",
+  "dec": 2,
+  "text": "0,67"
+ },
+ {
+  "path": "baseline/stage_b/qa/test/conclusion_match",
+  "dec": 2,
+  "text": "0,62"
+ },
+ {
+  "path": "baseline/stage_b/qa/test/conclusion_match_ci95/0",
+  "dec": 2,
+  "text": "0,54"
+ },
+ {
+  "path": "baseline/stage_b/qa/test/conclusion_match_ci95/1",
+  "dec": 2,
+  "text": "0,68"
+ },
+ {
+  "path": "stage_b/qa/test/conclusion_match",
+  "dec": 2,
+  "text": "0,75"
+ },
+ {
+  "path": "stage_b/qa/test/conclusion_match_ci95/0",
+  "dec": 2,
+  "text": "0,69"
+ },
+ {
+  "path": "stage_b/qa/test/conclusion_match_ci95/1",
+  "dec": 2,
+  "text": "0,80"
+ },
+ {
+  "path": "baseline/stage_b/qa/test/faithfulness",
+  "dec": 2,
+  "text": "0,55"
+ },
+ {
+  "path": "baseline/stage_b/qa/test/faithfulness_ci95/0",
+  "dec": 2,
+  "text": "0,51"
+ },
+ {
+  "path": "baseline/stage_b/qa/test/faithfulness_ci95/1",
+  "dec": 2,
+  "text": "0,58"
+ },
+ {
+  "path": "stage_b/qa/test/faithfulness",
+  "dec": 2,
+  "text": "0,91"
+ },
+ {
+  "path": "stage_b/qa/test/faithfulness_ci95/0",
+  "dec": 2,
+  "text": "0,89"
+ },
+ {
+  "path": "stage_b/qa/test/faithfulness_ci95/1",
+  "dec": 2,
+  "text": "0,93"
+ },
+ {
+  "path": "baseline/stage_b/qa/test/citation_gold_article",
+  "dec": 2,
+  "text": "0,54"
+ },
+ {
+  "path": "baseline/stage_b/qa/test/citation_gold_article_ci95/0",
+  "dec": 2,
+  "text": "0,48"
+ },
+ {
+  "path": "baseline/stage_b/qa/test/citation_gold_article_ci95/1",
+  "dec": 2,
+  "text": "0,59"
+ },
+ {
+  "path": "stage_b/qa/test/citation_gold_article",
+  "dec": 2,
+  "text": "0,81"
+ },
+ {
+  "path": "stage_b/qa/test/citation_gold_article_ci95/0",
+  "dec": 2,
+  "text": "0,76"
+ },
+ {
+  "path": "stage_b/qa/test/citation_gold_article_ci95/1",
+  "dec": 2,
+  "text": "0,86"
+ },
+ {
+  "path": "baseline/stage_b/qa/test/cited_not_in_context_rate",
+  "dec": 2,
+  "text": "0,71"
+ },
+ {
+  "path": "stage_b/qa/test/cited_not_in_context_rate",
+  "dec": 2,
+  "text": "0,32"
+ },
+ {
+  "path": "baseline/stage_b/qa/test/tokens_mean",
+  "dec": 0,
+  "text": "3436"
+ },
+ {
+  "path": "stage_b/qa/test/tokens_mean",
+  "dec": 0,
+  "text": "6218"
+ },
+ {
+  "path": "baseline/stage_b/qa/test/latency_ms_p50",
+  "dec": 0,
+  "text": "3077"
+ },
+ {
+  "path": "stage_b/qa/test/latency_ms_p50",
+  "dec": 0,
+  "text": "7890"
+ },
+ {
+  "path": "baseline/qa_paired_test/n_pairs",
+  "dec": 2,
+  "text": "314"
+ },
+ {
+  "path": "baseline/qa_paired_test/correctness_norm/diff",
+  "dec": 2,
+  "text": "0,21"
+ },
+ {
+  "path": "baseline/qa_paired_test/correctness_norm/ci95/0",
+  "dec": 2,
+  "text": "0,16"
+ },
+ {
+  "path": "baseline/qa_paired_test/correctness_norm/ci95/1",
+  "dec": 2,
+  "text": "0,26"
+ },
+ {
+  "path": "baseline/qa_paired_test/correctness_norm/better",
+  "dec": 2,
+  "text": "114"
+ },
+ {
+  "path": "baseline/qa_paired_test/correctness_norm/worse",
+  "dec": 2,
+  "text": "24"
+ },
+ {
+  "path": "baseline/qa_paired_test/conclusion_match/diff",
+  "dec": 2,
+  "text": "0,13"
+ },
+ {
+  "path": "baseline/qa_paired_test/conclusion_match/ci95/0",
+  "dec": 2,
+  "text": "0,07"
+ },
+ {
+  "path": "baseline/qa_paired_test/conclusion_match/ci95/1",
+  "dec": 2,
+  "text": "0,19"
+ },
+ {
+  "path": "baseline/qa_paired_test/conclusion_match/better",
+  "dec": 2,
+  "text": "37"
+ },
+ {
+  "path": "baseline/qa_paired_test/conclusion_match/worse",
+  "dec": 2,
+  "text": "10"
+ },
+ {
+  "path": "baseline/qa_paired_test/faithfulness/diff",
+  "dec": 2,
+  "text": "0,36"
+ },
+ {
+  "path": "baseline/qa_paired_test/faithfulness/ci95/0",
+  "dec": 2,
+  "text": "0,32"
+ },
+ {
+  "path": "baseline/qa_paired_test/faithfulness/ci95/1",
+  "dec": 2,
+  "text": "0,40"
+ },
+ {
+  "path": "baseline/qa_paired_test/faithfulness/better",
+  "dec": 2,
+  "text": "228"
+ },
+ {
+  "path": "baseline/qa_paired_test/faithfulness/worse",
+  "dec": 2,
+  "text": "20"
+ },
+ {
+  "path": "dataset/n_cases",
+  "dec": 2,
+  "text": "378"
+ },
+ {
+  "path": "verification/n_base_units",
+  "dec": 2,
+  "text": "154"
+ },
+ {
+  "path": "dataset/n_quarantine",
+  "dec": 2,
+  "text": "9"
+ },
+ {
+  "path": "dataset/n_eval",
+  "dec": 2,
+  "text": "369"
+ },
+ {
+  "path": "dataset/by_split/test",
+  "dec": 2,
+  "text": "314"
+ },
+ {
+  "path": "dataset/by_split/dev",
+  "dec": 2,
+  "text": "55"
+ },
+ {
+  "path": "dataset/by_source_set/contract_qa",
+  "dec": 2,
+  "text": "8"
+ },
+ {
+  "path": "dataset/by_source_set/injection",
+  "dec": 2,
+  "text": "234"
+ },
+ {
+  "path": "dataset/by_source_set/injection_v2",
+  "dec": 2,
+  "text": "93"
+ },
+ {
+  "path": "dataset/by_source_set/v04",
+  "dec": 2,
+  "text": "34"
+ },
+ {
+  "path": "dataset/by_gold_label/compliant",
+  "dec": 2,
+  "text": "112"
+ },
+ {
+  "path": "dataset/by_gold_label/n/a",
+  "dec": 2,
+  "text": "125"
+ },
+ {
+  "path": "dataset/by_gold_label/violation",
+  "dec": 2,
+  "text": "132"
+ },
+ {
+  "path": "dataset/by_difficulty/easy",
+  "dec": 2,
+  "text": "87"
+ },
+ {
+  "path": "dataset/by_difficulty/expert",
+  "dec": 2,
+  "text": "6"
+ },
+ {
+  "path": "dataset/by_difficulty/hard",
+  "dec": 2,
+  "text": "176"
+ },
+ {
+  "path": "dataset/by_difficulty/medium",
+  "dec": 2,
+  "text": "100"
+ },
+ {
+  "path": "dataset/by_rule/ban_lawsuit",
+  "dec": 2,
+  "text": "43"
+ },
+ {
+  "path": "dataset/by_rule/fine_deduct_wage",
+  "dec": 2,
+  "text": "43"
+ },
+ {
+  "path": "dataset/by_rule/forfeit_wage_quit",
+  "dec": 2,
+  "text": "37"
+ },
+ {
+  "path": "dataset/by_rule/no_bhxh",
+  "dec": 2,
+  "text": "43"
+ },
+ {
+  "path": "dataset/by_rule/ot_unpaid",
+  "dec": 2,
+  "text": "40"
+ },
+ {
+  "path": "dataset/by_rule/retain_id_papers",
+  "dec": 2,
+  "text": "43"
+ },
+ {
+  "path": "dataset/by_rule/terminate_pregnancy",
+  "dec": 2,
+  "text": "43"
+ },
+ {
+  "path": "dataset/by_rule/training_cost_flat",
+  "dec": 2,
+  "text": "42"
+ },
+ {
+  "path": "dataset/by_template/T1",
+  "dec": 2,
+  "text": "109"
+ },
+ {
+  "path": "dataset/by_template/T2",
+  "dec": 2,
+  "text": "109"
+ },
+ {
+  "path": "dataset/by_template/T3",
+  "dec": 2,
+  "text": "109"
+ },
+ {
+  "path": "dataset/by_template/fixed",
+  "dec": 2,
+  "text": "42"
+ },
+ {
+  "path": "verification/quarantine_by_layer/V7",
+  "dec": 2,
+  "text": "3"
+ },
+ {
+  "path": "verification/quarantine_by_layer/V4",
+  "dec": 2,
+  "text": "3"
+ },
+ {
+  "path": "verification/quarantine_by_layer/V6",
+  "dec": 2,
+  "text": "3"
+ },
+ {
+  "path": "verification/layers/V1/pass",
+  "dec": 2,
+  "text": "378"
+ },
+ {
+  "path": "verification/layers/V1/fail",
+  "dec": 2,
+  "text": "0"
+ },
+ {
+  "path": "verification/layers/V1/n/a",
+  "dec": 2,
+  "text": "0"
+ },
+ {
+  "path": "verification/layers/V2/pass",
+  "dec": 2,
+  "text": "378"
+ },
+ {
+  "path": "verification/layers/V2/fail",
+  "dec": 2,
+  "text": "0"
+ },
+ {
+  "path": "verification/layers/V2/n/a",
+  "dec": 2,
+  "text": "0"
+ },
+ {
+  "path": "verification/layers/V3/pass",
+  "dec": 2,
+  "text": "377"
+ },
+ {
+  "path": "verification/layers/V3/fail",
+  "dec": 2,
+  "text": "1"
+ },
+ {
+  "path": "verification/layers/V3/n/a",
+  "dec": 2,
+  "text": "0"
+ },
+ {
+  "path": "verification/layers/V4/pass",
+  "dec": 2,
+  "text": "375"
+ },
+ {
+  "path": "verification/layers/V4/fail",
+  "dec": 2,
+  "text": "3"
+ },
+ {
+  "path": "verification/layers/V4/n/a",
+  "dec": 2,
+  "text": "0"
+ },
+ {
+  "path": "verification/layers/V5/pass",
+  "dec": 2,
+  "text": "378"
+ },
+ {
+  "path": "verification/layers/V5/fail",
+  "dec": 2,
+  "text": "0"
+ },
+ {
+  "path": "verification/layers/V5/n/a",
+  "dec": 2,
+  "text": "0"
+ },
+ {
+  "path": "verification/layers/V6/pass",
+  "dec": 2,
+  "text": "375"
+ },
+ {
+  "path": "verification/layers/V6/fail",
+  "dec": 2,
+  "text": "3"
+ },
+ {
+  "path": "verification/layers/V6/n/a",
+  "dec": 2,
+  "text": "0"
+ },
+ {
+  "path": "verification/layers/V7/pass",
+  "dec": 2,
+  "text": "342"
+ },
+ {
+  "path": "verification/layers/V7/fail",
+  "dec": 2,
+  "text": "20"
+ },
+ {
+  "path": "verification/layers/V7/n/a",
+  "dec": 2,
+  "text": "16"
+ },
+ {
+  "path": "verification/v7/complete_units",
+  "dec": 2,
+  "text": "138"
+ },
+ {
+  "path": "verification/v7/run1_kappa",
+  "dec": 3,
+  "text": "0,914"
+ },
+ {
+  "path": "verification/v7/run1_agreement",
+  "dec": 3,
+  "text": "0,957"
+ },
+ {
+  "path": "verification/v7/run2_kappa",
+  "dec": 3,
+  "text": "0,927"
+ },
+ {
+  "path": "verification/v7/run2_agreement",
+  "dec": 3,
+  "text": "0,964"
+ },
+ {
+  "path": "verification/v7/both_runs_agree_with_label",
+  "dec": 2,
+  "text": "130"
+ },
+ {
+  "path": "verification/v7/one_run_contradicts",
+  "dec": 2,
+  "text": "3"
+ },
+ {
+  "path": "verification/v7/both_runs_contradict",
+  "dec": 2,
+  "text": "1"
+ },
+ {
+  "path": "verification/n_low_confidence",
+  "dec": 2,
+  "text": "38"
+ },
+ {
+  "path": "verification/ref_stats/quotes_checked",
+  "dec": 2,
+  "text": "444"
+ },
+ {
+  "path": "verification/ref_stats/refs_mismatch",
+  "dec": 2,
+  "text": "1"
+ },
+ {
+  "path": "verification/n_unmapped_ref_cases",
+  "dec": 2,
+  "text": "6"
+ },
+ {
+  "path": "stage_a/clause_split/injection/n",
+  "dec": 2,
+  "text": "109"
+ },
+ {
+  "path": "stage_a/clause_split/injection/exact_clause_ids",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_a/clause_split/injection/clause_id_recall",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_a/clause_split/injection/injected_span_match",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_a/clause_split/v04/n",
+  "dec": 2,
+  "text": "7"
+ },
+ {
+  "path": "stage_a/clause_split/v04/exact_clause_ids",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_a/clause_split/v04/clause_id_recall",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_a/clause_split/v04/clause_span_match",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_a/clause_split/gold_docx/n",
+  "dec": 2,
+  "text": "30"
+ },
+ {
+  "path": "stage_a/clause_split/gold_docx/clause_id_found",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_a/clause_split/gold_docx/clause_span_match",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_a/vector/test/contract_clause/n",
+  "dec": 2,
+  "text": "255"
+ },
+ {
+  "path": "stage_a/vector/test/contract_clause/hit@1",
+  "dec": 2,
+  "text": "0,57"
+ },
+ {
+  "path": "stage_a/vector/test/contract_clause/hit@1_ci95/0",
+  "dec": 2,
+  "text": "0,52"
+ },
+ {
+  "path": "stage_a/vector/test/contract_clause/hit@1_ci95/1",
+  "dec": 2,
+  "text": "0,64"
+ },
+ {
+  "path": "stage_a/vector/test/contract_clause/hit@3",
+  "dec": 2,
+  "text": "0,84"
+ },
+ {
+  "path": "stage_a/vector/test/contract_clause/hit@5",
+  "dec": 2,
+  "text": "0,85"
+ },
+ {
+  "path": "stage_a/vector/test/contract_clause/hit@5_ci95/0",
+  "dec": 2,
+  "text": "0,80"
+ },
+ {
+  "path": "stage_a/vector/test/contract_clause/hit@5_ci95/1",
+  "dec": 2,
+  "text": "0,89"
+ },
+ {
+  "path": "stage_a/vector/test/qa_contract_clause/n",
+  "dec": 2,
+  "text": "255"
+ },
+ {
+  "path": "stage_a/vector/test/qa_contract_clause/hit@1",
+  "dec": 2,
+  "text": "0,69"
+ },
+ {
+  "path": "stage_a/vector/test/qa_contract_clause/hit@1_ci95/0",
+  "dec": 2,
+  "text": "0,63"
+ },
+ {
+  "path": "stage_a/vector/test/qa_contract_clause/hit@1_ci95/1",
+  "dec": 2,
+  "text": "0,75"
+ },
+ {
+  "path": "stage_a/vector/test/qa_contract_clause/hit@5",
+  "dec": 2,
+  "text": "0,85"
+ },
+ {
+  "path": "stage_a/vector/test/qa_contract_clause/hit@5_ci95/0",
+  "dec": 2,
+  "text": "0,81"
+ },
+ {
+  "path": "stage_a/vector/test/qa_contract_clause/hit@5_ci95/1",
+  "dec": 2,
+  "text": "0,90"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path/n",
+  "dec": 2,
+  "text": "253"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path/recall@1",
+  "dec": 2,
+  "text": "0,45"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path/recall@3",
+  "dec": 2,
+  "text": "0,76"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path/recall@5",
+  "dec": 2,
+  "text": "0,76"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path/recall@5_ci95/0",
+  "dec": 2,
+  "text": "0,71"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path/recall@5_ci95/1",
+  "dec": 2,
+  "text": "0,81"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path/recall@10",
+  "dec": 2,
+  "text": "0,76"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path/precision@5",
+  "dec": 2,
+  "text": "0,29"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path/mrr",
+  "dec": 2,
+  "text": "0,76"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path/mrr_ci95/0",
+  "dec": 2,
+  "text": "0,71"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path/mrr_ci95/1",
+  "dec": 2,
+  "text": "0,81"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path/ndcg@10",
+  "dec": 2,
+  "text": "0,75"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path/hit@5",
+  "dec": 2,
+  "text": "0,81"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path/clause_recall@5",
+  "dec": 2,
+  "text": "0,67"
+ },
+ {
+  "path": "stage_a/vector/test/legal_clause_path/n",
+  "dec": 2,
+  "text": "253"
+ },
+ {
+  "path": "stage_a/vector/test/legal_clause_path/recall@1",
+  "dec": 2,
+  "text": "0,22"
+ },
+ {
+  "path": "stage_a/vector/test/legal_clause_path/recall@3",
+  "dec": 2,
+  "text": "0,46"
+ },
+ {
+  "path": "stage_a/vector/test/legal_clause_path/recall@5",
+  "dec": 2,
+  "text": "0,54"
+ },
+ {
+  "path": "stage_a/vector/test/legal_clause_path/recall@5_ci95/0",
+  "dec": 2,
+  "text": "0,49"
+ },
+ {
+  "path": "stage_a/vector/test/legal_clause_path/recall@5_ci95/1",
+  "dec": 2,
+  "text": "0,59"
+ },
+ {
+  "path": "stage_a/vector/test/legal_clause_path/recall@10",
+  "dec": 2,
+  "text": "0,55"
+ },
+ {
+  "path": "stage_a/vector/test/legal_clause_path/precision@5",
+  "dec": 2,
+  "text": "0,17"
+ },
+ {
+  "path": "stage_a/vector/test/legal_clause_path/mrr",
+  "dec": 2,
+  "text": "0,52"
+ },
+ {
+  "path": "stage_a/vector/test/legal_clause_path/mrr_ci95/0",
+  "dec": 2,
+  "text": "0,48"
+ },
+ {
+  "path": "stage_a/vector/test/legal_clause_path/mrr_ci95/1",
+  "dec": 2,
+  "text": "0,57"
+ },
+ {
+  "path": "stage_a/vector/test/legal_clause_path/ndcg@10",
+  "dec": 2,
+  "text": "0,45"
+ },
+ {
+  "path": "stage_a/vector/test/legal_clause_path/hit@5",
+  "dec": 2,
+  "text": "0,74"
+ },
+ {
+  "path": "stage_a/vector/test/legal_clause_path/clause_recall@5",
+  "dec": 2,
+  "text": "0,53"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T1/n",
+  "dec": 2,
+  "text": "93"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T1/recall@1",
+  "dec": 2,
+  "text": "0,53"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T1/recall@3",
+  "dec": 2,
+  "text": "0,94"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T1/recall@5",
+  "dec": 2,
+  "text": "0,94"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T1/recall@10",
+  "dec": 2,
+  "text": "0,94"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T1/precision@5",
+  "dec": 2,
+  "text": "0,37"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T1/mrr",
+  "dec": 2,
+  "text": "0,94"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T1/ndcg@10",
+  "dec": 2,
+  "text": "0,92"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T1/hit@5",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T1/clause_recall@5",
+  "dec": 2,
+  "text": "0,84"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T2/n",
+  "dec": 2,
+  "text": "93"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T2/recall@1",
+  "dec": 2,
+  "text": "0,53"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T2/recall@3",
+  "dec": 2,
+  "text": "0,94"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T2/recall@5",
+  "dec": 2,
+  "text": "0,94"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T2/recall@10",
+  "dec": 2,
+  "text": "0,94"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T2/precision@5",
+  "dec": 2,
+  "text": "0,37"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T2/mrr",
+  "dec": 2,
+  "text": "0,94"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T2/ndcg@10",
+  "dec": 2,
+  "text": "0,92"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T2/hit@5",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T2/clause_recall@5",
+  "dec": 2,
+  "text": "0,84"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T3/n",
+  "dec": 2,
+  "text": "47"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T3/recall@1",
+  "dec": 2,
+  "text": "0,13"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T3/recall@3",
+  "dec": 2,
+  "text": "0,13"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T3/recall@5",
+  "dec": 2,
+  "text": "0,13"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T3/recall@10",
+  "dec": 2,
+  "text": "0,13"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T3/precision@5",
+  "dec": 2,
+  "text": "0,03"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T3/mrr",
+  "dec": 2,
+  "text": "0,13"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T3/ndcg@10",
+  "dec": 2,
+  "text": "0,13"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T3/hit@5",
+  "dec": 2,
+  "text": "0,13"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/T3/clause_recall@5",
+  "dec": 2,
+  "text": "0,00"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/fixed/n",
+  "dec": 2,
+  "text": "20"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/fixed/recall@1",
+  "dec": 2,
+  "text": "0,45"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/fixed/recall@3",
+  "dec": 2,
+  "text": "0,64"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/fixed/recall@5",
+  "dec": 2,
+  "text": "0,64"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/fixed/recall@10",
+  "dec": 2,
+  "text": "0,64"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/fixed/precision@5",
+  "dec": 2,
+  "text": "0,20"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/fixed/mrr",
+  "dec": 2,
+  "text": "0,65"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/fixed/ndcg@10",
+  "dec": 2,
+  "text": "0,62"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/fixed/hit@5",
+  "dec": 2,
+  "text": "0,70"
+ },
+ {
+  "path": "stage_a/vector/test/legal_qa_path_by_template/fixed/clause_recall@5",
+  "dec": 2,
+  "text": "0,64"
+ },
+ {
+  "path": "stage_a/vector/temporal_v04/n_cases",
+  "dec": 2,
+  "text": "34"
+ },
+ {
+  "path": "stage_a/vector/temporal_v04/evidence_recall/value",
+  "dec": 3,
+  "text": "0,328"
+ },
+ {
+  "path": "stage_a/vector/temporal_v04/evidence_recall/n",
+  "dec": 2,
+  "text": "34"
+ },
+ {
+  "path": "stage_a/vector/temporal_v04/relation_recall/value",
+  "dec": 3,
+  "text": "0,000"
+ },
+ {
+  "path": "stage_a/vector/temporal_v04/relation_recall/n",
+  "dec": 2,
+  "text": "14"
+ },
+ {
+  "path": "stage_a/vector/temporal_v04/forbidden_citation_rate/value",
+  "dec": 3,
+  "text": "0,111"
+ },
+ {
+  "path": "stage_a/vector/temporal_v04/forbidden_citation_rate/n",
+  "dec": 2,
+  "text": "9"
+ },
+ {
+  "path": "stage_a/vector/temporal_v04/statute_selection_exact_match/value",
+  "dec": 3,
+  "text": "0,071"
+ },
+ {
+  "path": "stage_a/vector/temporal_v04/statute_selection_exact_match/n",
+  "dec": 2,
+  "text": "14"
+ },
+ {
+  "path": "stage_a/vector/excluded_unmapped",
+  "dec": 2,
+  "text": "3"
+ },
+ {
+  "path": "stage_a/vector/latency_ms_p50",
+  "dec": 0,
+  "text": "1072"
+ },
+ {
+  "path": "stage_a/vector/latency_ms_p95",
+  "dec": 0,
+  "text": "2446"
+ },
+ {
+  "path": "stage_a/hybrid/test/contract_clause/n",
+  "dec": 2,
+  "text": "255"
+ },
+ {
+  "path": "stage_a/hybrid/test/contract_clause/hit@1",
+  "dec": 2,
+  "text": "0,57"
+ },
+ {
+  "path": "stage_a/hybrid/test/contract_clause/hit@1_ci95/0",
+  "dec": 2,
+  "text": "0,52"
+ },
+ {
+  "path": "stage_a/hybrid/test/contract_clause/hit@1_ci95/1",
+  "dec": 2,
+  "text": "0,64"
+ },
+ {
+  "path": "stage_a/hybrid/test/contract_clause/hit@3",
+  "dec": 2,
+  "text": "0,84"
+ },
+ {
+  "path": "stage_a/hybrid/test/contract_clause/hit@5",
+  "dec": 2,
+  "text": "0,85"
+ },
+ {
+  "path": "stage_a/hybrid/test/contract_clause/hit@5_ci95/0",
+  "dec": 2,
+  "text": "0,80"
+ },
+ {
+  "path": "stage_a/hybrid/test/contract_clause/hit@5_ci95/1",
+  "dec": 2,
+  "text": "0,89"
+ },
+ {
+  "path": "stage_a/hybrid/test/qa_contract_clause/n",
+  "dec": 2,
+  "text": "255"
+ },
+ {
+  "path": "stage_a/hybrid/test/qa_contract_clause/hit@1",
+  "dec": 2,
+  "text": "0,69"
+ },
+ {
+  "path": "stage_a/hybrid/test/qa_contract_clause/hit@1_ci95/0",
+  "dec": 2,
+  "text": "0,63"
+ },
+ {
+  "path": "stage_a/hybrid/test/qa_contract_clause/hit@1_ci95/1",
+  "dec": 2,
+  "text": "0,75"
+ },
+ {
+  "path": "stage_a/hybrid/test/qa_contract_clause/hit@5",
+  "dec": 2,
+  "text": "0,85"
+ },
+ {
+  "path": "stage_a/hybrid/test/qa_contract_clause/hit@5_ci95/0",
+  "dec": 2,
+  "text": "0,81"
+ },
+ {
+  "path": "stage_a/hybrid/test/qa_contract_clause/hit@5_ci95/1",
+  "dec": 2,
+  "text": "0,90"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path/n",
+  "dec": 2,
+  "text": "253"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path/recall@1",
+  "dec": 2,
+  "text": "0,42"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path/recall@3",
+  "dec": 2,
+  "text": "0,74"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path/recall@5",
+  "dec": 2,
+  "text": "0,76"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path/recall@5_ci95/0",
+  "dec": 2,
+  "text": "0,71"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path/recall@5_ci95/1",
+  "dec": 2,
+  "text": "0,81"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path/recall@10",
+  "dec": 2,
+  "text": "0,76"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path/precision@5",
+  "dec": 2,
+  "text": "0,29"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path/mrr",
+  "dec": 2,
+  "text": "0,75"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path/mrr_ci95/0",
+  "dec": 2,
+  "text": "0,70"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path/mrr_ci95/1",
+  "dec": 2,
+  "text": "0,80"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path/ndcg@10",
+  "dec": 2,
+  "text": "0,74"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path/hit@5",
+  "dec": 2,
+  "text": "0,81"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path/clause_recall@5",
+  "dec": 2,
+  "text": "0,67"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_clause_path/n",
+  "dec": 2,
+  "text": "253"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_clause_path/recall@1",
+  "dec": 2,
+  "text": "0,22"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_clause_path/recall@3",
+  "dec": 2,
+  "text": "0,44"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_clause_path/recall@5",
+  "dec": 2,
+  "text": "0,54"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_clause_path/recall@5_ci95/0",
+  "dec": 2,
+  "text": "0,49"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_clause_path/recall@5_ci95/1",
+  "dec": 2,
+  "text": "0,59"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_clause_path/recall@10",
+  "dec": 2,
+  "text": "0,54"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_clause_path/precision@5",
+  "dec": 2,
+  "text": "0,17"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_clause_path/mrr",
+  "dec": 2,
+  "text": "0,52"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_clause_path/mrr_ci95/0",
+  "dec": 2,
+  "text": "0,47"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_clause_path/mrr_ci95/1",
+  "dec": 2,
+  "text": "0,57"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_clause_path/ndcg@10",
+  "dec": 2,
+  "text": "0,45"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_clause_path/hit@5",
+  "dec": 2,
+  "text": "0,74"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_clause_path/clause_recall@5",
+  "dec": 2,
+  "text": "0,53"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T1/n",
+  "dec": 2,
+  "text": "93"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T1/recall@1",
+  "dec": 2,
+  "text": "0,53"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T1/recall@3",
+  "dec": 2,
+  "text": "0,94"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T1/recall@5",
+  "dec": 2,
+  "text": "0,94"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T1/recall@10",
+  "dec": 2,
+  "text": "0,94"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T1/precision@5",
+  "dec": 2,
+  "text": "0,37"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T1/mrr",
+  "dec": 2,
+  "text": "0,94"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T1/ndcg@10",
+  "dec": 2,
+  "text": "0,92"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T1/hit@5",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T1/clause_recall@5",
+  "dec": 2,
+  "text": "0,84"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T2/n",
+  "dec": 2,
+  "text": "93"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T2/recall@1",
+  "dec": 2,
+  "text": "0,53"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T2/recall@3",
+  "dec": 2,
+  "text": "0,94"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T2/recall@5",
+  "dec": 2,
+  "text": "0,94"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T2/recall@10",
+  "dec": 2,
+  "text": "0,94"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T2/precision@5",
+  "dec": 2,
+  "text": "0,37"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T2/mrr",
+  "dec": 2,
+  "text": "0,94"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T2/ndcg@10",
+  "dec": 2,
+  "text": "0,92"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T2/hit@5",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T2/clause_recall@5",
+  "dec": 2,
+  "text": "0,84"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T3/n",
+  "dec": 2,
+  "text": "47"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T3/recall@1",
+  "dec": 2,
+  "text": "0,00"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T3/recall@3",
+  "dec": 2,
+  "text": "0,00"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T3/recall@5",
+  "dec": 2,
+  "text": "0,13"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T3/recall@10",
+  "dec": 2,
+  "text": "0,13"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T3/precision@5",
+  "dec": 2,
+  "text": "0,03"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T3/mrr",
+  "dec": 2,
+  "text": "0,03"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T3/ndcg@10",
+  "dec": 2,
+  "text": "0,06"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T3/hit@5",
+  "dec": 2,
+  "text": "0,13"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/T3/clause_recall@5",
+  "dec": 2,
+  "text": "0,00"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/fixed/n",
+  "dec": 2,
+  "text": "20"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/fixed/recall@1",
+  "dec": 2,
+  "text": "0,45"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/fixed/recall@3",
+  "dec": 2,
+  "text": "0,64"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/fixed/recall@5",
+  "dec": 2,
+  "text": "0,64"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/fixed/recall@10",
+  "dec": 2,
+  "text": "0,64"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/fixed/precision@5",
+  "dec": 2,
+  "text": "0,20"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/fixed/mrr",
+  "dec": 2,
+  "text": "0,65"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/fixed/ndcg@10",
+  "dec": 2,
+  "text": "0,62"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/fixed/hit@5",
+  "dec": 2,
+  "text": "0,70"
+ },
+ {
+  "path": "stage_a/hybrid/test/legal_qa_path_by_template/fixed/clause_recall@5",
+  "dec": 2,
+  "text": "0,64"
+ },
+ {
+  "path": "stage_a/hybrid/temporal_v04/n_cases",
+  "dec": 2,
+  "text": "34"
+ },
+ {
+  "path": "stage_a/hybrid/temporal_v04/evidence_recall/value",
+  "dec": 3,
+  "text": "0,328"
+ },
+ {
+  "path": "stage_a/hybrid/temporal_v04/evidence_recall/n",
+  "dec": 2,
+  "text": "34"
+ },
+ {
+  "path": "stage_a/hybrid/temporal_v04/relation_recall/value",
+  "dec": 3,
+  "text": "0,000"
+ },
+ {
+  "path": "stage_a/hybrid/temporal_v04/relation_recall/n",
+  "dec": 2,
+  "text": "14"
+ },
+ {
+  "path": "stage_a/hybrid/temporal_v04/forbidden_citation_rate/value",
+  "dec": 3,
+  "text": "0,111"
+ },
+ {
+  "path": "stage_a/hybrid/temporal_v04/forbidden_citation_rate/n",
+  "dec": 2,
+  "text": "9"
+ },
+ {
+  "path": "stage_a/hybrid/temporal_v04/statute_selection_exact_match/value",
+  "dec": 3,
+  "text": "0,071"
+ },
+ {
+  "path": "stage_a/hybrid/temporal_v04/statute_selection_exact_match/n",
+  "dec": 2,
+  "text": "14"
+ },
+ {
+  "path": "stage_a/hybrid/excluded_unmapped",
+  "dec": 2,
+  "text": "3"
+ },
+ {
+  "path": "stage_a/hybrid/latency_ms_p50",
+  "dec": 0,
+  "text": "1505"
+ },
+ {
+  "path": "stage_a/hybrid/latency_ms_p95",
+  "dec": 0,
+  "text": "3246"
+ },
+ {
+  "path": "zalo_locked/fts/recall@5",
+  "dec": 3,
+  "text": "0,009"
+ },
+ {
+  "path": "zalo_locked/fts/recall@5_ci95/0",
+  "dec": 3,
+  "text": "0,002"
+ },
+ {
+  "path": "zalo_locked/fts/recall@5_ci95/1",
+  "dec": 3,
+  "text": "0,018"
+ },
+ {
+  "path": "zalo_locked/fts/mrr@10",
+  "dec": 3,
+  "text": "0,007"
+ },
+ {
+  "path": "zalo_locked/fts/n",
+  "dec": 2,
+  "text": "556"
+ },
+ {
+  "path": "zalo_locked/hybrid+V3/recall@5",
+  "dec": 3,
+  "text": "0,802"
+ },
+ {
+  "path": "zalo_locked/hybrid+V3/recall@5_ci95/0",
+  "dec": 3,
+  "text": "0,768"
+ },
+ {
+  "path": "zalo_locked/hybrid+V3/recall@5_ci95/1",
+  "dec": 3,
+  "text": "0,835"
+ },
+ {
+  "path": "zalo_locked/hybrid+V3/mrr@10",
+  "dec": 3,
+  "text": "0,686"
+ },
+ {
+  "path": "zalo_locked/hybrid+V3/n",
+  "dec": 2,
+  "text": "556"
+ },
+ {
+  "path": "zalo_locked/hybrid/recall@5",
+  "dec": 3,
+  "text": "0,736"
+ },
+ {
+  "path": "zalo_locked/hybrid/recall@5_ci95/0",
+  "dec": 3,
+  "text": "0,701"
+ },
+ {
+  "path": "zalo_locked/hybrid/recall@5_ci95/1",
+  "dec": 3,
+  "text": "0,772"
+ },
+ {
+  "path": "zalo_locked/hybrid/mrr@10",
+  "dec": 3,
+  "text": "0,642"
+ },
+ {
+  "path": "zalo_locked/hybrid/n",
+  "dec": 2,
+  "text": "556"
+ },
+ {
+  "path": "zalo_locked/vector/recall@5",
+  "dec": 3,
+  "text": "0,795"
+ },
+ {
+  "path": "zalo_locked/vector/recall@5_ci95/0",
+  "dec": 3,
+  "text": "0,763"
+ },
+ {
+  "path": "zalo_locked/vector/recall@5_ci95/1",
+  "dec": 3,
+  "text": "0,827"
+ },
+ {
+  "path": "zalo_locked/vector/mrr@10",
+  "dec": 3,
+  "text": "0,682"
+ },
+ {
+  "path": "zalo_locked/vector/n",
+  "dec": 2,
+  "text": "556"
+ },
+ {
+  "path": "stage_b/completed/detect/test",
+  "dec": 2,
+  "text": "115"
+ },
+ {
+  "path": "stage_b/expected/detect/test",
+  "dec": 2,
+  "text": "115"
+ },
+ {
+  "path": "stage_b/completed/qa/test",
+  "dec": 2,
+  "text": "314"
+ },
+ {
+  "path": "stage_b/expected/qa/test",
+  "dec": 2,
+  "text": "314"
+ },
+ {
+  "path": "stage_b/detect/test/n",
+  "dec": 2,
+  "text": "115"
+ },
+ {
+  "path": "stage_b/detect/test/micro/precision",
+  "dec": 2,
+  "text": "0,72"
+ },
+ {
+  "path": "stage_b/detect/test/precision_ci95/0",
+  "dec": 2,
+  "text": "0,63"
+ },
+ {
+  "path": "stage_b/detect/test/precision_ci95/1",
+  "dec": 2,
+  "text": "0,81"
+ },
+ {
+  "path": "stage_b/detect/test/micro/recall",
+  "dec": 2,
+  "text": "0,98"
+ },
+ {
+  "path": "stage_b/detect/test/recall_ci95/0",
+  "dec": 2,
+  "text": "0,95"
+ },
+ {
+  "path": "stage_b/detect/test/recall_ci95/1",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_b/detect/test/micro/f1",
+  "dec": 2,
+  "text": "0,83"
+ },
+ {
+  "path": "stage_b/detect/test/f1_ci95/0",
+  "dec": 2,
+  "text": "0,76"
+ },
+ {
+  "path": "stage_b/detect/test/f1_ci95/1",
+  "dec": 2,
+  "text": "0,89"
+ },
+ {
+  "path": "stage_b/detect/test/macro_f1_rules",
+  "dec": 2,
+  "text": "0,83"
+ },
+ {
+  "path": "stage_b/detect/test/near_miss_fp_rate",
+  "dec": 2,
+  "text": "0,51"
+ },
+ {
+  "path": "stage_b/detect/test/near_miss_fp_rate_ci95/0",
+  "dec": 2,
+  "text": "0,39"
+ },
+ {
+  "path": "stage_b/detect/test/near_miss_fp_rate_ci95/1",
+  "dec": 2,
+  "text": "0,65"
+ },
+ {
+  "path": "stage_b/detect/test/near_miss_false_positive",
+  "dec": 2,
+  "text": "25"
+ },
+ {
+  "path": "stage_b/detect/test/near_miss_n",
+  "dec": 2,
+  "text": "49"
+ },
+ {
+  "path": "stage_b/detect/test/citation_gold_article_rate",
+  "dec": 2,
+  "text": "0,60"
+ },
+ {
+  "path": "stage_b/detect/test/halluc_not_in_db_rate",
+  "dec": 2,
+  "text": "0,00"
+ },
+ {
+  "path": "stage_b/detect/test/halluc_not_in_context_rate",
+  "dec": 2,
+  "text": "0,00"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/ban_lawsuit/n",
+  "dec": 2,
+  "text": "13"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/ban_lawsuit/precision",
+  "dec": 2,
+  "text": "0,70"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/ban_lawsuit/recall",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/ban_lawsuit/f1",
+  "dec": 2,
+  "text": "0,82"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/fine_deduct_wage/n",
+  "dec": 2,
+  "text": "13"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/fine_deduct_wage/precision",
+  "dec": 2,
+  "text": "0,88"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/fine_deduct_wage/recall",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/fine_deduct_wage/f1",
+  "dec": 2,
+  "text": "0,93"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/forfeit_wage_quit/n",
+  "dec": 2,
+  "text": "11"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/forfeit_wage_quit/precision",
+  "dec": 2,
+  "text": "0,67"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/forfeit_wage_quit/recall",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/forfeit_wage_quit/f1",
+  "dec": 2,
+  "text": "0,80"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/no_bhxh/n",
+  "dec": 2,
+  "text": "13"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/no_bhxh/precision",
+  "dec": 2,
+  "text": "0,58"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/no_bhxh/recall",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/no_bhxh/f1",
+  "dec": 2,
+  "text": "0,74"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/ot_unpaid/n",
+  "dec": 2,
+  "text": "12"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/ot_unpaid/precision",
+  "dec": 2,
+  "text": "0,64"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/ot_unpaid/recall",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/ot_unpaid/f1",
+  "dec": 2,
+  "text": "0,78"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/retain_id_papers/n",
+  "dec": 2,
+  "text": "13"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/retain_id_papers/precision",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/retain_id_papers/recall",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/retain_id_papers/f1",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/terminate_pregnancy/n",
+  "dec": 2,
+  "text": "13"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/terminate_pregnancy/precision",
+  "dec": 2,
+  "text": "0,58"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/terminate_pregnancy/recall",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/terminate_pregnancy/f1",
+  "dec": 2,
+  "text": "0,74"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/training_cost_flat/n",
+  "dec": 2,
+  "text": "12"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/training_cost_flat/precision",
+  "dec": 2,
+  "text": "0,67"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/training_cost_flat/recall",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_b/detect/test/per_rule/training_cost_flat/f1",
+  "dec": 2,
+  "text": "0,80"
+ },
+ {
+  "path": "stage_b/qa/test/n_answers",
+  "dec": 2,
+  "text": "314"
+ },
+ {
+  "path": "stage_b/qa/test/n_judged",
+  "dec": 2,
+  "text": "314"
+ },
+ {
+  "path": "stage_b/qa/test/faithfulness",
+  "dec": 2,
+  "text": "0,91"
+ },
+ {
+  "path": "stage_b/qa/test/faithfulness_ci95/0",
+  "dec": 2,
+  "text": "0,89"
+ },
+ {
+  "path": "stage_b/qa/test/faithfulness_ci95/1",
+  "dec": 2,
+  "text": "0,93"
+ },
+ {
+  "path": "stage_b/qa/test/correctness_norm",
+  "dec": 2,
+  "text": "0,72"
+ },
+ {
+  "path": "stage_b/qa/test/correctness_norm_ci95/0",
+  "dec": 2,
+  "text": "0,68"
+ },
+ {
+  "path": "stage_b/qa/test/correctness_norm_ci95/1",
+  "dec": 2,
+  "text": "0,76"
+ },
+ {
+  "path": "stage_b/qa/test/correctness_full",
+  "dec": 2,
+  "text": "0,62"
+ },
+ {
+  "path": "stage_b/qa/test/correctness_full_ci95/0",
+  "dec": 2,
+  "text": "0,56"
+ },
+ {
+  "path": "stage_b/qa/test/correctness_full_ci95/1",
+  "dec": 2,
+  "text": "0,67"
+ },
+ {
+  "path": "stage_b/qa/test/conclusion_match",
+  "dec": 2,
+  "text": "0,75"
+ },
+ {
+  "path": "stage_b/qa/test/conclusion_match_ci95/0",
+  "dec": 2,
+  "text": "0,69"
+ },
+ {
+  "path": "stage_b/qa/test/conclusion_match_ci95/1",
+  "dec": 2,
+  "text": "0,80"
+ },
+ {
+  "path": "stage_b/qa/test/citation_gold_article",
+  "dec": 2,
+  "text": "0,81"
+ },
+ {
+  "path": "stage_b/qa/test/citation_gold_article_ci95/0",
+  "dec": 2,
+  "text": "0,76"
+ },
+ {
+  "path": "stage_b/qa/test/citation_gold_article_ci95/1",
+  "dec": 2,
+  "text": "0,86"
+ },
+ {
+  "path": "stage_b/qa/test/cited_not_in_context_rate",
+  "dec": 2,
+  "text": "0,32"
+ },
+ {
+  "path": "stage_b/qa/test/source_clause_hit",
+  "dec": 2,
+  "text": "0,85"
+ },
+ {
+  "path": "stage_b/judge_calibration/n",
+  "dec": 2,
+  "text": "20"
+ },
+ {
+  "path": "stage_b/judge_calibration/agreement",
+  "dec": 2,
+  "text": "1,00"
+ },
+ {
+  "path": "stage_b/detect/test/error_layers/a",
+  "dec": 2,
+  "text": "0"
+ },
+ {
+  "path": "stage_b/detect/test/error_layers/b",
+  "dec": 2,
+  "text": "7"
+ },
+ {
+  "path": "stage_b/detect/test/error_layers/c",
+  "dec": 2,
+  "text": "19"
+ },
+ {
+  "path": "stage_b/detect/test/error_layers/d",
+  "dec": 2,
+  "text": "25"
+ },
+ {
+  "path": "stage_b/detect/test/tokens_mean",
+  "dec": 0,
+  "text": "5375"
+ },
+ {
+  "path": "stage_b/detect/test/latency_ms_p50",
+  "dec": 0,
+  "text": "6599"
+ },
+ {
+  "path": "stage_b/detect/test/latency_ms_p95",
+  "dec": 0,
+  "text": "13825"
+ },
+ {
+  "path": "stage_b/qa/test/tokens_mean",
+  "dec": 0,
+  "text": "6218"
+ },
+ {
+  "path": "stage_b/qa/test/latency_ms_p50",
+  "dec": 0,
+  "text": "7890"
+ },
+ {
+  "path": "stage_b/qa/test/latency_ms_p95",
+  "dec": 0,
+  "text": "14927"
+ }
+]

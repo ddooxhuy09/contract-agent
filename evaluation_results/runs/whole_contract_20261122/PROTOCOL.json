@@ -1,0 +1,15 @@
+{
+ "doc": "Đo trước/sau: câu hỏi toàn hợp đồng (T3) đọc mọi Điều của hợp đồng đang hỏi thay vì top-k vector.\n\n    python -m evaluation.contract_eval_v1.whole_contract_round prepare   # câu hỏi, gold, protocol (hash), nạp hợp đồng v3\n    python -m evaluation.contract_eval_v1.whole_contract_round qa        # QaPipeline thật, 2 cấu hình xen kẽ, có resume\n    python -m evaluation.contract_eval_v1.whole_contract_round judge     # judge Groq qwen, không thấy tên cấu hình\n    python -m evaluation.contract_eval_v1.whole_contract_round score\n\nProtocol (chốt trước khi chạy, ghi vào PROTOCOL.json):\n- baseline = code hiện tại nhưng tắt định tuyến (`asks_whole_contract` -> False, tức top-k vector như trước);\n  candidate = code hiện tại. Cùng tiến trình, cùng model sinh/judge/kho luật; thứ tự cấu hình đảo theo từng câu.\n- dev: 16 ca gốc injection thuộc dev v1, mỗi ca 2 câu (T3 gốc + một câu diễn đạt khác viết trước khi chạy).\n- validation: 48 ca injection_v3 (3 hợp đồng nền khác), câu T3 gốc; chưa từng dùng cho QA, không dùng để sửa code.\n- Chỉ số chính: kết luận khớp nhãn và correctness (judge 0–2) trên validation. Phụ: Điều gold có trong ngữ cảnh hợp đồng.\n- CI95 chênh lệch theo cặp, bootstrap 1000 lần theo ca gốc, seed 42. Không sửa nhãn, không chạy lại để chọn điểm.\n",
+ "created_at": "2026-11-22T20:25:28",
+ "git_head": "f2a47625ded73ea5c5755d4271a7fdaee45b86a3",
+ "code_sha256": {
+  "app/agents/qa_agent.py": "2a97690404bc3f960237fb0eb9dc4f1113318ba3421f415611312791f4caaa81",
+  "app/infrastructure/retrieval/query_rewrite.py": "9472cafe9919b0eb298b9c14b04086ea09f04bbafcbbc5347b039decec8d8100"
+ },
+ "inputs_sha256": "9a97ba975ef166ca6557f4821b7fd2a30c1037ce5660cc8c5db102f2aaac6b21",
+ "gold_sha256": "ae057a8c019cc605aa405d63460e33be7e63e7781998298244794c948c41a6cc",
+ "n": {
+  "dev": 32,
+  "validation": 48
+ }
+}

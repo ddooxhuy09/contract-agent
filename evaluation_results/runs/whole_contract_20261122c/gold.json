@@ -1,0 +1,562 @@
+{
+ "DEV-BH-05-t3": {
+  "label": "violation",
+  "clause": "4",
+  "facts": [
+   "Điều 4 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "DEV-BH-05-paraphrase": {
+  "label": "violation",
+  "clause": "4",
+  "facts": [
+   "Điều 4 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "DEV-BH-07-t3": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "DEV-BH-07-paraphrase": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "DEV-DT-04-t3": {
+  "label": "violation",
+  "clause": "6",
+  "facts": [
+   "Điều 6 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "DEV-DT-04-paraphrase": {
+  "label": "violation",
+  "clause": "6",
+  "facts": [
+   "Điều 6 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "DEV-DT-08-t3": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "DEV-DT-08-paraphrase": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "DEV-GT-03-t3": {
+  "label": "violation",
+  "clause": "5",
+  "facts": [
+   "Điều 5 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "DEV-GT-03-paraphrase": {
+  "label": "violation",
+  "clause": "5",
+  "facts": [
+   "Điều 5 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "DEV-GT-09-t3": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "DEV-GT-09-paraphrase": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "DEV-KL-02-t3": {
+  "label": "violation",
+  "clause": "7",
+  "facts": [
+   "Điều 7 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "DEV-KL-02-paraphrase": {
+  "label": "violation",
+  "clause": "7",
+  "facts": [
+   "Điều 7 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "DEV-KL-09-t3": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "DEV-KL-09-paraphrase": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "DEV-LU-03-t3": {
+  "label": "violation",
+  "clause": "8",
+  "facts": [
+   "Điều 8 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "DEV-LU-03-paraphrase": {
+  "label": "violation",
+  "clause": "8",
+  "facts": [
+   "Điều 8 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "DEV-LU-10-t3": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "DEV-LU-10-paraphrase": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "DEV-OT-05-t3": {
+  "label": "violation",
+  "clause": "2",
+  "facts": [
+   "Điều 2 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "DEV-OT-05-paraphrase": {
+  "label": "violation",
+  "clause": "2",
+  "facts": [
+   "Điều 2 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "DEV-OT-10-t3": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "DEV-OT-10-paraphrase": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "DEV-TC-04-t3": {
+  "label": "violation",
+  "clause": "10",
+  "facts": [
+   "Điều 10 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "DEV-TC-04-paraphrase": {
+  "label": "violation",
+  "clause": "10",
+  "facts": [
+   "Điều 10 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "DEV-TC-09-t3": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "DEV-TC-09-paraphrase": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "DEV-TS-04-t3": {
+  "label": "violation",
+  "clause": "9",
+  "facts": [
+   "Điều 9 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "DEV-TS-04-paraphrase": {
+  "label": "violation",
+  "clause": "9",
+  "facts": [
+   "Điều 9 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "DEV-TS-06-t3": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "DEV-TS-06-paraphrase": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-OT-Va": {
+  "label": "violation",
+  "clause": "2",
+  "facts": [
+   "Điều 2 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-OT-Vb": {
+  "label": "violation",
+  "clause": "3",
+  "facts": [
+   "Điều 3 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-OT-Vc": {
+  "label": "violation",
+  "clause": "2",
+  "facts": [
+   "Điều 2 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-OT-Ca": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-OT-Cb": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-OT-Cc": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-BH-Va": {
+  "label": "violation",
+  "clause": "5",
+  "facts": [
+   "Điều 5 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-BH-Vb": {
+  "label": "violation",
+  "clause": "4",
+  "facts": [
+   "Điều 4 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-BH-Vc": {
+  "label": "violation",
+  "clause": "5",
+  "facts": [
+   "Điều 5 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-BH-Ca": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-BH-Cb": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-BH-Cc": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-GT-Va": {
+  "label": "violation",
+  "clause": "6",
+  "facts": [
+   "Điều 6 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-GT-Vb": {
+  "label": "violation",
+  "clause": "6",
+  "facts": [
+   "Điều 6 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-GT-Vc": {
+  "label": "violation",
+  "clause": "4",
+  "facts": [
+   "Điều 4 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-GT-Ca": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-GT-Cb": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-GT-Cc": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-DT-Va": {
+  "label": "violation",
+  "clause": "7",
+  "facts": [
+   "Điều 7 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-DT-Vb": {
+  "label": "violation",
+  "clause": "7",
+  "facts": [
+   "Điều 7 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-DT-Vc": {
+  "label": "violation",
+  "clause": "7",
+  "facts": [
+   "Điều 7 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-DT-Ca": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-DT-Cb": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-DT-Cc": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-KL-Va": {
+  "label": "violation",
+  "clause": "8",
+  "facts": [
+   "Điều 8 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-KL-Vb": {
+  "label": "violation",
+  "clause": "8",
+  "facts": [
+   "Điều 8 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-KL-Vc": {
+  "label": "violation",
+  "clause": "8",
+  "facts": [
+   "Điều 8 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-KL-Ca": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-KL-Cb": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-KL-Cc": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-LU-Va": {
+  "label": "violation",
+  "clause": "10",
+  "facts": [
+   "Điều 10 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-LU-Vb": {
+  "label": "violation",
+  "clause": "9",
+  "facts": [
+   "Điều 9 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-LU-Vc": {
+  "label": "violation",
+  "clause": "10",
+  "facts": [
+   "Điều 10 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-LU-Ca": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-LU-Cb": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-LU-Cc": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-TS-Va": {
+  "label": "violation",
+  "clause": "10",
+  "facts": [
+   "Điều 10 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-TS-Vb": {
+  "label": "violation",
+  "clause": "9",
+  "facts": [
+   "Điều 9 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-TS-Vc": {
+  "label": "violation",
+  "clause": "9",
+  "facts": [
+   "Điều 9 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-TS-Ca": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-TS-Cb": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-TS-Cc": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-TC-Va": {
+  "label": "violation",
+  "clause": "11",
+  "facts": [
+   "Điều 11 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-TC-Vb": {
+  "label": "violation",
+  "clause": "11",
+  "facts": [
+   "Điều 11 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-TC-Vc": {
+  "label": "violation",
+  "clause": "11",
+  "facts": [
+   "Điều 11 trái/vi phạm quy định pháp luật lao động"
+  ]
+ },
+ "VAL-TC-Ca": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-TC-Cb": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ },
+ "VAL-TC-Cc": {
+  "label": "compliant",
+  "clause": null,
+  "facts": [
+   "không có điều khoản bơm lỗi vi phạm luật đỏ"
+  ]
+ }
+}

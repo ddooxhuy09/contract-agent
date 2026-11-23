@@ -2,6 +2,8 @@
 
     python -m evaluation.contract_eval_v1.score [--run-dir DIR]     # metrics.json, per_case.csv, KET_QUA_BO_TEST_V1.md
     python -m evaluation.contract_eval_v1.score check [--run-dir DIR]  # đối chiếu mọi số trong báo cáo với metrics.json
+    python -m evaluation.contract_eval_v1.score --run-dir DIR --report docs/.../KET_QUA_BO_TEST_V1_1.md --baseline-run DIR_V1
+        # phiên bản hệ thống mới trên cùng bộ test: báo cáo riêng + bảng so sánh, chênh lệch QA theo cặp (bootstrap)
 
 Chỉ đọc gold ở bước này. Mọi số trong báo cáo được sinh từ metrics.json / verification_stats.json qua hàm `N()`
 và được ghi vào report_numbers.json để bước `check` đối chiếu lại.
@@ -208,15 +210,19 @@ def stage_a(rd: Path, cases: dict) -> dict:
         if not rows:
             continue
         res = {}
-        crow = []
+        crow, qrow = [], []
         for r in rows:
             c = cases[r["id"]]
             if c["gold_clause_ids"] and r.get("contract_hits") is not None:
                 ranked = dedupe(str(h["clause_number"]) for h in r["contract_hits"])
                 crow.append({"id": r["id"], "split": r["split"], **hits_at(ranked, set(c["gold_clause_ids"]))})
+            if c["gold_clause_ids"] and r.get("qa_contract_hits") is not None:
+                ranked = dedupe(str(h["clause_number"]) for h in r["qa_contract_hits"])
+                qrow.append({"id": r["id"], "split": r["split"], **hits_at(ranked, set(c["gold_clause_ids"]))})
         for split in ("test", "dev"):
             res[split] = {
                 "contract_clause": mdict([x for x in crow if x["split"] == split], {f"hit@{k}": (lambda r, k=k: r[f"hit@{k}"]) for k in (1, 3, 5)}),
+                "qa_contract_clause": mdict([x for x in qrow if x["split"] == split], {f"hit@{k}": (lambda r, k=k: r[f"hit@{k}"]) for k in (1, 3, 5)}),
                 "legal_qa_path": legal_summary([x for x in legal_rows(rows, cases, "qa_legal_hits") if x["split"] == split]),
                 "legal_clause_path": legal_summary([x for x in legal_rows(rows, cases, "clause_legal_hits") if x["split"] == split]),
                 "legal_qa_path_by_template": {t: legal_summary([x for x in legal_rows(rows, cases, "qa_legal_hits")
@@ -450,7 +456,11 @@ def cmd_score(args) -> None:
                                   "models": sorted({g.get("model") for g in gen}),
                                   "judge_model": sorted({j.get("judge_model") for j in judge.values()})},
         "zalo_locked": zalo_locked(),
+        "report": report_path(args).relative_to(ROOT).as_posix(),
+        "test_lock_info": json.loads((rd / "test.lock").read_text(encoding="utf-8")) if (rd / "test.lock").exists() else None,
     }
+    if getattr(args, "baseline_run", None):
+        metrics["baseline"] = baseline(Path(args.baseline_run), qa_rows)
     (rd / "metrics.json").write_text(json.dumps(metrics, ensure_ascii=False, indent=1), encoding="utf-8")
     with (rd / "per_case.csv").open("w", encoding="utf-8-sig", newline="") as f:
         keys = sorted({k for r in det_rows + qa_rows for k in r})
@@ -461,7 +471,46 @@ def cmd_score(args) -> None:
         for r in qa_rows:
             w.writerow({"kind": "qa", **r})
     write_report(metrics, rd)
-    print(f"wrote {rd / 'metrics.json'}, per_case.csv, {REPORT.relative_to(ROOT)}")
+    print(f"wrote {rd / 'metrics.json'}, per_case.csv, {metrics['report']}")
+
+
+def report_path(args) -> Path:
+    return (ROOT / args.report).resolve() if getattr(args, "report", None) else REPORT
+
+
+def baseline(bd: Path, qa_rows: list[dict]) -> dict:
+    """Chỉ số của phiên bản trước trên cùng bộ test + chênh lệch QA theo cặp câu (bootstrap theo câu, seed 42)."""
+    bd = bd if bd.is_absolute() else ROOT / bd
+    bm = json.loads((bd / "metrics.json").read_text(encoding="utf-8"))
+    with (bd / "per_case.csv").open(encoding="utf-8-sig") as f:
+        old = {r["id"]: r for r in csv.DictReader(f) if r["kind"] == "qa" and r["split"] == "test"}
+
+    def num(v):
+        return None if v in ("", None) else float(v)
+
+    pairs = []
+    for r in qa_rows:
+        o = old.get(r["id"])
+        if r["split"] != "test" or not o or not r["judged"] or o["judged"] != "True":
+            continue
+        pairs.append({"correctness_norm": (r["correctness"], num(o["correctness"])),
+                      "conclusion_match": (r["conclusion_match"], num(o["conclusion_match"])),
+                      "faithfulness": (r["faithfulness"], num(o["faithfulness"]))})
+
+    def avg_diff(sub):
+        return mean([a - b for a, b in sub])
+
+    diff = {"n_pairs": len(pairs)}
+    for k in ("correctness_norm", "conclusion_match", "faithfulness"):
+        div = 2 if k == "correctness_norm" else 1
+        sub = [(p[k][0] / div, p[k][1] / div) for p in pairs if p[k][0] is not None and p[k][1] is not None]
+        diff[k] = {"n": len(sub), "diff": round(avg_diff(sub), 4) if sub else None, "ci95": bootstrap(sub, avg_diff),
+                   "better": sum(a > b for a, b in sub), "worse": sum(a < b for a, b in sub)}
+    lock = bm.get("test_lock_info") or {}
+    return {"run_dir": bm["run_dir"], "system_version": lock.get("system_version") or "v1",
+            "stage_a": bm["stage_a"], "stage_b": {"detect": bm["stage_b"]["detect"], "qa": bm["stage_b"]["qa"],
+                                                  "models": bm["stage_b"]["models"], "judge_model": bm["stage_b"]["judge_model"]},
+            "qa_paired_test": diff}
 
 
 def dataset_stats(cases: dict, side: dict) -> dict:
@@ -525,6 +574,63 @@ def fmt(v, dec=2) -> str:
     return str(v)
 
 
+def write_comparison(m: dict, N, w) -> None:
+    ver = (m.get("test_lock_info") or {}).get("system_version") or "mới"
+    old = m["baseline"]["system_version"]
+    w(f"## 0. So sánh {old} → {ver} (cùng bộ test đóng băng, phần test)")
+    w("")
+    w(f"Phiên bản trước: `{m['baseline']['run_dir']}`. Cùng ca, cùng nhãn, cùng model sinh và judge; chỉ code hệ thống khác. "
+      "Mỗi cột kèm CI95 riêng; chênh lệch QA tính theo cặp câu ở bảng sau.")
+    w("")
+    w(f"| Chỉ số (test) | {old} | {ver} |")
+    w("|---|---:|---:|")
+    rows = []
+    for label in ("vector", "hybrid"):
+        if label in m["stage_a"] and label in m["baseline"]["stage_a"]:
+            a = f"stage_a/{label}/test"
+            rows += [(f"Truy xuất ({label}): R@5 luật, đường QA", f"{a}/legal_qa_path/recall@5", f"{a}/legal_qa_path/recall@5_ci95"),
+                     (f"Truy xuất ({label}): MRR luật, đường QA", f"{a}/legal_qa_path/mrr", f"{a}/legal_qa_path/mrr_ci95"),
+                     (f"Truy xuất ({label}): R@5 luật, đường phân tích", f"{a}/legal_clause_path/recall@5", f"{a}/legal_clause_path/recall@5_ci95")]
+    dt, qt = "stage_b/detect/test", "stage_b/qa/test"
+    rows += [("Phát hiện rủi ro: F1 (micro)", f"{dt}/micro/f1", f"{dt}/f1_ci95"),
+             ("Phát hiện rủi ro: precision", f"{dt}/micro/precision", f"{dt}/precision_ci95"),
+             ("Phát hiện rủi ro: recall", f"{dt}/micro/recall", f"{dt}/recall_ci95"),
+             ("Phát hiện rủi ro: báo nhầm trên ca near-miss", f"{dt}/near_miss_fp_rate", f"{dt}/near_miss_fp_rate_ci95"),
+             ("Phát hiện rủi ro: trích đúng Điều gold", f"{dt}/citation_gold_article_rate", None),
+             ("QA: correctness (0–1)", f"{qt}/correctness_norm", f"{qt}/correctness_norm_ci95"),
+             ("QA: tỷ lệ đúng đủ", f"{qt}/correctness_full", f"{qt}/correctness_full_ci95"),
+             ("QA: kết luận khớp nhãn", f"{qt}/conclusion_match", f"{qt}/conclusion_match_ci95"),
+             ("QA: faithfulness", f"{qt}/faithfulness", f"{qt}/faithfulness_ci95"),
+             ("QA: trích đúng Điều gold", f"{qt}/citation_gold_article", f"{qt}/citation_gold_article_ci95"),
+             ("QA: Điều luật nêu nhưng không có trong context", f"{qt}/cited_not_in_context_rate", None),
+             ("QA: token trung bình", f"{qt}/tokens_mean", None),
+             ("QA: độ trễ p50 (ms)", f"{qt}/latency_ms_p50", None)]
+    for name, path, ci in rows:
+        dec = 0 if ("tokens" in path or "latency" in path) else 2
+        cells = [N(pre + path, dec) + (N.ci(pre + ci) if ci else "") for pre in ("baseline/", "")]
+        w(f"| {name} | {cells[0]} | {cells[1]} |")
+    w("")
+    p = "baseline/qa_paired_test"
+    w(f"Chênh lệch QA theo cặp câu ({ver} − {old}, n={N(p + '/n_pairs')}, bootstrap 1000 lần, seed 42):")
+    w("")
+    w("| Chỉ số | Chênh lệch | CI95 | Tốt hơn | Kém hơn |")
+    w("|---|---:|---:|---:|---:|")
+    for k, name in (("correctness_norm", "Correctness"), ("conclusion_match", "Kết luận khớp nhãn"), ("faithfulness", "Faithfulness")):
+        w(f"| {name} | {N(f'{p}/{k}/diff')} |{N.ci(f'{p}/{k}/ci95')} | {N(f'{p}/{k}/better')} | {N(f'{p}/{k}/worse')} |")
+    w("")
+    if old != "v1":
+        w(f"Thay đổi cách đo so với {old}: đường phân tích ở Giai đoạn A gọi đúng `risk_flagger._retrieve_legal` (gồm luật bổ sung theo "
+          "chủ đề) thay vì gọi thẳng GraphRAG; QA đo như v1.1. Code QA không đổi giữa hai bản, nên chênh lệch QA là dao động của "
+          "LLM sinh và judge; xem `evaluation/contract_eval_v1/DECISIONS.md`.")
+        w("")
+        return
+    w("Thay đổi cách đo so với v1 (sửa cho đúng hệ thống đang chạy, không đổi ca hay nhãn): đường QA ở Giai đoạn A gọi đúng nút "
+      "retrieve của QA thay vì tái dựng truy vấn cũ; `context_legal_paths` của QA lấy luật thực gửi model (sau bổ sung luật theo "
+      "chủ đề) thay vì kết quả truy xuất thô. Hai chỉ số liên quan (R@5 đường QA, «không có trong context») vì vậy phản ánh cả thay "
+      "đổi code lẫn thay đổi cách đo; xem `evaluation/contract_eval_v1/DECISIONS.md`.")
+    w("")
+
+
 def write_report(m: dict, rd: Path) -> None:
     N = Nums(m)
     d, v = "dataset", "verification"
@@ -536,6 +642,8 @@ def write_report(m: dict, rd: Path) -> None:
       "số chính lấy trên phần **test**, chạy một lần (`test.lock`). Mọi số dưới đây sinh tự động từ `metrics.json` và "
       "`verification_stats.json`, đã đối chiếu bằng `python -m evaluation.contract_eval_v1.score check`.")
     w("")
+    if "baseline" in m:
+        write_comparison(m, N, w)
     w("## 1. Quy mô bộ test")
     w("")
     w(f"- Tổng {N(d + '/n_cases')} ca từ {N(v + '/n_base_units')} ca gốc; quarantine {N(d + '/n_quarantine')} ca; "
@@ -584,6 +692,10 @@ def write_report(m: dict, rd: Path) -> None:
         w("")
         w(f"- Điều khoản hợp đồng liên quan câu hỏi (n={N(b + '/contract_clause/n')}): Hit@1 {N(b + '/contract_clause/hit@1')}{N.ci(b + '/contract_clause/hit@1_ci95')}, "
           f"Hit@3 {N(b + '/contract_clause/hit@3')}, Hit@5 {N(b + '/contract_clause/hit@5')}{N.ci(b + '/contract_clause/hit@5_ci95')}.")
+        if (Nums(m).get(b + "/qa_contract_clause/n") or 0) > 0:
+            w(f"- Điều khoản hợp đồng QA thực đưa vào ngữ cảnh (nút retrieve, ưu tiên Điều được nêu trong câu hỏi; n={N(b + '/qa_contract_clause/n')}): "
+              f"Hit@1 {N(b + '/qa_contract_clause/hit@1')}{N.ci(b + '/qa_contract_clause/hit@1_ci95')}, "
+              f"Hit@5 {N(b + '/qa_contract_clause/hit@5')}{N.ci(b + '/qa_contract_clause/hit@5_ci95')}.")
         w("")
         w("| Điều luật (khớp mức Điều) | n | R@1 | R@3 | R@5 | R@10 | P@5 | MRR | nDCG@10 | Hit@5 | R@5 mức Khoản |")
         w("|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|")
@@ -596,8 +708,12 @@ def write_report(m: dict, rd: Path) -> None:
             w(f"| ↳ đường QA, câu {tpl} | {N(p + '/n')} | {N(p + '/recall@1')} | {N(p + '/recall@3')} | {N(p + '/recall@5')} | {N(p + '/recall@10')} | "
               f"{N(p + '/precision@5')} | {N(p + '/mrr')} | {N(p + '/ndcg@10')} | {N(p + '/hit@5')} | {N(p + '/clause_recall@5')} |")
         w("")
-        w("Đường QA truy xuất luật chỉ từ câu hỏi (ngữ cảnh hợp đồng đi riêng), nên câu T1/T3 chỉ nêu số Điều hợp đồng gần như không mang thông tin chủ đề; "
-          "đường phân tích truy xuất từ chính nội dung điều khoản.")
+        if (Nums(m).get(b + "/qa_contract_clause/n") or 0) > 0:
+            w("Đường QA truy xuất luật từ câu hỏi đã gắn nội dung Điều hợp đồng được nêu, cộng luật bổ sung theo chủ đề; câu T3 không nêu Điều cụ thể "
+              "nên vẫn chỉ có câu hỏi chung chung để truy xuất. Đường phân tích truy xuất từ chính nội dung điều khoản.")
+        else:
+            w("Đường QA truy xuất luật chỉ từ câu hỏi (ngữ cảnh hợp đồng đi riêng), nên câu T1/T3 chỉ nêu số Điều hợp đồng gần như không mang thông tin chủ đề; "
+              "đường phân tích truy xuất từ chính nội dung điều khoản.")
         w("")
         t = f"stage_a/{label}/temporal_v04"
         tv = m["stage_a"][label]["temporal_v04"]
@@ -696,7 +812,7 @@ def write_report(m: dict, rd: Path) -> None:
         w(cmd)
     w("```")
     w("Trên host cần `DATABASE_URL=postgresql://contractlens:contractlens@127.0.0.1:5433/contractlens`.")
-    REPORT.write_text("\n".join(L) + "\n", encoding="utf-8")
+    (ROOT / m.get("report", REPORT.relative_to(ROOT).as_posix())).write_text("\n".join(L) + "\n", encoding="utf-8")
     (rd / "report_numbers.json").write_text(json.dumps(N.used, ensure_ascii=False, indent=1), encoding="utf-8")
 
 
@@ -705,13 +821,13 @@ def cmd_check(args) -> None:
     rd = run_dir(args.run_dir)
     m = json.loads((rd / "metrics.json").read_text(encoding="utf-8"))
     used = json.loads((rd / "report_numbers.json").read_text(encoding="utf-8"))
-    text = REPORT.read_text(encoding="utf-8")
+    text = (ROOT / m.get("report", REPORT.relative_to(ROOT).as_posix())).read_text(encoding="utf-8")
     N = Nums(m)
     bad = [u for u in used if fmt(N.get(u["path"]), u["dec"]) != u["text"] or u["text"] not in text]
     # số trong bảng mà không đến từ metrics
     known = {u["text"] for u in used}
     stray = [x for line in text.splitlines() if line.startswith("|")
-             for x in re.findall(r"(?<![\w@.])\d+(?:,\d+)?(?![\w@])", line) if x not in known and not re.fullmatch(r"\d", x)]
+             for x in re.findall(r"(?<![\w@.])-?\d+(?:,\d+)?(?![\w@])", line) if x not in known and not re.fullmatch(r"\d", x)]
     print(f"checked {len(used)} numbers; mismatches {len(bad)}; stray table numbers {len(stray)}")
     if bad or stray:
         for u in bad[:20]:
@@ -725,6 +841,8 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("cmd", nargs="?", default="score", choices=["score", "check"])
     ap.add_argument("--run-dir")
+    ap.add_argument("--report", help="đường dẫn báo cáo (tương đối ROOT); mặc định KET_QUA_BO_TEST_V1.md")
+    ap.add_argument("--baseline-run", help="thư mục run của phiên bản trước để so sánh trên cùng bộ test")
     args = ap.parse_args()
     (cmd_check if args.cmd == "check" else cmd_score)(args)
 

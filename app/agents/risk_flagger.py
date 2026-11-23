@@ -2,6 +2,7 @@ from typing import Any
 import re
 
 from app.agents.json_parsing import parse_json_object
+from app.agents.qa_evidence import augment_legal_evidence
 from app.agents.labor_red_flags import revised_clause_problems
 from app.agents.legal_citations import (
     citations_to_legal_basis_line,
@@ -90,7 +91,26 @@ def _retrieve_legal(
     contract_type: str | None,
     as_of_date: str | None,
 ):
-    """Return ``(legal_docs, legal_context)``: GraphRAG when bound, else plain vector search."""
+    """Return ``(legal_docs, legal_context)``: GraphRAG when bound, else plain vector search.
+
+    Labour clauses on a known topic get the exact BLLĐ 2019 Điều (same index as QA) in place of vector hits.
+    """
+    legal_docs, legal_context = _retrieve_legal_raw(clause, scope_summary, contract_type, as_of_date)
+    anchored = augment_legal_evidence(
+        legal_docs, f"{clause.title or ''}\n{scope_summary}", as_of_date,
+        contract_context=f"{contract_type or ''}\n{scope_summary}",
+    )
+    if anchored is legal_docs:
+        return legal_docs, legal_context
+    return anchored, format_legal_context(anchored, max_chars=7000)
+
+
+def _retrieve_legal_raw(
+    clause: Clause,
+    scope_summary: str,
+    contract_type: str | None,
+    as_of_date: str | None,
+):
     rag = get_graph_rag()
     if rag is None:
         legal_docs = retrieve_legal(
@@ -168,6 +188,7 @@ def _risk_from_judgement(
     legal_docs: list,
     scope_summary: str,
     as_of_date: str | None,
+    finding_types: bool = False,
 ) -> RiskItem | None:
     """Turn the parsed LLM judgement into a RiskItem (None when the clause is fine)."""
     severity = result["severity"]
@@ -175,7 +196,7 @@ def _risk_from_judgement(
     if severity == "ok" and not issue:
         return None
     loai = result.get("loai")
-    finding_type = loai if get_settings().judge_finding_types and isinstance(loai, str) else None
+    finding_type = loai if finding_types and isinstance(loai, str) else None
     if finding_type and finding_type != "vi_pham" and severity in ("critical", "warning"):
         # Missing content / drafting advice is shown, but not counted as a legal risk.
         severity = "info"
@@ -286,8 +307,13 @@ def evaluate_clause(
         clause_summary=(clause.summary or "")[:800],
         legal_context=legal_context,
     )
-    if get_settings().judge_finding_types:
-        prompt += "\n\n" + CLAUSE_RISK_FINDING_TYPES
+    # With the governing BLLĐ Điều in context, "no basis found" is reliable enough to split violations from
+    # missing-content advice; without it the split would also demote real violations whose law was not retrieved.
+    finding_types = get_settings().judge_finding_types or any(
+        (d.metadata or {}).get("role") == "topic_anchor" for d in legal_docs
+    )
+    if finding_types:
+        prompt +="\n\n" + CLAUSE_RISK_FINDING_TYPES
     if rule_hint:
         prompt += "\n\n" + CLAUSE_RISK_RULE_HINT.format(rules=rule_hint)
 
@@ -299,6 +325,7 @@ def evaluate_clause(
         legal_docs=legal_docs,
         scope_summary=scope_summary,
         as_of_date=as_of_date,
+        finding_types=finding_types,
     )
 
 
