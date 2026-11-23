@@ -288,7 +288,7 @@ thì đang thiếu `muc_luc.json` (B1).
 |---|---|---|
 | B1 | `flatten_luoc_do` đọc được cả bucket dạng list (`scripts/crawl_vbpl`) lẫn dạng `{count, documents}`. `muc_luc.json` thành **tùy chọn**: nếu thiếu thì dựng cây Phần/Chương/Mục/Điều/Khoản từ `van_ban.md` (dựa vào `## Điều …` + `<!-- article_id -->` và `<!-- clause_id -->`, bỏ qua tiêu đề Công báo lặp lại kiểu "Phần thứ hai"). Không có Điểm nên Khoản là đơn vị chunk nhỏ nhất | `luoc_do_flatten.py`, `muc_luc_derive.py` (mới), `discover.py`, `assemble.py`, `clause_amendments.py` |
 | B3, B4 | **Một root duy nhất `sanitize(doc_id)`** cho cây 7 bảng, `legal_documents.path`, `legal_embeddings.path` và `legal_path_relations` (kể cả clause_amendments: nguồn không có `documentId` thì bỏ qua và ghi cảnh báo) | `assemble.py`, `legal_repository.py`, `clause_amendments.py` |
-| B3, B4 (DB đang có) | `scripts/migrate_path_root_doc_id.py`: đổi root theo chuỗi FK (không dựa vào `doc_num`), chạy trong một transaction, mặc định dry-run. In danh sách văn bản đã mất cây vì trùng số hiệu, cần nạp lại | mới |
+| B3, B4 (DB đang có) | `scripts/migrate_path_root_doc_id.py`, chạy trong một transaction, mặc định dry-run. Tự nhận 2 layout: **legacy** (DB thật: mọi bảng cây có `doc_id`, `UNIQUE(doc_id, path)`, FK cha nullable, nên mọi `ON CONFLICT (path)` của code hiện tại đều lỗi) thì chuyển 7 bảng sang schema `legacy_hierarchy`, dựng lại bảng theo `schema.sql` rồi nạp lại cây từng văn bản qua `upsert_nodes` (cùng cấu trúc với nạp mới), chép lại `content`/`created_at`. Layout `schema.sql` thì đổi root theo chuỗi FK. Cả hai đều tính lại `is_effective` và in danh sách văn bản cần nạp lại | mới |
 | B2 | Quy tắc tìm được: `is_effective = status NOT IN (2, 3)`, áp dụng cả lúc nạp lẫn trong trigger `trg_hier_emb_eff`. Status 4 không còn làm ẩn cả văn bản. `refresh_status_flags()` thêm bước 6 đồng bộ các chunk nằm ngoài Điều (preamble/appendix/sign) theo status văn bản. Chunk nằm dưới Điều thì đồng bộ qua `refresh_hierarchy_status_flags()` + trigger | `legal_ingest.py`, `schema.sql` |
 | B2 (lỗi phát hiện khi test) | `trg_hier_emb_eff` trước khai báo `AFTER UPDATE OF status_flag`, nên không chạy khi status bị trigger ngày tháng đổi. Nay là `AFTER INSERT OR UPDATE` (hàm tự bỏ qua khi status/path không đổi) | `schema.sql` |
 | H1 | `transaction()` mới trong `connection.py`: mọi `get_db()` bên trong dùng chung một connection và commit một lần. `ingest_legal_corpus` bọc mỗi văn bản trong một transaction; embed chạy trước mọi lệnh ghi. Nhờ vậy "đã có chunk trong DB" nghĩa là văn bản đã nạp đủ | `connection.py`, `legal_ingest.py`, `ingest_legal_corpus.py` |
@@ -308,12 +308,19 @@ Bản sao `schemas/empty/contractlens_postgres.sql` đã chép lại, giống h�
   6. Lỗi giữa chừng thì không còn dòng nào.
   7. Văn bản status 3 tới ngày có hiệu lực thì sau refresh tìm được cả chunk thân lẫn preamble/appendix.
   8. Hai văn bản cùng số hiệu "Không số" mỗi bên giữ 2 Điều riêng.
-- **Chưa chạy trên DB thật** (`contractlens-postgres-1` không start được vì port 5433 bị chiếm).
+- **Bản sao đầy đủ của DB thật** (2026-11-23; container tạm, DB thật không bị đụng tới). `--apply` mất 18.097 s (~5 giờ), phần lớn là dựng lại cây của 20.776 văn bản:
+  - Phần/Chương/Mục/Tiểu mục/Điều: không mất dòng nào (262.400/262.400 Điều). Thêm 5.825 scaffold "Không có" cho các FK cha trước đây là NULL.
+  - Khoản: bỏ 26.032, đúng bằng số Khoản không có Điều cha. Điểm: bỏ 26.407 = 21.573 (Khoản cha bị bỏ) + 3.099 (cha không có trong DB) + 1.735 (Điểm nằm thẳng dưới Điều, schema không có chỗ). 1.735 Điểm này vẫn còn chunk riêng nên vẫn tìm được. Không có dòng nào bị mất khi cha còn tồn tại. Nạp mới cũng cho đúng kết quả này.
+  - Mọi node/chunk đều có root `sanitize(doc_id)`. Danh sách cần nạp lại: 0.
+  - `is_effective = true`: 441.531 → 661.549. Phần lớn là 207k chunk của văn bản status 4 (lỗi B2, B3). Chunk dưới Điều theo status của node sâu nhất. Khoảng 15k chunk của văn bản status 2/3 có Điều status 0/1 thì được hiện (dữ liệu cũ vốn vậy).
+  - Sau migration: nạp văn bản mới, nạp lại (xóa phần cũ) và nạp lại một văn bản thật (179273) từ chính dữ liệu của nó đều giữ nguyên số dòng, status và chunk. `refresh_status_flags()` đổi 23.567 văn bản status 0 theo nhãn/ngày. `refresh_hierarchy_status_flags()` chạy 55 s.
+- Code hiện tại ghi `content = 'Không có'` cho node cây (nội dung nằm trong chunk). Migration giữ `content` cũ, nhưng nạp lại một văn bản sẽ xóa content đó. Không có code nào trong `app/` đọc cột này.
+- DB thật vẫn **chưa chạy** (`contractlens-postgres-1` không start được vì port 5433 bị chiếm).
 
 ### Quy trình nạp lô mới
-1. Backup DB (`scripts/restore_db.*` hoặc `pg_dump`).
-2. `python -m scripts.migrate_path_root_doc_id`: đọc kết quả dry-run, đặc biệt dòng "need re-ingest".
-3. `python -m scripts.migrate_path_root_doc_id --apply`: áp `schema.sql` mới rồi đổi root. Việc đổi root kích hoạt trigger, nên `is_effective` của chunk dưới Điều được tính lại theo quy tắc mới (status 4 thành tìm được). `scripts/fix_labor_effectivity.py` vì thế không còn cần thiết.
+1. Dừng API/worker (migration giữ khóa trên các bảng cây suốt quá trình), rồi backup DB (`scripts/restore_db.*` hoặc `pg_dump`).
+2. `python -m scripts.migrate_path_root_doc_id`: dry-run, chạy hết rồi rollback (với DB legacy cũng mất ~5 giờ). Mọi dòng `CHECK ...` phải bằng 0. Đọc dòng "need re-ingest".
+3. `python -m scripts.migrate_path_root_doc_id --apply`: áp `schema.sql` mới, dựng lại hoặc đổi root cây, tính lại `is_effective` (status 4 thành tìm được). `scripts/fix_labor_effectivity.py` vì thế không còn cần thiết. Kiểm tra xong thì `DROP SCHEMA legacy_hierarchy CASCADE;`.
 4. Nạp lại các văn bản "need re-ingest": chạy `ingest_legal_corpus PATH --force` trên đúng các thư mục đó.
 5. `python -m scripts.ingest_legal_corpus PATH --dry-run`: số thư mục tìm thấy phải bằng số thư mục crawl.
 6. `python -m scripts.ingest_legal_corpus PATH`.
