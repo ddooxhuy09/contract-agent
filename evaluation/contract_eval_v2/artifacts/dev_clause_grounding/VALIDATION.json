@@ -1,0 +1,28 @@
+{
+  "pytest_nonintegration": {
+    "passed": 372,
+    "skipped": 1,
+    "runtime": "project Linux container, LLM keys blank"
+  },
+  "changed_files_ruff_F": "passed",
+  "repository_ruff_F": "pre-existing F401 evaluation/check_chapter_numbers.py:15",
+  "v1_hashes": {
+    "cases.jsonl": true,
+    "gold.jsonl": true,
+    "inputs_no_gold.jsonl": true,
+    "split.json": true,
+    "quarantine.jsonl": true,
+    "verification.jsonl": true
+  },
+  "evaluated_code_matches_workspace": {
+    "app/agents/qa_agent.py": true,
+    "app/infrastructure/retrieval/query_rewrite.py": true,
+    "evaluation/contract_eval_v2/experiment.py": true
+  },
+  "unique_output_rows": {
+    "retrieval": 240,
+    "qa": 64,
+    "judge": 64
+  },
+  "live_integration_and_frontend": "not run; frontend not changed by this task"
+}

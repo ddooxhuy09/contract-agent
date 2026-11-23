@@ -1,0 +1,146 @@
+[
+  {
+    "id": "NEW-01",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "NEW-01",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 689.5
+  },
+  {
+    "id": "NEW-01",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "NEW-01",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 667.5
+  },
+  {
+    "id": "NEW-02",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "NEW-02",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 655.0
+  },
+  {
+    "id": "NEW-02",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "NEW-02",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 626.5
+  },
+  {
+    "id": "NEW-03",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "NEW-03",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 703.7
+  },
+  {
+    "id": "NEW-03",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "NEW-03",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 687.7
+  },
+  {
+    "id": "NEW-04",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "NEW-04",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 610.9
+  },
+  {
+    "id": "NEW-04",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "NEW-04",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 577.6
+  },
+  {
+    "id": "NEW-05",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "NEW-05",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 706.1
+  },
+  {
+    "id": "NEW-05",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "NEW-05",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 608.9
+  },
+  {
+    "id": "NEW-06",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "NEW-06",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 675.4
+  },
+  {
+    "id": "NEW-06",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "NEW-06",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 578.0
+  },
+  {
+    "id": "NEW-07",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "NEW-07",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 666.0
+  },
+  {
+    "id": "NEW-07",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "NEW-07",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 680.8
+  },
+  {
+    "id": "NEW-08",
+    "system": "grounded",
+    "variant": "T1",
+    "base_case_id": "NEW-08",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 664.9
+  },
+  {
+    "id": "NEW-08",
+    "system": "baseline",
+    "variant": "T1",
+    "base_case_id": "NEW-08",
+    "recall@5": 1.0,
+    "contract_hit": true,
+    "ms": 627.1
+  }
+]

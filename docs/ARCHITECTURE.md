@@ -8,10 +8,10 @@ Tài liệu này mô tả kiến trúc **hiện có** của mã nguồn. Sơ đ�
 |---|---|---|
 | API | FastAPI (`app/main.py`, `app/api/routes.py`), prefix `/api/v1` | Auth JWT, upload, phân tích, chat (JSON + SSE) |
 | Agents | LangGraph (`app/agents/`) | Đồ thị phân tích hợp đồng và đồ thị hỏi đáp |
-| Retrieval | Postgres/pgvector + Neo4j (`app/infrastructure/retrieval/`, `vector/`) | Tìm điều luật theo vector, mở rộng theo cây Phần→Điểm |
+| Retrieval | Postgres/pgvector + ltree (`app/infrastructure/retrieval/`, `vector/`) | Tìm điều luật theo vector, mở rộng theo cây Phần→Điểm và quan hệ văn bản |
 | LLM | Gemini qua LangChain (`agents/llm_client.py`, `infrastructure/llm/gemini_chat.py`) | Trích xuất điều khoản, đánh giá rủi ro, trả lời |
 | Embedding | `BAAI/bge-m3` (`infrastructure/embeddings/hf_embedder.py`) | Vector hóa hợp đồng và văn bản luật |
-| Lưu trữ | Postgres (`schema.sql`), Neo4j (`schema.cypher`), file cục bộ (`data/uploads`) | Dữ liệu người dùng, hợp đồng, corpus pháp luật, checkpoint LangGraph |
+| Lưu trữ | Postgres (`schema.sql`), file cục bộ (`data/uploads`) | Dữ liệu người dùng, hợp đồng, corpus pháp luật, checkpoint LangGraph |
 | Frontend | React + Vite (`frontend/`) | Giao diện; build ra `frontend/dist`, API mount tĩnh nếu thư mục tồn tại |
 
 ## Phân lớp
@@ -24,7 +24,7 @@ api  ──►  application/use_cases  ──►  domain (entities, ports, error
 
 - `domain/`: entity, `ports` (Protocol cho repository và service), `errors`. Docstring ghi rõ không import framework.
 - `application/use_cases/`: `auth.py`, `contracts.py`, `legal_ingest.py`. Nhận port qua constructor.
-- `infrastructure/`: adapter Postgres (`db/`), Neo4j, vector search, embedding, Gemini, JWT/bcrypt, lưu file, `legal_corpus/` (parse folder crawl), `retrieval/`, `agents/pipelines.py`.
+- `infrastructure/`: adapter Postgres (`db/`), vector search, embedding, Gemini, JWT/bcrypt, lưu file, `legal_corpus/` (parse folder crawl), `retrieval/`, `agents/pipelines.py`.
 - `infrastructure/container.py`: `AppContainer` + `build_container()` dựng adapter; `lifespan` trong `app/main.py` gán `analyze_pipeline`, `qa_pipeline`, gọi `bind_retrieval(...)`.
 - `agents/`: logic LangGraph và các bộ kiểm tra xác định (red-flag lao động, đủ nội dung Điều 21, trích dẫn phần căn cứ, hiệu lực văn bản).
 - `schemas/contract.py`: Pydantic cho request/response và `ContractAnalysis`, `RiskItem`, `LegalCitation`.
@@ -37,7 +37,7 @@ api  ──►  application/use_cases  ──►  domain (entities, ports, error
 
 ## Vòng đời request
 
-1. `app/main.py` khởi động: kiểm tra `JWT_SECRET`, `build_container()`, áp `schema.sql` (`apply_postgres_schema`) và `graph.ensure_schema()` đọc `schema.cypher` (lỗi chỉ cảnh báo), tạo pipeline, `bind_retrieval`, `init_checkpointer`, làm nóng embedding.
+1. `app/main.py` khởi động: kiểm tra `JWT_SECRET`, `build_container()`, áp `schema.sql` (`apply_postgres_schema`, lỗi chỉ cảnh báo), tạo pipeline, `bind_retrieval`, `init_checkpointer`, làm nóng embedding.
 2. Route nhận request, `get_current_user_id` giải JWT (`api/deps.py`), `get_container_dep` lấy `AppContainer`.
 3. Route tạo use case từ container và gọi `execute`. Use case kiểm tra quyền sở hữu hợp đồng bằng `contracts.get_owned`, rồi gọi repository hoặc pipeline.
 4. Tại route: `NotFoundError` → 404, `AuthError` (login) → 401, lỗi đăng ký trùng và lỗi file upload không hợp lệ → 400; lỗi khác qua `_http_error` (lỗi mất kết nối DB → 503, còn lại không lộ chi tiết driver).
@@ -57,8 +57,8 @@ Sơ đồ: [`diagrams/analysis-workflow.md`](diagrams/analysis-workflow.md), [`d
 
 ## Luồng dữ liệu
 
-- Ghi: file upload → `data/uploads`; chunk và vector hợp đồng → Postgres; corpus pháp luật → Postgres (`legal_documents`, hierarchy, `legal_embeddings`, quan hệ) và cây Neo4j qua `IngestLegalDocument`.
-- Đọc: vector search (Postgres, RRF ở `vector/rrf.py`) lấy seed; với câu hỏi về lao động còn tìm riêng trong Bộ luật Lao động 2019 và Nghị định 145/2020 (`RAG_LABOR_SCOPE`, role `labor_scope`) → mở rộng cây qua Neo4j và/hoặc ltree Postgres (`LEGAL_EXPAND_BACKEND`) → hydrate theo path (`legal_graph_rag.py`).
+- Ghi: file upload → `data/uploads`; chunk và vector hợp đồng → Postgres; corpus pháp luật → Postgres (`legal_documents`, hierarchy, `legal_embeddings`, quan hệ) qua `IngestLegalDocument`.
+- Đọc: vector search (Postgres, RRF ở `vector/rrf.py`) lấy seed; với câu hỏi về lao động còn tìm riêng trong Bộ luật Lao động 2019 và Nghị định 145/2020 (`RAG_LABOR_SCOPE`, role `labor_scope`) → mở rộng qua ltree (anh em, tổ tiên, khoản cha) và bảng `legal_document_relations` (văn bản liên quan, văn bản bãi bỏ/thay thế), `PgLegalChunkRepository.expand_paths` → hydrate theo path (`legal_graph_rag.py`).
 - Hiệu lực: `agents/effectivity.py` dùng `status_flag` 0..5 cùng `eff_from`/`eff_to` để quyết định có được trích dẫn theo ngày hợp đồng hay không.
 
 Sơ đồ: [`diagrams/system-architecture.md`](diagrams/system-architecture.md), [`diagrams/module-dependencies.md`](diagrams/module-dependencies.md).
@@ -70,5 +70,5 @@ Gemini (cần `GEMINI_API_KEY`), Hugging Face (tải model embedding, tùy chọ
 ## Quyết định và đánh đổi
 
 - Port/adapter ở `domain/ports` cho phép test use case bằng fake; đổi lại `agents/` vẫn lấy repository qua service-locator `retrieval/context.py` thay vì nhận qua constructor (chọn cách này để tránh import vòng và để script/evaluation dùng được mà không phải truyền tham số).
-- Retrieval đa nguồn (Postgres + Neo4j) tăng độ phủ nhưng thêm hai hệ phụ thuộc runtime; Neo4j hoặc schema lỗi chỉ ghi cảnh báo lúc khởi động, nên API lên được dù thiếu dịch vụ, và lỗi lộ ra ở request đầu dùng đến nó.
+- Toàn bộ retrieval (vector, FTS, mở rộng cây và quan hệ văn bản) nằm trong một Postgres: một phụ thuộc runtime, không phải đồng bộ hai kho. Neo4j từng được dùng cho bước mở rộng và đã gỡ ngày 15/11/2026 sau khi benchmark cho thấy ltree cho kết quả bằng hoặc tốt hơn (`docs/NHAT_KY_THAY_DOI.md`). Schema lỗi chỉ ghi cảnh báo lúc khởi động, nên API lên được và lỗi lộ ra ở request đầu dùng đến nó.
 - Bước xác định (`deterministic`) chạy trước LLM và có thể bỏ qua LLM cho điều khoản đã có red-flag (`skip_llm_clauses`) để giảm chi phí và tăng tính lặp lại.

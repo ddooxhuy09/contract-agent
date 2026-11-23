@@ -1,0 +1,52 @@
+{
+  "source_kind": "user_pdf_visually_reviewed_anonymized_excerpts",
+  "scope": "supplemental_diagnostic_not_part_of_historical_314",
+  "raw_pdf_outbound": false,
+  "human_legal_signoff": false,
+  "as_of_date": "2024-12-25",
+  "cases": [
+    {
+      "id": "REAL-LEAVE-ORIGINAL",
+      "kind": "anonymized_excerpt_normalized_punctuation",
+      "text": "Điều 3. Người lao động đã ký HĐLĐ chính thức và có thâm niên công tác 12 tháng thì sẽ được nghỉ phép năm có hưởng lương (01 ngày phép/01 tháng, 12 ngày phép/01 năm); trường hợp có thâm niên làm việc dưới 12 tháng thì thời gian nghỉ hằng năm được tính theo tỷ lệ tương ứng với số thời gian làm việc.",
+      "note": "Đã phóng to trang 2 xác nhận có tính phép theo tỷ lệ; chuẩn hóa dấu câu, không sửa quyền phép năm.",
+      "expected": "Tính phép năm theo tỷ lệ cho thời gian làm dưới 12 tháng; đánh giá có điều kiện theo Điều 113."
+    },
+    {
+      "id": "REAL-LEAVE-MUTATED",
+      "kind": "synthetic_mutation_from_real_topic",
+      "text": "Điều 3. Người lao động làm việc dưới 12 tháng không có bất kỳ quyền nghỉ hằng năm có hưởng lương nào; mọi ngày nghỉ phép đều phải không hưởng lương.",
+      "expected": "Nhận diện việc tước phép hằng năm tính theo tỷ lệ; đối chiếu khoản 2 Điều 113."
+    },
+    {
+      "id": "REAL-TRAINING-ORIGINAL",
+      "kind": "anonymized_excerpt_normalized_punctuation",
+      "text": "Điều 4. Nếu sau khi kết thúc khóa đào tạo mà nhân viên không tiếp tục hợp tác với Công ty thì nhân viên phải hoàn trả lại 100% phí đào tạo và các khoản chế độ đã được nhận trong thời gian đào tạo.",
+      "expected": "Không đọc 100% thành gấp 10 lần; không tự kết luận mọi hoàn trả đều trái luật. Nêu cần xem hợp đồng đào tạo, phạm vi chi phí có chứng từ và cam kết làm việc theo Điều 62."
+    },
+    {
+      "id": "REAL-TRAINING-MUTATED",
+      "kind": "synthetic_mutation_from_real_topic",
+      "text": "Điều 4. Nếu sau đào tạo người lao động không tiếp tục làm việc thì phải trả gấp 10 lần mọi chi phí đào tạo công ty tự kê, kể cả khoản không có chứng từ.",
+      "expected": "Nêu rủi ro phạt vượt chi phí thực tế có chứng từ; kiểm Điều 62 và hợp đồng đào tạo; không tuyên mọi nghĩa vụ hoàn trả đều bị cấm."
+    },
+    {
+      "id": "REAL-TRAINING-CORRECTED",
+      "kind": "synthetic_control_from_real_topic",
+      "text": "Điều 4. Các bên ký hợp đồng đào tạo riêng ghi thời gian cam kết. Khi phát sinh trách nhiệm hoàn trả theo thỏa thuận hợp pháp, khoản hoàn trả không vượt chi phí thực tế có chứng từ hợp lệ và được giảm theo thời gian đã thực hiện cam kết.",
+      "expected": "Không kết luận trái luật chỉ vì có nghĩa vụ hoàn trả; kiểm điều kiện và chứng từ theo Điều 62."
+    },
+    {
+      "id": "REAL-HOURS-CONTROL",
+      "kind": "anonymized_excerpt",
+      "text": "Điều 3. Thời giờ làm việc: 08 giờ/ngày, 48 giờ/tuần. Nghỉ hằng tuần: ngày chủ nhật. Buổi sáng: 07 giờ đến 11 giờ. Buổi chiều: 13 giờ đến 17 giờ.",
+      "expected": "Không báo vượt giới hạn thời giờ bình thường chỉ từ 08 giờ/ngày và 48 giờ/tuần; phạm vi không bao gồm thời gian làm thêm chưa nêu."
+    },
+    {
+      "id": "REAL-HOURS-MUTATED",
+      "kind": "synthetic_mutation_from_real_topic",
+      "text": "Điều 3. Thời giờ làm việc bình thường bắt buộc: 08 giờ/ngày, 07 ngày/tuần, 56 giờ/tuần; không có ngày nghỉ hằng tuần, không áp dụng bất kỳ ngoại lệ ngành nghề nào.",
+      "expected": "Nhận diện vượt giới hạn thời giờ bình thường và thiếu nghỉ hằng tuần; phân biệt với làm thêm hợp pháp."
+    }
+  ]
+}

@@ -10,10 +10,10 @@ Tra cứu nhanh "sửa gì ở đâu". Tên symbol lấy từ mã hiện tại; 
 | `frontend/` | React/Vite (`src/App.jsx`, `api.js`, `AuthContext.jsx`, `components/`, `lib/`, `content/`) |
 | `scripts/` | Nạp corpus, backfill, restore DB, audit, crawl (`crawl_vbpl/`) |
 | `tests/` | `unit/`, `integration/test_api.py`, `evaluation/`, `fixtures/` |
-| `evaluation/` | Mã benchmark (đề bài ở `benchmark/v04/`), gold set theo điều khoản (`gold/`) và `run_eval.py`; xem `evaluation/README.md` |
+| `evaluation/` | Benchmark (`benchmark/v04/`), gold set (`gold/`), v1 đóng băng (`contract_eval_v1/`), thí nghiệm dev đối chứng và audit (`contract_eval_v2/`); xem `evaluation/README.md` |
 | `evaluation_results/`, `data/` | Kết quả và dữ liệu cục bộ; không đọc/index |
-| `schema.sql`, `schema.cypher` | Schema Postgres, Neo4j (nạp lúc khởi động) |
-| `docker-compose.yml`, `Dockerfile`, `docker/` | Triển khai (postgres, neo4j, api, frontend) |
+| `schema.sql` | Schema Postgres (nạp lúc khởi động) |
+| `docker-compose.yml`, `Dockerfile`, `docker/` | Triển khai (postgres, api, frontend) |
 
 ## `app/` theo lớp
 
@@ -35,7 +35,8 @@ Tra cứu nhanh "sửa gì ở đâu". Tên symbol lấy từ mã hiện tại; 
 | File | Việc |
 |---|---|
 | `workflow.py` | Đồ thị phân tích: `run_analysis_workflow`, `run_analysis_workflow_review`, `resume_analysis_review`; node `_supervisor_node`, `_extract_node`, `_deterministic_node`, `_judge_clause_node`, `_review_node` |
-| `qa_agent.py` | Đồ thị hỏi đáp: `answer_question`, `stream_answer_events`, `get_state_history`, `rewind_state`, `get_conversation_history` |
+| `qa_agent.py` | Đồ thị hỏi đáp: `answer_question`, `stream_answer_events`, `get_state_history`, `rewind_state`, `get_conversation_history`; `_retrieve_contract_docs` lấy Điều được hỏi và bối cảnh; `_review_qa_result` kiểm chứng bản nháp một lần khi có căn cứ chính xác |
+| `qa_evidence.py` | `topic_articles`, `augment_legal_evidence`: chọn Điều luật theo chủ đề lao động, lấy văn bản thật qua repository, ghép đúng Điều và đặt căn cứ chính xác trước vector; không quyết định nhãn vi phạm |
 | `clause_parser.py` | `parse_contract` (LLM trích xuất điều khoản) |
 | `risk_flagger.py` | `evaluate_clause` (LLM + RAG cho một điều khoản) |
 | `labor_red_flags.py` | Pattern xác định cho điều khoản trái luật lao động: `check_labor_red_flags`, `skip_llm_clause_numbers` |
@@ -53,10 +54,9 @@ Tra cứu nhanh "sửa gì ở đâu". Tên symbol lấy từ mã hiện tại; 
 | Gói | Việc |
 |---|---|
 | `container.py` | `AppContainer`, `build_container` |
-| `db/` | `connection.py`, `*_repository.py` (Pg adapter), `hierarchy_chain.py`, `schema_loader.py` |
+| `db/` | `connection.py`, `*_repository.py` (Pg adapter; `legal_repository.expand_paths` = bước mở rộng GraphRAG), `hierarchy_chain.py`, `schema_loader.py` |
 | `vector/` | `pg_search.py` (`PgContractVectorSearch`, `PgLegalVectorSearch`), `rrf.py` |
-| `retrieval/` | `legal_graph_rag.py` (`LegalGraphRag`), `query_rewrite.py`, `scope_match.py`, `normative_rank.py`, `context.py` (`bind_retrieval`, `get_legal_docs`, `get_legal_chunks`) |
-| `neo4j/graph_repository.py` | `Neo4jGraphRepository` |
+| `retrieval/` | `legal_graph_rag.py` (`LegalGraphRag`), `query_rewrite.py` (`contract_clause_references`, `ground_qa_retrieval_query`), `scope_match.py`, `normative_rank.py`, `context.py` (`bind_retrieval`, `get_legal_docs`, `get_legal_chunks`) |
 | `legal_corpus/` | Parse folder crawl → artifact ingest: `assemble.load_document_folder`, `muc_luc_paths`, `van_ban_chunker`, `thuoc_tinh_mapper`, `internal_refs`, `clause_amendments`, `luoc_do_flatten`, `appendix`, `checkpoint`, `discover`, `effectivity` (nhận diện tiêu đề "Hiệu lực thi hành", khác với `agents/effectivity.py`) |
 | `agents/pipelines.py` | `LangGraphAnalyzePipeline`, `LangGraphQaPipeline` (bọc đồ thị, retry khi mất kết nối DB) |
 | `embeddings/`, `llm/`, `auth/`, `storage/` | `HuggingFaceEmbedder`, `GeminiChatModel`, `JwtTokenService`/`BcryptPasswordHasher`, `LocalObjectStorage` |
@@ -86,6 +86,6 @@ Tra cứu nhanh "sửa gì ở đâu". Tên symbol lấy từ mã hiện tại; 
 | Đổi luồng hỏi đáp | `agents/qa_agent.py`, `memory.py` | `test_qa_memory.py`, `test_qa_self_correct.py` |
 | Đổi parse/chunk hợp đồng | `document/` | `test_parser.py`, `test_chunker.py`, `test_upload.py` |
 | Đổi nạp corpus pháp luật | `infrastructure/legal_corpus/`, `application/use_cases/legal_ingest.py`, `scripts/ingest_*.py` | `test_legal_corpus_parser.py`, `test_legal_ingest_unit.py`, `test_ingest_checkpoint.py`, `test_clause_amendments.py` |
-| Đổi schema DB | `schema.sql`/`schema.cypher` (cần migration thủ công, ngoài phạm vi refactor) | — |
+| Đổi schema DB | `schema.sql` (cần migration thủ công, ngoài phạm vi refactor) | — |
 | Thêm biến môi trường | `core/settings.py`, `.env.example`, README | — |
 | Prompt LLM | `core/prompts.py` (xem `docs/PROMPT_ARCHITECTURE.md`) | — |

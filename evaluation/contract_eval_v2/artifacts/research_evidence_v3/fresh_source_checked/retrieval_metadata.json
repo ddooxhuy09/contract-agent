@@ -1,0 +1,21 @@
+{
+  "finished_at": "2026-11-17T23:03:47",
+  "stage": "retrieval",
+  "manifest_sha256": "45f2cfe6ba9e6e22bb4fc2e1e227e5202ffdd2825247f5e904e383b3cea2e097",
+  "code_sha256": {
+    "app/agents/qa_agent.py": "56a4cd710bd629c299be827138504fb755165ffd0e7c4263f90ed4d83a90173c",
+    "app/infrastructure/retrieval/query_rewrite.py": "612b049acef7b94625bb4388656e3937a32696c1077da0904d71ed1869a627cc",
+    "evaluation/contract_eval_v2/experiment.py": "1e10741a5327acf7b86c0fe421bcb2cd3e00148221c7754e4bb0c0344726a79c"
+  },
+  "systems": [
+    "baseline",
+    "grounded"
+  ],
+  "source": "isolated_eval_database",
+  "long_term_memory": false,
+  "retrieval_mode": "vector",
+  "llm_provider": "groq",
+  "generation_model": "openai/gpt-oss-120b",
+  "embedding_model": "BAAI/bge-m3",
+  "context_capture": "actual final graph state, including deterministic law blurbs"
+}

@@ -30,6 +30,14 @@ class Settings(BaseSettings):
     # tool should not miss violations (see docs/NHAT_KY_THAY_DOI.md).
     red_flag_negation_check: bool = False
 
+    # JUDGE_FINDING_TYPES=true: the judge also labels each finding vi_pham / thieu_noi_dung / gop_y and is told a
+    # contract need not copy the law; non-violations are kept as severity "info" (shown, not counted as risks).
+    # RED_FLAG_LLM_VERIFY=true: a Điều hit by a critical fixed rule is still sent to the judge as a candidate;
+    # if the judge does not confirm a violation, the rule risk is downgraded to "info" instead of standing alone.
+    # Both off by default (= the configuration evaluated in chapter 5); see docs/NHAT_KY_THAY_DOI.md.
+    judge_finding_types: bool = False
+    red_flag_llm_verify: bool = False
+
     @property
     def gemini_api_keys(self) -> list[str]:
         """Configured Gemini keys in use order, de-duplicated, blanks dropped."""
@@ -48,9 +56,6 @@ class Settings(BaseSettings):
     db_pool_min_size: int = 2
     db_pool_max_size: int = 10
     db_pool_timeout: float = 10.0
-    neo4j_uri: str = "bolt://localhost:7687"
-    neo4j_user: str = "neo4j"
-    neo4j_password: str = "contractlens"
 
     jwt_secret: str = "change-me-in-production"
     jwt_algorithm: str = "HS256"
@@ -70,7 +75,6 @@ class Settings(BaseSettings):
     similarity_threshold: float = 0.6
 
     schema_sql_path: str = "schema.sql"
-    schema_cypher_path: str = "schema.cypher"
 
     # Retrieval experiments (see evaluation_results/reports/LABOR_EFFECTIVITY_RAG_RUN.md).
     rag_labor_scope: bool = True  # extra search inside the core labor-law instruments for labor queries
@@ -81,9 +85,6 @@ class Settings(BaseSettings):
     legal_article_chunks_only: bool = False  # drop chunks whose path has no Điều token (e.g. PREAMBLE)
     legal_rrf_weight_vector: float = 1.0
     legal_rrf_weight_fts: float = 1.0
-
-    # GraphRAG hierarchy expand: neo4j | postgres | both (merge, prefer neo4j then fill gaps)
-    legal_expand_backend: str = "neo4j"
 
     @property
     def upload_path(self) -> Path:

@@ -1,13 +1,12 @@
-# ContractLens — empty schema handoff (Postgres + Neo4j)
+# ContractLens — empty schema handoff (Postgres)
 
 Gói schema **rỗng** (không data) để dựng DB rồi nạp corpus pháp lý / hợp đồng.
 
 | File | Hệ | Nội dung |
 |------|-----|----------|
 | `contractlens_postgres.sql` | PostgreSQL 16+ + **pgvector** | Tables, indexes, triggers, refresh functions |
-| `contractlens_neo4j.cypher` | Neo4j 5+ | Constraints + indexes GraphRAG (không chứa text/embedding) |
 
-Nguồn gốc trong repo: `schema.sql`, `schema.cypher` (giữ đồng bộ với thư mục này).
+Nguồn gốc trong repo: `schema.sql` (giữ đồng bộ với thư mục này). Từ 15/11/2026 hệ thống không còn dùng Neo4j; toàn bộ dữ liệu nằm trong Postgres.
 
 ---
 
@@ -22,10 +21,6 @@ Nguồn gốc trong repo: `schema.sql`, `schema.cypher` (giữ đồng bộ vớ
   - `pgcrypto` — `gen_random_uuid()` cho bảng `users`
 
 Ví dụ image: `pgvector/pgvector:pg16`
-
-### Neo4j
-- Neo4j **5.x** (Community/Enterprise)
-- Chỉ cần chạy các câu `CREATE CONSTRAINT` / `CREATE INDEX` trong file `.cypher` (phần comment là tài liệu mô hình)
 
 ---
 
@@ -46,29 +41,20 @@ psql -U postgres -d contractlens -f /docker-entrypoint-initdb.d/01-schema.sql
 
 Script **idempotent** (`IF NOT EXISTS` / `CREATE OR REPLACE`) — chạy lại an toàn trên DB đã có schema.
 
-### Neo4j
-
-Trong Neo4j Browser / `cypher-shell`, chạy lần lượt các dòng bắt đầu bằng `CREATE CONSTRAINT` và `CREATE INDEX` (bỏ qua comment `//`).
-
-```bash
-cypher-shell -u neo4j -p PASSWORD -f contractlens_neo4j.cypher
-# hoặc paste các CREATE CONSTRAINT / CREATE INDEX vào Browser
-```
+---
 
 ---
 
-## 3. Phân công: Postgres vs Neo4j
+## 3. Đồ thị pháp luật cho GraphRAG (trong Postgres)
 
-| Dữ liệu | Postgres (SoT) | Neo4j |
-|---------|----------------|-------|
-| Metadata VB (`doc_id`, số hiệu, hiệu lực…) | `legal_documents` | mirror nhẹ `:Document` |
-| Cây Phần→…→Điểm | `legal_parts` … `legal_points` | `:Node` + `PARENT_OF` / `NEXT` |
-| Nội dung chunk + embedding + FTS | `legal_embeddings` | chỉ `:Chunk {path, doc_id, chunk_type}` — **không** text/embed |
-| Quan hệ VB↔VB | `legal_document_relations` | cạnh `REPEALS` / `SUPERSEDES` / `AMENDS` / … |
-| Dẫn chiếu Điều/Khoản (ltree) | `legal_path_relations` | `(:Chunk)-[:REFERS_TO]->(:Chunk)` |
-| User + hợp đồng upload | `users`, `uploaded_contracts`, `contract_chunks` | — |
+| Thành phần đồ thị | Bảng / cột | Dùng khi expand |
+|-------------------|------------|-----------------|
+| Cây Phần→…→Điểm | `legal_parts` … `legal_points`, cột `path` (ltree) | anh em cùng cha, tổ tiên, khoản cha của seed |
+| Chunk nội dung + embedding + FTS | `legal_embeddings` (`path` UNIQUE) | seed (vector/FTS) và hydrate text theo `path` |
+| Quan hệ VB↔VB | `legal_document_relations` (`relation_type`) | văn bản liên quan (`can_cu_ban_hanh`, `dan_chieu`, `sua_doi_bo_sung`) và văn bản bãi bỏ/thay thế (`van_ban_bi_bai_bo`, `thay_the`) |
+| Dẫn chiếu Điều/Khoản | `legal_path_relations` | dẫn chiếu nội bộ và sửa đổi/bãi bỏ ở cấp khoản |
 
-**Khóa nối PG ↔ Neo4j:** `doc_id` (TEXT) và `path` (ltree text, ví dụ `45_2019_QH14.C3.D21.K1`).
+Truy vấn expand: `PgLegalChunkRepository.expand_paths` (`app/infrastructure/db/legal_repository.py`).
 
 ---
 
@@ -105,31 +91,9 @@ Trigger đồng bộ `eff_flag` ↔ `status_flag`; cửa sổ `eff_from` / `eff_
 
 ---
 
-## 5. Thứ tự nạp data (Neo4j)
-
-1. `:Document` (`doc_id`, `doc_num`, `doc_type`, optional `status_flag`)
-2. `:Node` theo path (MERGE `(d)-[:HAS_NODE]->(n)`, `PARENT_OF`, optional `NEXT`)
-3. `:Chunk` keyed by `path` → `OF_DOC`, `OF_NODE`
-4. Cạnh văn bản (map từ `legal_document_relations.relation_type`):
-
-| `relation_type` (PG) | Rel type (Neo4j) |
-|----------------------|------------------|
-| `van_ban_bi_bai_bo` | `REPEALS` |
-| `thay_the` | `SUPERSEDES` |
-| `sua_doi_bo_sung` | `AMENDS` |
-| `can_cu_ban_hanh` | `BASED_ON` |
-| `dan_chieu` | `CITES` |
-| `quy_dinh_chi_tiet_huong_dan_thi_hanh` | `DETAILS` |
-| `huong_dan_ap_dung` | `GUIDES` |
-| … | xem comment trong `.cypher` |
-
-5. `(:Chunk)-[:REFERS_TO]->(:Chunk)` từ `legal_path_relations`
-
-GraphRAG chỉ expand cấu trúc/quan hệ; **hydrate nội dung** từ Postgres `legal_embeddings` theo `path`.
-
 ---
 
-## 6. Ràng buộc kỹ thuật quan trọng
+## 5. Ràng buộc kỹ thuật quan trọng
 
 - Embedding dimension cố định: **`vector(1024)`** (đổi model → phải đổi schema + re-embed).
 - `path` ltree: ký tự ngoài `[A-Za-z0-9_]` trong `doc_id` được sanitize thành `_`.
@@ -138,18 +102,11 @@ GraphRAG chỉ expand cấu trúc/quan hệ; **hydrate nội dung** từ Postgre
 
 ---
 
-## 7. Kiểm tra nhanh sau khi dựng
+## 6. Kiểm tra nhanh sau khi dựng
 
 ```sql
 -- Postgres
 SELECT extname FROM pg_extension WHERE extname IN ('vector','ltree','pg_trgm','pgcrypto');
 SELECT COUNT(*) FROM legal_documents;           -- 0 khi rỗng
 SELECT COUNT(*) FROM legal_embeddings;
-```
-
-```cypher
-// Neo4j
-SHOW CONSTRAINTS;
-SHOW INDEXES;
-MATCH (n) RETURN count(n);   // 0 khi rỗng
 ```

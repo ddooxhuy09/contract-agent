@@ -1,6 +1,6 @@
 # ContractLens — Sơ đồ luồng dữ liệu (DFD)
 
-> Cập nhật theo **mã nguồn hiện tại** (JWT + PostgreSQL/pgvector + Neo4j + Gemini + BGE-M3).
+> Cập nhật theo **mã nguồn hiện tại** (JWT + PostgreSQL/pgvector/ltree + Gemini + BGE-M3).
 > Không còn Supabase Auth hay FAISS.
 >
 > File PlantUML: thư mục [`docs/dfd/`](dfd/).
@@ -47,7 +47,7 @@ Mỗi file `!include _skin.puml` — render từ đúng thư mục `docs/dfd/`.
 
 ## Mức 0 — Ngữ cảnh
 
-Nhìn từ ngoài: người dùng và người vận hành trao đổi với **một** hệ thống ContractLens. Hệ thống gọi Gemini và (khi crawl) VBPL.vn; lưu dữ liệu vào PostgreSQL, Neo4j và ổ đĩa cục bộ.
+Nhìn từ ngoài: người dùng và người vận hành trao đổi với **một** hệ thống ContractLens. Hệ thống gọi Gemini và (khi crawl) VBPL.vn; lưu dữ liệu vào PostgreSQL và ổ đĩa cục bộ.
 
 Embedding `BAAI/bge-m3` chạy **trong** process API nên không vẽ là thực thể ngoài ở mức 0.
 
@@ -63,7 +63,7 @@ Embedding `BAAI/bge-m3` chạy **trong** process API nên không vẽ là thực
 | 4.0 | Hỏi đáp | Người dùng | câu hỏi → câu trả lời SSE + trích dẫn |
 | 5.0 | Danh sách HĐ | Người dùng | `user_id` → danh sách metadata |
 | 6.0 | Crawl VBPL | Người vận hành | HTTP VBPL → folder JSON/MD |
-| 7.0 | Ingest pháp điển | Người vận hành | folder crawl → PG + Neo4j |
+| 7.0 | Ingest pháp điển | Người vận hành | folder crawl → PostgreSQL |
 
 6.0 và 7.0 **không** có REST; chạy script.
 
@@ -80,7 +80,6 @@ Embedding `BAAI/bge-m3` chạy **trong** process API nên không vẽ là thực
 | D1.3c | `legal_embeddings` | chunk luật + vector + FTS + `is_effective` | 7.0 ghi; GraphRAG đọc |
 | D1.3d | `legal_document_relations`, `legal_path_relations` | cạnh VB↔VB và path↔path | 7.0 ghi; GraphRAG đọc |
 | D1.4 | bảng checkpoint LangGraph (thư viện tạo lúc startup) | lịch sử chat, HITL, memory store | 4.0; 3.0 khi `review_mode` |
-| D2 | Neo4j `:Document` `:Node` `:Chunk` | **chỉ** id/path/quan hệ — không text/embedding | 7.0 ghi; GraphRAG expand |
 | D3.1 | `data/uploads` | file HĐ gốc | 2.0 ghi; parse đọc |
 | D3.2 | `data/crawl_data` | folder crawl | 6.0 ghi; 7.0 đọc |
 
@@ -110,7 +109,7 @@ API có trên backend nhưng frontend **không** gọi: `POST /analyze/resume`, 
 | FAISS hợp đồng / luật | pgvector trên `contract_chunks` và `legal_embeddings` |
 | `app/core/auth.py`, `app/services/contract_service.py` | `use_cases/auth.py`, `use_cases/contracts.py` |
 | `app/knowledge_base/loader.py` | `IngestLegalDocument` + `scripts/ingest_legal_corpus.py` |
-| Không có Neo4j | Neo4j expand GraphRAG |
+| Không có GraphRAG | GraphRAG expand trên Postgres (`ltree` + `legal_document_relations`) |
 | Chat REST thuần | UI dùng SSE `/chat/stream` |
 
 ---
@@ -120,7 +119,7 @@ API có trên backend nhưng frontend **không** gọi: `POST /analyze/resume`, 
 | # | Tiêu chí | Trạng thái |
 |---|----------|------------|
 | 1 | Thực thể ngoài | Người dùng, người vận hành, Gemini, VBPL.vn |
-| 2 | Kho dữ liệu runtime + offline | PostgreSQL (tách logic), Neo4j, uploads, crawl |
+| 2 | Kho dữ liệu runtime + offline | PostgreSQL (tách logic), uploads, crawl |
 | 3 | Mỗi luồng chính có dữ liệu đi và kết quả về | Có |
 | 4 | Cache phân tích | 3.3 đọc JSONB `analysis` |
 | 5 | Tác vụ nền / thủ công | 6.0 crawl, 7.0 ingest |

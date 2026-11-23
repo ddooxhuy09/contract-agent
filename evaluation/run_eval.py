@@ -152,7 +152,7 @@ def _bind_runtime() -> None:
     from app.infrastructure.retrieval.context import bind_retrieval
 
     c = build_container()
-    bind_retrieval(c.contract_search, c.legal_search, c.graph, legal_chunks=c.legal_chunks, contract_chunks=c.contract_chunks)
+    bind_retrieval(c.contract_search, c.legal_search, legal_chunks=c.legal_chunks, contract_chunks=c.contract_chunks)
 
 
 def run_contract(config: str, cid: str, text: str) -> dict:

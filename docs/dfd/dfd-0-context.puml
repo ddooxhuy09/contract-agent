@@ -11,8 +11,7 @@ rectangle "0.0\nContractLens\n(Frontend React + FastAPI + LangGraph)" as System
 cloud "Gemini API\n(Google Generative AI)" as Gemini
 cloud "Cổng VBPL.vn" as VBPL
 
-database "D1 PostgreSQL\nusers, HĐ, chunk/embedding,\ncorpus luật, checkpoint" as PG
-database "D2 Neo4j\ncây path + quan hệ văn bản\n(GraphRAG, không lưu text)" as Neo4j
+database "D1 PostgreSQL\nusers, HĐ, chunk/embedding,\ncorpus luật + cây ltree +\nquan hệ VB, checkpoint" as PG
 database "D3 Ổ đĩa cục bộ\ndata/uploads\ndata/crawl_data" as FS
 
 User --> System : yêu cầu (đăng ký/nhập, tải HĐ,\nphân tích, hỏi đáp)
@@ -29,8 +28,6 @@ VBPL --> System : HTML / thuộc tính / lược đồ
 
 System --> PG : đọc / ghi
 PG --> System : bản ghi, vector, FTS
-System --> Neo4j : upsert cây / expand path
-Neo4j --> System : doc_id, path, quan hệ
 System --> FS : ghi file HĐ / folder crawl
 FS --> System : bytes file, JSON/MD luật
 

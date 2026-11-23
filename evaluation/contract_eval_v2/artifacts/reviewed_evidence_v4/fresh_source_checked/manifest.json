@@ -1,0 +1,27 @@
+{
+  "purpose": "new_synthetic_cases_source_checked_but_author_knows_code",
+  "independent_test": false,
+  "n_questions": 8,
+  "n_base_cases": 8,
+  "source_split": "new_source_checked",
+  "source_sha256": "27f806d2d8598ab1636fa2989a614fcd04a015607a6104c8e8af54e37cfc072e",
+  "v1_fingerprint_purpose": "compatibility integrity guard, not label source",
+  "legal_source": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/9/125-vbhn-vpqh.pdf",
+  "fresh_spec_sha256": "03b955e746578867dbafcf47fdb52bba04d2de3dd78bf227adc4400099aeeed9",
+  "files": {
+    "contracts/C001.txt": "76420db7d5f75a7aaf510632c9867ffde6879b68753a591ed49d707de7b218c1",
+    "contracts/C002.txt": "ad58ca9238dca62df66c93769b466123053b3af55088ac9874327e253dd45f90",
+    "contracts/C003.txt": "6dfb7d3c1b5ab0489be64de95cca07c72fd83564fe23ae58da10446295763c28",
+    "contracts/C004.txt": "ce575e838fb919e35983764e260a918231481218cc28034537f33d20487376ed",
+    "contracts/C005.txt": "f77734a0b81d6f2fcbbe93da3ffdabe2a7de6aa899c7d361a282c53f5b4f8a78",
+    "contracts/C006.txt": "96cc080e1c0b7636b0aec4246caf1d33c3b86f0994b852856a405cb6d5bcb21f",
+    "contracts/C007.txt": "c126225bb8134be2c95f01fe384ff88ae65ac5bf7f2c9119df2ef01314bec569",
+    "contracts/C008.txt": "3a557afb6a0753db381d4a269b87b8c5d7f8915e375643a434b4cd051cd13908",
+    "inputs.jsonl": "89706a4ddc3d23dfc948ac2cf1d29acac032eda1d2e784bb928a45d2d79ed5fa",
+    "gold.jsonl": "a7ae3bed5a4abb37cd14f6535e2b3bfd481f8f22a4a9b9db0573f4086f7299f2"
+  },
+  "qa_subset": [
+    "T1"
+  ],
+  "bootstrap_cluster": "base_case_id"
+}

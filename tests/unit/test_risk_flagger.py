@@ -175,6 +175,7 @@ def test_full_risk_item_fields(env):
         "confidence": 0.45,
         "confidence_notes": ["Không có căn cứ pháp lý đã xác minh trong kho."],
         "findings": None,
+        "finding_type": None,
     }
 
 
@@ -261,3 +262,56 @@ def test_resolve_citations_fallback_when_not_grounded(env, monkeypatch):
     assert resolved["args"] == (["x"], "BLLĐ")
     assert risk.legal_citations == [cite]
     assert risk.legal_basis == "BLLĐ"  # falls back to the raw text
+
+
+# --- JUDGE_FINDING_TYPES / RED_FLAG_LLM_VERIFY prompt and mapping -------------------------------
+
+def _flags(monkeypatch, finding_types=False):
+    monkeypatch.setattr(rf, "get_settings", lambda: SimpleNamespace(judge_finding_types=finding_types))
+
+
+def test_finding_types_off_keeps_prompt_and_severity(env, monkeypatch):
+    _flags(monkeypatch, False)
+    env.llm_outputs.append(_llm(loai="thieu_noi_dung"))
+    risk = rf.evaluate_clause(CLAUSE, contract_id="c1")
+    assert "Phân loại phát hiện" not in env.prompts[0]
+    # Flag off = old behaviour: a stray "loai" is ignored.
+    assert risk.severity == "warning" and risk.finding_type is None
+
+
+def test_finding_types_on_adds_rules_to_prompt(env, monkeypatch):
+    _flags(monkeypatch, True)
+    env.llm_outputs.append(_llm(loai="vi_pham"))
+    risk = rf.evaluate_clause(CLAUSE, contract_id="c1")
+    assert "Phân loại phát hiện" in env.prompts[0]
+    assert "KHÔNG bắt buộc chép lại" in env.prompts[0]
+    assert risk.severity == "warning" and risk.finding_type == "vi_pham"
+
+
+@pytest.mark.parametrize("loai", ["thieu_noi_dung", "gop_y"])
+def test_non_violation_becomes_info(env, monkeypatch, loai):
+    _flags(monkeypatch, True)
+    env.llm_outputs.append(_llm(severity="critical", loai=loai))
+    risk = rf.evaluate_clause(CLAUSE, contract_id="c1")
+    assert risk.severity == "info" and risk.finding_type == loai
+
+
+def test_no_loai_keeps_severity(env, monkeypatch):
+    _flags(monkeypatch, True)
+    env.llm_outputs.append(_llm())
+    assert rf.evaluate_clause(CLAUSE, contract_id="c1").severity == "warning"
+
+
+def test_rule_hint_goes_into_prompt(env, monkeypatch):
+    _flags(monkeypatch, False)
+    env.llm_outputs.append(_llm())
+    rf.evaluate_clause(CLAUSE, contract_id="c1", rule_hint="Phạt tiền / khấu trừ lương")
+    assert "Phạt tiền / khấu trừ lương" in env.prompts[0]
+    assert "câu phủ định" in env.prompts[0]
+
+
+def test_no_rule_hint_no_hint_section(env, monkeypatch):
+    _flags(monkeypatch, False)
+    env.llm_outputs.append(_llm())
+    rf.evaluate_clause(CLAUSE, contract_id="c1")
+    assert "Kết quả quét tự động" not in env.prompts[0]

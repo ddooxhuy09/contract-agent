@@ -106,7 +106,7 @@ def score(output):
              f"Thời gian UTC: {metadata['started_at']} → {metadata['finished_at']}. Corpus luật fingerprint trước/sau giống nhau: **{metadata['legal_corpus_unchanged']}**.",
              f"Gemini credential trong worker: {metadata['gemini_credential_present']}. LLM client modules loaded: {metadata.get('llm_client_modules_loaded')}.", '',
              '## Phương pháp', '',
-             'Chỉ QUESTIONS_ONLY_NO_GOLD được dùng khi truy xuất. BGE-M3 được đọc từ cache cục bộ; PostgreSQL/Neo4j dùng corpus hiện có trong bản sao. Không ingest luật fixture, sửa cờ hiệu lực, thêm căn cứ gold hay tuning Top-K.',
+             'Chỉ QUESTIONS_ONLY_NO_GOLD được dùng khi truy xuất. BGE-M3 được đọc từ cache cục bộ; PostgreSQL dùng corpus hiện có trong bản sao. Không ingest luật fixture, sửa cờ hiệu lực, thêm căn cứ gold hay tuning Top-K.',
              'QA/multi-hop/classification chạy first-pass retrieve_legal như QA hiện tại (k=5, không gán cứng contract_type). Risk chạy LegalGraphRag.retrieve_for_clause với question/scenario đầu vào (k_seed=4, max_total=10); không thực hiện LLM clause extraction. Đây là đánh giá retrieval theo fact pattern, không phải đánh giá rủi ro hợp đồng đầu-cuối.',
              '7 DOCX được parse/chunk/embed bằng UploadContract thực tế trong database bản sao; contract retrieval được lưu riêng với legal retrieval. Gold được đọc sau khi hoàn tất toàn bộ retrieval.', '',
              '## Kết quả theo stage', '', '| Stage | n | R@1 | R@3 | R@5 | R@10 | MRR | Provision coverage |', '|---|---:|---:|---:|---:|---:|---:|---:|']

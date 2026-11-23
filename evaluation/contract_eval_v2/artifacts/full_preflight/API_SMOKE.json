@@ -1,0 +1,19 @@
+{
+  "scope": "one_actual_API_case_not_part_of_369_QA_or_117_workflows",
+  "authentication_overridden": false,
+  "LLM_stubbed": false,
+  "steps": {
+    "register": 200,
+    "login": 200,
+    "upload_docx": 200,
+    "analyze": 200,
+    "chat": 200,
+    "persisted_history": 200,
+    "persisted_report": 200,
+    "unauthenticated_report_denied": 401
+  },
+  "contract_id": "905e6330-ba03-449c-9d7b-7675d98ae16a",
+  "history_messages": 1,
+  "status": "passed",
+  "seconds": 39.6
+}

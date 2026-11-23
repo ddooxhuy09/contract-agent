@@ -1,4 +1,4 @@
-"""Unit tests for RRF, query rewrite, and LegalGraphRag hydrate (fake graph/PG)."""
+"""Unit tests for RRF, query rewrite, and LegalGraphRag hydrate (fake PG repositories)."""
 
 from app.domain.entities.search import RetrievedChunk
 from app.infrastructure.retrieval.legal_graph_rag import LegalGraphRag
@@ -116,10 +116,11 @@ class _FakeChunks:
         }
 
 
-class _FakeGraph:
-    def expand(self, chunk_refs, limit=80):
+class _FakeChunksExpanding(_FakeChunks):
+    """Postgres expand returning a sibling, an ancestor, a parent clause and a related doc."""
+
+    def expand_paths(self, seed_keys, limit=80):
         return {
-            "seeds": list(chunk_refs),
             "sibling_paths": ["C1.M1.D5.K1.b"],
             "ancestor_paths": ["C1.M1.D5"],
             "parent_clause_paths": ["C1.M1.D5.K1"],
@@ -142,7 +143,7 @@ def test_legal_graph_rag_hydrate_roles():
             },
         )
     ]
-    rag = LegalGraphRag(_FakeSearch(seeds), _FakeChunks(), _FakeGraph())
+    rag = LegalGraphRag(_FakeSearch(seeds), _FakeChunksExpanding())
     hits = rag.retrieve_for_clause("Chấm dứt HĐLĐ", "đơn phương chấm dứt", contract_type="lao động")
     roles = {h.metadata.get("role") for h in hits}
     assert "seed" in roles
@@ -153,7 +154,7 @@ def test_legal_graph_rag_hydrate_roles():
     assert "C1.M1.D5.K1.a" in ctx
 
 
-def test_legal_graph_rag_without_graph_returns_seeds_only():
+def test_legal_graph_rag_empty_expand_returns_seeds_only():
     seeds = [
         RetrievedChunk(
             content="only seed",
@@ -161,16 +162,15 @@ def test_legal_graph_rag_without_graph_returns_seeds_only():
             metadata={"path": "X.1", "doc_id": "D", "doc_number": "1", "title": "t"},
         )
     ]
-    rag = LegalGraphRag(_FakeSearch(seeds), _FakeChunks(), None)
+    rag = LegalGraphRag(_FakeSearch(seeds), _FakeChunks())
     hits = rag.retrieve_for_clause("title", "summary")
     assert len(hits) == 1
     assert hits[0].metadata["role"] == "seed"
 
 
-class _FakeGraphSuperseding:
-    def expand(self, chunk_refs, limit=80):
+class _FakeChunksSuperseding(_FakeChunks):
+    def expand_paths(self, seed_keys, limit=80):
         return {
-            "seeds": list(chunk_refs),
             "sibling_paths": [],
             "ancestor_paths": [],
             "parent_clause_paths": [],
@@ -180,7 +180,7 @@ class _FakeGraphSuperseding:
 
 
 def test_repealed_seeds_yield_superseding_context():
-    """When the graph reports repealed_by_docs, the replacement doc's text is
+    """When the expand reports repealed_by_docs, the replacement doc's text is
     fetched (via search_in_docs) and appears with role=superseding + section."""
     seeds = [
         RetrievedChunk(
@@ -195,7 +195,7 @@ def test_repealed_seeds_yield_superseding_context():
             },
         )
     ]
-    rag = LegalGraphRag(_FakeSearch(seeds), _FakeChunks(), _FakeGraphSuperseding())
+    rag = LegalGraphRag(_FakeSearch(seeds), _FakeChunksSuperseding())
     hits = rag.retrieve_for_clause("Chấm dứt HĐLĐ", "đơn phương chấm dứt")
     roles = {h.metadata.get("role") for h in hits}
     assert "superseding" in roles
@@ -285,7 +285,7 @@ def _chunk(path, title, doc_id="D"):
 
 def test_no_seeds_anywhere_returns_empty_after_all_fallbacks():
     search = _SeqSearch()
-    rag = LegalGraphRag(search, _FakeChunks(), None)
+    rag = LegalGraphRag(search, _FakeChunks())
     assert rag.retrieve_for_clause("Chấm dứt", "tóm tắt", contract_type="lao động") == []
     # combined query (with floor), same query without floor, then narrow variants
     assert len(search.queries) == 2 + 3
@@ -296,7 +296,7 @@ def test_sector_mismatch_seed_is_replaced_by_labor_law_recovery():
     oil = _chunk("OIL.1", "Nghị định về hoạt động dầu khí")
     labor = _chunk("BLLD.1", "Bộ luật Lao động")
     search = _SeqSearch([oil], [labor])
-    rag = LegalGraphRag(search, _FakeChunks(), None)
+    rag = LegalGraphRag(search, _FakeChunks())
     hits = rag.retrieve_for_clause("Làm thêm giờ", "tăng ca", contract_type="lao động")
     assert [h.metadata["path"] for h in hits] == ["BLLD.1"]
     assert hits[0].metadata["role"] == "seed"
@@ -305,7 +305,7 @@ def test_sector_mismatch_seed_is_replaced_by_labor_law_recovery():
 
 def test_max_total_limits_result_count():
     seeds = [_chunk(f"P.{i}", "Bộ luật Lao động") for i in range(4)]
-    rag = LegalGraphRag(_SeqSearch(seeds), _FakeChunks(), None)
+    rag = LegalGraphRag(_SeqSearch(seeds), _FakeChunks())
     assert len(rag.retrieve_for_clause("t", "s", max_total=2)) == 2
 
 
@@ -340,7 +340,7 @@ def test_labor_scope_pass_adds_labor_code_chunk_after_seeds(flags):
     seed = _chunk("OTHER.1", "Nghị định bảo hiểm", doc_id="X")
     labor = _chunk("139264.D17.K2", "Bộ luật Lao động", doc_id="139264")
     search = _ScopedSearch([seed], scoped=[labor])
-    hits = LegalGraphRag(search, _FakeChunks(), None).retrieve_for_clause(
+    hits = LegalGraphRag(search, _FakeChunks()).retrieve_for_clause(
         "Đặt cọc", "người lao động nộp tiền bảo đảm", max_total=10
     )
     assert [h.metadata["path"] for h in hits] == ["OTHER.1", "139264.D17.K2"]
@@ -352,12 +352,12 @@ def test_labor_scope_pass_is_skipped_for_non_labor_queries_and_when_disabled(fla
     seed = _chunk("OTHER.1", "Luật Dân sự", doc_id="X")
     flags.rag_labor_scope = True
     search = _ScopedSearch([seed], scoped=[_chunk("L.1", "Bộ luật Lao động", doc_id="L")])
-    LegalGraphRag(search, _FakeChunks(), None).retrieve_for_clause("Đặt cọc dân sự", "hợp đồng thuê nhà")
+    LegalGraphRag(search, _FakeChunks()).retrieve_for_clause("Đặt cọc dân sự", "hợp đồng thuê nhà")
     assert search.scoped_calls == []
 
     flags.rag_labor_scope = False
     search = _ScopedSearch([seed], scoped=[_chunk("L.1", "Bộ luật Lao động", doc_id="L")])
-    LegalGraphRag(search, _FakeChunks(), None).retrieve_for_clause("Làm thêm giờ", "người lao động", contract_type="lao động")
+    LegalGraphRag(search, _FakeChunks()).retrieve_for_clause("Làm thêm giờ", "người lao động", contract_type="lao động")
     assert search.scoped_calls == []
 
 

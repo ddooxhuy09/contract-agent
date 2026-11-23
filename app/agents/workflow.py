@@ -16,6 +16,7 @@ from app.agents.effectivity import legal_timeline, stamp_legal_basis
 from app.core.dates import parse_vn_date
 from app.agents.risk_flagger import JudgeUnparsable, evaluate_clause
 from app.agents.llm_client import DEFAULT_PROVIDER
+from app.core.settings import get_settings
 
 # Caps concurrent LLM calls per analysis run so a large contract doesn't fan out
 # dozens of simultaneous requests and hit provider rate limits (free tier ~5 RPM).
@@ -48,6 +49,8 @@ class AnalysisState(TypedDict):
     _evaluated: bool
     # Deterministic pre-pass: clause numbers (str) that already have critical red-flags.
     skip_llm_clauses: list[str]
+    # RED_FLAG_LLM_VERIFY: rule hits the judge did not confirm: {"clause": "7", "reason": "..."}.
+    rule_rejected: Annotated[list[dict], operator.add]
 
 
 class ClauseState(TypedDict):
@@ -57,6 +60,8 @@ class ClauseState(TypedDict):
     contract_type: str | None
     as_of_date: str | None
     job_context: str | None
+    # RED_FLAG_LLM_VERIFY: titles of the fixed rules that fired on this Điều, else None.
+    rule_hint: str | None
 
 # Output schemas for the nested subgraphs. Limiting what each subgraph writes back
 # to the parent state is REQUIRED: without it, a subgraph echoes every channel it
@@ -72,6 +77,7 @@ class _EvaluateOutput(TypedDict):
     risks: list[RiskItem]
     unchecked: list[dict]
     skip_llm_clauses: list[str]
+    rule_rejected: list[dict]
 
 
 class _ReviewOutput(TypedDict):
@@ -92,6 +98,7 @@ async def _extract_node(state: AnalysisState) -> dict:
 
 async def _judge_clause_node(state: ClauseState) -> dict:
     clause = state["clause"]
+    hint = state.get("rule_hint")
     logger.info(f"Judging clause: contract_id={state['contract_id']} clause_number={clause.clause_number}")
     # Judge branches are spawned via Send, so a graph-edge retry loop would lose the
     # per-clause payload. Retry on exception inside the node instead (initial attempt
@@ -107,7 +114,10 @@ async def _judge_clause_node(state: ClauseState) -> dict:
                 contract_type=state.get("contract_type"),
                 as_of_date=state.get("as_of_date"),
                 job_context=state.get("job_context"),
+                **({"rule_hint": hint} if hint else {}),
             )
+            if hint:
+                return _rule_verdict(clause, risk)
             if risk:
                 logger.info("Judge result: contract_id=%s clause=%s severity=%s issue=%s",
                     state["contract_id"], clause.clause_number, risk.severity,
@@ -119,11 +129,15 @@ async def _judge_clause_node(state: ClauseState) -> dict:
         except JudgeUnparsable as e:
             # The judge already retried its own output once; do not burn more calls.
             logger.error(f"Judge output unusable: contract_id={state['contract_id']} clause_number={clause.clause_number} error={e}")
+            if hint:
+                return {"risks": []}  # the fixed-rule risk stands, as without verification
             return {"risks": [], "unchecked": [_unchecked(clause, "unparsable")]}
         except Exception as e:
             logger.error(
                 f"Judge failed: contract_id={state['contract_id']} clause_number={clause.clause_number} error={e} (attempt {attempt}/{_MAX_JUDGE_RETRIES + 1})"
             )
+    if hint:
+        return {"risks": []}  # the fixed-rule risk stands, as without verification
     return {"risks": [], "unchecked": [_unchecked(clause, "unchecked_error")]}
 
 
@@ -131,9 +145,51 @@ def _unchecked(clause: Clause, status: str) -> dict:
     return {"clause_ref": f"Điều {clause.clause_number}", "status": status}
 
 
+def _rule_verdict(clause: Clause, risk: RiskItem | None) -> dict:
+    """Judge reviewed a fixed-rule hit: confirmed -> the rule risk stands alone; else mark it rejected."""
+    if risk is not None and risk.severity in ("critical", "warning"):
+        return {"risks": []}
+    reason = (risk.issue if risk is not None else "") or "Mô hình không xác nhận vi phạm."
+    return {"risks": [], "rule_rejected": [{"clause": str(clause.clause_number), "reason": reason[:300]}]}
+
+
+def _rule_hints(risks: list[RiskItem]) -> dict[str, str]:
+    """Clause number -> titles of the critical red-flag rules that fired there (items carrying findings)."""
+    from app.agents.labor_red_flags import clause_number_from_ref
+
+    hints: dict[str, list[str]] = {}
+    for r in risks:
+        if r.severity != "critical" or not r.findings:
+            continue
+        n = clause_number_from_ref(r.clause_ref)
+        if n:
+            hints.setdefault(n, []).extend(f.title for f in r.findings)
+    return {n: "; ".join(dict.fromkeys(t)) for n, t in hints.items()}
+
+
+def _apply_rule_rejections(risks: list[RiskItem], rejected: list[dict] | None) -> list[RiskItem]:
+    """Downgrade fixed-rule risks the judge did not confirm to "info", keeping the trail."""
+    if not rejected:
+        return risks
+    from app.agents.labor_red_flags import clause_number_from_ref
+
+    reasons = {r["clause"]: r["reason"] for r in rejected}
+    out = []
+    for r in risks:
+        n = clause_number_from_ref(r.clause_ref) if r.findings else None
+        if n in reasons and r.severity == "critical":
+            note = f"Quét từ khoá nghi vi phạm nhưng mô hình kiểm tra lại không xác nhận: {reasons[n]}"
+            findings = [f.model_copy(update={"severity": "info"}) for f in r.findings]
+            r = r.model_copy(update={"severity": "info", "findings": findings,
+                                     "confidence_notes": [*(r.confidence_notes or []), note]})
+        out.append(r)
+    return out
+
+
 def _detection_summary(analysis: ContractAnalysis, risks: list[RiskItem], skipped: list[str]) -> dict:
     """What the findings say about detection — separate from how many clauses were scanned."""
     nums = {str(c.clause_number) for c in analysis.clauses}
+    risks = [r for r in risks if r.severity != "info"]  # advice / unconfirmed rule hits are not risks
     flagged = {m.group(1) for r in risks if (m := re.search(r"(\d+)", r.clause_ref or ""))} & nums
     confs = [r.confidence for r in risks if r.confidence is not None]
     return {
@@ -185,8 +241,10 @@ def _finalize(
     risks: list[RiskItem],
     contract_text: str,
     skipped: list[str] | None,
+    rule_rejected: list[dict] | None = None,
 ) -> tuple[ContractAnalysis | None, list[RiskItem]]:
     """Coverage + legal-date basis + Điều 21 checklist, and citation statuses stamped with their date."""
+    risks = _apply_rule_rejections(risks, rule_rejected)
     analysis = _with_coverage(analysis, unchecked, risks, skipped)
     if analysis is None:
         return None, risks
@@ -235,7 +293,8 @@ def _deterministic_node(state: AnalysisState) -> dict:
     )
     risks.extend(check_labor_completeness(text, analysis, as_of_date=as_of))
     risks.extend(check_preamble_citations(text, as_of_date=as_of))
-    skip = skip_llm_clause_numbers(risks)
+    # RED_FLAG_LLM_VERIFY: rule hits are judged too (as candidates), so nothing is skipped.
+    skip = [] if get_settings().red_flag_llm_verify else skip_llm_clause_numbers(risks)
     logger.info(
         "Deterministic pre-pass: contract_id=%s risks=%s skip_llm_clauses=%s",
         state.get("contract_id"),
@@ -262,6 +321,7 @@ async def _review_node(state: AnalysisState) -> dict:
         state.get("risks", []),
         state.get("contract_text") or "",
         state.get("skip_llm_clauses"),
+        state.get("rule_rejected"),
     )
     payload = {
         "contract_id": state["contract_id"],
@@ -339,6 +399,7 @@ def _build_evaluate_subgraph():
         job_ctx = extract_job_context(state.get("contract_text") or "", analysis)
         skip = {str(x) for x in (state.get("skip_llm_clauses") or [])}
         to_judge = [c for c in clauses if str(c.clause_number) not in skip]
+        hints = _rule_hints(state.get("risks") or []) if get_settings().red_flag_llm_verify else {}
         logger.info(
             "LLM judge fan-out: contract_id=%s total_clauses=%s skip=%s to_judge=%s",
             state["contract_id"],
@@ -359,6 +420,7 @@ def _build_evaluate_subgraph():
                     "contract_type": contract_type,
                     "as_of_date": as_of,
                     "job_context": job_ctx,
+                    "rule_hint": hints.get(str(c.clause_number)),
                 },
             )
             for c in to_judge
@@ -438,6 +500,7 @@ def _analysis_input(contract_text: str, contract_id: str, provider: str, review_
         "_extract_started": False,
         "_evaluated": False,
         "skip_llm_clauses": [],
+        "rule_rejected": [],
     }
 
 
@@ -466,6 +529,7 @@ async def run_analysis_workflow(contract_text: str, contract_id: str, provider: 
         result["risks"],
         result.get("contract_text") or contract_text,
         result.get("skip_llm_clauses"),
+        result.get("rule_rejected"),
     )
     logger.info(
         f"Analysis workflow completed for contract: {contract_id} "
@@ -528,6 +592,7 @@ async def resume_analysis_review(
         result["risks"],
         result.get("contract_text") or "",
         result.get("skip_llm_clauses"),
+        result.get("rule_rejected"),
     )
     if result.get("_edited_risks") is not None:
         risks = [RiskItem(**r) for r in result["_edited_risks"]]

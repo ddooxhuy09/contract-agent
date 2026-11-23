@@ -1,0 +1,21 @@
+{
+  "completion": {
+    "qa_test": 314,
+    "qa_dev": 55,
+    "judge": 369,
+    "workflow": 117
+  },
+  "dataset_integrity": "passed",
+  "application_and_runner_integrity": "passed",
+  "scorer_integrity": "passed",
+  "independent_arithmetic": "passed",
+  "generation_invalid_count": 0,
+  "qa_judge_model": "qwen/qwen3.8-27b",
+  "expert_validated": false,
+  "no_expert_required_to_run": true,
+  "whole_contract_F1": null,
+  "raw_personal_pdf_sent": false,
+  "actual_API_smoke": "passed",
+  "report_sha256": "924238a061b7cd31304296c2321f1dd0be06a79f73db7b02427df19f022340fd",
+  "technical_checks": "386 tests full suite + 2 additional scorer tests; frontend lint/build and Ruff F passed"
+}

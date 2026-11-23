@@ -91,7 +91,7 @@ def rewrite_qa_query(question: str, max_chars: int = 400) -> str:
     tokens = []
     for tok in text.split(" "):
         t = tok.strip()
-        if not t or len(t) <= 1:
+        if not t or (len(t) <= 1 and not t.isdigit()):
             continue
         if _FILLER.fullmatch(t):
             continue
@@ -143,6 +143,39 @@ def _strip_answer_prose(text: str) -> str:
     t = re.sub(r"(?i)căn\s*cứ\s*:\s*", " ", t)
     t = re.sub(r"(?i)khuyến\s*nghị\s*:\s*", " ", t)
     return re.sub(r"\s+", " ", t).strip()
+
+
+def contract_clause_references(question: str) -> list[str]:
+    """Separate references to this contract from explicitly named statutes."""
+    refs: list[str] = []
+    for match in re.finditer(r"\bĐiều\s+(\d+)\b", question, re.I):
+        tail = question[match.end():]
+        if re.match(
+            r"\s*(?:(?:của|trong|theo)\s+)?(?:Bộ\s+luật|BLLĐ|Luật\b|Nghị\s+định|Thông\s+tư)",
+            tail, re.I,
+        ):
+            continue
+        if match.group(1) not in refs:
+            refs.append(match.group(1))
+    return refs
+
+
+def ground_qa_retrieval_query(question: str, history: list, clause_texts: list[str]) -> str:
+    """Search the referenced contract's content rather than its article number."""
+    if not clause_texts:
+        return augment_qa_retrieval_query(question, history)
+    # Contract numbering is an address, not a statute-search keyword.
+    for number in contract_clause_references(question):
+        question = re.sub(
+            rf"(?i)\bĐiều\s+{number}\b(?!\s*(?:(?:của|trong|theo)\s+)?(?:Bộ\s+luật|BLLĐ|Luật\b|Nghị\s+định|Thông\s+tư))",
+            "điều khoản hợp đồng", question,
+        )
+    query = augment_qa_retrieval_query(question, history)
+    # Bound contract evidence; generic/topic questions retain the existing query.
+    content = "\n".join(clause_texts)[:1200]
+    content = re.sub(r"(?im)^\s*Điều\s+\d+\s*[.:]?\s*", "", content)
+    content = re.sub(r"(?m)^\s*\d+(?:\.\d+)*\.?\s+", "", content)
+    return expand_legal_topic_query(f"{content}\n{query}", max_chars=1600)
 
 
 def augment_qa_retrieval_query(

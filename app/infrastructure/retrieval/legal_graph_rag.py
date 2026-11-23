@@ -1,4 +1,4 @@
-"""GraphRAG: hybrid PG seeds → expand (Neo4j and/or PG ltree) → hydrate by path."""
+"""GraphRAG on Postgres: hybrid seeds → expand (ltree tree + legal_document_relations) → hydrate by path."""
 
 import re
 from datetime import date
@@ -8,7 +8,7 @@ from app.core.logging import logger
 from app.core.settings import get_settings
 from app.domain.entities.search import RetrievedChunk
 from app.domain.ports.repositories import LegalChunkRepository
-from app.domain.ports.services import GraphRepository, LegalVectorSearch
+from app.domain.ports.services import LegalVectorSearch
 from app.infrastructure.legal_corpus.muc_luc_paths import chunk_ref_to_ltree
 from app.infrastructure.retrieval.query_rewrite import rewrite_legal_query
 from app.infrastructure.retrieval.normative_rank import normative_rank
@@ -19,15 +19,6 @@ from app.infrastructure.retrieval.scope_match import (
 
 # 0/? 1 còn 2 hết/ngưng 3 chưa HL 4 hết 1 phần 5 còn 1 phần
 _STATUS_RANK = {0: 0.40, 1: 1.00, 2: 0.00, 3: 0.55, 4: 0.50, 5: 0.85}
-
-_EMPTY_EXPAND = {
-    "sibling_paths": [],
-    "ancestor_paths": [],
-    "parent_clause_paths": [],
-    "related_docs": [],
-    "repealed_by_docs": [],
-}
-
 
 # Core labor-law instruments searched on their own for labor queries (document numbers, not ids).
 LABOR_CORE_DOC_NUMS = ("45/2019/QH14", "145/2020/NĐ-CP")
@@ -46,60 +37,23 @@ def _to_ltree_key(key: str | None) -> str | None:
     return key
 
 
-def _normalize_expand_to_paths(expansion: dict) -> dict:
-    """Normalize expand lists to ltree path keys."""
-    out = {}
-    for field in ("sibling_paths", "ancestor_paths", "parent_clause_paths"):
-        out[field] = [
-            p for p in (_to_ltree_key(k) for k in (expansion.get(field) or [])) if p
-        ]
-    out["related_docs"] = list(expansion.get("related_docs") or [])
-    out["repealed_by_docs"] = list(expansion.get("repealed_by_docs") or [])
-    return out
-
-
-def _merge_expand(primary: dict, secondary: dict) -> dict:
-    """Union list fields; primary wins order, secondary fills gaps."""
-    out = {}
-    for key in _EMPTY_EXPAND:
-        a = list(primary.get(key) or [])
-        b = list(secondary.get(key) or [])
-        out[key] = list(dict.fromkeys([*a, *b]))
-    return out
-
-
 class LegalGraphRag:
     def __init__(
         self,
         legal_search: LegalVectorSearch,
         legal_chunks: LegalChunkRepository,
-        graph: GraphRepository | None,
     ):
         self._search = legal_search
         self._chunks = legal_chunks
-        self._graph = graph
 
     def _expand(self, seed_keys: list[str]) -> dict:
-        backend = (get_settings().legal_expand_backend or "neo4j").strip().lower()
+        """Siblings/ancestors via ltree, related/repealing docs via legal_document_relations."""
         path_keys = [k for k in (_to_ltree_key(k) for k in seed_keys) if k]
-
-        neo: dict = dict(_EMPTY_EXPAND)
-        pg: dict = dict(_EMPTY_EXPAND)
-        if backend in ("neo4j", "both") and self._graph is not None and path_keys:
-            try:
-                neo = _normalize_expand_to_paths(self._graph.expand(path_keys) or neo)
-            except Exception as e:
-                logger.warning("Neo4j expand failed: %s", e)
-        if backend in ("postgres", "both"):
-            try:
-                pg = self._chunks.expand_paths(path_keys or seed_keys) or pg
-            except Exception as e:
-                logger.warning("Postgres ltree expand failed: %s", e)
-        if backend == "postgres":
-            return pg
-        if backend == "both":
-            return _merge_expand(neo, pg)
-        return neo
+        try:
+            return self._chunks.expand_paths(path_keys or seed_keys) or {}
+        except Exception as e:
+            logger.warning("Postgres ltree expand failed: %s", e)
+            return {}
 
     def _find_seeds(
         self,

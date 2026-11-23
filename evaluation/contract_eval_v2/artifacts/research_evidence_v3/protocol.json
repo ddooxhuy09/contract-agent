@@ -1,0 +1,26 @@
+{
+  "baseline": "previous v2 grounded QA, exact source snapshots under reference_code",
+  "candidate": "normalized clause query + topic-guided exact corpus evidence + QA reasoning/citation prompt",
+  "judge": "unchanged experiment.py judge prompt and rubric; Groq qwen/qwen3.8-27b",
+  "generation": "same Groq openai/gpt-oss-120b for both configurations",
+  "data": {
+    "dev": "364fe6f363a07daf6e6efcbf038c49eb9e2a2619c393a322e02839727ff27bfc",
+    "regression_test": "9353e5113c2405e6b2640e25b5b24aa8206da24ae5c24935ac27166899a61dc9",
+    "fresh_source_checked": "45f2cfe6ba9e6e22bb4fc2e1e227e5202ffdd2825247f5e904e383b3cea2e097"
+  },
+  "candidate_sha256": {
+    "app/agents/qa_agent.py": "56a4cd710bd629c299be827138504fb755165ffd0e7c4263f90ed4d83a90173c",
+    "app/agents/qa_evidence.py": "b904801c2c06a782bb5ef4eb6bedad034ee30274d7b6bf3e13c18e07f5e95068",
+    "app/infrastructure/retrieval/query_rewrite.py": "612b049acef7b94625bb4388656e3937a32696c1077da0904d71ed1869a627cc",
+    "app/core/prompts.py": "804bff1e9ef81541e393a85378cc8395e07b9953a3057f693951c31f23bcbb2f"
+  },
+  "reference_sha256": {
+    "experiment.py.txt": "d82a2452eba92321782b1ca9c7113dcb675d3ae78c577689b0912a1c4cfae525",
+    "prompts.py.txt": "d9ae351e61b22a19d416ab621282b85b49943bd074c5e7add1b4b480616da0d1",
+    "qa_agent.py.txt": "df6e279cb073edf9eaf34649823eae520db3b78eeee3817ef27e22fa97a0e29c",
+    "QA_SYSTEM_PROMPT.txt": "acbb6ceb99ec8740f5dd5af7877a0ec124e345cc0c4313ccec3612b6263d5e70",
+    "query_rewrite.py.txt": "00b19ae63ce106f8f85ecbba87a3570951faf4337113a987389700729c20ba65"
+  },
+  "selection_rule": "report all cases, no label/rubric edits, no score-seeking reruns",
+  "limitations": "dev already analyzed; regression subset previously evaluated in v1; fresh cases written by coding agent with knowledge of candidate, checked to official source, not expert validated"
+}

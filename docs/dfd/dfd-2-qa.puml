@@ -22,7 +22,6 @@ cloud "Gemini API" as Gemini
 database "D1.2 uploaded_contracts" as UC
 database "D1.2b contract_chunks" as CC
 database "D1.3 legal_embeddings" as Legal
-database "D2 Neo4j" as Neo4j
 database "D1.4 checkpoint +\nPostgres store" as Ckpt
 
 UI --> Own : contract_id + JWT
@@ -36,9 +35,8 @@ CRet --> CC : top-K theo contract_id
 CC --> CRet : đoạn Điều + score
 Ret --> LRet : query đã augment
 LRet --> Legal : vector + FTS + RRF
-LRet --> Neo4j : expand
+LRet --> Legal : expand ltree + quan hệ VB
 Legal --> LRet : chunk còn HL
-Neo4j --> LRet : path
 Ret --> Blurb : regex cờ đỏ trên Q + HĐ
 Blurb --> Ret : đoạn luật cố định (nếu khớp)
 Ret --> Mem : load_qa_memory

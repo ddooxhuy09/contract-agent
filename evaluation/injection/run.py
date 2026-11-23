@@ -222,7 +222,7 @@ def cmd_full(args) -> None:
     cache = OUT / "full"
     cache.mkdir(parents=True, exist_ok=True)
     cont = build_container()
-    bind_retrieval(cont.contract_search, cont.legal_search, cont.graph,
+    bind_retrieval(cont.contract_search, cont.legal_search,
                    legal_chunks=cont.legal_chunks, contract_chunks=cont.contract_chunks)
     done, stalled = 0, 0
     for cid in order:

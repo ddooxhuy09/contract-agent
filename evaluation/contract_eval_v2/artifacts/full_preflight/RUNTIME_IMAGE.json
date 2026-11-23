@@ -1,0 +1,7 @@
+{
+  "image": "contractlens-api:latest",
+  "image_id": "sha256:6a3f76c1fb011da3730a87d9efea23d1f2cf8f5a26918ac12a23e3c5f438e0eb",
+  "repository_mount": "read_only",
+  "artifacts_mount": "writable",
+  "isolated_database": true
+}

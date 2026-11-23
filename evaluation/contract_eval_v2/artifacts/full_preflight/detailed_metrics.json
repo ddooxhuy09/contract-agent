@@ -1,0 +1,80 @@
+{
+  "splits": {
+    "test": {
+      "n": 314,
+      "base_cases": 128,
+      "correctness": 0.7643312101910829,
+      "correctness_cluster_ci95": [
+        0.7295597484276729,
+        0.8009554140127388
+      ],
+      "fully_correct": 0.6878980891719745,
+      "faithfulness": 0.7711783439490444,
+      "faithfulness_n": 314,
+      "legal_recall_at5_article": 0.7347066167290887,
+      "legal_recall_n": 267,
+      "source_clause_hit": 0.8509803921568627,
+      "source_clause_n": 255,
+      "disputed_gold": 0,
+      "latency_ms_p50": 4033.5,
+      "latency_ms_p95": 7087.0,
+      "detection_focal": {
+        "n": 93,
+        "tp": 47,
+        "fp": 38,
+        "fn": 0,
+        "tn": 8,
+        "precision": 0.5529411764705883,
+        "recall": 1.0,
+        "f1": 0.7121212121212122,
+        "false_positive_rate": 0.8260869565217391,
+        "scope": "annotated_focal_clauses_after_full_workflow_not_exhaustive_contract_F1"
+      }
+    },
+    "dev": {
+      "n": 55,
+      "base_cases": 23,
+      "correctness": 0.7636363636363637,
+      "correctness_cluster_ci95": [
+        0.6636363636363637,
+        0.8538461538461538
+      ],
+      "fully_correct": 0.6545454545454545,
+      "faithfulness": 0.7575757575757577,
+      "faithfulness_n": 55,
+      "legal_recall_at5_article": 0.6914893617021277,
+      "legal_recall_n": 47,
+      "source_clause_hit": 0.8444444444444444,
+      "source_clause_n": 45,
+      "disputed_gold": 0,
+      "latency_ms_p50": 3725.2,
+      "latency_ms_p95": 6786.3,
+      "detection_focal": {
+        "n": 16,
+        "tp": 8,
+        "fp": 7,
+        "fn": 0,
+        "tn": 1,
+        "precision": 0.5333333333333333,
+        "recall": 1.0,
+        "f1": 0.6956521739130435,
+        "false_positive_rate": 0.875,
+        "scope": "annotated_focal_clauses_after_full_workflow_not_exhaustive_contract_F1"
+      }
+    }
+  },
+  "system_usage": {
+    "qa": {
+      "llm_calls": 750,
+      "llm_errors": 0,
+      "tokens": 2305517
+    },
+    "workflow": {
+      "llm_calls": 1326,
+      "llm_errors": 0,
+      "tokens": 7104277
+    }
+  },
+  "whole_contract_F1": null,
+  "expert_validated": false
+}

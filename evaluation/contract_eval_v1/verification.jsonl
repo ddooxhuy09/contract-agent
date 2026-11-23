@@ -1,0 +1,378 @@
+{"id": "OT-01-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT-01-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT-01-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT-02-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT-02-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT-02-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT-03-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT-03-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT-03-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT-04-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT-04-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT-04-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT-05-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT-05-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT-05-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT-06-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT-06-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT-06-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "OT-07-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "fail"}, "flags": ["low_confidence"], "reasons": ["V7: LLM ['khong_xac_dinh', 'hop_le'] vs nhãn compliant"]}
+{"id": "OT-07-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "fail"}, "flags": ["low_confidence"], "reasons": ["V7: LLM ['khong_xac_dinh', 'hop_le'] vs nhãn compliant"]}
+{"id": "OT-07-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "fail"}, "flags": ["low_confidence"], "reasons": ["V3: không có ref đã map", "V7: LLM ['khong_xac_dinh', 'hop_le'] vs nhãn compliant"]}
+{"id": "OT-08-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT-08-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT-08-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "OT-09-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "fail"}, "flags": ["quarantine"], "reasons": ["V7: LLM ['vi_pham', 'vi_pham'] vs nhãn compliant"], "quarantine_layers": ["V7"]}
+{"id": "OT-09-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "fail"}, "flags": ["quarantine"], "reasons": ["V7: LLM ['vi_pham', 'vi_pham'] vs nhãn compliant"], "quarantine_layers": ["V7"]}
+{"id": "OT-09-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "fail"}, "flags": ["quarantine"], "reasons": ["V3: không có ref đã map", "V7: LLM ['vi_pham', 'vi_pham'] vs nhãn compliant"], "quarantine_layers": ["V7"]}
+{"id": "OT-10-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "fail"}, "flags": ["low_confidence"], "reasons": ["V7: LLM ['khong_xac_dinh', 'khong_xac_dinh'] vs nhãn compliant"]}
+{"id": "OT-10-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "fail"}, "flags": ["low_confidence"], "reasons": ["V7: LLM ['khong_xac_dinh', 'khong_xac_dinh'] vs nhãn compliant"]}
+{"id": "OT-10-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "fail"}, "flags": ["low_confidence"], "reasons": ["V3: không có ref đã map", "V7: LLM ['khong_xac_dinh', 'khong_xac_dinh'] vs nhãn compliant"]}
+{"id": "BH-01-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-01-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-01-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-02-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-02-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-02-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-03-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-03-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-03-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-04-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-04-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-04-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-05-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-05-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-05-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-06-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-06-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-06-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "BH-07-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-07-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-07-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "BH-08-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-08-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-08-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "BH-09-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý"]}
+{"id": "BH-09-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý"]}
+{"id": "BH-09-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V3: không có ref đã map", "V4: REVIEW CSV: có lưu ý"]}
+{"id": "BH-10-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-10-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH-10-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "GT-01-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-01-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-01-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-02-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-02-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-02-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-03-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-03-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-03-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-04-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-04-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-04-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-05-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-05-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-05-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-06-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-06-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-06-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "GT-07-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-07-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-07-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "GT-08-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-08-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-08-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "GT-09-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-09-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-09-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "GT-10-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-10-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT-10-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "DT-01-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý"]}
+{"id": "DT-01-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý"]}
+{"id": "DT-01-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý"]}
+{"id": "DT-02-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT-02-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT-02-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT-03-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT-03-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT-03-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT-04-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT-04-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT-04-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT-05-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý"]}
+{"id": "DT-05-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý"]}
+{"id": "DT-05-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý"]}
+{"id": "DT-06-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT-06-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT-06-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "DT-07-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT-07-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT-07-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "DT-08-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT-08-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT-08-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "DT-09-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT-09-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT-09-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "DT-10-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT-10-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT-10-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "KL-01-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-01-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-01-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-02-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-02-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-02-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-03-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-03-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-03-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-04-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-04-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-04-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-05-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-05-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-05-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-06-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-06-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-06-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "KL-07-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-07-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-07-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "KL-08-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-08-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-08-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "KL-09-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-09-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-09-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "KL-10-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-10-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL-10-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "LU-01-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU-01-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU-01-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU-02-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU-02-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU-02-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU-03-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU-03-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU-03-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU-04-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU-04-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU-04-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU-05-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU-05-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU-05-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU-06-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý"]}
+{"id": "LU-06-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý"]}
+{"id": "LU-06-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V3: không có ref đã map", "V4: REVIEW CSV: có lưu ý"]}
+{"id": "LU-07-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU-07-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU-07-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "LU-08-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU-08-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU-08-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "LU-09-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "fail", "V5": "pass", "V6": "pass", "V7": "fail"}, "flags": ["low_confidence", "quarantine"], "reasons": ["V4: REVIEW CSV: CẦN BẠN XEM", "V7: LLM ['vi_pham', 'hop_le'] vs nhãn compliant"], "quarantine_layers": ["V4"]}
+{"id": "LU-09-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "fail", "V5": "pass", "V6": "pass", "V7": "fail"}, "flags": ["low_confidence", "quarantine"], "reasons": ["V4: REVIEW CSV: CẦN BẠN XEM", "V7: LLM ['vi_pham', 'hop_le'] vs nhãn compliant"], "quarantine_layers": ["V4"]}
+{"id": "LU-09-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "fail", "V5": "pass", "V6": "pass", "V7": "fail"}, "flags": ["low_confidence", "quarantine"], "reasons": ["V3: không có ref đã map", "V4: REVIEW CSV: CẦN BẠN XEM", "V7: LLM ['vi_pham', 'hop_le'] vs nhãn compliant"], "quarantine_layers": ["V4"]}
+{"id": "LU-10-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU-10-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU-10-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "TS-01-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS-01-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS-01-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS-02-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS-02-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS-02-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS-03-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS-03-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS-03-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS-04-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS-04-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS-04-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS-05-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS-05-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS-05-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS-06-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS-06-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS-06-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "TS-07-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS-07-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS-07-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "TS-08-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS-08-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS-08-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "TS-09-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "fail"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý", "V7: LLM ['khong_xac_dinh', 'khong_xac_dinh'] vs nhãn compliant"]}
+{"id": "TS-09-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "fail"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý", "V7: LLM ['khong_xac_dinh', 'khong_xac_dinh'] vs nhãn compliant"]}
+{"id": "TS-09-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "fail"}, "flags": ["low_confidence"], "reasons": ["V3: không có ref đã map", "V4: REVIEW CSV: có lưu ý", "V7: LLM ['khong_xac_dinh', 'khong_xac_dinh'] vs nhãn compliant"]}
+{"id": "TS-10-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "fail"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý", "V7: LLM ['hop_le', 'vi_pham'] vs nhãn compliant"]}
+{"id": "TS-10-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "fail"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý", "V7: LLM ['hop_le', 'vi_pham'] vs nhãn compliant"]}
+{"id": "TS-10-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "fail"}, "flags": ["low_confidence"], "reasons": ["V3: không có ref đã map", "V4: REVIEW CSV: có lưu ý", "V7: LLM ['hop_le', 'vi_pham'] vs nhãn compliant"]}
+{"id": "TC-01-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC-01-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC-01-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC-02-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC-02-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC-02-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC-03-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC-03-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC-03-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC-04-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC-04-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC-04-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC-05-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC-05-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC-05-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC-06-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý"]}
+{"id": "TC-06-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý"]}
+{"id": "TC-06-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V3: không có ref đã map", "V4: REVIEW CSV: có lưu ý"]}
+{"id": "TC-07-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC-07-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC-07-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "TC-08-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC-08-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC-08-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "TC-09-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC-09-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC-09-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "TC-10-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý"]}
+{"id": "TC-10-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý"]}
+{"id": "TC-10-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V3: không có ref đã map", "V4: REVIEW CSV: có lưu ý"]}
+{"id": "OT2-V1-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT2-V1-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT2-V1-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT2-V2-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT2-V2-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT2-V2-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT2-C1-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT2-C1-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT2-C1-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "OT2-C2-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT2-C2-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "OT2-C2-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "BH2-V1-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH2-V1-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH2-V1-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH2-V2-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH2-V2-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH2-V2-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH2-C1-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH2-C1-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH2-C1-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "BH2-C2-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH2-C2-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "BH2-C2-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "GT2-V1-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT2-V1-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT2-V1-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT2-V2-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT2-V2-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT2-V2-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT2-C1-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT2-C1-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT2-C1-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "GT2-C2-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT2-C2-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "GT2-C2-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "DT2-V1-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý"]}
+{"id": "DT2-V1-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý"]}
+{"id": "DT2-V1-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý"]}
+{"id": "DT2-V2-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý"]}
+{"id": "DT2-V2-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý"]}
+{"id": "DT2-V2-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["low_confidence"], "reasons": ["V4: REVIEW CSV: có lưu ý"]}
+{"id": "DT2-C1-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT2-C1-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT2-C1-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "DT2-C2-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT2-C2-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "DT2-C2-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "KL2-V1-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL2-V1-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL2-V1-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL2-V2-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL2-V2-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL2-V2-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL2-C1-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL2-C1-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL2-C1-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "KL2-C2-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL2-C2-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "KL2-C2-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "LU2-V1-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "fail", "V7": "pass"}, "flags": ["quarantine"], "reasons": ["V6: gần trùng LU-01 (ratio > 0.95)"], "quarantine_layers": ["V6"]}
+{"id": "LU2-V1-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "fail", "V7": "pass"}, "flags": ["quarantine"], "reasons": ["V6: gần trùng LU-01 (ratio > 0.95)"], "quarantine_layers": ["V6"]}
+{"id": "LU2-V1-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "fail", "V7": "pass"}, "flags": ["quarantine"], "reasons": ["V6: gần trùng LU-01 (ratio > 0.95)"], "quarantine_layers": ["V6"]}
+{"id": "LU2-V2-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU2-V2-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU2-V2-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU2-C1-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU2-C1-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU2-C1-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "LU2-C2-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU2-C2-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "LU2-C2-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "TS2-V1-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS2-V1-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS2-V1-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS2-V2-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS2-V2-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS2-V2-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS2-C1-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS2-C1-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS2-C1-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "TS2-C2-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS2-C2-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TS2-C2-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "TC2-V1-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC2-V1-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC2-V1-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC2-V2-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC2-V2-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC2-V2-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC2-C1-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC2-C1-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC2-C1-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "TC2-C2-T1", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC2-C2-T2", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TC2-C2-T3", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map"]}
+{"id": "QA-01", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "QA-02", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "QA-03", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "QA-04", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "QA-05", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "QA-06", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "fail"}, "flags": ["low_confidence"], "reasons": ["V7: LLM ['khong_xac_dinh', 'vi_pham'] vs nhãn violation"]}
+{"id": "QA-07", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "QA-08", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "n/a"}, "flags": [], "reasons": ["V3: không có ref đã map", "V7: không áp dụng (không có nhãn violation/compliant hoặc thiếu điều khoản/luật)"]}
+{"id": "MIX-017", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TEMP-006", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "n/a"}, "flags": [], "reasons": ["V2: không có hợp đồng (câu hỏi pháp luật thuần)", "V3: không có ref đã map", "V7: không áp dụng (không có nhãn violation/compliant hoặc thiếu điều khoản/luật)"]}
+{"id": "MIX-018", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TEMP-014", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "n/a"}, "flags": [], "reasons": ["V2: không có hợp đồng (câu hỏi pháp luật thuần)", "V3: không có ref đã map", "V7: không áp dụng (không có nhãn violation/compliant hoặc thiếu điều khoản/luật)"]}
+{"id": "MIX-007", "checks": {"V1": "pass", "V2": "pass", "V3": "fail", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": ["ref_mismatch"], "reasons": ["V3: Điều 13 (ratio 0.39)"]}
+{"id": "MIX-006", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "fail"}, "flags": ["low_confidence"], "reasons": ["V7: LLM ['vi_pham', 'hop_le'] vs nhãn violation"]}
+{"id": "MIX-012", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map (unmapped_refs)"]}
+{"id": "TEMP-009", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "n/a"}, "flags": [], "reasons": ["V2: không có hợp đồng (câu hỏi pháp luật thuần)", "V3: không có ref đã map", "V7: không áp dụng (không có nhãn violation/compliant hoặc thiếu điều khoản/luật)"]}
+{"id": "MIX-019", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "MIX-005", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "MIX-003", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "MIX-004", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "MIX-008", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TEMP-011", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "n/a"}, "flags": [], "reasons": ["V2: không có hợp đồng (câu hỏi pháp luật thuần)", "V3: không có ref đã map", "V7: không áp dụng (không có nhãn violation/compliant hoặc thiếu điều khoản/luật)"]}
+{"id": "MIX-020", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "MIX-013", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "MIX-014", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TEMP-010", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "n/a"}, "flags": [], "reasons": ["V2: không có hợp đồng (câu hỏi pháp luật thuần)", "V3: không có ref đã map", "V7: không áp dụng (không có nhãn violation/compliant hoặc thiếu điều khoản/luật)"]}
+{"id": "TEMP-003", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "n/a"}, "flags": [], "reasons": ["V2: không có hợp đồng (câu hỏi pháp luật thuần)", "V3: không có ref đã map", "V7: không áp dụng (không có nhãn violation/compliant hoặc thiếu điều khoản/luật)"]}
+{"id": "MIX-009", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map (unmapped_refs)"]}
+{"id": "MIX-002", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TEMP-001", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "n/a"}, "flags": [], "reasons": ["V2: không có hợp đồng (câu hỏi pháp luật thuần)", "V3: không có ref đã map", "V7: không áp dụng (không có nhãn violation/compliant hoặc thiếu điều khoản/luật)"]}
+{"id": "TEMP-013", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "n/a"}, "flags": [], "reasons": ["V2: không có hợp đồng (câu hỏi pháp luật thuần)", "V3: không có ref đã map", "V7: không áp dụng (không có nhãn violation/compliant hoặc thiếu điều khoản/luật)"]}
+{"id": "MIX-011", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": ["V3: không có ref đã map (unmapped_refs)"]}
+{"id": "TEMP-012", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "n/a"}, "flags": [], "reasons": ["V2: không có hợp đồng (câu hỏi pháp luật thuần)", "V3: không có ref đã map", "V7: không áp dụng (không có nhãn violation/compliant hoặc thiếu điều khoản/luật)"]}
+{"id": "MIX-016", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "MIX-015", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "TEMP-005", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "n/a"}, "flags": [], "reasons": ["V2: không có hợp đồng (câu hỏi pháp luật thuần)", "V3: không có ref đã map", "V7: không áp dụng (không có nhãn violation/compliant hoặc thiếu điều khoản/luật)"]}
+{"id": "TEMP-008", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "n/a"}, "flags": [], "reasons": ["V2: không có hợp đồng (câu hỏi pháp luật thuần)", "V3: không có ref đã map", "V7: không áp dụng (không có nhãn violation/compliant hoặc thiếu điều khoản/luật)"]}
+{"id": "MIX-001", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "pass"}, "flags": [], "reasons": []}
+{"id": "MIX-010", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "n/a"}, "flags": [], "reasons": ["V7: không áp dụng (không có nhãn violation/compliant hoặc thiếu điều khoản/luật)"]}
+{"id": "TEMP-007", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "n/a"}, "flags": [], "reasons": ["V2: không có hợp đồng (câu hỏi pháp luật thuần)", "V3: không có ref đã map", "V7: không áp dụng (không có nhãn violation/compliant hoặc thiếu điều khoản/luật)"]}
+{"id": "TEMP-004", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "n/a"}, "flags": [], "reasons": ["V2: không có hợp đồng (câu hỏi pháp luật thuần)", "V3: không có ref đã map", "V7: không áp dụng (không có nhãn violation/compliant hoặc thiếu điều khoản/luật)"]}
+{"id": "TEMP-002", "checks": {"V1": "pass", "V2": "pass", "V3": "pass", "V4": "pass", "V5": "pass", "V6": "pass", "V7": "n/a"}, "flags": [], "reasons": ["V2: không có hợp đồng (câu hỏi pháp luật thuần)", "V3: không có ref đã map", "V7: không áp dụng (không có nhãn violation/compliant hoặc thiếu điều khoản/luật)"]}

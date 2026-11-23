@@ -3,6 +3,7 @@
 export function severityLabel(severity) {
   if (severity === "critical") return "Nghiêm trọng";
   if (severity === "warning") return "Cần chú ý";
+  if (severity === "info") return "Góp ý";
   return "Ổn";
 }
 
@@ -352,7 +353,7 @@ export function markChangedTokens(original, revised) {
 }
 
 export function sortRisks(risks) {
-  const rank = { critical: 0, warning: 1, ok: 2 };
+  const rank = { critical: 0, warning: 1, info: 2, ok: 3 };
   return [...(risks || [])].sort((a, b) => {
     const sr = (rank[a.severity] ?? 9) - (rank[b.severity] ?? 9);
     if (sr !== 0) return sr;

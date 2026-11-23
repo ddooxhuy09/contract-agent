@@ -100,7 +100,7 @@ class PgLegalDocumentRepository:
                         signer_title = EXCLUDED.signer_title,
                         source_url = EXCLUDED.source_url,
                         full_text = EXCLUDED.full_text,
-                        path = COALESCE(EXCLUDED.path, legal_documents.path),
+                        path = EXCLUDED.path,
                         updated_at = NOW()
                     """,
                     (
@@ -120,7 +120,7 @@ class PgLegalDocumentRepository:
                         doc.signer_title,
                         doc.source_url,
                         doc.full_text,
-                        sanitize_doc_id_for_ltree(doc.doc_num or doc.doc_id),
+                        sanitize_doc_id_for_ltree(doc.doc_id),
                         doc.crawled_at,
                     ),
                 )
@@ -597,6 +597,22 @@ class PgLegalChunkRepository:
                         """,
                         (src, tgt, rel.relation_type or "dan_chieu"),
                     )
+
+    def delete_doc_content(self, doc_id: str) -> None:
+        """Drop a document's chunks, tree (FK cascade) and own internal refs before re-writing them.
+
+        Keeps legal_documents, doc↔doc relations (also written by other docs' luoc_do) and
+        clause_amendments edges (ref_type <> 'dan_chieu', loaded by another script).
+        """
+        with get_db() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "DELETE FROM legal_path_relations WHERE ref_type = 'dan_chieu' "
+                    "AND source_path <@ %s::ltree",
+                    (sanitize_doc_id_for_ltree(doc_id),),
+                )
+                cur.execute("DELETE FROM legal_embeddings WHERE doc_id = %s", (doc_id,))
+                cur.execute("DELETE FROM legal_parts WHERE doc_id = %s", (doc_id,))
 
     def count_for_doc(self, doc_id: str) -> int:
         with get_db() as conn:

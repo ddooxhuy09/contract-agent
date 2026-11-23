@@ -28,7 +28,7 @@ docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docke
 python -m evaluation.score_rag_only evaluation_results/runs/rag_only_no_labor_hint
 ```
 
-This uses only cached BGE-M3, real PostgreSQL/Neo4j retrieval, and the original query-rewrite rules. It instantiates no LLM client, does not run an LLM query rewrite, and records that no Gemini credential was available. QA cases use the production first-pass QA legal retriever without forcing a labor contract type; risk cases use the production GraphRAG entry with the supplied fact pattern as the query instead of LLM-extracted clauses. All input contracts are indexed using the real local DOCX parser/chunker/embedder in the isolated copy.
+This uses only cached BGE-M3, real PostgreSQL retrieval, and the original query-rewrite rules. It instantiates no LLM client, does not run an LLM query rewrite, and records that no Gemini credential was available. QA cases use the production first-pass QA legal retriever without forcing a labor contract type; risk cases use the production GraphRAG entry with the supplied fact pattern as the query instead of LLM-extracted clauses. All input contracts are indexed using the real local DOCX parser/chunker/embedder in the isolated copy.
 
 On Git Bash, prefix Docker commands with `MSYS_NO_PATHCONV=1` so `/workspace/...` container paths are not rewritten to Windows paths.
 
@@ -53,7 +53,7 @@ Final R@5 moved 0.147 → 0.201 and MRR 0.185 → 0.260 with unchanged coverage;
 
 - `run_benchmark.py`: questions-only inference, incremental JSONL persistence, corpus fingerprints, package/code/config metadata.
 - `runtime_adapter.py`: real `UploadContract`, `run_analysis_workflow`, `answer_question`, and legal-only/scenario adapters; passive hooks preserve arguments and return values.
-- `audit.py`: JSON/JSONL/reference/date/DOCX checks and read-only PostgreSQL/Neo4j coverage inspection.
+- `audit.py`: JSON/JSONL/reference/date/DOCX checks and read-only PostgreSQL coverage inspection (document-relation edges from `legal_document_relations`).
 - `rerank_ablation.py`: offline reranking policies over saved traces; no model/database, gold read after rankings are fixed.
 - `scoring.py`: post-inference structural scoring, CSV, reports, review rubric, charts. It reads gold only after predictions exist.
 - `finalize_blocked.py`: one-off, evidence-checked finalization of this quota-interrupted run. It preserves raw predictions and records null output for unexecuted cases.
@@ -74,19 +74,18 @@ Final R@5 moved 0.147 → 0.201 and MRR 0.185 → 0.260 with unchanged coverage;
 
 ## Reproduce safely
 
-Run from the repository root. The original database containers must be stopped before physically copying volumes. The evaluation Compose file uses only the explicitly named copied data volumes. It does not apply `schema.sql`, `ensure_schema`, or ingest law fixtures.
+Run from the repository root. The original database containers must be stopped before physically copying volumes. The evaluation Compose file uses only the explicitly named copied data volumes. It does not apply `schema.sql` or ingest law fixtures.
 
 Always pass **`-p contractlens-eval-01a154eb`**. The repository `.env` sets COMPOSE_PROJECT_NAME and can override the YAML name.
 
 The current copied volumes are:
 
 - `contractlens_eval_20261019_01a154eb_pgdata`
-- `contractlens_eval_20261019_01a154eb_neo4jdata`
 
-The original source volumes `contractlens_pgdata` and `contractlens_neo4jdata` were mounted read-only by copy helpers. The shared `contractlens_hf_cache` is mounted read-only in workers. The model remains the repository-configured Gemini 2.5 Flash / BAAI bge-m3.
+The original source volume `contractlens_pgdata` was mounted read-only by a copy helper. Neo4j was removed from the stack on 2026-11-15 (see `docs/NHAT_KY_THAY_DOI.md`); runs before that date expanded through Neo4j, `rag_expand_*_20261115` compares both backends, and every later run uses PostgreSQL only. The shared `contractlens_hf_cache` is mounted read-only in workers. The model remains the repository-configured Gemini 2.5 Flash / BAAI bge-m3.
 
 ```powershell
-docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docker-compose.eval.yml up -d postgres neo4j
+docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docker-compose.eval.yml up -d postgres
 docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docker-compose.eval.yml run --rm --no-deps worker python -m evaluation.audit
 python -m evaluation.scoring evaluation_results/new_baseline
 python -m unittest discover -s evaluation/tests -v
@@ -109,7 +108,7 @@ Generation/legal correctness and unsupported temporal selection metrics remain n
 ## Stop isolated services
 
 ```powershell
-docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docker-compose.eval.yml stop postgres neo4j
+docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docker-compose.eval.yml stop postgres
 ```
 
 The copied volumes are retained for review/reproduction. No production volume should be removed or restored by this tooling.

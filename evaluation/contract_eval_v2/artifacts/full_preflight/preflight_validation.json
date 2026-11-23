@@ -1,0 +1,18 @@
+{
+  "status": "pre_full_notification_no_model_run",
+  "pytest_all": {
+    "passed": 386,
+    "skipped": 1,
+    "includes_existing_integration": true,
+    "model_keys_blank": true
+  },
+  "new_preflight_tests": 3,
+  "frontend_lint": "passed",
+  "frontend_build": "passed",
+  "ruff_F_app_scripts_evaluation": "passed",
+  "full_qa_outputs_created": false,
+  "full_workflow_outputs_created": false,
+  "expert_gold_signoff": false,
+  "whole_workflow_F1_ready": false,
+  "pdf_upload_OCR_measured": false
+}

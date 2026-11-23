@@ -109,15 +109,16 @@ The retrieval-only runner writes actual retrieval traces. It adapts risk cases t
 
 ## Docker / data safety
 
-The original DB volume names are `contractlens_pgdata` and `contractlens_neo4jdata`. The evaluation used copied volumes:
+The original DB volume name is `contractlens_pgdata`. The evaluation uses the copied volume:
 
 - `contractlens_eval_20261019_01a154eb_pgdata`
-- `contractlens_eval_20261019_01a154eb_neo4jdata`
 
-These clones are retained and the evaluation PostgreSQL/Neo4j containers were stopped after each run, including the seed-first run on 2026-10-26. No volume was removed. The original postgres/neo4j containers are currently `created` (not running) and reference their original volumes. Do not remove volumes or run Compose without explicit `-p contractlens-eval-01a154eb`; `.env` defines `COMPOSE_PROJECT_NAME=contractlens` and can otherwise target original services. If DB access is needed, start only the evaluation clones with:
+Neo4j was removed from the stack on 2026-11-15 (see `docs/NHAT_KY_THAY_DOI.md`); runs before that date expanded through Neo4j, `rag_expand_*_20261115` compares both backends, and every later run uses PostgreSQL only.
+
+The PostgreSQL clone is retained and the evaluation containers were stopped after each run. The original postgres container is not affected by this tooling. Do not remove volumes or run Compose without explicit `-p contractlens-eval-01a154eb`; `.env` defines `COMPOSE_PROJECT_NAME=contractlens` and can otherwise target original services. If DB access is needed, start only the evaluation clones with:
 
 ```powershell
-docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docker-compose.eval.yml up -d postgres neo4j
+docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docker-compose.eval.yml up -d postgres
 ```
 
 For any new retrieval worker, keep Gemini disabled:
@@ -132,7 +133,7 @@ On Git Bash, prefix Docker commands with `MSYS_NO_PATHCONV=1`; otherwise `/works
 Use a fresh output directory; the runner refuses to overwrite an existing `predictions.jsonl`. Stop only the evaluation clones after use:
 
 ```powershell
-docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docker-compose.eval.yml stop postgres neo4j
+docker compose -p contractlens-eval-01a154eb --env-file .env -f evaluation/docker-compose.eval.yml stop postgres
 ```
 
 ## Earlier generation experiment: do not resume

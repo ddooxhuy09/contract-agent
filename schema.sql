@@ -1,6 +1,6 @@
 -- =============================================================================
 -- ContractLens — Postgres schema v2.1 (EMPTY bootstrap)
--- Mirror: schemas/empty/contractlens_postgres.sql  |  Neo4j: schema.cypher
+-- Mirror: schemas/empty/contractlens_postgres.sql
 -- Hierarchy = full FK chain doc→part→…; only parts.doc_id (+ embeddings.doc_id)
 -- Missing levels stored as title/content='Không có'; RAG ltree stays sparse
 -- Chunks+RAG = legal_embeddings (UNIQUE path ltree; chunk_type on embeddings)
@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS legal_documents (
 );
 
 COMMENT ON TABLE legal_documents IS
-  'Document metadata. path = sanitized doc_id for root level of hierarchy.';
+  'Document metadata. path = sanitize(doc_id): root label of every hierarchy / chunk / path-relation ltree.';
 COMMENT ON COLUMN legal_documents.eff_from IS
   'Declared effective date — different from status_flag (which factors in repeal/replace relations).';
 COMMENT ON COLUMN legal_documents.eff_flag IS
@@ -127,7 +127,7 @@ CREATE INDEX IF NOT EXISTS idx_ld_path_gist ON legal_documents USING gist (path)
 -- Effectiveness columns (same vocabulary as legal_documents):
 --   eff_from, eff_to, eff_flag, status_flag — SoT for provision-level HL.
 -- Parent status_flag=2 cascades to children; partial repeal touches only that node.
--- legal_embeddings.is_effective is a RAG cache synced from leaf hierarchy status.
+-- legal_embeddings.is_effective is a RAG cache synced from hierarchy status (NOT IN (2,3)).
 
 -- Level 1: Part (Phần) — sole hierarchy table with doc_id
 CREATE TABLE IF NOT EXISTS legal_parts (
@@ -315,7 +315,7 @@ COMMENT ON COLUMN legal_embeddings.path IS
   'ltree leaf key (sanitize(doc_id).structural). Replaces former chunk_ref.';
 
 COMMENT ON COLUMN legal_embeddings.is_effective IS
-  'Denorm cache for HNSW/RAG. SoT = hierarchy status_flag (1=còn HL, 5=còn 1 phần).';
+  'Denorm cache for HNSW/RAG = status NOT IN (2,3). SoT = hierarchy status_flag (chunks under a Điều) or document status_flag (root_path NULL).';
 
 CREATE INDEX IF NOT EXISTS idx_le_doc ON legal_embeddings (doc_id);
 CREATE INDEX IF NOT EXISTS idx_le_type ON legal_embeddings (doc_id, chunk_type);
@@ -341,7 +341,7 @@ CREATE TABLE IF NOT EXISTS legal_document_relations (
 );
 
 COMMENT ON TABLE legal_document_relations IS
-  'doc_id ↔ doc_id edges (luoc_do). Neo4j mirrors same id pairs.';
+  'doc_id ↔ doc_id edges (luoc_do). Read by GraphRAG expand (related / repealing docs).';
 
 CREATE INDEX IF NOT EXISTS idx_ldr_from ON legal_document_relations (from_doc_id);
 CREATE INDEX IF NOT EXISTS idx_ldr_to ON legal_document_relations (to_doc_id);
@@ -357,7 +357,7 @@ CREATE TABLE IF NOT EXISTS legal_path_relations (
 );
 
 COMMENT ON TABLE legal_path_relations IS
-  'Cạnh Điều/Khoản/Điểm qua ltree. Root = sanitize(doc_num) e.g. 100_2015_QH13.… (không dùng portal doc_id). Chéo VB + nội bộ cùng VB. Song song legal_document_relations (doc↔doc).';
+  'Cạnh Điều/Khoản/Điểm qua ltree. Root = sanitize(doc_id) e.g. 96122.… (như legal_embeddings.path). Chéo VB + nội bộ cùng VB. Song song legal_document_relations (doc↔doc).';
 
 CREATE INDEX IF NOT EXISTS idx_lpr_source ON legal_path_relations USING gist (source_path);
 CREATE INDEX IF NOT EXISTS idx_lpr_target ON legal_path_relations USING gist (target_path);
@@ -454,6 +454,13 @@ BEGIN
         'Ngưng hiệu lực một phần',
         'Có hiệu lực một phần'
     );
+END; $$ LANGUAGE plpgsql IMMUTABLE;
+
+-- Label says fully expired (or status 2 with no label): a date window alone must not revive it.
+CREATE OR REPLACE FUNCTION is_full_expired_eff(sf SMALLINT, ef TEXT) RETURNS BOOLEAN AS $$
+BEGIN
+    IF TRIM(COALESCE(ef, '')) = '' THEN RETURN sf = 2; END IF;
+    RETURN TRIM(ef) IN ('Hết hiệu lực toàn bộ', 'Ngưng hiệu lực', 'Không còn phù hợp');
 END; $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- Bidirectional sync: eff_flag ↔ status_flag
@@ -577,6 +584,13 @@ BEGIN
     IF NEW.eff_from IS NOT NULL
        AND NEW.eff_from <= today
        AND (NEW.eff_to IS NULL OR today < NEW.eff_to) THEN
+        -- Fully expired label (repealed with no eff_to) beats the date window
+        IF is_full_expired_eff(NEW.status_flag, ef) THEN
+            NEW.status_flag := 2;
+            NEW.eff_flag := CASE WHEN ef IN ('Ngưng hiệu lực', 'Không còn phù hợp')
+                                 THEN ef ELSE 'Hết hiệu lực toàn bộ' END;
+            RETURN NEW;
+        END IF;
         IF is_partial_eff(NEW.status_flag, ef) THEN
             IF ef <> '' THEN
                 NEW.status_flag := status_flag_for_eff_flag(ef);
@@ -679,6 +693,17 @@ BEGIN
     GET DIAGNOSTICS _updated = ROW_COUNT;
     RAISE NOTICE 'Step 5 (cascade partial): updated % row(s)', _updated;
 
+    -- Chunks outside any Điều (preamble, signature, appendix) follow the document status;
+    -- chunks under a Điều follow the hierarchy (trg_hier_emb_eff via refresh_hierarchy_status_flags).
+    UPDATE legal_embeddings e
+    SET    is_effective = d.status_flag NOT IN (2, 3)
+    FROM   legal_documents d
+    WHERE  e.doc_id = d.doc_id
+      AND  e.root_path IS NULL
+      AND  e.is_effective IS DISTINCT FROM (d.status_flag NOT IN (2, 3));
+    GET DIAGNOSTICS _updated = ROW_COUNT;
+    RAISE NOTICE 'Step 6 (doc-level chunks is_effective): updated % row(s)', _updated;
+
     RETURN QUERY
         SELECT ld.doc_id, CAST(0 AS INT), CAST(ld.status_flag AS INT)
         FROM legal_documents ld
@@ -772,6 +797,12 @@ BEGIN
     IF NEW.eff_from IS NOT NULL
        AND NEW.eff_from <= today
        AND (NEW.eff_to IS NULL OR today < NEW.eff_to) THEN
+        IF is_full_expired_eff(NEW.status_flag, ef) THEN
+            NEW.status_flag := 2;
+            NEW.eff_flag := CASE WHEN ef IN ('Ngưng hiệu lực', 'Không còn phù hợp')
+                                 THEN ef ELSE 'Hết hiệu lực toàn bộ' END;
+            RETURN NEW;
+        END IF;
         IF is_partial_eff(NEW.status_flag, ef) THEN
             IF ef <> '' THEN
                 NEW.status_flag := status_flag_for_eff_flag(ef);
@@ -815,7 +846,10 @@ BEGIN
     RETURN NULL;
 END; $$ LANGUAGE plpgsql;
 
--- Sync embeddings.is_effective cache from hierarchy leaf status (1 or 5 = effective)
+-- Sync embeddings.is_effective cache from hierarchy status.
+-- Searchable unless 2 (hết hiệu lực) or 3 (chưa có hiệu lực). 4 = the *document* lost part of
+-- its force; a node inheriting 4 is still in force unless its own eff_to says otherwise.
+-- Hierarchy and chunk paths share the root sanitize(doc_id), so path <@ node.path matches.
 CREATE OR REPLACE FUNCTION trg_sync_embedding_effective() RETURNS TRIGGER AS $$
 DECLARE
     ok BOOLEAN;
@@ -824,7 +858,7 @@ BEGIN
        AND NEW.path IS NOT DISTINCT FROM OLD.path THEN
         RETURN NULL;
     END IF;
-    ok := NEW.status_flag IN (1, 5);
+    ok := NEW.status_flag NOT IN (2, 3);
     UPDATE legal_embeddings
     SET is_effective = ok
     WHERE path IS NOT NULL
@@ -863,9 +897,12 @@ BEGIN
              EXECUTE FUNCTION trg_hierarchy_cascade_expire()', t);
 
         EXECUTE format('DROP TRIGGER IF EXISTS trg_hier_emb_eff ON %I', t);
+        -- Plain UPDATE (not "UPDATE OF status_flag"): status is often changed by the
+        -- BEFORE date trigger, which "OF col" triggers do not see. The function exits early
+        -- when status and path are unchanged.
         EXECUTE format(
             'CREATE TRIGGER trg_hier_emb_eff
-             AFTER INSERT OR UPDATE OF status_flag, path ON %I
+             AFTER INSERT OR UPDATE ON %I
              FOR EACH ROW EXECUTE FUNCTION trg_sync_embedding_effective()', t);
 
         EXECUTE format(

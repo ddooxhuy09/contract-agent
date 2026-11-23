@@ -6,6 +6,7 @@ const FILTERS = [
   { key: "all", label: "Tất cả" },
   { key: "critical", label: "Nghiêm trọng" },
   { key: "warning", label: "Cần chú ý" },
+  { key: "info", label: "Góp ý" },
 ];
 
 export default function IssueList({ risks, openKey, onOpenKeyChange, clausesByNumber }) {

@@ -173,7 +173,7 @@ body.notes-on .notes-panel{display:block}
   <div class="cols c3" style="margin-top:1.6rem;max-width:42rem">
     <div class="card"><p class="kw">Rà soát HĐLĐ</p><p class="why">Cảnh báo + bản sửa Điều</p></div>
     <div class="card law"><p class="kw">Hỏi đáp có nguồn</p><p class="why">HĐ và kho luật song song</p></div>
-    <div class="card"><p class="kw">GraphRAG</p><p class="why">Postgres + Neo4j</p></div>
+    <div class="card"><p class="kw">GraphRAG</p><p class="why">Postgres: ltree + quan hệ VB</p></div>
   </div>
 </section>
 
@@ -188,7 +188,7 @@ body.notes-on .notes-panel{display:block}
     </div>
     <div class="card law">
       <h3>Dữ liệu &amp; kiến trúc</h3>
-      <ul><li>Cấu trúc VBQPPL &amp; HĐLĐ</li><li>Stack công nghệ</li><li>Kiến trúc &amp; data pipeline</li><li>PostgreSQL &amp; Neo4j cho RAG</li></ul>
+      <ul><li>Cấu trúc VBQPPL &amp; HĐLĐ</li><li>Stack công nghệ</li><li>Kiến trúc &amp; data pipeline</li><li>PostgreSQL cho GraphRAG</li></ul>
     </div>
     <div class="card">
       <h3>Luồng &amp; đánh giá</h3>
@@ -329,7 +329,7 @@ body.notes-on .notes-panel{display:block}
   </div>
 </section>
 
-<section class="slide" data-notes="Phần công nghệ chỉ nêu những gì có trong source. FastAPI monolith, React, Gemini 2.5 Flash, BGE-M3 1024 chiều, Postgres 16 với pgvector và ltree, Neo4j 5, LangGraph, Docker Compose bốn service. Không Redis, không Kubernetes, không microservices — đây là điểm em muốn nói rõ để tránh hiểu nhầm quy mô đồ án.">
+<section class="slide" data-notes="Phần công nghệ chỉ nêu những gì có trong source. FastAPI monolith, React, Gemini 2.5 Flash, BGE-M3 1024 chiều, Postgres 16 với pgvector và ltree, LangGraph, Docker Compose ba service. Không Redis, không Kubernetes, không microservices — đây là điểm em muốn nói rõ để tránh hiểu nhầm quy mô đồ án.">
   <p class="dieu">Điều 07</p>
   <h2>CÔNG NGHỆ SỬ DỤNG</h2>
   <p class="take">Stack triển khai trong repository hiện tại</p>
@@ -341,16 +341,15 @@ body.notes-on .notes-panel{display:block}
       <tr><td>Orchestration</td><td>LangGraph</td><td>Hai state graph: analyze + QA</td></tr>
       <tr><td>LLM</td><td>Gemini 2.5 Flash</td><td>Extract, chấm Điều, QA, OCR ảnh</td></tr>
       <tr><td>Embedding</td><td>BAAI/bge-m3 · 1024 chiều</td><td>Semantic retrieval HĐ và luật</td></tr>
-      <tr><td>OLTP + vector</td><td>PostgreSQL 16 · pgvector · ltree</td><td>Hồ sơ, chữ, vector, FTS, checkpoint</td></tr>
-      <tr><td>Graph</td><td>Neo4j 5</td><td>Cây path, quan hệ VB — không lưu chữ</td></tr>
-    </tbody>
+      <tr><td>OLTP + vector</td><td>PostgreSQL 16 · pgvector · ltree</td><td>Hồ sơ, chữ, vector, FTS, cây ltree + quan hệ VB (GraphRAG), checkpoint</td></tr>
+          </tbody>
   </table>
 </section>
 
-<section class="slide" data-notes="Kiến trúc: người dùng qua React tới một FastAPI. Hai graph LangGraph gọi Gemini và BGE-M3. Chữ và vector nằm ở Postgres, Neo4j chỉ giữ id và cạnh. Crawl luật là script offline, tách khỏi request người dùng. Docker Compose chạy đúng bốn process.">
+<section class="slide" data-notes="Kiến trúc: người dùng qua React tới một FastAPI. Hai graph LangGraph gọi Gemini và BGE-M3. Chữ, vector, cây điều khoản và quan hệ văn bản đều nằm ở Postgres. Crawl luật là script offline, tách khỏi request người dùng. Docker Compose chạy đúng ba process.">
   <p class="dieu">Điều 08</p>
   <h2>KIẾN TRÚC HỆ THỐNG</h2>
-  <p class="take">Monolith FastAPI · hai datastore · LLM bên ngoài</p>
+  <p class="take">Monolith FastAPI · một datastore · LLM bên ngoài</p>
   <div class="arch fill">
     <ol class="pipe">
       <li>Người dùng</li><li>React SPA</li><li>FastAPI</li>
@@ -361,36 +360,34 @@ body.notes-on .notes-panel{display:block}
       <div class="node core"><b>LangGraph QA</b><span>retrieve → rewrite → generate</span></div>
     </div>
     <div class="arrow-down">&darr;</div>
-    <div class="arch-row r4">
-      <div class="node db"><b>PostgreSQL</b><span>chữ, vector, FTS, checkpoint</span></div>
-      <div class="node db"><b>Neo4j</b><span>path, cạnh VBQPPL</span></div>
+    <div class="arch-row r3">
+      <div class="node db"><b>PostgreSQL</b><span>chữ, vector, FTS, ltree, checkpoint</span></div>
       <div class="node ai"><b>Gemini 2.5 Flash</b><span>extract, judge, QA, OCR</span></div>
       <div class="node ai"><b>BGE-M3</b><span>embedding 1024 chiều</span></div>
     </div>
   </div>
 </section>
 
-<section class="slide" data-notes="Triển khai local bằng Docker Compose: postgres, neo4j, api, frontend. Không phải cụm Kubernetes. Crawl và ingest là script chạy tay, không phải API runtime. Storage file là đĩa local, không MinIO.">
+<section class="slide" data-notes="Triển khai local bằng Docker Compose: postgres, api, frontend. Không phải cụm Kubernetes. Crawl và ingest là script chạy tay, không phải API runtime. Storage file là đĩa local, không MinIO.">
   <p class="dieu">Điều 09</p>
   <h2>TRIỂN KHAI</h2>
-  <p class="take">Docker Compose — bốn process, không microservices</p>
-  <div class="cols c4 fill">
-    <div class="card"><h3>postgres</h3><p class="kw">pgvector:pg16</p><p class="why">User, HĐ, corpus, vector, checkpoint LangGraph.</p></div>
-    <div class="card law"><h3>neo4j</h3><p class="kw">neo4j:5</p><p class="why">Đồ thị mục lục và quan hệ văn bản.</p></div>
-    <div class="card"><h3>api</h3><p class="kw">Python 3.12</p><p class="why">FastAPI + embedding model trong container.</p></div>
+  <p class="take">Docker Compose — ba process, không microservices</p>
+  <div class="cols c3 fill">
+    <div class="card"><h3>postgres</h3><p class="kw">pgvector:pg16</p><p class="why">User, HĐ, corpus, vector, cây ltree + quan hệ VB, checkpoint LangGraph.</p></div>
+        <div class="card"><h3>api</h3><p class="kw">Python 3.12</p><p class="why">FastAPI + embedding model trong container.</p></div>
     <div class="card"><h3>frontend</h3><p class="kw">Node 22</p><p class="why">Vite dev server trong Compose.</p></div>
   </div>
   <p class="why">Crawl VBPL và ingest corpus: script thủ công, tách khỏi request người dùng.</p>
 </section>
 
-<section class="slide" data-notes="Quy trình dữ liệu pháp luật. Crawl vbpl.vn ra folder. Extract trong RAM. Chuẩn hóa, dựng cây, chunk, embed, rồi ghi Postgres và Neo4j. muc_luc.json bắt buộc khi ingest nhưng crawler hiện không tự tạo, phải bổ sung trước. User hỏi không crawl lại.">
+<section class="slide" data-notes="Quy trình dữ liệu pháp luật. Crawl vbpl.vn ra folder. Extract trong RAM. Chuẩn hóa, dựng cây, chunk, embed, rồi ghi Postgres. muc_luc.json bắt buộc khi ingest nhưng crawler hiện không tự tạo, phải bổ sung trước. User hỏi không crawl lại.">
   <p class="dieu">Điều 10</p>
   <h2>QUY TRÌNH XỬ LÝ DỮ LIỆU</h2>
   <p class="take">Từ VBPL đến kho sẵn sàng truy hồi</p>
   <ol class="pipe">
     <li>Thu thập</li><li>Trích xuất</li><li>Chuẩn hóa</li><li>Phân cấp</li><li>Chunking</li><li>Embedding</li><li>Lưu trữ</li>
   </ol>
-  <div class="cols c3 fill">
+  <div class="cols c2 fill">
     <div class="card">
       <h3>Input folder</h3>
       <p class="mono">thuoc_tinh.json<br>van_ban.md<br>muc_luc.json<br>luoc_do.json</p>
@@ -398,19 +395,15 @@ body.notes-on .notes-panel{display:block}
     </div>
     <div class="card">
       <h3>PostgreSQL</h3>
-      <p class="why">Metadata, hierarchy ltree, chunk text, vector 1024, full-text.</p>
-    </div>
-    <div class="card law">
-      <h3>Neo4j</h3>
-      <p class="why">Node path, PARENT_OF, REPEALS, AMENDS, CITES. Không lưu chunk_text.</p>
+      <p class="why">Metadata, hierarchy ltree, chunk text, vector 1024, full-text, quan hệ văn bản (căn cứ, sửa đổi, bãi bỏ, dẫn chiếu).</p>
     </div>
   </div>
 </section>
 
-<section class="slide" data-notes="Lý do có hai cơ sở dữ liệu. Postgres giữ chữ, user, vector, FTS, ltree trong cùng một hệ quản trị — phù hợp dữ liệu có cấu trúc cộng semantic retrieval. Neo4j chỉ bung hàng xóm trên cây sau khi có seed. Chữ luôn hydrate lại từ Postgres. Mặc định LEGAL_EXPAND_BACKEND là neo4j.">
+<section class="slide" data-notes="Vì sao chỉ một cơ sở dữ liệu. Postgres giữ chữ, user, vector, FTS và cả đồ thị pháp luật: cây Điều Khoản Điểm bằng ltree, quan hệ văn bản ở bảng legal_document_relations. Bước expand bung anh em, tổ tiên, văn bản liên quan và văn bản bãi bỏ ngay trong Postgres. Em từng dùng Neo4j cho bước này, rồi đo lại trên 34 câu hỏi benchmark: Postgres cho R@5 và MRR bằng nhau, R@10 cao hơn (0,314 so với 0,299), nhanh hơn khoảng 200 ms mỗi truy vấn, nên em gỡ Neo4j để bớt một kho phải đồng bộ.">
   <p class="dieu">Điều 11</p>
-  <h2>POSTGRESQL &amp; NEO4J</h2>
-  <p class="take">Chữ và vector tại Postgres · cạnh cấu trúc tại Neo4j</p>
+  <h2>POSTGRESQL CHO GRAPHRAG</h2>
+  <p class="take">Chữ, vector và đồ thị pháp luật trong cùng một Postgres</p>
   <div class="cols c2">
     <div class="card">
       <h3>PostgreSQL</h3>
@@ -418,10 +411,10 @@ body.notes-on .notes-panel{display:block}
       <p class="why">Lý do: cùng hệ quản trị cho hồ sơ, pháp điển, pgvector, full-text, ltree, checkpoint chat.</p>
     </div>
     <div class="card law">
-      <h3>Neo4j</h3>
-      <p class="kw">Graph expand</p>
-      <p class="why">Lý do: sibling, ancestor, REPEALS / AMENDS. Không lưu nội dung Điều.</p>
-    </div>
+                <h3>Graph expand</h3>
+                <p class="kw">ltree + legal_document_relations</p>
+                <p class="why">Anh em, tổ tiên, khoản cha; văn bản liên quan và văn bản bãi bỏ / thay thế. Đã đo so với Neo4j: bằng hoặc tốt hơn, nhanh hơn ~200 ms, nên bỏ Neo4j.</p>
+              </div>
   </div>
   <ol class="pipe">
     <li>Query</li><li>Seed vector + FTS</li><li>Expand graph</li><li>Hydrate text</li><li>Context tối đa 10</li>
@@ -433,7 +426,7 @@ body.notes-on .notes-panel{display:block}
   <h2>RAG PIPELINE</h2>
   <p class="take">Từ truy vấn đến ngữ cảnh có căn cứ — chưa phải phán quyết</p>
   <ol class="pipe">
-    <li>Query</li><li>Rewrite</li><li>Hybrid search</li><li>Lọc hiệu lực</li><li>Neo4j expand</li><li>Hydrate PG</li><li>LLM</li>
+    <li>Query</li><li>Rewrite</li><li>Hybrid search</li><li>Lọc hiệu lực</li><li>Expand ltree</li><li>Hydrate PG</li><li>LLM</li>
   </ol>
   <div class="cols c3 fill">
     <div class="card"><h3>Hybrid</h3><p class="why">Vector cosine + Postgres FTS. Hợp nhất Reciprocal Rank Fusion.</p></div>

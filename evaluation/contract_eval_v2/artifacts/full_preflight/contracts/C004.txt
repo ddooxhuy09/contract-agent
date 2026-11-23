@@ -1,0 +1,10 @@
+HỢP ĐỒNG MUA BÁN HÀNG HÓA, BIẾN THỂ HỢP LỆ
+DỮ LIỆU GIẢ LẬP CHỈ DÀNH CHO ĐÁNH GIÁ HỆ THỐNG AI. KHÔNG SỬ DỤNG ĐỂ GIAO KẾT HỢP ĐỒNG.
+Điều 1
+Công ty A bán cho Công ty B 500 bộ bàn ghế văn phòng; giá trị hợp đồng 400.000.000 đồng.
+Điều 2
+Bên vi phạm nghĩa vụ phải chịu phạt 6% giá trị phần nghĩa vụ hợp đồng bị vi phạm.
+Điều 3
+Hai bên trao đổi và chấp nhận đề nghị qua email doanh nghiệp, có lưu hồ sơ giao dịch.
+Điều 4
+Các bên ghi rõ mình đều là thương nhân, giao dịch nhằm mục đích sinh lợi.

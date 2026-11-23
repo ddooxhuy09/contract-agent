@@ -1,0 +1,9 @@
+{"id": "OT-09-T1", "layers": ["V7"], "reasons": ["V7: LLM ['vi_pham', 'vi_pham'] vs nhãn compliant"]}
+{"id": "OT-09-T2", "layers": ["V7"], "reasons": ["V7: LLM ['vi_pham', 'vi_pham'] vs nhãn compliant"]}
+{"id": "OT-09-T3", "layers": ["V7"], "reasons": ["V3: không có ref đã map", "V7: LLM ['vi_pham', 'vi_pham'] vs nhãn compliant"]}
+{"id": "LU-09-T1", "layers": ["V4"], "reasons": ["V4: REVIEW CSV: CẦN BẠN XEM", "V7: LLM ['vi_pham', 'hop_le'] vs nhãn compliant"]}
+{"id": "LU-09-T2", "layers": ["V4"], "reasons": ["V4: REVIEW CSV: CẦN BẠN XEM", "V7: LLM ['vi_pham', 'hop_le'] vs nhãn compliant"]}
+{"id": "LU-09-T3", "layers": ["V4"], "reasons": ["V3: không có ref đã map", "V4: REVIEW CSV: CẦN BẠN XEM", "V7: LLM ['vi_pham', 'hop_le'] vs nhãn compliant"]}
+{"id": "LU2-V1-T1", "layers": ["V6"], "reasons": ["V6: gần trùng LU-01 (ratio > 0.95)"]}
+{"id": "LU2-V1-T2", "layers": ["V6"], "reasons": ["V6: gần trùng LU-01 (ratio > 0.95)"]}
+{"id": "LU2-V1-T3", "layers": ["V6"], "reasons": ["V6: gần trùng LU-01 (ratio > 0.95)"]}

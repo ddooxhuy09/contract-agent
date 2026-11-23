@@ -1,0 +1,233 @@
+{
+  "metric": "T3_violation_annotated_contract_clause_visible_in_actual_context_markers",
+  "all": {
+    "hits": 14,
+    "n": 55
+  },
+  "test": {
+    "hits": 12,
+    "n": 47
+  },
+  "per_case": [
+    {
+      "id": "OT-01-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "OT-02-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "OT-03-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "OT-04-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "OT-05-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "BH-01-T3",
+      "gold_clause_visible": true
+    },
+    {
+      "id": "BH-02-T3",
+      "gold_clause_visible": true
+    },
+    {
+      "id": "BH-03-T3",
+      "gold_clause_visible": true
+    },
+    {
+      "id": "BH-04-T3",
+      "gold_clause_visible": true
+    },
+    {
+      "id": "BH-05-T3",
+      "gold_clause_visible": true
+    },
+    {
+      "id": "GT-01-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "GT-02-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "GT-03-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "GT-04-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "GT-05-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "DT-01-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "DT-02-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "DT-03-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "DT-04-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "DT-05-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "KL-01-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "KL-02-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "KL-03-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "KL-04-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "KL-05-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "LU-01-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "LU-02-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "LU-03-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "LU-04-T3",
+      "gold_clause_visible": true
+    },
+    {
+      "id": "LU-05-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "TS-01-T3",
+      "gold_clause_visible": true
+    },
+    {
+      "id": "TS-02-T3",
+      "gold_clause_visible": true
+    },
+    {
+      "id": "TS-03-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "TS-04-T3",
+      "gold_clause_visible": true
+    },
+    {
+      "id": "TS-05-T3",
+      "gold_clause_visible": true
+    },
+    {
+      "id": "TC-01-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "TC-02-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "TC-03-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "TC-04-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "TC-05-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "OT2-V1-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "OT2-V2-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "BH2-V1-T3",
+      "gold_clause_visible": true
+    },
+    {
+      "id": "BH2-V2-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "GT2-V1-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "GT2-V2-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "DT2-V1-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "DT2-V2-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "KL2-V1-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "KL2-V2-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "LU2-V2-T3",
+      "gold_clause_visible": true
+    },
+    {
+      "id": "TS2-V1-T3",
+      "gold_clause_visible": true
+    },
+    {
+      "id": "TS2-V2-T3",
+      "gold_clause_visible": true
+    },
+    {
+      "id": "TC2-V1-T3",
+      "gold_clause_visible": false
+    },
+    {
+      "id": "TC2-V2-T3",
+      "gold_clause_visible": false
+    }
+  ]
+}

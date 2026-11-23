@@ -1,5 +1,6 @@
 from contextlib import contextmanager
 from collections.abc import Generator
+from contextvars import ContextVar
 
 import psycopg2
 import psycopg2.extras
@@ -19,8 +20,16 @@ def get_connection():
     return conn
 
 
+# Set by transaction(): every get_db() inside reuses one connection, committed once at the end.
+_shared_conn: ContextVar = ContextVar("shared_conn", default=None)
+
+
 @contextmanager
 def get_db() -> Generator:
+    shared = _shared_conn.get()
+    if shared is not None:
+        yield shared
+        return
     conn = get_connection()
     try:
         yield conn
@@ -30,3 +39,14 @@ def get_db() -> Generator:
         raise
     finally:
         conn.close()
+
+
+@contextmanager
+def transaction() -> Generator:
+    """All-or-nothing scope for several repository calls (e.g. one legal document ingest)."""
+    with get_db() as conn:
+        token = _shared_conn.set(conn)
+        try:
+            yield conn
+        finally:
+            _shared_conn.reset(token)

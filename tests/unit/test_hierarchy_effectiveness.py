@@ -28,11 +28,10 @@ def test_ingest_inherits_doc_effectiveness_onto_nodes():
     docs = MagicMock()
     docs.get.return_value = None
     chunks_repo = MagicMock()
-    graph = MagicMock()
     embedder = MagicMock()
     embedder.embed_documents.return_value = [[0.1] * 8]
 
-    uc = IngestLegalDocument(docs, chunks_repo, embedder, graph)
+    uc = IngestLegalDocument(docs, chunks_repo, embedder)
     uc.execute(
         thuoc_tinh={
             "doc_id": "d1",
@@ -60,7 +59,6 @@ def test_ingest_inherits_doc_effectiveness_onto_nodes():
             }
         ],
         relations=[],
-        graph_nodes=[],
     )
 
     nodes = chunks_repo.upsert_nodes.call_args[0][0]
@@ -80,11 +78,10 @@ def test_ingest_chunk_ineffective_when_doc_expired():
     docs = MagicMock()
     docs.get.return_value = None
     chunks_repo = MagicMock()
-    graph = MagicMock()
     embedder = MagicMock()
     embedder.embed_documents.return_value = [[0.1] * 8]
 
-    uc = IngestLegalDocument(docs, chunks_repo, embedder, graph)
+    uc = IngestLegalDocument(docs, chunks_repo, embedder)
     uc.execute(
         thuoc_tinh={
             "doc_id": "d2",
@@ -97,7 +94,6 @@ def test_ingest_chunk_ineffective_when_doc_expired():
         chunks=[{"path": "d2.D1", "chunk_text": "x", "chunk_type": "body"}],
         legal_nodes=[],
         relations=[],
-        graph_nodes=[],
     )
     entities = chunks_repo.upsert_many.call_args[0][0]
     assert entities[0].is_effective is False

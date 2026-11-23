@@ -18,8 +18,7 @@ FastAPI (Backend API)  ──────►  React 19 + Vite (Frontend)
    ├─ Analysis workflow (LangGraph): extract → judge từng Điều → aggregate
    ├─ QA workflow (LangGraph): retrieve → generate/refusal, có checkpointer
    │
-   ├─ PostgreSQL + pgvector : hợp đồng, chunks, kho luật, embeddings, checkpoint chat
-   ├─ Neo4j : đồ thị văn bản pháp luật (GraphRAG expansion)
+   ├─ PostgreSQL + pgvector + ltree : hợp đồng, chunks, kho luật, embeddings, cây điều khoản và quan hệ văn bản (GraphRAG), checkpoint chat
    └─ Gemini 2.5 Flash : LLM sinh nội dung (chat, JSON extraction, đánh giá rủi ro)
 ```
 
@@ -44,7 +43,7 @@ Luồng dữ liệu chính qua các API (`app/api/routes.py`):
 - **Kiến trúc phân lớp** (Clean/Hexagonal Architecture):
   - `app/domain/` — entities + ports (interfaces) — `domain/ports/repositories.py`, `domain/ports/services.py`
   - `app/application/use_cases/` — business logic độc lập framework (`contracts.py`, `auth.py`, `legal_ingest.py`)
-  - `app/infrastructure/` — cài đặt cụ thể (Postgres, Neo4j, LLM, embeddings, vector search...)
+  - `app/infrastructure/` — cài đặt cụ thể (Postgres, LLM, embeddings, vector search...)
   - `app/agents/` — các module LangGraph + helper LLM
   - `app/api/` — REST layer
   - DI container: `app/infrastructure/container.py` (`AppContainer`, `build_container()`)
@@ -62,19 +61,19 @@ Luồng dữ liệu chính qua các API (`app/api/routes.py`):
 - Nạp qua **`langchain-huggingface`** (`HuggingFaceEmbeddings`) + **PyTorch** (`torch`), tự chọn device CUDA/CPU (`app/infrastructure/embeddings/hf_embedder.py:12-43`).
 - Cache HF chia sẻ qua volume Docker `hf_cache`, warm-up lúc startup (`app/main.py:62-66`).
 
-### 2.4 Database — PostgreSQL + pgvector + Neo4j
+### 2.4 Database — PostgreSQL + pgvector + ltree
 
 - **PostgreSQL 16 với pgvector** (image `pgvector/pgvector:pg16`) — lưu: người dùng, hợp đồng, `contract_chunks`, kho luật `legal_documents` + `legal_section_chunks`, và cả **checkpoint chat của LangGraph**.
 - **Vector search**: operator `<=>` (cosine distance) trong `app/infrastructure/vector/pg_search.py`.
 - **Hybrid search**: vector cosine + **Postgres Full-Text Search** (`tsv`, `ts_rank_cd`) → hợp nhất bằng **Reciprocal Rank Fusion** (`app/infrastructure/vector/rrf.py`).
-- **Neo4j 5** — đồ thị các văn bản pháp luật: node `Document`/`Node`/`Chunk`, quan hệ `PARENT_OF`, `REPEALS`, `SUPERSEDES`, `AMENDS`, `BASED_ON`, `CITES`... (`app/infrastructure/neo4j/graph_repository.py:10-40`). Dùng cho **GraphRAG** — bung mở kết quả tìm kiếm theo quan hệ pháp lý.
+- **Đồ thị pháp luật trong Postgres** — cây Phần→Chương→Mục→Điều→Khoản→Điểm lưu bằng cột `path` kiểu `ltree` (bảng hierarchy `legal_parts` … `legal_points` và `legal_embeddings`); cạnh giữa các văn bản (căn cứ, dẫn chiếu, sửa đổi, bãi bỏ, thay thế) ở bảng `legal_document_relations`. Dùng cho **GraphRAG** qua `PgLegalChunkRepository.expand_paths` (`app/infrastructure/db/legal_repository.py`). Neo4j từng giữ bản sao đồ thị này và đã gỡ ngày 15/11/2026 (ltree cho kết quả bằng hoặc tốt hơn trên benchmark, xem `docs/NHAT_KY_THAY_DOI.md`).
 - **psycopg / psycopg2** — driver Postgres sync; **psycopg async pool** cho LangGraph checkpointer (`app/agents/checkpointer.py`).
 
 ### 2.5 Retrieval — RAG / GraphRAG
 
 - **`app/infrastructure/retrieval/legal_graph_rag.py`** — pipeline 3 bước:
   1. **Seed**: hybrid search Postgres lấy các điều luật liên quan.
-  2. **Expand**: Neo4j bung các "sibling/ancestor/related" theo quan hệ đồ thị.
+  2. **Expand**: Postgres bung các "sibling/ancestor" theo `ltree` và "related/superseding" theo `legal_document_relations`.
   3. **Hydrate**: lấy text từ Postgres, đánh hạng theo hiệu lực (`status_flag`, `eff_from/eff_to`) và vai trò (seed/sibling/ancestor/related).
 - Query rewrite theo loại hợp đồng: `app/infrastructure/retrieval/query_rewrite.py`.
 
@@ -96,8 +95,8 @@ Luồng dữ liệu chính qua các API (`app/api/routes.py`):
 
 ### 2.9 Deployment — Docker Compose
 
-- 4 services: `postgres`, `neo4j`, `api`, `frontend` (`docker-compose.yml`), healthcheck + volume riêng.
-- Script restore dump DB: `scripts/restore_db.ps1/.sh`, `restore_neo4j.ps1/.sh`.
+- 3 services: `postgres`, `api`, `frontend` (`docker-compose.yml`), healthcheck + volume riêng.
+- Script restore dump DB: `scripts/restore_db.ps1/.sh`.
 
 ---
 
@@ -427,7 +426,7 @@ Phân biệt 3 loại "memory" trong QA graph:
 | bge-m3 embeddings | `app/infrastructure/embeddings/hf_embedder.py` |
 | pgvector | `app/infrastructure/vector/pg_search.py`, `schema.sql` |
 | Hybrid search + RRF | `app/infrastructure/vector/rrf.py`, `pg_search.py` |
-| GraphRAG / Neo4j | `app/infrastructure/retrieval/legal_graph_rag.py`, `app/infrastructure/neo4j/graph_repository.py` |
+| GraphRAG | `app/infrastructure/retrieval/legal_graph_rag.py`, `app/infrastructure/db/legal_repository.py` (`expand_paths`) |
 | JWT + bcrypt | `app/infrastructure/auth/*` |
 | Doc parsing | `app/document/parser.py`, `chunker.py` |
 | React/Vite/Tailwind | `frontend/` |

@@ -97,7 +97,7 @@ async def run(args):
     if args.case_id:
         cases = [c for c in cases if c["id"] in args.case_id]
     packages = {}
-    for name in ("langgraph", "langchain-google-genai", "langchain-huggingface", "psycopg2-binary", "neo4j", "torch", "sentence-transformers"):
+    for name in ("langgraph", "langchain-google-genai", "langchain-huggingface", "psycopg2-binary", "torch", "sentence-transformers"):
         try:
             packages[name] = importlib.metadata.version(name)
         except importlib.metadata.PackageNotFoundError:

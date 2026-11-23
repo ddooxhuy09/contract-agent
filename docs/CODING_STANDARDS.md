@@ -14,7 +14,7 @@ Rút ra từ mã hiện có; áp dụng cho mã mới. Quy tắc chung cho agent
 ## Xử lý lỗi
 - Lỗi nghiệp vụ dùng lớp trong `domain/errors.py` (`NotFoundError`, `AuthError`, `ConflictError`, `ValidationError`); route dịch sang HTTP.
 - Lỗi không lường trước đi qua `_http_error` ở `api/routes.py`: không trả `str(e)` của driver; mất kết nối DB trả 503.
-- Bước tùy chọn lúc khởi động (Neo4j, checkpointer, warmup embedding) bắt `Exception` và ghi `logger.warning`; bước bắt buộc (JWT secret) thì raise.
+- Bước tùy chọn lúc khởi động (áp schema, checkpointer, warmup embedding) bắt `Exception` và ghi `logger.warning`; bước bắt buộc (JWT secret) thì raise.
 - Gọi LLM/mạng có thể lỗi tạm thời: thử lại ngay trong node (`_judge_clause_node`) hoặc ở pipeline (`_retry_on_dropped_connection`), không nuốt lỗi im lặng.
 
 ## Logging
@@ -32,7 +32,7 @@ Rút ra từ mã hiện có; áp dụng cho mã mới. Quy tắc chung cho agent
 - Trên Windows `app/main.py` đặt `WindowsSelectorEventLoopPolicy` ngay đầu file (lý do chưa được ghi trong mã; nhiều khả năng liên quan psycopg async). Giữ nguyên và giữ trước các import khác.
 
 ## Test
-- `pytest` + `pytest-asyncio`. Test unit không được cần Postgres/Neo4j/Gemini: fake port hoặc monkeypatch hàm theo module sử dụng (ví dụ `monkeypatch.setattr(wf, "parse_contract", ...)`).
+- `pytest` + `pytest-asyncio`. Test unit không được cần Postgres/Gemini: fake port hoặc monkeypatch hàm theo module sử dụng (ví dụ `monkeypatch.setattr(wf, "parse_contract", ...)`).
 - Fake phải khớp chữ ký thật (kinh nghiệm: `retrieve_legal` đã thêm tham số `title`, fake cũ trong `test_qa_memory.py` vỡ).
 - Test cần dịch vụ ngoài đặt ở `tests/integration/`.
 

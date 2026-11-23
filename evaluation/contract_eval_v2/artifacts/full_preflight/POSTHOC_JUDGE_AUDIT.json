@@ -1,0 +1,18 @@
+{
+  "primary_scores_unchanged": true,
+  "judge_disputed_gold_flags": 0,
+  "zero_flags_does_not_establish_gold_validity": true,
+  "spot_check": [
+    {
+      "ids": [
+        "BH-09-T1",
+        "BH-09-T3"
+      ],
+      "problem": "Judge reason invokes 2014 insurance law / article 42 for a 2026 contract. Do not treat this reason as an independently verified legal explanation.",
+      "official_reference": "41/2024/QH15 Article 33(5), Article 34(3), Article 140; BHYT needs its own applicable provisions.",
+      "url": "https://xaydungchinhsach.chinhphu.vn/toan-van-luat-so-41-2024-qh15-bao-hiem-xa-hoi-119240723163650489.htm",
+      "score_action": "No post-hoc relabeling or score edits; retain low_confidence and report limitation."
+    }
+  ],
+  "T3_retrieval_diagnostic": "Only 12 of 47 test T3 violation questions had the annotated focal clause marker in actual contract context. This is a measured context-coverage failure, not proof all other errors are retrieval-only."
+}

@@ -1,0 +1,36 @@
+{
+  "pytest_nonintegration": {
+    "passed": 381,
+    "skipped": 1,
+    "runtime": "project Linux container; LLM keys blank"
+  },
+  "changed_files_ruff_F": "passed",
+  "repository_ruff_F": "pre-existing F401 evaluation/check_chapter_numbers.py:15",
+  "v1_frozen_integrity": "6/6 match",
+  "v2_result_seal": "all prior artifact hashes match",
+  "candidate_and_reference_hashes": "match protocol",
+  "judge_and_scoring_functions": "AST identical to v3 baseline snapshot",
+  "independent_metric_arithmetic": "passed",
+  "real_output_counts": {
+    "regression_test": {
+      "questions_per_system": 32,
+      "unique_qa": 64,
+      "unique_judged": 64,
+      "valid_generations": 64
+    },
+    "fresh_source_checked": {
+      "questions_per_system": 8,
+      "unique_qa": 16,
+      "unique_judged": 16,
+      "valid_generations": 16
+    },
+    "validation": {
+      "questions_per_system": 16,
+      "unique_qa": 32,
+      "unique_judged": 32,
+      "valid_generations": 32
+    }
+  },
+  "llm_errors_recorded_in_usage": 2,
+  "integration_frontend": "not run; frontend changes predate this task"
+}

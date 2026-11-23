@@ -1,0 +1,5 @@
+{
+  "source": "actual final retrieval observed in QA graph",
+  "source_file": "qa.jsonl",
+  "not_a_separate_inference": true
+}

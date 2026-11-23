@@ -11,7 +11,8 @@ from app.agents.legal_citations import (
 )
 from app.agents.llm_client import DEFAULT_PROVIDER, chat_completion
 from app.core.logging import logger
-from app.core.prompts import CLAUSE_RISK_PROMPT
+from app.core.prompts import CLAUSE_RISK_FINDING_TYPES, CLAUSE_RISK_PROMPT, CLAUSE_RISK_RULE_HINT
+from app.core.settings import get_settings
 from app.infrastructure.retrieval.context import get_contract_chunks, get_graph_rag
 from app.schemas.contract import Clause, RiskItem
 from app.vectorstore.retriever import format_legal_context, retrieve_legal
@@ -173,6 +174,11 @@ def _risk_from_judgement(
     issue = (result.get("issue") or "").strip()
     if severity == "ok" and not issue:
         return None
+    loai = result.get("loai")
+    finding_type = loai if get_settings().judge_finding_types and isinstance(loai, str) else None
+    if finding_type and finding_type != "vi_pham" and severity in ("critical", "warning"):
+        # Missing content / drafting advice is shown, but not counted as a legal risk.
+        severity = "info"
 
     actions = _as_str_list(result.get("actions"))
     revised = (result.get("revised_clause") or "").strip() or None
@@ -243,6 +249,7 @@ def _risk_from_judgement(
         original_clause=clause_text or None,
         confidence=round(confidence, 2) if confidence is not None else None,
         confidence_notes=notes or None,
+        finding_type=finding_type,
     )
 
 
@@ -254,8 +261,12 @@ def evaluate_clause(
     contract_type: str | None = None,
     as_of_date: str | None = None,
     job_context: str | None = None,
+    rule_hint: str | None = None,
 ) -> RiskItem | None:
-    """Retrieve law relevant to THIS clause specifically, then judge compliance against it."""
+    """Retrieve law relevant to THIS clause specifically, then judge compliance against it.
+
+    ``rule_hint``: titles of fixed rules that fired on this Điều (RED_FLAG_LLM_VERIFY); the judge confirms or rejects.
+    """
     clause_ref = f"Điều {clause.clause_number}"
     clause_text = _resolve_clause_text(clause, contract_id)
     summary_for_query = clause.summary or clause_text
@@ -275,6 +286,10 @@ def evaluate_clause(
         clause_summary=(clause.summary or "")[:800],
         legal_context=legal_context,
     )
+    if get_settings().judge_finding_types:
+        prompt += "\n\n" + CLAUSE_RISK_FINDING_TYPES
+    if rule_hint:
+        prompt += "\n\n" + CLAUSE_RISK_RULE_HINT.format(rules=rule_hint)
 
     result = _judge(prompt, provider, clause.clause_number)
     return _risk_from_judgement(

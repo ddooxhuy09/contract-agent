@@ -1,12 +1,12 @@
 # ContractLens — AI rà soát hợp đồng lao động tiếng Việt
 
-Stack: FastAPI · Postgres/pgvector · Neo4j · Groq (gpt-oss-120b) / Gemini · BAAI/bge-m3 · React (Vite)
+Stack: FastAPI · Postgres/pgvector (ltree) · Groq (gpt-oss-120b) / Gemini · BAAI/bge-m3 · React (Vite)
 
 Phạm vi: hợp đồng lao động. Đây không phải tư vấn pháp lý; xem [`docs/PHAM_VI.md`](docs/PHAM_VI.md).
 
 ## Giới hạn
 
-- Chưa đo được độ chính xác của câu trả lời hỏi đáp. Bộ gold set có chuyên gia kiểm đang được xây dựng (`evaluation/gold/`); số đo đầu ra ở `evaluation_results/RESULTS_TUAN.md` kèm cỡ mẫu và khoảng tin cậy. Chưa kiểm chứng trên hợp đồng ngoài bộ dữ liệu.
+- Đã chạy full 369 câu QA và 117 hợp đồng (18/11/2026): test QA correctness 76,4%, đúng đủ 68,8%; F1 tại 93 Điều test có nhãn sau toàn workflow là 71,2%, với báo nhầm cao. Xem [báo cáo full và nguyên nhân lỗi](docs/bo_test_hoi_dong/KET_QUA_FULL_QA_WORKFLOW.md). Kết quả tự động trên dữ liệu tổng hợp, không phải xác nhận pháp lý. [Báo cáo v1](docs/bo_test_hoi_dong/KET_QUA_BO_TEST_V1.md) là mốc lịch sử theo cách chấm cũ; F1 0,86 ở đó đo trên Điều đã chỉ sẵn. Chưa có gold đầy đủ mọi rủi ro để công bố F1 toàn hợp đồng.
 - Điều khoản mà mô hình không đánh giá được (lỗi, hết quota, JSON hỏng) được báo là "chưa kiểm" trong `analysis.coverage`, không phải "ổn".
 - Một nhà cung cấp LLM mỗi lần chạy, chọn bằng `LLM_PROVIDER`: mặc định `groq` (model `openai/gpt-oss-120b`, cấu hình đã dùng để đánh giá), tuỳ chọn `gemini`. Tham số `provider` của API chỉ có một giá trị.
 - Không hỗ trợ `.doc` (chuyển sang `.docx`) và PDF dạng ảnh quét không có lớp chữ (tải ảnh `.png/.jpg` để dùng OCR). Giới hạn tải lên 10 MB.
@@ -47,9 +47,6 @@ Lần đầu API sẽ tải model embedding (`BAAI/bge-m3`) — có thể mất 
 docker compose up -d postgres
 powershell -File scripts\restore_db.ps1
 
-# Neo4j (neo4j.dump) — service sẽ bị stop/start trong lúc nạp
-powershell -File scripts\restore_neo4j.ps1
-
 docker compose up -d
 ```
 
@@ -58,8 +55,6 @@ docker compose up -d
 ```bash
 docker compose up -d postgres
 sh scripts/restore_db.sh
-chmod +x scripts/restore_neo4j.sh
-./scripts/restore_neo4j.sh
 docker compose up -d
 ```
 
@@ -74,7 +69,7 @@ docker compose down             # dừng stack
 ## Yêu cầu và phát triển cục bộ
 
 - Docker Desktop (cách chạy chính, xem trên). Image API dùng Python 3.12, image frontend dùng Node 22; máy dev hiện kiểm thử với Python 3.11.
-- Chạy backend ngoài Docker (cần Postgres/Neo4j đang chạy, ví dụ `docker compose up -d postgres neo4j`):
+- Chạy backend ngoài Docker (cần Postgres đang chạy, ví dụ `docker compose up -d postgres`):
 
 ```bash
 pip install -r requirements.txt
@@ -89,12 +84,13 @@ cd frontend && npm install && npm run dev      # lint: npm run lint, build: npm 
 |---|---|
 | Bắt buộc | `GROQ_API_KEY` (hoặc `GROG_KEY`; hoặc `GEMINI_API_KEY` khi `LLM_PROVIDER=gemini`), `JWT_SECRET` (khác giá trị mặc định, nếu không app không khởi động) |
 | Luật đỏ | `RED_FLAG_NEGATION_CHECK` (mặc định `false`; `true` = bước quét bỏ qua câu phủ định, xem `docs/NHAT_KY_THAY_DOI.md`) |
+| Judge | `JUDGE_FINDING_TYPES`, `RED_FLAG_LLM_VERIFY` (mặc định `false`, chưa đánh giá; `true` = tách "vi phạm" khỏi "thiếu / góp ý", và cho judge kiểm lại cờ của luật cố định; xem `docs/NHAT_KY_THAY_DOI.md`) |
 | LLM | `LLM_PROVIDER` (`groq` mặc định | `gemini`), `GROQ_MODEL` (mặc định `openai/gpt-oss-120b`) |
 | LLM dự phòng (Gemini) | `GEMINI_API_KEY_1`, `GEMINI_API_KEY_2`, `GEMINI_API_KEY_3`: key bổ sung. Khi key đang dùng hết quota theo ngày, client chuyển sang key kế tiếp (`app/agents/llm_client.py`). Quota theo phút vẫn chờ rồi thử lại trên cùng key. |
 | LLM / embedding | `GEMINI_MODEL`, `EMBEDDING_MODEL`, `EMBEDDING_DIM`, `EMBEDDING_DEVICE`, `EMBEDDING_TRUST_REMOTE_CODE`, `EMBEDDING_NORMALIZE`, `EMBEDDING_MAX_SEQ_LENGTH`, `HF_TOKEN` |
-| Database | `DATABASE_URL`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `POSTGRES_PORT`, `NEO4J_URI`, `NEO4J_USER`, `NEO4J_PASSWORD` |
+| Database | `DATABASE_URL`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `POSTGRES_PORT` |
 | Auth / API | `JWT_ALGORITHM`, `JWT_EXPIRE_MINUTES`, `CORS_ORIGINS`, `UPLOAD_DIR`, `MAX_UPLOAD_MB`, `LOGIN_MAX_FAILURES`, `LOGIN_WINDOW_SECONDS`, `API_PORT`, `FRONTEND_PORT`, `VITE_API_BASE_URL` |
-| Retrieval | `MAX_CHUNK_SIZE`, `CHUNK_OVERLAP`, `TOP_K_RETRIEVAL`, `SIMILARITY_THRESHOLD`, `LEGAL_EXPAND_BACKEND`, `RAG_LABOR_SCOPE` |
+| Retrieval | `MAX_CHUNK_SIZE`, `CHUNK_OVERLAP`, `TOP_K_RETRIEVAL`, `SIMILARITY_THRESHOLD`, `RAG_LABOR_SCOPE` |
 | Tùy chọn | `LANGCHAIN_API_KEY`, `LANGCHAIN_PROJECT`, `COMPOSE_PROJECT_NAME`, `DEV_RELOAD` |
 
 ### Test
@@ -104,9 +100,15 @@ python -m pytest tests -q --ignore=tests/integration   # unit + fixture QA, khô
 python -m pytest tests/integration -q                  # cần stack đang chạy
 ```
 
-Test unit không cần Postgres/Neo4j/Gemini (hiện 227 passed, 1 skipped khi có thư mục `data/` và `evaluation_results/`; clone mới không có hai thư mục này sẽ fail 17 test đọc dữ liệu, xem `docs/test_baseline.txt`).
+Test unit không cần Postgres/Gemini (hiện 227 passed, 1 skipped khi có thư mục `data/` và `evaluation_results/`; clone mới không có hai thư mục này sẽ fail 17 test đọc dữ liệu, xem `docs/test_baseline.txt`).
 
 ## Đánh giá
+
+Kết quả mới nhất: [`CAI_THIEN_V4_KET_QUA.md`](docs/bo_test_hoi_dong/CAI_THIEN_V4_KET_QUA.md). V4 thêm một lượt model kiểm chứng căn cứ, bổ sung bối cảnh hợp đồng và giảm nguồn lệch phạm vi; so với v3 trên 40 ca regression và 16 ca validation chưa dùng sửa v4. Đây là đánh giá QA câu hỏi chỉ rõ Điều, không thay điểm toàn test v1 hoặc workflow phân tích.
+
+Vòng cải tiến có nghiên cứu v3: [`NGHIEN_CUU_V3_KET_QUA.md`](docs/bo_test_hoi_dong/NGHIEN_CUU_V3_KET_QUA.md), phương pháp và nguồn sơ cấp ở [`RESEARCH_NOTES.md`](evaluation/contract_eval_v2/RESEARCH_NOTES.md). QA bổ sung truy xuất Điều luật chính xác theo chủ đề, ghép căn cứ trong đúng Điều và phân biệt nguồn hợp đồng với nguồn luật. So sánh thật với bản v2 trên dev, 32 ca regression từ test v1 và 8 ca giả lập mới đối chiếu nguồn Chính phủ; không sửa nhãn/rubric hoặc coi các nhóm này là benchmark pháp lý độc lập.
+
+Thí nghiệm cải thiện QA sau v1 ở [`evaluation/contract_eval_v2/`](evaluation/contract_eval_v2/README.md): 80 câu dev từ 16 ca gốc, có đổi cách hỏi và số Điều; so sánh tìm luật chỉ từ câu hỏi với tìm luật có nội dung Điều hợp đồng. Đây là phép đo phát triển có đối chứng, không phải test giữ kín mới. Kết quả và giới hạn: [`CAI_THIEN_V2_KET_QUA_VA_BANG_CHUNG.md`](docs/bo_test_hoi_dong/CAI_THIEN_V2_KET_QUA_VA_BANG_CHUNG.md).
 
 Kết quả đánh giá thực nghiệm nằm ở [`docs/CHUONG_DANH_GIA_THUC_NGHIEM.md`](docs/CHUONG_DANH_GIA_THUC_NGHIEM.md) (chương 5), tóm tắt hai bộ test để trình bày ở [`docs/bo_test_hoi_dong/`](docs/bo_test_hoi_dong/), số liệu thô và báo cáo ở [`evaluation_results/`](evaluation_results/). Cấu hình được đánh giá: truy xuất **vector-only**, judge **Groq `openai/gpt-oss-120b`** (nhiệt độ 0), `RED_FLAG_NEGATION_CHECK` **tắt** (mặc định). Các bộ ca đã đóng băng (tag `injection-frozen`, `injection-v2-frozen`, `legalqa-split-frozen`) không được sửa. Checklist buổi demo: [`docs/DEMO_CHECKLIST.md`](docs/DEMO_CHECKLIST.md).
 
@@ -140,7 +142,7 @@ Path hierarchy / `legal_path_relations` root theo **số hiệu** (`100_2015_QH1
 
 ### Extract vs ingest (khi nào chạy gì)
 
-**Extract** = parse folder trong RAM (chưa ghi DB). **Ingest** = embed + upsert Postgres/Neo4j. Cả hai chạy khi gọi `ingest_legal_corpus` (trừ `--dry-run` chỉ extract).
+**Extract** = parse folder trong RAM (chưa ghi DB). **Ingest** = embed + upsert Postgres. Cả hai chạy khi gọi `ingest_legal_corpus` (trừ `--dry-run` chỉ extract).
 
 ```
 crawl → folder JSON/MD
@@ -160,7 +162,6 @@ IngestLegalDocument.execute (GHI DB) — thứ tự:
   3. embed → legal_embeddings (path, chunk_type, is_effective khởi tạo)
   4. legal_document_relations (luoc_do + stub doc nếu thiếu)
   5. legal_path_relations (dẫn chiếu nội bộ vừa extract)
-  6. Neo4j tree (nodes + chunks)
 
 clause_amendments — lệnh riêng: scripts.ingest_clause_amendments
   → cũng ghi legal_path_relations (sửa đổi/bãi bỏ, ref_type khác dan_chieu)
@@ -197,7 +198,7 @@ SELECT refresh_hierarchy_status_flags();     -- cấp Điều/Khoản/Điểm + 
 
 Query-time GraphRAG / citation vẫn so `as_of` với `eff_to` — không tin riêng nhãn “Còn hiệu lực”.
 
-Schema rỗng để dựng DB mới / gửi đối tác: `schemas/empty/` (`contractlens_postgres.sql`, `contractlens_neo4j.cypher`).
+Schema rỗng để dựng DB mới / gửi đối tác: `schemas/empty/` (`contractlens_postgres.sql`).
 
 ### 1) Crawl VBPL
 
@@ -214,12 +215,12 @@ Output: `data/crawl_data/documents/…`
 
 Bổ sung `muc_luc.json` (+ `clause_amendments.json` nếu có) vào từng folder trước khi ingest.
 
-### 2) Schema DB / Neo4j
+### 2) Schema DB
 
-DB mới: apply `schema.sql` (hoặc `schemas/empty/contractlens_postgres.sql`) + `schema.cypher`.  
-Docker Postgres đã mount `schema.sql` vào init. Neo4j: chạy constraint/index trong `schema.cypher`.
+DB mới: apply `schema.sql` (hoặc `schemas/empty/contractlens_postgres.sql`).  
+Docker Postgres đã mount `schema.sql` vào init.
 
-### 3) Ingest corpus → Postgres + Neo4j
+### 3) Ingest corpus → Postgres
 
 Extract (assemble) rồi ghi DB như mục **Extract vs ingest** ở trên.
 
@@ -279,7 +280,7 @@ python -m pytest tests/unit/test_legal_corpus_parser.py tests/unit/test_clause_a
 | `evaluation_results/` | **Kết quả** benchmark: `reports/` (tổng hợp) và `runs/` (từng lần chạy) |
 | `docs/` | Tài liệu thiết kế, slide, prompt. Xem `docs/README.md` |
 | `data/` | Dữ liệu cục bộ, không đưa lên git (dataset.csv, corpus mẫu, hợp đồng demo, upload) |
-| `schema.sql`, `schema.cypher` | Schema Postgres/Neo4j mà docker-compose và app nạp trực tiếp |
+| `schema.sql` | Schema Postgres mà docker-compose và app nạp trực tiếp |
 | `schemas/empty/` | Bản sao schema rỗng để bàn giao |
 
 ## API chính

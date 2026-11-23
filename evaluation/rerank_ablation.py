@@ -407,7 +407,7 @@ def write_report(output: Path, built: dict, scored: dict, compared: dict) -> Non
         "",
         f"Chạy lại thứ hạng trên đúng candidate pool đã quan sát trong 34 trace của "
         f"`{built['input_dir']}`. "
-        "Không gọi model, không kết nối PostgreSQL/Neo4j, không đổi corpus. "
+        "Không gọi model, không kết nối PostgreSQL, không đổi corpus. "
         "Candidate pool lấy từ sự kiện `graph_expanded` (trước `_order_for_prompt`), "
         "seed order lấy từ thứ tự hybrid search đã lưu.",
         "",

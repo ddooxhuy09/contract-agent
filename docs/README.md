@@ -5,7 +5,7 @@
 | Bộ tài liệu chuẩn (đọc trước) | `ARCHITECTURE.md`, `CODEBASE_MAP.md`, `CODING_STANDARDS.md`, `REFACTOR_PLAN.md`, `diagrams/` (Mermaid, mỗi file ghi nguồn và giả định) |
 | Kiến trúc và luồng | `PROJECT_TECHNICAL_DOCUMENTATION.md`, `processing-design.md`, `tech-stack-va-langgraph.md`, `user-flow.md`, `PROMPT_ARCHITECTURE.md` |
 | Giao diện | `frontend.md`, `ANALYSIS_RESULT_UX.md` |
-| Sơ đồ dữ liệu / luồng | `dfd.md` và `dfd/*.puml` (DFD các cấp), `schema-v2.1-erd.puml`, `neo4j-graphrag.puml` |
+| Sơ đồ dữ liệu / luồng | `dfd.md` và `dfd/*.puml` (DFD các cấp), `schema-v2.1-erd.puml` |
 | Báo cáo đồ án, slide | `presentations/` (`.pptx`, `.html`), `slides-demo/` |
 | Prompt dùng để rà soát code | `prompts/` |
 | Dữ liệu mẫu | `Sample_DB_v2.xlsx` |

@@ -198,12 +198,61 @@ def test_assemble_relations_and_graph_nodes():
     assert art["relations"]
     assert art["stub_docs"]["70821"]["title"]
     paths = {n["path"] for n in art["graph_nodes"]}
-    assert "168_2024_N__CP.C1.D1.K1.a" in paths
-    assert "168_2024_N__CP.PREAMBLE" in paths or "fixture_168.PREAMBLE" in paths
+    assert "fixture_168.C1.D1.K1.a" in paths
+    assert "fixture_168.PREAMBLE" in paths
     assert art["legal_nodes"]
+    # Hierarchy and chunks share the doc_id root (trg_hier_emb_eff matches by path <@ node.path).
     ltree_paths = {n["path"] for n in art["legal_nodes"]}
-    assert "168_2024_N__CP.C1.D1.K1.a" in ltree_paths
+    assert "fixture_168.C1.D1.K1.a" in ltree_paths
+    assert all(p.startswith("fixture_168.") for p in ltree_paths)
     assert any(c.get("path") == "fixture_168.C1.D1.K1.a" for c in art["chunks"])
+
+
+def test_flatten_luoc_do_accepts_crawl_vbpl_list_buckets():
+    from app.infrastructure.legal_corpus.luoc_do_flatten import flatten_luoc_do
+
+    rels, stubs = flatten_luoc_do(
+        {"doc_id": "1", "relations": {"van_ban_bi_bai_bo": [{"doc_id": "2", "doc_num": "5/2010/QH12"}]}}
+    )
+    assert rels == [{"from_doc_id": "1", "to_doc_id": "2", "relation_type": "van_ban_bi_bai_bo"}]
+    assert stubs["2"]["doc_num"] == "5/2010/QH12"
+
+
+def test_folder_without_muc_luc_derives_tree_from_van_ban(tmp_path):
+    import shutil
+
+    from app.infrastructure.legal_corpus.discover import discover_document_folders
+
+    for name in ("thuoc_tinh.json", "van_ban.md"):
+        shutil.copy(FIXTURE / name, tmp_path / name)
+    assert discover_document_folders(tmp_path) == [tmp_path.resolve()]
+    art = load_document_folder(tmp_path)
+    chunk_paths = {c["path"] for c in art["chunks"]}
+    assert "fixture_168.C1.D1.K1" in chunk_paths  # no Điểm markup → Khoản is the leaf
+    node_paths = {n["path"] for n in art["legal_nodes"]}
+    assert {"fixture_168.C1", "fixture_168.C1.D1", "fixture_168.C1.D1.K1"} <= node_paths
+
+
+def test_muc_luc_from_van_ban_ignores_repeated_cong_bao_headers():
+    from app.infrastructure.legal_corpus.muc_luc_derive import muc_luc_from_van_ban
+
+    md = """**Phần thứ hai**
+**Chương XIII**
+## Điều 5. A
+<!-- article_id: a5 -->
+1. x <!-- clause_id: c1 -->
+**Phần thứ hai**
+2. y <!-- clause_id: c2 -->
+**Chương XIV**
+## Điều 6. B
+<!-- article_id: a6 -->
+"""
+    tree = muc_luc_from_van_ban(md)
+    assert len(tree) == 1 and tree[0]["level"] == "Part"
+    chapters = tree[0]["children"]
+    assert [c["title"] for c in chapters] == ["Chương XIII", "Chương XIV"]
+    art5 = chapters[0]["children"][0]
+    assert art5["id"] == "a5" and [k["title"] for k in art5["children"]] == ["Khoản 1", "Khoản 2"]
 
 
 def test_ltree_path_helpers():

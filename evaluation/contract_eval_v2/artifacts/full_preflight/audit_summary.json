@@ -1,0 +1,32 @@
+{
+  "questions_scanned": 378,
+  "base_cases_scanned": 154,
+  "contract_files_read": 120,
+  "eligible": 369,
+  "by_split": {
+    "test": 314,
+    "dev": 55
+  },
+  "by_task": {
+    "targeted_review": 109,
+    "legal_basis": 109,
+    "whole_contract_review": 109,
+    "fixed": 28,
+    "temporal": 14
+  },
+  "by_source": {
+    "injection": 234,
+    "injection_v2": 93,
+    "contract_qa": 8,
+    "v04": 34
+  },
+  "low_confidence_kept": 38,
+  "reference_corrections": 34,
+  "near_duplicate_pairs": 5,
+  "cases_with_missing_refs_restored": 20,
+  "cross_split_near_duplicate_pairs": 2,
+  "excluded_preserved": 9,
+  "original_labels_changed": 0,
+  "original_files_modified": false,
+  "expert_validated": false
+}

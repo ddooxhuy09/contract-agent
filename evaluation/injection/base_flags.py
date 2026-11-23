@@ -16,7 +16,7 @@ def main() -> None:
     from app.infrastructure.retrieval.context import bind_retrieval
 
     cont = build_container()
-    bind_retrieval(cont.contract_search, cont.legal_search, cont.graph,
+    bind_retrieval(cont.contract_search, cont.legal_search,
                    legal_chunks=cont.legal_chunks, contract_chunks=cont.contract_chunks)
     analysis, risks = asyncio.run(run_analysis_workflow(BASE.read_text(encoding="utf-8"), "inj-BASE"))
     out = {"llm": _llm_name(), "commit": _commit(), "coverage": analysis.coverage,

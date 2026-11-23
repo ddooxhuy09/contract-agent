@@ -1,0 +1,91 @@
+﻿id,system,question,answer,reference_label,judge_reason,human_score,human_notes
+NEW-01,baseline,Điều 27 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 27 của hợp đồng vi phạm quy định pháp luật về thời gian thử việc.
+Căn cứ:
+- Luật Lao động 45/2019/QH14, Điều 25 khoản 3 quy định thời gian thử việc tối đa cho công việc yêu cầu trình độ trung cấp kỹ thuật là 30 ngày.
+- Hợp đồng quy định thời gian thử việc 45 ngày, vượt quá mức cho phép → vi phạm.
+- Luật Lao động, Điều 26 quy định mức lương thử việc ít nhất 85% mức lương; hợp đồng quy định 90% nên không vi phạm về tiền lương.
+Khuyến nghị: Điều chỉnh thời gian thử việc xuống không quá 30 ngày để phù hợp với quy định pháp luật.",violation,"Kết luận vi phạm là đúng. Căn cứ Điều 25 khoản 3 Luật Lao động 2019 (có trong ngữ cảnh pháp lý) quy định thời gian thử việc tối đa 30 ngày cho trình độ trung cấp, trong khi hợp đồng quy định 45 ngày. Các mệnh đề về lương thử việc (90% >= 85%) và căn cứ pháp lý đều chính xác và được ngữ cảnh hỗ trợ.",,
+NEW-02,baseline,Điều 27 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 27 của hợp đồng không trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 25 Bộ luật Lao động 45/2019/QH14 quy định thời gian thử việc tối đa 30 ngày đối với công việc yêu cầu trình độ trung cấp kỹ thuật; hợp đồng quy định 30 ngày → phù hợp.
+- Điều 26 Bộ luật Lao động 45/2019/QH14 quy định tiền lương thử việc ít nhất 85% mức lương; hợp đồng quy định 90% → đáp ứng yêu cầu.
+- Điều 24 Bộ luật Lao động cho phép thỏa thuận nội dung thử việc trong hợp đồng, không cấm nội dung này.
+Do đó, các điều khoản về thời gian và mức lương thử việc trong Điều 27 đều nằm trong phạm vi cho phép của pháp luật hiện hành, nên không vi phạm.",compliant,"Kết luận đúng. Các mệnh đề về thời gian thử việc (Điều 25), lương thử việc (Điều 26) và căn cứ pháp lý đều được ngữ cảnh hỗ trợ chính xác.",,
+NEW-03,baseline,Điều 28 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 28 của hợp đồng trái quy định pháp luật lao động về tiền lương thử việc.
+Căn cứ:
+- Hợp đồng quy định tiền lương thử việc là 80% mức lương (Điều 28).
+- Luật Lao động 45/2019/QH14, Điều 26 quy định tiền lương trong thời gian thử việc phải ít nhất bằng 85% mức lương của công việc.
+=> Mức 80% thấp hơn mức tối thiểu 85%, vi phạm pháp luật.
+(Thời gian thử việc 20 ngày đáp ứng quy định tối đa 30 ngày của Điều 25, nên không có vấn đề về thời gian.)
+Khuyến nghị: Điều chỉnh tiền lương thử việc lên ít nhất 85% mức lương hoặc thay đổi thỏa thuận để phù hợp với quy định pháp luật.",violation,"Câu trả lời xác định đúng mức lương thử việc 80% trong Điều 28 hợp đồng, đối chiếu chính xác với Điều 26 Bộ luật Lao động 2019 (tối thiểu 85%) và đưa ra kết luận vi phạm đúng. Các mệnh đề về thời gian thử việc cũng được hỗ trợ bởi ngữ cảnh.",,
+NEW-04,baseline,Điều 28 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 28 của hợp đồng không trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 25 Luật Lao động 45/2019/QH14 quy định thời gian thử việc tối đa 30 ngày đối với công việc yêu cầu trình độ trung cấp kỹ thuật; thời gian 20 ngày trong hợp đồng nằm trong giới hạn này.
+- Điều 26 Luật Lao động 45/2019/QH14 quy định tiền lương thử việc phải ít nhất 85% mức lương của công việc; hợp đồng quy định 90%, đáp ứng yêu cầu.
+- Điều 24 Luật Lao động cho phép thỏa thuận thời gian và tiền lương thử việc trong hợp đồng, nên điều khoản này hợp pháp.
+Khuyến nghị: Không cần sửa đổi; duy trì nội dung hiện tại.",compliant,"Kết luận đúng. Các căn cứ pháp lý (Điều 24, 25, 26 BLLĐ 2019) được trích dẫn chính xác và phù hợp với ngữ cảnh hợp đồng (thử việc 20 ngày cho trình độ trung cấp, lương 90% > 85%).",,
+NEW-05,baseline,Điều 29 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 29 của hợp đồng vi phạm quy định pháp luật lao động.
+Căn cứ:
+- Điều 29 hợp đồng quy định nghỉ hằng năm 08 ngày.
+- Điều 113 Bộ luật Lao động 45/2019/QH14, khoản a) quy định người lao động làm việc trong điều kiện bình thường và đủ 12 tháng được nghỉ hằng năm 12 ngày làm việc, hưởng nguyên lương.
+- Điều 23 Nghị định 27/2014/NĐ-CP cũng quy định 12 ngày nghỉ hằng năm cho người lao động làm việc đủ 12 tháng trong điều kiện bình thường.
+Do đó, mức nghỉ 08 ngày trong hợp đồng thấp hơn mức tối thiểu do pháp luật quy định (12 ngày), nên vi phạm pháp luật.
+Khuyến nghị: sửa đổi Điều 29 để người lao động được nghỉ ít nhất 12 ngày hằng năm (hoặc hơn) theo quy định của Điều 113 Bộ luật Lao động và Nghị định 27/2014/NĐ-CP.",violation,Câu trả lời xác định đúng mức nghỉ 08 ngày trong Điều 29 hợp đồng thấp hơn mức tối thiểu 12 ngày quy định tại Điều 113 Bộ luật Lao động 2019 (được cung cấp trong ngữ cảnh pháp lý). Kết luận vi phạm là chính xác và có căn cứ.,,
+NEW-06,baseline,Điều 29 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 29 của hợp đồng không trái quy định pháp luật lao động.
+Căn cứ:
+- Luật Lao động 45/2019/QH14, Điều 113 khoản 1 a) quy định người lao động làm việc trong điều kiện bình thường và đủ 12 tháng được nghỉ hằng năm 12 ngày, hưởng nguyên lương – đúng với nội dung Điều 29 của hợp đồng.
+- Nghị định 27/2014/NĐ‑CP, Điều 23 cũng quy định tương tự 12 ngày nghỉ hằng năm cho người lao động làm việc đủ 12 tháng trong điều kiện bình thường.
+Do đó, điều khoản hợp đồng chỉ đưa ra mức tối thiểu được pháp luật cho phép, không vi phạm.",compliant,Kết luận đúng. Căn cứ Điều 113 khoản 1 điểm a Luật Lao động 2019 và Điều 23 Nghị định 27/2014 (vẫn còn hiệu lực về nội dung này hoặc được thay thế bởi 45/2019 nhưng nội dung 12 ngày là chuẩn) đều xác nhận mức 12 ngày nghỉ hằng năm cho lao động bình thường là đúng quy định. Hợp đồng ghi nhận đúng mức tối thiểu này nên không vi phạm.,,
+NEW-07,baseline,Điều 30 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 30 của hợp đồng vi phạm quy định của pháp luật lao động.
+Căn cứ:
+- Hợp đồng: [Điều 30] quy định người lao động làm nghề, công việc nặng nhọc, độc hại, nguy hiểm được nghỉ 12 ngày.
+- Luật 45/2019/QH14, Điều 113, khoản 1 b) quy định người lao động làm công việc nặng nhọc, độc hại, nguy hiểm được nghỉ hằng năm 14 ngày làm việc (và 16 ngày nếu công việc đặc biệt nặng nhọc, độc hại, nguy hiểm).
+Do đó mức nghỉ 12 ngày trong hợp đồng thấp hơn mức tối thiểu do luật quy định, nên điều khoản này trái pháp luật.
+Khuyến nghị: sửa đổi Điều 30, tăng số ngày nghỉ hằng năm lên ít nhất 14 ngày cho người lao động thuộc danh mục nặng nhọc, độc hại, nguy hiểm để phù hợp với quy định của Điều 113, Luật Lao động 45/2019/QH14.",violation,"Câu trả lời xác định đúng điều khoản hợp đồng (12 ngày) và căn cứ pháp luật (Điều 113 khoản 1 điểm b Luật 45/2019/QH14 quy định 14 ngày), từ đó đưa ra kết luận vi phạm chính xác.",,
+NEW-08,baseline,Điều 30 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 30 của hợp đồng không trái quy định pháp luật lao động.
+Căn cứ:
+- Hợp đồng: Điều 30 quy định người lao động làm nghề, công việc nặng nhọc, độc hại, nguy hiểm và đã làm việc đủ 12 tháng được nghỉ hằng năm 14 ngày làm việc, hưởng nguyên lương.
+- Luật Lao động 45/2019/QH14, Điều 113: Người lao động làm việc đủ 12 tháng được nghỉ hằng năm 14 ngày làm việc đối với người lao động làm nghề, công việc nặng nhọc, độc hại, nguy hiểm.
+Do đó, quy định trong hợp đồng tương ứng với quy định tối thiểu của pháp luật, không vi phạm.
+Khuyến nghị: Giữ nguyên điều khoản; nếu công ty muốn ưu đãi có thể xem xét tăng lên 16 ngày cho công việc đặc biệt nặng nhọc, độc hại, nguy hiểm (theo khoản c) của Điều 113).",compliant,"Câu trả lời xác định đúng nội dung Điều 30 hợp đồng (14 ngày nghỉ cho công việc nặng nhọc, độc hại, nguy hiểm) và đối chiếu chính xác với Điều 113 khoản 1 điểm b Luật Lao động 2019. Kết luận không vi phạm là đúng vì hợp đồng tuân thủ mức tối thiểu của pháp luật.",,
+NEW-01,grounded,Điều 27 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 27 của hợp đồng trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 25 Bộ luật Lao động 45/2019/QH14 quy định thời gian thử việc tối đa 30 ngày đối với công việc có chức danh nghề nghiệp yêu cầu trình độ trung cấp kỹ thuật; hợp đồng quy định 45 ngày, vượt quá giới hạn này.
+- Điều 26 Bộ luật Lao động 45/2019/QH14 cho phép mức lương thử việc ít nhất 85% mức lương công việc; hợp đồng quy định 90%, không vi phạm.
+(Khuyến nghị: Điều chỉnh thời gian thử việc xuống không quá 30 ngày để phù hợp với quy định pháp luật.)",violation,"Kết luận đúng. Căn cứ Điều 25 khoản 3 BLĐL 2019, thời gian thử việc tối đa 30 ngày cho trình độ trung cấp, hợp đồng quy định 45 ngày là vi phạm. Mức lương 90% (>=85%) là hợp lệ.",,
+NEW-02,grounded,Điều 27 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 27 của hợp đồng không trái quy định pháp luật lao động.
+Căn cứ:
+- Luật Lao động 45/2019/QH14, Điều 25 khoản 3 quy định thời gian thử việc tối đa cho công việc yêu cầu trình độ trung cấp kỹ thuật là không quá 30 ngày; hợp đồng quy định 30 ngày → phù hợp.
+- Luật Lao động 45/2019/QH14, Điều 26 quy định tiền lương thử việc phải ít nhất 85% mức lương của công việc; hợp đồng quy định 90% → đáp ứng yêu cầu.
+- Điều 27 hợp đồng quy định nội dung thử việc cho công việc kỹ thuật viên trung cấp, không vi phạm các quy định trên.",compliant,"Kết luận đúng. Căn cứ pháp lý chính xác: Điều 25 khoản 3 BLLĐ 2019 quy định thời gian thử việc tối đa 30 ngày cho trình độ trung cấp (hợp đồng quy định 30 ngày, phù hợp); Điều 26 quy định lương thử việc tối thiểu 85% (hợp đồng quy định 90%, phù hợp).",,
+NEW-03,grounded,Điều 28 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 28 của hợp đồng vi phạm quy định của Bộ luật Lao động.
+Căn cứ:
+- Luật Lao động 45/2019/QH14, Điều 26: tiền lương thử việc phải ít nhất 85% mức lương của công việc.
+- Hợp đồng quy định tiền lương thử việc chỉ 80% mức lương, thấp hơn mức tối thiểu pháp luật.
+- Luật Lao động, Điều 25: thời gian thử việc tối đa 30 ngày đối với công việc yêu cầu trình độ trung cấp; thời gian 20 ngày của hợp đồng không vi phạm (đây là thông tin bổ trợ).
+Khuyến nghị: Điều chỉnh tiền lương thử việc lên ít nhất 85% mức lương của công việc để phù hợp với quy định pháp luật.",violation,Kết luận vi phạm là đúng. Căn cứ Điều 26 BLLĐ 2019 (lương thử việc tối thiểu 85%) và Điều 28 hợp đồng (quy định 80%) được hỗ trợ đầy đủ bởi ngữ cảnh. Mệnh đề về thời gian thử việc (Điều 25) cũng chính xác nhưng không ảnh hưởng đến kết luận vi phạm chính.,,
+NEW-04,grounded,Điều 28 của hợp đồng có trái quy định pháp luật lao động không?,Thời hạn hợp đồng lao động là bao lâu? (có ít nhất 01 tháng hay không),compliant,"Câu trả lời là một câu hỏi ngược lại thay vì đưa ra kết luận và lập luận pháp lý, không giải quyết được vấn đề được hỏi.",,
+NEW-05,grounded,Điều 29 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 29 của hợp đồng trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 29 hợp đồng quy định người lao động được nghỉ hằng năm 08 ngày làm việc, hưởng nguyên lương.
+- Điều 113 Bộ luật Lao động 45/2019/QH14 quy định người lao động làm việc đủ 12 tháng trong điều kiện bình thường phải được nghỉ hằng năm tối thiểu 12 ngày làm việc, hưởng nguyên lương.
+Do mức nghỉ trong hợp đồng (08 ngày) thấp hơn mức tối thiểu do pháp luật quy định (12 ngày), nên điều khoản này vi phạm pháp luật.
+Khuyến nghị: sửa đổi Điều 29 thành ít nhất 12 ngày nghỉ hằng năm (hoặc hơn) để phù hợp với quy định của Điều 113.",violation,"Câu trả lời xác định đúng điều khoản hợp đồng (08 ngày) và căn cứ pháp luật (Điều 113 BLĐ 2019 quy định tối thiểu 12 ngày), từ đó đưa ra kết luận vi phạm chính xác và có căn cứ.",,
+NEW-06,grounded,Điều 29 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 29 của hợp đồng không trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 29 hợp đồng quy định người lao động làm việc trong điều kiện bình thường, đủ 12 tháng được nghỉ 12 ngày có lương.
+- Luật Lao động 45/2019/QH14, Điều 113, khoản 1(a) quy định người lao động làm việc đủ 12 tháng trong điều kiện bình thường được nghỉ 12 ngày có lương.
+- Điều 4 và Điều 15 Luật Lao động cho phép thỏa thuận có lợi hơn cho người lao động; việc quy định mức tối thiểu 12 ngày không vi phạm và thậm chí đáp ứng yêu cầu pháp luật.
+Khuyến nghị: Không cần sửa đổi; có thể xem xét tăng ngày nghỉ cho các trường hợp đặc biệt (điều 113 khoản b, c) nếu muốn có lợi hơn cho người lao động.",compliant,"Kết luận đúng. Điều 29 hợp đồng quy định 12 ngày nghỉ cho lao động bình thường sau 12 tháng, khớp hoàn toàn với Điều 113 khoản 1 điểm a Luật Lao động 2019. Các căn cứ pháp lý được trích dẫn chính xác và hỗ trợ cho kết luận.",,
+NEW-07,grounded,Điều 30 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 30 của hợp đồng vi phạm quy định tối thiểu về nghỉ hằng năm của pháp luật lao động.
+Căn cứ:
+- Điều 30 hợp đồng quy định người lao động làm công việc nặng nhọc, độc hại, nguy hiểm được nghỉ 12 ngày.
+- Điều 113 Bộ luật Lao động 45/2019/QH14 quy định người lao động trong cùng điều kiện phải được nghỉ ít nhất 14 ngày (hoặc 16 ngày nếu là công việc đặc biệt nặng nhọc, độc hại, nguy hiểm).
+- Nguyên tắc không được giảm quyền lợi tối thiểu của người lao động (Điều 4, Điều 15 Bộ luật Lao động) yêu cầu các thỏa thuận phải có lợi hơn hoặc ít nhất không kém mức tối thiểu pháp luật.
+- Do đó, mức nghỉ 12 ngày thấp hơn mức tối thiểu 14 ngày là giảm quyền lợi, nên trái quy định pháp luật.
+Khuyến nghị: Điều chỉnh Điều 30, quy định nghỉ hằng năm ít nhất 14 ngày cho công việc nặng nhọc, độc hại, nguy hiểm (hoặc 16 ngày nếu thuộc nhóm đặc biệt) và ghi rõ hưởng nguyên lương.",violation,"Câu trả lời xác định đúng kết luận vi phạm dựa trên việc so sánh Điều 30 hợp đồng (12 ngày) với Điều 113 khoản 1 điểm b Bộ luật Lao động (14 ngày cho công việc nặng nhọc, độc hại, nguy hiểm). Các căn cứ pháp lý và lập luận đều chính xác và phù hợp với ngữ cảnh.",,
+NEW-08,grounded,Điều 30 của hợp đồng có trái quy định pháp luật lao động không?,"Kết luận: Điều 30 của hợp đồng không trái quy định pháp luật lao động.
+Căn cứ:
+- Điều 113, khoản 1, mục b) Luật Lao động 45/2019/QH14 quy định người lao động làm nghề, công việc nặng nhọc, độc hại, nguy hiểm và làm việc đủ 12 tháng được nghỉ hằng năm 14 ngày làm việc, hưởng nguyên lương.
+- Nguyên tắc giao kết hợp đồng (Điều 15, khoản 2) cho phép các bên thỏa thuận có lợi hơn cho người lao động, nhưng không được thấp hơn mức tối thiểu quy định; hợp đồng đáp ứng mức tối thiểu 14 ngày.
+Khuyến nghị: Không cần sửa đổi; nếu muốn, công ty có thể cân nhắc tăng lên 16 ngày để có lợi hơn cho người lao động.",compliant,"Kết luận đúng. Căn cứ Điều 113 khoản 1 điểm b Luật Lao động 2019, mức 14 ngày cho lao động nặng nhọc, độc hại, nguy hiểm là đúng quy định tối thiểu. Hợp đồng đáp ứng đúng mức này nên không trái luật.",,

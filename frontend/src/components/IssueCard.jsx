@@ -126,10 +126,13 @@ export default function IssueCard({ risk, open, onToggle, cardId, clauseFallback
   const [copied, setCopied] = useState(false);
 
   const isCritical = risk.severity === "critical";
-  const rail = isCritical ? "border-l-stamp" : "border-l-caution";
+  const isInfo = risk.severity === "info";
+  const rail = isCritical ? "border-l-stamp" : isInfo ? "border-l-rule-strong" : "border-l-caution";
   const badge = isCritical
     ? "bg-stamp text-paper-raised"
-    : "bg-caution text-paper-raised";
+    : isInfo
+      ? "bg-ink-muted text-paper-raised"
+      : "bg-caution text-paper-raised";
 
   const revisedParts = useMemo(
     () => markChangedTokens(view.originalClause, view.revisedClause),
@@ -164,7 +167,7 @@ export default function IssueCard({ risk, open, onToggle, cardId, clauseFallback
               className={`inline-flex items-center gap-1 px-1.5 py-1 text-[0.625rem] font-semibold uppercase tracking-wide rounded-sm ${badge}`}
             >
               <span className="material-symbols-outlined !text-[0.75rem]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                {isCritical ? "error" : "warning"}
+                {isCritical ? "error" : isInfo ? "info" : "warning"}
               </span>
               {severityLabel(risk.severity)}
             </span>

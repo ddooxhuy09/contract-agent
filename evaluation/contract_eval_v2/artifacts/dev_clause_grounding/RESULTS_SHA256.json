@@ -1,0 +1,21 @@
+{
+  "contract_map.json": "77f7f65591a6133221634d8ecb65feb54c7193172b7ff2d5d2a6d2617e53f724",
+  "CORPUS_SNAPSHOT.json": "21c02b66f9e6dd60f77505f51a70642a34e124457593b44cb100ce56600c5b25",
+  "gold.jsonl": "e00663119639cceb990ea7601a3716088c90d6c0bc4f816d585639f5499c4a8a",
+  "GROQ_PAYLOAD_REVIEW.jsonl": "9ac782a62893f5ab3f8f3c3e883c8a87d87235e58b78538c6519c3b99c9e55d5",
+  "human_review.csv": "245bd6656ae6b0c20981ac058468cc3b7adf73fa332b7bdb09e182872d02eae4",
+  "inputs.jsonl": "214e371c7bdebc3f30480d01fd0e7f820ba369a9de3e2aaad025da043de2ffc1",
+  "judge.jsonl": "ddcee765a43b855fcd305764cb8376dabf3cb556dfc418946d853635fe59b605",
+  "judge_metadata.json": "f71e02664ef0940a7833e2101fa45be95b53ad0ca39d79904e8bce4b3789ab83",
+  "LABEL_REVIEW.csv": "10de93c5d6446992b83a148a7553c98f3bf3f1b0917858f770811dbd4b03a1cc",
+  "manifest.json": "364fe6f363a07daf6e6efcbf038c49eb9e2a2619c393a322e02839727ff27bfc",
+  "metrics.json": "12b765082315c97f715f4fc53fa2aa7ffb2fc956928c823c6e54d9ea59e09f87",
+  "paired_qa_changes.json": "c76016cc3e4cfae6af098c2c5348d5f374a0ba1fa1f053e603298ad27609732c",
+  "per_case_metrics.json": "f8347d93f5f1b982bbb913e3f32dafefb06944d92635561e844ef972405db4fe",
+  "qa.jsonl": "cade5ec195e0eb13669d7b4edf8a9b3684599a4f9726e4ab9cd4a17ed407556b",
+  "qa_metadata.json": "d6722625a1c5cd2fad22be057db6c09d4ef006f5815616f04f822afa40ee8b66",
+  "retrieval.jsonl": "5dc519b52b1fd0d7ccc6bfc638f0dc792207e23d7b6c387ba47a4f9fe8c9c72c",
+  "retrieval_metadata.json": "9391c6e223863fc94ad5b7805a45725695d7bee69b6798871fa02026e6d8abe9",
+  "RETRIEVAL_QA_CROSSCHECK.json": "dda65722f3a56ef7656a43fc3a7fd938f0428995b18c845ccdc300b434c5ae0b",
+  "VALIDATION.json": "3b882b8e73d43c8e2fe9f8eadb77c92c5fce4dd02d593b7f87734222044b6043"
+}

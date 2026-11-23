@@ -1,0 +1,12 @@
+HỢP ĐỒNG MUA BÁN HÀNG HÓA GIỮA THƯƠNG NHÂN
+DỮ LIỆU GIẢ LẬP CHỈ DÀNH CHO ĐÁNH GIÁ HỆ THỐNG AI. KHÔNG SỬ DỤNG ĐỂ GIAO KẾT HỢP ĐỒNG.
+Điều 1
+Công ty A bán cho Công ty B 500 bộ bàn ghế văn phòng; giá trị hợp đồng 400.000.000 đồng.
+Điều 2
+Bên vi phạm một phần nghĩa vụ giao hàng phải chịu phạt 12% trên tổng giá trị hợp đồng.
+Điều 3
+Hai bên xác nhận đề nghị và chấp nhận giao kết bằng thông điệp dữ liệu qua email doanh nghiệp.
+Điều 4
+Công ty B được quyền kiểm tra số lượng, chủng loại và khiếu nại khi giao hàng không đúng thỏa thuận.
+Điều 5
+Các bên ghi rõ mình đều là thương nhân, giao dịch nhằm mục đích sinh lợi.

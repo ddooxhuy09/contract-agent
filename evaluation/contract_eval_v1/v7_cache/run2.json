@@ -1,0 +1,692 @@
+{
+ "OT-01": {
+  "verdict": "vi_pham",
+  "article": "Điều 98 k1",
+  "model": "gemini-2.5-flash"
+ },
+ "OT-02": {
+  "verdict": "vi_pham",
+  "article": "Điều 98 k1",
+  "model": "gemini-2.5-flash"
+ },
+ "OT-03": {
+  "verdict": "vi_pham",
+  "article": "Điều 98 k1",
+  "model": "gemini-2.5-flash"
+ },
+ "OT-04": {
+  "verdict": "vi_pham",
+  "article": "Điều 98 k1",
+  "model": "gemini-2.5-flash"
+ },
+ "OT-05": {
+  "verdict": "vi_pham",
+  "article": "Điều 107 k2a",
+  "model": "gemini-2.5-flash"
+ },
+ "OT-06": {
+  "verdict": "hop_le",
+  "article": "Điều 107 k2",
+  "model": "gemini-2.5-flash"
+ },
+ "OT-07": {
+  "verdict": "hop_le",
+  "article": "Điều 98 k1",
+  "model": "gemini-2.5-flash"
+ },
+ "OT-08": {
+  "verdict": "hop_le",
+  "article": "Điều 107 k2",
+  "model": "gemini-2.5-flash"
+ },
+ "OT-09": {
+  "verdict": "vi_pham",
+  "article": "Điều 98",
+  "model": "gemini-2.5-flash"
+ },
+ "OT-10": {
+  "verdict": "khong_xac_dinh",
+  "article": "Điều 107",
+  "model": "gemini-2.5-flash"
+ },
+ "BH-01": {
+  "verdict": "vi_pham",
+  "article": "Điều 168",
+  "model": "gemini-2.5-flash"
+ },
+ "BH-02": {
+  "verdict": "vi_pham",
+  "article": "Điều 168",
+  "model": "gemini-2.5-flash"
+ },
+ "BH-03": {
+  "verdict": "vi_pham",
+  "article": "Điều 168",
+  "model": "gemini-2.5-flash"
+ },
+ "BH-04": {
+  "verdict": "vi_pham",
+  "article": "Điều 168",
+  "model": "gemini-2.5-flash"
+ },
+ "BH-05": {
+  "verdict": "vi_pham",
+  "article": "Điều 168",
+  "model": "gemini-2.5-flash"
+ },
+ "BH-06": {
+  "verdict": "hop_le",
+  "article": "Điều 168",
+  "model": "gemini-2.5-flash"
+ },
+ "BH-07": {
+  "verdict": "hop_le",
+  "article": "Điều 168",
+  "model": "gemini-3-flash-preview"
+ },
+ "BH-08": {
+  "verdict": "hop_le",
+  "article": "Điều 168",
+  "model": "gemini-3-flash-preview"
+ },
+ "BH-09": {
+  "verdict": "hop_le",
+  "article": "Điều 33",
+  "model": "gemini-3-flash-preview"
+ },
+ "BH-10": {
+  "verdict": "hop_le",
+  "article": "Điều 168",
+  "model": "gemini-3-flash-preview"
+ },
+ "GT-01": {
+  "verdict": "vi_pham",
+  "article": "Điều 17",
+  "model": "gemini-3-flash-preview"
+ },
+ "GT-02": {
+  "verdict": "vi_pham",
+  "article": "Điều 17",
+  "model": "gemini-3-flash-preview"
+ },
+ "GT-03": {
+  "verdict": "vi_pham",
+  "article": "Điều 17",
+  "model": "gemini-3-flash-preview"
+ },
+ "GT-04": {
+  "verdict": "vi_pham",
+  "article": "Điều 17",
+  "model": "gemini-3-flash-preview"
+ },
+ "GT-05": {
+  "verdict": "vi_pham",
+  "article": "Điều 17",
+  "model": "gemini-3-flash-preview"
+ },
+ "GT-06": {
+  "verdict": "hop_le",
+  "article": "Điều 17",
+  "model": "gemini-3-flash-preview"
+ },
+ "GT-07": {
+  "verdict": "hop_le",
+  "article": "Điều 17",
+  "model": "gemini-3-flash-preview"
+ },
+ "GT-08": {
+  "verdict": "hop_le",
+  "article": "Điều 17",
+  "model": "gemini-3-flash-preview"
+ },
+ "GT-09": {
+  "verdict": "hop_le",
+  "article": "Điều 17",
+  "model": "gemini-3-flash-preview"
+ },
+ "GT-10": {
+  "verdict": "hop_le",
+  "article": "Điều 17",
+  "model": "gemini-3-flash-preview"
+ },
+ "DT-01": {
+  "verdict": "vi_pham",
+  "article": "Điều 62",
+  "model": "gemini-3-flash-preview"
+ },
+ "DT-02": {
+  "verdict": "vi_pham",
+  "article": "Điều 62",
+  "model": "gemini-3-flash-preview"
+ },
+ "DT-03": {
+  "verdict": "vi_pham",
+  "article": "Điều 62",
+  "model": "gemini-3-flash-preview"
+ },
+ "DT-04": {
+  "verdict": "vi_pham",
+  "article": "Điều 62",
+  "model": "gemini-3-flash-preview"
+ },
+ "DT-05": {
+  "verdict": "vi_pham",
+  "article": "Điều 62",
+  "model": "gemini-3-flash-preview"
+ },
+ "DT-06": {
+  "verdict": "hop_le",
+  "article": "Điều 62",
+  "model": "gemini-3-flash-preview"
+ },
+ "DT-07": {
+  "verdict": "hop_le",
+  "article": "Điều 62",
+  "model": "gemini-3-flash-preview"
+ },
+ "DT-08": {
+  "verdict": "hop_le",
+  "article": "Điều 62",
+  "model": "gemini-3-flash-preview"
+ },
+ "DT-09": {
+  "verdict": "hop_le",
+  "article": "Điều 62",
+  "model": "gemini-3-flash-preview"
+ },
+ "DT-10": {
+  "verdict": "hop_le",
+  "article": "Điều 62",
+  "model": "gemini-3-flash-preview"
+ },
+ "KL-01": {
+  "verdict": "vi_pham",
+  "article": "Điều 127",
+  "model": "gemini-3-flash-preview"
+ },
+ "KL-02": {
+  "verdict": "vi_pham",
+  "article": "Điều 127",
+  "model": "gemini-3-flash-preview"
+ },
+ "KL-03": {
+  "verdict": "vi_pham",
+  "article": "Điều 127",
+  "model": "gemini-3-flash-preview"
+ },
+ "KL-04": {
+  "verdict": "vi_pham",
+  "article": "Điều 127",
+  "model": "gemini-3-flash-preview"
+ },
+ "KL-05": {
+  "verdict": "vi_pham",
+  "article": "Điều 127",
+  "model": "gemini-3-flash-preview"
+ },
+ "KL-06": {
+  "verdict": "hop_le",
+  "article": "Điều 124",
+  "model": "gemini-3-flash-preview"
+ },
+ "KL-07": {
+  "verdict": "hop_le",
+  "article": "Điều 102",
+  "model": "gemini-3-flash-preview"
+ },
+ "KL-08": {
+  "verdict": "hop_le",
+  "article": "Điều 124",
+  "model": "gemini-3-flash-preview"
+ },
+ "KL-09": {
+  "verdict": "hop_le",
+  "article": "Điều 127",
+  "model": "gemini-3-flash-preview"
+ },
+ "KL-10": {
+  "verdict": "hop_le",
+  "article": "Điều 127",
+  "model": "gemini-3-flash-preview"
+ },
+ "LU-01": {
+  "verdict": "vi_pham",
+  "article": "Điều 94",
+  "model": "gemini-3-flash-preview"
+ },
+ "LU-02": {
+  "verdict": "vi_pham",
+  "article": "Điều 94",
+  "model": "gemini-3-flash-preview"
+ },
+ "LU-03": {
+  "verdict": "vi_pham",
+  "article": "Điều 94",
+  "model": "gemini-3-flash-preview"
+ },
+ "LU-04": {
+  "verdict": "vi_pham",
+  "article": "Điều 94",
+  "model": "gemini-3-flash-preview"
+ },
+ "LU-05": {
+  "verdict": "vi_pham",
+  "article": "Điều 94",
+  "model": "gemini-3-flash-preview"
+ },
+ "LU-06": {
+  "verdict": "hop_le",
+  "article": "Điều 48",
+  "model": "gemini-3-flash-preview"
+ },
+ "LU-07": {
+  "verdict": "hop_le",
+  "article": "Điều 40",
+  "model": "gemini-3-flash-preview"
+ },
+ "LU-08": {
+  "verdict": "hop_le",
+  "article": "Điều 48",
+  "model": "gemini-3-flash-preview"
+ },
+ "LU-09": {
+  "verdict": "hop_le",
+  "article": "Điều 48",
+  "model": "gemini-3-flash-preview"
+ },
+ "LU-10": {
+  "verdict": "hop_le",
+  "article": "Điều 40",
+  "model": "gemini-3-flash-preview"
+ },
+ "TS-01": {
+  "verdict": "vi_pham",
+  "article": "Điều 137",
+  "model": "gemini-3-flash-preview"
+ },
+ "TS-02": {
+  "verdict": "vi_pham",
+  "article": "Điều 137",
+  "model": "gemini-3-flash-preview"
+ },
+ "TS-03": {
+  "verdict": "vi_pham",
+  "article": "Điều 137",
+  "model": "gemini-3-flash-preview"
+ },
+ "TS-04": {
+  "verdict": "vi_pham",
+  "article": "Điều 137",
+  "model": "gemini-3-flash-preview"
+ },
+ "TS-05": {
+  "verdict": "vi_pham",
+  "article": "Điều 137",
+  "model": "gemini-3-flash-preview"
+ },
+ "TS-06": {
+  "verdict": "hop_le",
+  "article": "Điều 137",
+  "model": "gemini-3-flash-preview"
+ },
+ "TS-07": {
+  "verdict": "hop_le",
+  "article": "Điều 138",
+  "model": "gemini-3-flash-preview"
+ },
+ "TS-08": {
+  "verdict": "hop_le",
+  "article": "Điều 137",
+  "model": "gemini-3-flash-preview"
+ },
+ "TS-09": {
+  "verdict": "khong_xac_dinh",
+  "article": "Điều 137",
+  "model": "gemini-3-flash-preview"
+ },
+ "TS-10": {
+  "verdict": "vi_pham",
+  "article": "Điều 37",
+  "model": "gemini-3-flash-preview"
+ },
+ "TC-01": {
+  "verdict": "vi_pham",
+  "article": "Điều 187",
+  "model": "gemini-3-flash-preview"
+ },
+ "TC-02": {
+  "verdict": "vi_pham",
+  "article": "Điều 187",
+  "model": "gemini-3-flash-preview"
+ },
+ "TC-03": {
+  "verdict": "vi_pham",
+  "article": "Điều 187",
+  "model": "gemini-3-flash-preview"
+ },
+ "TC-04": {
+  "verdict": "vi_pham",
+  "article": "Điều 190",
+  "model": "gemini-3-flash-preview"
+ },
+ "TC-05": {
+  "verdict": "vi_pham",
+  "article": "Điều 187",
+  "model": "gemini-3-flash-preview"
+ },
+ "TC-06": {
+  "verdict": "hop_le",
+  "article": "Điều 187",
+  "model": "gemini-3-flash-preview"
+ },
+ "TC-07": {
+  "verdict": "hop_le",
+  "article": "Điều 187",
+  "model": "gemini-3-flash-preview"
+ },
+ "TC-08": {
+  "verdict": "hop_le",
+  "article": "Điều 187",
+  "model": "gemini-3-flash-preview"
+ },
+ "TC-09": {
+  "verdict": "hop_le",
+  "article": "Điều 187",
+  "model": "gemini-3-flash-preview"
+ },
+ "TC-10": {
+  "verdict": "hop_le",
+  "article": "Điều 188",
+  "model": "gemini-3-flash-preview"
+ },
+ "OT2-V1": {
+  "verdict": "vi_pham",
+  "article": "Điều 98",
+  "model": "gemini-3-flash-preview"
+ },
+ "OT2-V2": {
+  "verdict": "vi_pham",
+  "article": "Điều 98",
+  "model": "gemini-3-flash-preview"
+ },
+ "OT2-C1": {
+  "verdict": "hop_le",
+  "article": "Điều 98",
+  "model": "gemini-3-flash-preview"
+ },
+ "OT2-C2": {
+  "verdict": "hop_le",
+  "article": "Điều 98",
+  "model": "gemini-3-flash-preview"
+ },
+ "BH2-V1": {
+  "verdict": "vi_pham",
+  "article": "Điều 168",
+  "model": "gemini-3-flash-preview"
+ },
+ "BH2-V2": {
+  "verdict": "vi_pham",
+  "article": "Điều 168",
+  "model": "gemini-3-flash-preview"
+ },
+ "BH2-C1": {
+  "verdict": "hop_le",
+  "article": "Điều 168",
+  "model": "gemini-3-flash-preview"
+ },
+ "BH2-C2": {
+  "verdict": "hop_le",
+  "article": "Điều 168",
+  "model": "gemini-3-flash-preview"
+ },
+ "GT2-V1": {
+  "verdict": "vi_pham",
+  "article": "Điều 17",
+  "model": "gemini-3-flash-preview"
+ },
+ "GT2-V2": {
+  "verdict": "vi_pham",
+  "article": "Điều 17",
+  "model": "gemini-3-flash-preview"
+ },
+ "GT2-C1": {
+  "verdict": "hop_le",
+  "article": "Điều 17",
+  "model": "gemini-3-flash-preview"
+ },
+ "GT2-C2": {
+  "verdict": "hop_le",
+  "article": "Điều 17",
+  "model": "gemini-3-flash-preview"
+ },
+ "DT2-V1": {
+  "verdict": "vi_pham",
+  "article": "Điều 62",
+  "model": "gemini-3-flash-preview"
+ },
+ "DT2-V2": {
+  "verdict": "vi_pham",
+  "article": "Điều 62",
+  "model": "gemini-3-flash-preview"
+ },
+ "DT2-C1": {
+  "verdict": "hop_le",
+  "article": "Điều 62",
+  "model": "gemini-3-flash-preview"
+ },
+ "DT2-C2": {
+  "verdict": "hop_le",
+  "article": "Điều 62",
+  "model": "gemini-3-flash-preview"
+ },
+ "KL2-V1": {
+  "verdict": "vi_pham",
+  "article": "Điều 127",
+  "model": "gemini-3-flash-preview"
+ },
+ "KL2-V2": {
+  "verdict": "vi_pham",
+  "article": "Điều 127",
+  "model": "gemini-3-flash-preview"
+ },
+ "KL2-C1": {
+  "verdict": "hop_le",
+  "article": "Điều 127",
+  "model": "gemini-3-flash-preview"
+ },
+ "KL2-C2": {
+  "verdict": "hop_le",
+  "article": "Điều 127",
+  "model": "gemini-3-flash-preview"
+ },
+ "LU2-V1": {
+  "verdict": "vi_pham",
+  "article": "Điều 94",
+  "model": "gemini-3-flash-preview"
+ },
+ "LU2-V2": {
+  "verdict": "vi_pham",
+  "article": "Điều 94",
+  "model": "gemini-3-flash-preview"
+ },
+ "LU2-C1": {
+  "verdict": "hop_le",
+  "article": "Điều 94",
+  "model": "gemini-3-flash-preview"
+ },
+ "LU2-C2": {
+  "verdict": "hop_le",
+  "article": "Điều 94",
+  "model": "gemini-3-flash-preview"
+ },
+ "TS2-V1": {
+  "verdict": "vi_pham",
+  "article": "Điều 137",
+  "model": "gemini-3-flash-preview"
+ },
+ "TS2-V2": {
+  "verdict": "vi_pham",
+  "article": "Điều 137",
+  "model": "gemini-3-flash-preview"
+ },
+ "TS2-C1": {
+  "verdict": "hop_le",
+  "article": "Điều 137",
+  "model": "gemini-3-flash-preview"
+ },
+ "TS2-C2": {
+  "verdict": "hop_le",
+  "article": "Điều 137",
+  "model": "gemini-3-flash-preview"
+ },
+ "TC2-V1": {
+  "verdict": "vi_pham",
+  "article": "Điều 187",
+  "model": "gemini-3-flash-preview"
+ },
+ "TC2-V2": {
+  "verdict": "vi_pham",
+  "article": "Điều 187",
+  "model": "gemini-3-flash-preview"
+ },
+ "TC2-C1": {
+  "verdict": "hop_le",
+  "article": "Điều 187",
+  "model": "gemini-3-flash-preview"
+ },
+ "TC2-C2": {
+  "verdict": "hop_le",
+  "article": "Điều 187",
+  "model": "gemini-3-flash-preview"
+ },
+ "QA-01": {
+  "verdict": "vi_pham",
+  "article": "Điều 98",
+  "model": "gemini-3-flash-preview"
+ },
+ "QA-02": {
+  "verdict": "vi_pham",
+  "article": "Điều 168",
+  "model": "gemini-3-flash-preview"
+ },
+ "QA-03": {
+  "verdict": "vi_pham",
+  "article": "Điều 17",
+  "model": "gemini-3-flash-preview"
+ },
+ "QA-04": {
+  "verdict": "vi_pham",
+  "article": "Điều 94",
+  "model": "gemini-3-flash-preview"
+ },
+ "QA-05": {
+  "verdict": "vi_pham",
+  "article": "Điều 127",
+  "model": "gemini-3-flash-preview"
+ },
+ "QA-06": {
+  "verdict": "vi_pham",
+  "article": "Điều 137",
+  "model": "gemini-3-flash-preview"
+ },
+ "QA-07": {
+  "verdict": "vi_pham",
+  "article": "Điều 187",
+  "model": "gemini-3-flash-preview"
+ },
+ "MIX-017": {
+  "verdict": "vi_pham",
+  "article": "Điều 25",
+  "model": "gemini-3-flash-preview"
+ },
+ "MIX-018": {
+  "verdict": "vi_pham",
+  "article": "Điều 25",
+  "model": "gemini-3-flash-preview"
+ },
+ "MIX-007": {
+  "verdict": "vi_pham",
+  "article": "Điều 13",
+  "model": "gemini-3-flash-preview"
+ },
+ "MIX-006": {
+  "verdict": "hop_le",
+  "article": "Điều 13",
+  "model": "gemini-3-flash-preview"
+ },
+ "MIX-012": {
+  "verdict": "hop_le",
+  "article": "Điều 301",
+  "model": "gemini-3-flash-preview"
+ },
+ "MIX-019": {
+  "verdict": "vi_pham",
+  "article": "Điều 24",
+  "model": "gemini-3-flash-preview"
+ },
+ "MIX-005": {
+  "verdict": "vi_pham",
+  "article": "Điều 7",
+  "model": "gemini-3-flash-preview"
+ },
+ "MIX-003": {
+  "verdict": "vi_pham",
+  "article": "Điều 98",
+  "model": "gemini-3-flash-preview"
+ },
+ "MIX-004": {
+  "verdict": "vi_pham",
+  "article": "Điều 168",
+  "model": "gemini-3-flash-preview"
+ },
+ "MIX-008": {
+  "verdict": "vi_pham",
+  "article": "Điều 17",
+  "model": "gemini-3-flash-preview"
+ },
+ "MIX-020": {
+  "verdict": "hop_le",
+  "article": "Điều 25",
+  "model": "gemini-3-flash-preview"
+ },
+ "MIX-013": {
+  "verdict": "hop_le",
+  "article": "Điều 35",
+  "model": "gemini-3-flash-preview"
+ },
+ "MIX-014": {
+  "verdict": "vi_pham",
+  "article": "Điều 301",
+  "model": "gemini-3-flash-preview"
+ },
+ "MIX-009": {
+  "verdict": "hop_le",
+  "article": "Điều 328",
+  "model": "gemini-3-flash-preview"
+ },
+ "MIX-002": {
+  "verdict": "vi_pham",
+  "article": "Điều 17",
+  "model": "gemini-3-flash-preview"
+ },
+ "MIX-011": {
+  "verdict": "vi_pham",
+  "article": "Điều 301",
+  "model": "gemini-3-flash-preview"
+ },
+ "MIX-016": {
+  "verdict": "vi_pham",
+  "article": "Điều 25",
+  "model": "gemini-3-flash-preview"
+ },
+ "MIX-015": {
+  "verdict": "vi_pham",
+  "article": "Điều 25",
+  "model": "gemini-3-flash-preview"
+ },
+ "MIX-001": {
+  "verdict": "vi_pham",
+  "article": "Điều 17",
+  "model": "gemini-3-flash-preview"
+ }
+}

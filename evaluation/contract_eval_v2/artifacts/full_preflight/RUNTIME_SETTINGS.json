@@ -1,0 +1,7 @@
+{
+  "llm_provider": "groq",
+  "groq_model": "openai/gpt-oss-120b",
+  "legal_retrieval_mode": "vector",
+  "red_flag_llm_verify": false,
+  "embedding_model": "BAAI/bge-m3"
+}

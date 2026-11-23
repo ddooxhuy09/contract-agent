@@ -23,7 +23,7 @@ RUN pip install --upgrade pip \
     && rm /tmp/requirements-no-torch.txt
 
 COPY app ./app
-COPY schema.sql schema.cypher ./
+COPY schema.sql ./
 COPY scripts ./scripts
 COPY docker/api-entrypoint.sh /api-entrypoint.sh
 

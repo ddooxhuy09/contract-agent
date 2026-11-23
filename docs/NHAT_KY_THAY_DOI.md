@@ -1,5 +1,26 @@
 # Nhật ký thay đổi theo kế hoạch 1 tuần
 
+## 2026-11-18: v4 — kiểm chứng bản nháp theo bằng chứng thật
+
+- V3 tăng retrieval/nguồn nhưng còn ca đảo nghĩa điều cấm, nhầm thiếu chi tiết với vi phạm và viện dẫn lệch phạm vi. Giữ toàn bộ kết quả v3, không sửa rubric hoặc gold để nâng điểm.
+- V4 bổ sung Điều 1 của hợp đồng, căn cứ nguyên tắc và quyền tiếp cận Tòa án theo chủ đề, bỏ vector lệch phạm vi khi đã có căn cứ; model sinh kiểm chứng bản nháp một lần, lỗi thì giữ bản nháp. Không đổi API, node/cạnh, retry kỹ thuật hoặc checkpointer.
+- Đóng băng trước kết quả: 32 regression + 8 ca có nguồn đã dùng chẩn đoán, thêm 16 validation không trùng ca gốc các vòng trước. Cả hai cấu hình gọi model thật; judge/rubric giữ nguyên. Không gọi 16 ca là benchmark pháp lý mới độc lập vì vẫn thuộc v1 từng được đánh giá.
+- Test không integration cuối: 381 passed, 1 skipped. Sửa harness dùng một event loop cho nhiều split để tránh client HTTP cache trỏ loop đã đóng; có test hồi quy. Kết quả QA, chi phí và các ca còn sai: `docs/bo_test_hoi_dong/CAI_THIEN_V4_KET_QUA.md`. Không tự cập nhật cờ hiệu lực BHXH 2024 dù phát hiện dữ liệu cần audit.
+
+## 2026-11-18: vòng nghiên cứu v3 — căn cứ đúng chủ đề và QA có viện dẫn
+
+- Tham khảo CRAG/ALCE và đối chiếu nguồn Chính phủ, gồm văn bản hợp nhất 125/VBHN-VPQH; nguồn và phạm vi áp dụng ghi ở `evaluation/contract_eval_v2/RESEARCH_NOTES.md`.
+- `qa_evidence.py` lấy Điều luật thật theo chủ đề, kiểm phạm vi/ngày, ghép văn bản và bỏ phần lặp/tràn Điều; không chứa nhãn hoặc id test. Query bỏ số thứ tự hợp đồng, giữ số Điều luật; prompt và xác minh `cited_clauses` phân biệt hai loại nguồn.
+- Protocol chốt trước kết quả: baseline v2 từ snapshot, candidate mới, cùng model/judge/rubric. Đo dev, 32 regression cân bằng từ test v1 và 8 ca thử việc/nghỉ phép mới có nguồn; không sửa gold hoặc xóa test.lock.
+- Test không integration: 379 passed, 1 skipped. Kết quả đo thật và các ca giảm điểm: `docs/bo_test_hoi_dong/NGHIEN_CUU_V3_KET_QUA.md`.
+
+## 2026-11-18: QA dùng nội dung Điều được hỏi và thí nghiệm dev có đối chứng
+
+- `_retrieve_contract_docs` ưu tiên số Điều hợp đồng nêu trong câu hỏi qua port `ContractChunkRepository`; không dùng gold và không thêm SQL trong agent. Tham chiếu có tên luật/nghị định được phân biệt với số Điều hợp đồng.
+- `ground_qa_retrieval_query` bổ sung nội dung Điều thực tìm được khi truy xuất luật. Câu hỏi không nêu số Điều giữ truy vấn trước đó. Không đổi API, auth, prompt sinh, streaming, node/cạnh, retry hoặc checkpointer.
+- `evaluation/contract_eval_v2/`: audit chất lượng v1, bộ dev 80 câu từ 16 ca gốc (thêm paraphrase và đổi số Điều), ba cấu hình retrieval đối chứng, hai cấu hình QA, ngữ cảnh thực dùng để chấm, CI lấy mẫu theo ca gốc. Không chỉnh v1, không mở khóa test, không tuyên bố đây là test giữ kín mới.
+- Bộ đánh giá và phép sửa có 17 test mới. Toàn bộ test không integration trong container: 372 passed, 1 skipped. Báo cáo so sánh: `docs/bo_test_hoi_dong/CAI_THIEN_V2_KET_QUA_VA_BANG_CHUNG.md`.
+
 Ghi lại các quyết định và thay đổi so với kế hoạch gốc. Mốc đối chiếu: tag `baseline-tuan-0` (commit `dd1782f`).
 
 ## Ngày 1
@@ -182,3 +203,37 @@ Số liệu chính để quyết định: **exact provision recall của `final_
 - **P2-A (dự phòng demo):** thêm `docs/DEMO_CHECKLIST.md` (lệnh khởi động, kiểm tra key Groq còn hạn mức không in key, chuyển sang `LLM_PROVIDER=gemini`, bản ghi dự phòng, nhắc không chạy script từ thư mục Temp) và 4 ảnh chụp giao diện thật bằng tài khoản demo trong `docs/demo_backup/` (danh sách hợp đồng, kết quả phân tích, Điều bị cờ kèm căn cứ luật, hỏi đáp có trích dẫn). Lệnh kiểm tra hạn mức đã chạy thử: HTTP 200.
 - **P2-B (README):** thêm mục "Đánh giá" trỏ tới chương 5, `docs/bo_test_hoi_dong/`, `evaluation_results/`; nêu cấu hình được đánh giá (vector-only, judge Groq gpt-oss-120b, `RED_FLAG_NEGATION_CHECK` tắt). Dòng "227 passed" ở mục Test của README đã cũ (lệnh khác, `tests --ignore=tests/integration`); chưa sửa vì chưa chạy lại lệnh đó.
 - **Tag:** `defense-freeze` (`be89669`) = bản chốt chương lần 1, giữ nguyên, không force-push. `defense-final` = bản nộp (commit cuối sau khi chốt số liệu chương 5.5.3 và đối chiếu 172/172).
+
+## 2026-11-15 bỏ Neo4j khỏi stack mặc định
+- **Đo trước khi bỏ:** `rag_only` (34 ca, 0 lần gọi model, kho luật không đổi) trên bản sao eval với 3 giá trị `LEGAL_EXPAND_BACKEND`: `evaluation_results/runs/rag_expand_{neo4j,postgres,both}_20261115/`. Final R@1/R@3/R@5/MRR trùng nhau (0,142/0,230/0,270/0,300); R@10 và coverage: neo4j 0,299, postgres và both 0,314 (khác duy nhất ở TEMP-004). Trung vị thời gian truy xuất: neo4j ~774 ms, postgres ~570 ms. Neo4j trả nhiều `related_docs` hơn (đi 2 bước) nhưng không thêm evidence gold nào.
+- **Thay đổi:** mặc định `LEGAL_EXPAND_BACKEND=postgres`; container chỉ tạo `Neo4jGraphRepository` khi backend là `neo4j`/`both`; ingest bỏ qua ghi đồ thị khi không có Neo4j. Service `neo4j` trong `docker-compose.yml` chuyển vào profile `neo4j`, `api` không còn phụ thuộc nó. Code Neo4j, `schema.cypher`, script restore giữ nguyên để bật lại được.
+- **Lưu ý số liệu:** chương 5 và các lần chạy trước 15/11 đo với `neo4j`; không chạy lại, không sửa số chương 5.
+- Volume `contractlens_neo4jdata` và `contractlens_eval_20261019_01a154eb_neo4jdata` chưa xóa (đã xóa ở mục kế tiếp).
+
+## 2026-11-15 gỡ hẳn Neo4j
+- Sau bước trên, tác giả quyết định gỡ hẳn. GraphRAG expand giờ chỉ chạy trên Postgres: `LegalGraphRag._expand` gọi `PgLegalChunkRepository.expand_paths` (ltree cho anh em/tổ tiên/khoản cha, `legal_document_relations` cho văn bản liên quan và văn bản bãi bỏ/thay thế). Hành vi bằng cấu hình `postgres` đã đo ở `rag_expand_postgres_20261115`.
+- **Code đã xoá:** `app/infrastructure/neo4j/`, port `GraphRepository`, tham số `graph` của `LegalGraphRag`, `bind_retrieval`, `IngestLegalDocument` (cùng `graph_nodes` của `execute`) và `AppContainer`; setting `NEO4J_*`, `SCHEMA_CYPHER_PATH`, `LEGAL_EXPAND_BACKEND`; `schema.cypher`, `schemas/empty/contractlens_neo4j.cypher`, `scripts/restore_neo4j.{ps1,sh}`, `docs/neo4j-graphrag.puml`; thư viện `neo4j` trong `requirements.txt`; service, biến môi trường và volume `neo4j` trong `docker-compose.yml` và `evaluation/docker-compose.eval.yml`.
+- **Đánh giá:** `rag_only.py`, `runtime_adapter.py`, `run_eval.py` bỏ graph; `audit.py` đếm cạnh văn bản từ `legal_document_relations` thay cho Neo4j (cùng định dạng output). Settings ghi vào `execution_metadata.json` không còn `legal_expand_backend`; các run từ nay đều là Postgres.
+- **Tài liệu và slide** viết lại theo hệ thống hiện tại: README, AGENTS.md, ARCHITECTURE, CODEBASE_MAP, CODING_STANDARDS, PROJECT_TECHNICAL_DOCUMENTATION, tech-stack, dfd.md + các `dfd/*.puml`, `diagrams/system-architecture.md`, `schemas/empty/README.md`, `evaluation/README.md`, `evaluation/HANDOFF_CONTEXT.md`, slide HTML và PPTX trong `docs/presentations/` (slide "PostgreSQL & Neo4j" thành "PostgreSQL cho GraphRAG", kèm số đo so sánh). Bản ghi lịch sử (nhật ký này, report các run cũ, REFACTOR_PLAN, log test) giữ nguyên vì chúng đúng tại thời điểm chạy.
+- Test: `pytest tests/unit tests/evaluation` 344 passed, 1 skipped. Chạy lại `rag_only` trên code đã gỡ (`evaluation_results/runs/rag_postgres_only_20261115/`): final R@1/R@3/R@5/R@10/MRR/coverage = 0,142/0,230/0,270/0,314/0,300/0,314, trùng run `rag_expand_postgres_20261115`; 34/34 ca, 0 lần gọi model, kho luật không đổi.
+- **Docker:** theo đồng ý của tác giả, đã xóa container `contractlens-neo4j-1`, `contractlens-eval-01a154eb-neo4j-1`, volume `contractlens_neo4jdata`, `contractlens_eval_20261019_01a154eb_neo4jdata` (mỗi volume ~2,3 GB) và image `neo4j:5`. Không thể khôi phục; dữ liệu đồ thị vốn là bản sao dẫn xuất của Postgres.
+
+## 2026-11-15: giảm báo nhầm của judge và luật cố định (sau cờ, mặc định TẮT)
+- **Nguồn:** phân tích lỗi theo bước trên kết quả đã có, `evaluation_results/reports/PHAN_TICH_LOI_THEO_BUOC.md`. 15 FP của lần 48 ca: 6 do regex (Điều bị regex cờ critical không qua judge), 7 do judge gắn warning cho nội dung "thiếu / chưa rõ", 2 do judge kết luận sai.
+- **`JUDGE_FINDING_TYPES`** (`judge_finding_types`): thêm vào prompt judge quy tắc "hợp đồng không bắt buộc chép lại luật", "thiếu chỉ là vấn đề khi thuộc Điều 21 khoản 1", "đối chiếu loại HĐ trước khi áp số liệu", và trường `loai` (`vi_pham`/`thieu_noi_dung`/`gop_y`/`khong_co`). Phát hiện không phải `vi_pham` được giữ với severity mới `info` (giao diện: "Góp ý"), không tính vào số rủi ro. `RiskItem.finding_type` mới (tuỳ chọn).
+- **`RED_FLAG_LLM_VERIFY`** (`red_flag_llm_verify`): Điều bị regex cờ critical vẫn gửi judge kèm gợi ý luật nghi vi phạm. Judge xác nhận thì chỉ giữ cờ regex (không thêm cờ trùng); judge không xác nhận thì cờ regex hạ xuống `info` kèm lý do trong `confidence_notes`; judge lỗi thì giữ cờ regex như cũ và không tính "chưa kiểm".
+- **Cả hai cờ tắt mặc định**: hành vi ứng dụng và cấu hình đã đánh giá ở chương 5 không đổi. Schema thêm giá trị `info` (cả `RiskItem` và `RiskFinding`); báo cáo xuất có thêm khoá `info` trong `findings_by_severity`.
+- **Chưa đo.** Không chạy lại bộ 48/80 ca để tuyên bố cải thiện, vì phân tích lỗi đã làm trên chính các ca đó. Muốn bật mặc định phải: viết bộ ca mới (gợi ý `injection_v3`, nhiều hợp đồng nền đã kiểm sạch Điều 21), đóng băng bằng tag, ghi trước quy tắc chấp nhận, rồi chạy cờ tắt và cờ bật trên cùng bộ, cùng judge.
+- Test: `tests/unit/test_rule_llm_verify.py` (4 test, cả hai trạng thái cờ) và 7 test mới trong `tests/unit/test_risk_flagger.py`. `pytest tests/unit tests/evaluation`: 342 passed, 1 skipped. `vite build` thành công.
+
+## 2026-11-15: bộ ca injection_v3 và quy tắc chấp nhận (khai báo trước khi chạy)
+- Bộ mới `evaluation/injection_v3` (48 ca = 8 luật × 3 vi phạm + 3 hợp lệ, trên 3 hợp đồng nền A/B/C đủ Điều 21) để đo `JUDGE_FINDING_TYPES` + `RED_FLAG_LLM_VERIFY`. Thiết kế, cách chấm và giới hạn: `evaluation/injection_v3/README.md`.
+- **Quy tắc:** chạy `off` và `on` (cả hai cờ cùng tắt/bật), cùng commit, cùng judge Groq `openai/gpt-oss-120b`. Bật cờ mặc định khi và chỉ khi trên đủ 48/48 ca ở cả hai cấu hình: `FP(on) ≤ FP(off) − 3` và `FN(on) ≤ FN(off) + 1`. Thiếu ca thì không quyết định. Không đổi quy tắc sau khi xem kết quả.
+- Chưa chạy `full`. Sẽ gắn tag `injection-v3-frozen` trước khi chạy. Khai báo: ca do cùng mô hình viết hai cờ soạn, sau khi xem phân tích lỗi, nên bộ đo việc sửa các kiểu lỗi đã biết trên văn bản mới, không đo tỷ lệ trên hợp đồng thực tế.
+
+## 2026-11-15: rà soát trước khi chạy injection_v3 (sau tag `injection-v3-frozen`)
+- Không đổi `bases/`, `cases.jsonl`, `contracts/`, cách chấm hay quy tắc chấp nhận (`build` chạy lại cho đúng các file cũ).
+- `RED_FLAG_LLM_VERIFY`: cờ regex bị judge bác nay hạ cả `findings[].severity` xuống `info` (trước chỉ hạ mức của RiskItem, giao diện có thể vẫn hiện finding là critical).
+- `coverage.phat_hien`: `so_rui_ro` và số Điều có rủi ro không tính mục `info`. Khi cờ tắt không có mục `info` nên không đổi.
+- `JUDGE_FINDING_TYPES`: thêm vào prompt câu "không đủ căn cứ để kết luận vi phạm thì không dùng vi_pham", vì prompt gốc vẫn bảo dùng warning khi thiếu căn cứ (hai chỉ dẫn mâu thuẫn).
+- `evaluation/injection_v3/run.py` (chỉ phần chạy, không phần chấm): gọi `bind_retrieval` bằng tham số tên, không truyền `graph` (đúng với nhánh bỏ Neo4j đang làm, mặc định `LEGAL_EXPAND_BACKEND=postgres`); từ chối chạy `full` khi `app/` hoặc `evaluation/injection_v3` có thay đổi chưa commit; mỗi bản ghi lưu thêm cấu hình (`settings`).

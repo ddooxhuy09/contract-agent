@@ -40,7 +40,7 @@ class RiskFinding(BaseModel):
 
     key: str
     title: str
-    severity: str = Field(..., pattern="^(critical|warning|ok)$")
+    severity: str = Field(..., pattern="^(critical|warning|info|ok)$")
     reason: str
     violated_text: str | None = None  # the contract sentence(s) that trigger it
     legal_citations: list[LegalCitation] | None = None
@@ -51,7 +51,7 @@ class RiskFinding(BaseModel):
 class RiskItem(BaseModel):
     clause_ref: str
     issue: str
-    severity: str = Field(..., pattern="^(critical|warning|ok)$")
+    severity: str = Field(..., pattern="^(critical|warning|info|ok)$")
     legal_basis: str | None = None
     recommendation: str | None = None
     # Structured fields (optional — older analyses may only have issue/legal_basis/recommendation)
@@ -68,6 +68,8 @@ class RiskItem(BaseModel):
     confidence_notes: list[str] | None = None
     # Per-violation breakdown (deterministic engine); the fields above stay the merged view.
     findings: list[RiskFinding] | None = None
+    # Judge label (JUDGE_FINDING_TYPES): vi_pham | thieu_noi_dung | gop_y | khong_co. None for older analyses.
+    finding_type: str | None = None
 
 
 class ContractAnalysis(BaseModel):

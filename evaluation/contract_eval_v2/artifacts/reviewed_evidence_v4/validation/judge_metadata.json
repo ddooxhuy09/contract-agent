@@ -1,0 +1,6 @@
+{
+  "model": "qwen/qwen3.8-27b",
+  "calls_this_process": 32,
+  "tokens_this_process": 68056,
+  "human_calibrated_on_real_answers": false
+}

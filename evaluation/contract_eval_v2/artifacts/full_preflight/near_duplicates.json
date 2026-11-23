@@ -1,0 +1,32 @@
+[
+  {
+    "left": "DT-01",
+    "right": "DT2-V1",
+    "similarity": 0.9043,
+    "cross_split": false
+  },
+  {
+    "left": "LU-01",
+    "right": "LU2-V1",
+    "similarity": 0.9653,
+    "cross_split": false
+  },
+  {
+    "left": "TS-06",
+    "right": "TS2-C1",
+    "similarity": 0.9399,
+    "cross_split": true
+  },
+  {
+    "left": "MIX-018",
+    "right": "MIX-015",
+    "similarity": 1.0,
+    "cross_split": false
+  },
+  {
+    "left": "MIX-014",
+    "right": "MIX-011",
+    "similarity": 1.0,
+    "cross_split": true
+  }
+]
