@@ -1,0 +1,24 @@
+{
+ "run_dir": "evaluation_results/runs/contract_eval_v1_20261124",
+ "all": {
+  "detect_n": 115,
+  "precision": 0.9265,
+  "recall": 0.9545,
+  "f1": 0.9403,
+  "near_miss_fp_rate": 0.102,
+  "qa_n": 314,
+  "qa_correctness_norm": 0.7102,
+  "qa_conclusion_match": 0.7356
+ },
+ "panel_agreed": {
+  "detect_n": 114,
+  "precision": 0.9254,
+  "recall": 0.9538,
+  "f1": 0.9394,
+  "near_miss_fp_rate": 0.102,
+  "qa_n": 310,
+  "qa_correctness_norm": 0.7097,
+  "qa_conclusion_match": 0.7343
+ },
+ "n_agreed_base_cases": 124
+}
