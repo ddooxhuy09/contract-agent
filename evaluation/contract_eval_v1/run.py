@@ -379,10 +379,10 @@ async def qa_one(c, cid, qa, cap, provider):
 
 
 def other_test_lock(rd: Path) -> Path | None:
-    for d in RUNS.glob("contract_eval_v1_*"):
-        if d.resolve() != rd.resolve() and (d / "test.lock").exists():
-            return d / "test.lock"
-    return None
+    """Khóa test mới nhất (theo thời điểm ghi trong khóa) ở thư mục run khác: phiên bản đo ngay trước."""
+    locks = [d / "test.lock" for d in RUNS.glob("contract_eval_v1_*")
+             if d.resolve() != rd.resolve() and (d / "test.lock").exists()]
+    return max(locks, key=lambda p: json.loads(p.read_text(encoding="utf-8"))["at"], default=None)
 
 
 async def cmd_generation(args) -> None:

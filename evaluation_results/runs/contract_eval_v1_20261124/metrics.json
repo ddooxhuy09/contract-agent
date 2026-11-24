@@ -2268,7 +2268,8 @@
    "n_quarantine": 9
   },
   "system_version": "v1.2",
-  "previous_test_lock": "evaluation_results/runs/contract_eval_v1_20261115/test.lock"
+  "previous_test_lock": "evaluation_results/runs/contract_eval_v1_20261123/test.lock",
+  "previous_test_lock_note": "sửa 2026-11-24: bản ghi lúc chạy là khóa v1 (20261115) do other_test_lock lấy khóa đầu tiên tìm thấy; phiên bản trước thực tế là v1.1"
  },
  "baseline": {
   "run_dir": "evaluation_results/runs/contract_eval_v1_20261123",
