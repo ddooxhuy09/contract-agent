@@ -31,7 +31,7 @@ EVAL_EMAIL = "contract-eval-v1@example.invalid"
 # ---------- chung ----------
 def run_dir(arg: str | None) -> Path:
     if arg:
-        d = Path(arg)
+        d = Path(arg) if Path(arg).is_absolute() else ROOT / arg
     else:
         old = sorted(RUNS.glob("contract_eval_v1_*"))
         d = old[-1] if old else RUNS / f"contract_eval_v1_{time.strftime('%Y%m%d')}"
@@ -87,15 +87,35 @@ def contract_map(rd: Path) -> dict[str, str]:
 
 
 # ---------- index ----------
-async def cmd_index(args) -> None:
-    from app.application.use_cases.contracts import UploadContract
+def eval_user(cont):
+    return cont.users.get_by_email(EVAL_EMAIL) or cont.users.create(EVAL_EMAIL, "disabled-evaluation-account")
+
+
+def index_text(cont, user, src: Path, message: str = "contract_eval_v1") -> str:
+    """.txt/.md: UploadContract chỉ nhận docx/pdf/ảnh; dùng đúng chunker + embedder + repository như upload."""
     from app.document.chunker import chunk_by_clause
     from app.domain.entities.contract import Contract, ContractChunk
+    text = unicodedata.normalize("NFC", src.read_text(encoding="utf-8"))
+    cid = str(uuid.uuid4())
+    docs = chunk_by_clause(text, cid)
+    vecs = cont.embedder.embed_documents([d.page_content for d in docs])
+    cont.contracts.upsert(Contract(contract_id=cid, user_id=user.id, filename=src.name, file_type=src.suffix,
+                                   storage_key=f"eval-inline/{src.name}", full_text=text, status="parsed",
+                                   message=message, chunk_count=len(docs)))
+    cont.contract_chunks.replace_for_contract(cid, [
+        ContractChunk(contract_id=cid, chunk_index=int(d.metadata.get("chunk_index", i + 1)),
+                      clause_number=str(d.metadata.get("clause_number", i + 1)), content=d.page_content,
+                      embedding=vecs[i]) for i, d in enumerate(docs)])
+    return cid
+
+
+async def cmd_index(args) -> None:
+    from app.application.use_cases.contracts import UploadContract
 
     rd = run_dir(args.run_dir)
     cases, _ = load_eval_cases()
     cont = bind()
-    user = cont.users.get_by_email(EVAL_EMAIL) or cont.users.create(EVAL_EMAIL, "disabled-evaluation-account")
+    user = eval_user(cont)
     f = rd / "contract_map.json"
     cmap = json.loads(f.read_text(encoding="utf-8")) if f.exists() else {}
     paths = sorted({c["contract_path"] for c in cases if c["contract_path"]} - set(cmap))
@@ -105,18 +125,8 @@ async def cmd_index(args) -> None:
         if src.suffix.lower() == ".docx":  # đường upload thật
             up = await uploader.execute(src.read_bytes(), src.name, user.id)
             cid = up["contract_id"]
-        else:  # .txt/.md: UploadContract chỉ nhận docx/pdf/ảnh; dùng đúng chunker + embedder + repository như upload
-            text = unicodedata.normalize("NFC", src.read_text(encoding="utf-8"))
-            cid = str(uuid.uuid4())
-            docs = chunk_by_clause(text, cid)
-            vecs = cont.embedder.embed_documents([d.page_content for d in docs])
-            cont.contracts.upsert(Contract(contract_id=cid, user_id=user.id, filename=src.name, file_type=src.suffix,
-                                           storage_key=f"eval-inline/{src.name}", full_text=text, status="parsed",
-                                           message="contract_eval_v1", chunk_count=len(docs)))
-            cont.contract_chunks.replace_for_contract(cid, [
-                ContractChunk(contract_id=cid, chunk_index=int(d.metadata.get("chunk_index", i + 1)),
-                              clause_number=str(d.metadata.get("clause_number", i + 1)), content=d.page_content,
-                              embedding=vecs[i]) for i, d in enumerate(docs)])
+        else:
+            cid = index_text(cont, user, src)
         cmap[p] = cid
         f.write_text(json.dumps(cmap, ensure_ascii=False, indent=1), encoding="utf-8")
         print(f"indexed {p} -> {cid}", flush=True)
@@ -130,17 +140,55 @@ def parsed_clauses(path: str) -> list[dict]:
     return [{"clause_number": str(c.clause_number), "title": c.title, "summary": c.summary} for c in _extract_clauses(text)]
 
 
+def qa_retrieval_probe():
+    """Chạy đúng nút retrieve của QA (không gọi LLM) và ghi lại luật, điều khoản hợp đồng mà nó đưa vào ngữ cảnh."""
+    from langchain_core.messages import HumanMessage
+    import app.agents.qa_agent as qa
+    cap: dict = {}
+    orig_aug, orig_contract, orig_ground = qa.augment_legal_evidence, qa._retrieve_contract_docs, qa.ground_qa_retrieval_query
+
+    def keep(name, fn):
+        def wrapped(*a, **k):
+            cap[name] = fn(*a, **k)
+            return cap[name]
+        return wrapped
+
+    async def no_memory(*a, **k):
+        return ""
+
+    qa.augment_legal_evidence = keep("legal", orig_aug)
+    qa._retrieve_contract_docs = keep("contract", orig_contract)
+    qa.ground_qa_retrieval_query = keep("query", orig_ground)
+    qa.load_qa_memory = no_memory
+
+    def probe(question: str, cid: str | None, as_of_date: str | None) -> dict:
+        cap.clear()
+        asyncio.run(qa._retrieve_node({"messages": [HumanMessage(content=question)], "contract_id": cid or "none",
+                                       "as_of_date": as_of_date}))
+        return dict(cap)
+    return probe
+
+
+def legal_hit_rows(docs) -> list[dict]:
+    """Một dòng mỗi path; Điều lấy theo chủ đề mang nhiều Khoản (evidence_paths) nên được trải ra theo thứ tự."""
+    rows = []
+    for d in docs:
+        for p in (d.metadata or {}).get("evidence_paths") or [(d.metadata or {}).get("path")]:
+            rows.append({**meta_path(d), "path": p})
+    return rows
+
+
 def cmd_retrieval(args) -> None:
     from app.core.settings import get_settings
-    from app.infrastructure.retrieval.context import get_graph_rag
-    from app.infrastructure.retrieval.query_rewrite import augment_qa_retrieval_query
-    from app.vectorstore.retriever import retrieve_contract, retrieve_legal
+    import app.agents.risk_flagger as rf
+    from app.schemas.contract import Clause
+    from app.vectorstore.retriever import retrieve_contract
 
     rd = run_dir(args.run_dir)
     cases, side = load_eval_cases()
     cmap = contract_map(rd)
     bind()
-    rag = get_graph_rag()
+    probe = qa_retrieval_probe()
     mode = get_settings().legal_retrieval_mode
     if mode != args.label:
         raise SystemExit(f"LEGAL_RETRIEVAL_MODE={mode} khác --label {args.label}")
@@ -159,19 +207,20 @@ def cmd_retrieval(args) -> None:
             row["parsed_clauses"] = [x["clause_number"] for x in clauses[c["contract_path"]]]
             docs = retrieve_contract(c["question"], cmap[c["contract_path"]], k=10)
             row["contract_hits"] = [meta_path(d) for d in docs]
-        legal_query = augment_qa_retrieval_query(c["question"], [])
-        hits = retrieve_legal(legal_query, k=5, title=legal_query, as_of_date=c["as_of_date"])  # đúng tham số QA
-        row["qa_legal_hits"] = [meta_path(d) for d in hits]
-        row["qa_legal_query"] = legal_query
+        # Đường QA: đúng nút retrieve của QA (v1 tái dựng `augment_qa_retrieval_query` + `retrieve_legal`, xem DECISIONS.md)
+        got = probe(c["question"], cmap.get(c["contract_path"]) if c["contract_path"] else None, c["as_of_date"])
+        row["qa_legal_hits"] = legal_hit_rows(got.get("legal") or [])
+        row["qa_legal_query"] = got.get("query")
+        row["qa_contract_hits"] = [meta_path(d) for d in got.get("contract") or []]
         # Đường phân tích (GraphRAG theo điều khoản): theo Điều gold do parser tách, như evaluate_clause
         if c["contract_path"] and c["gold_clause_ids"]:
             key = f"{c['contract_path']}#{c['gold_clause_ids'][0]}#{c['as_of_date']}"
             if key not in clause_rag_cache:
                 cl = next((x for x in clauses[c["contract_path"]] if x["clause_number"] == c["gold_clause_ids"][0]), None)
-                clause_rag_cache[key] = [] if cl is None else [
-                    {"path": h.metadata.get("path"), "score": h.score, "role": h.metadata.get("role")}
-                    for h in rag.retrieve_for_clause(cl["title"], cl["summary"], contract_type=c["contract_type"],
-                                                     k_seed=4, max_total=10, as_of_date=c["as_of_date"])]
+                # đúng hàm evaluate_clause dùng (v1.2 thêm luật theo chủ đề); v1/v1.1 gọi thẳng retrieve_for_clause
+                clause_rag_cache[key] = [] if cl is None else legal_hit_rows(rf._retrieve_legal(
+                    Clause(clause_number=cl["clause_number"], title=cl["title"], summary=cl["summary"]),
+                    cl["summary"] or "", c["contract_type"], c["as_of_date"])[0])
             row["clause_legal_hits"] = clause_rag_cache[key]
         row["retrieval_ms"] = round((time.perf_counter() - t0) * 1000, 1)
         append(out, row)
@@ -321,17 +370,19 @@ async def qa_one(c, cid, qa, cap, provider):
     contract = cap.get("contract") or []
     return {"answer": res["messages"][-1].content, "source_clauses": res.get("source_clauses", []),
             "needs_clarification": res.get("needs_clarification", False),
-            "context_legal_paths": [d.metadata.get("path") for d in legal],
-            "context_contract_clauses": [d.metadata.get("clause_number") for d in contract],
-            "context_legal": qa._format_legal_context(legal)[:6000],
-            "context_contract": qa._format_contract_context(contract)[:4000]}
+            # luật thực gửi model (sau augment_legal_evidence); v1 ghi kết quả retrieve_legal thô
+            "context_legal_paths": [e.get("path") for e in res.get("_legal_evidence") or []] or [d.metadata.get("path") for d in legal],
+            # ngữ cảnh thực gửi model nằm trong state cuối (gồm đoạn luật chèn cố định, và lượt retrieve sau rewrite)
+            "context_contract_clauses": res.get("_valid_clause_numbers") or [d.metadata.get("clause_number") for d in contract],
+            "context_legal": (res.get("_legal_context") or qa._format_legal_context(legal))[:10000],
+            "context_contract": (res.get("_contract_context") or qa._format_contract_context(contract))[:8000]}
 
 
 def other_test_lock(rd: Path) -> Path | None:
-    for d in RUNS.glob("contract_eval_v1_*"):
-        if d.resolve() != rd.resolve() and (d / "test.lock").exists():
-            return d / "test.lock"
-    return None
+    """Khóa test mới nhất (theo thời điểm ghi trong khóa) ở thư mục run khác: phiên bản đo ngay trước."""
+    locks = [d / "test.lock" for d in RUNS.glob("contract_eval_v1_*")
+             if d.resolve() != rd.resolve() and (d / "test.lock").exists()]
+    return max(locks, key=lambda p: json.loads(p.read_text(encoding="utf-8"))["at"], default=None)
 
 
 async def cmd_generation(args) -> None:
@@ -341,8 +392,9 @@ async def cmd_generation(args) -> None:
 
     rd = run_dir(args.run_dir)
     lock = other_test_lock(rd)
-    if lock:
-        raise SystemExit(f"Test đã chạy một lần ở {lock}; không chạy lại test (dùng --run-dir thư mục đó để resume).")
+    if lock and not args.system_version:
+        raise SystemExit(f"Test đã chạy một lần ở {lock}; không chạy lại test (dùng --run-dir thư mục đó để resume, "
+                         "hoặc --system-version NHÃN để đo một phiên bản hệ thống mới, ghi lý do vào DECISIONS.md).")
     cases, side = load_eval_cases()
     cmap = contract_map(rd)
     bind()
@@ -358,19 +410,22 @@ async def cmd_generation(args) -> None:
     for c in cases:
         if args.limit and saved >= args.limit:
             break
+        if args.split and side[c["base_case_id"]] != args.split:
+            continue
         units = []
         det_id = f"{c['base_case_id']}#detect"
         if (c["template"] in ("T1", "fixed") and c["gold_label"] in ("violation", "compliant") and c["contract_path"]
                 and c["gold_clause_ids"] and det_id not in have):
             units.append(("detect", det_id))
-        if c["id"] not in have:
+        if c["id"] not in have and args.kind != "detect":
             units.append(("qa", c["id"]))
         for kind, uid in units:
             for attempt in range(3):
                 t0 = time.perf_counter()
                 tap.take()
                 row = {"id": uid, "case_id": c["id"], "base_case_id": c["base_case_id"], "kind": kind,
-                       "split": side[c["base_case_id"]], "model": model, "git": git_state()["commit"]}
+                       "split": side[c["base_case_id"]], "model": model, "git": git_state()["commit"],
+                       "judge_finding_types": s.judge_finding_types}
                 try:
                     cid = cmap.get(c["contract_path"]) if c["contract_path"] else None
                     if kind == "detect":
@@ -406,7 +461,9 @@ async def cmd_generation(args) -> None:
     test_units = {u for c in cases if side[c["base_case_id"]] == "test" for u in [c["id"]]}
     if test_units <= have and not (rd / "test.lock").exists():
         (rd / "test.lock").write_text(json.dumps({"at": time.strftime("%Y-%m-%dT%H:%M:%S"), "git": git_state(),
-                                                  "frozen": check_frozen()}, ensure_ascii=False, indent=1), encoding="utf-8")
+                                                  "frozen": check_frozen(), "system_version": args.system_version,
+                                                  "previous_test_lock": str(lock.relative_to(ROOT).as_posix()) if lock else None},
+                                                 ensure_ascii=False, indent=1), encoding="utf-8")
         print("test.lock written")
     (rd / "RESUME.md").unlink(missing_ok=True)
     print(f"generation rows: {len(have)}")
@@ -446,7 +503,7 @@ class GroqJudge:
         self.client, self.model_name, self.calls, self.tokens = Groq(api_key=get_settings().groq_api_key), model, 0, 0
 
     def json(self, prompt: str):
-        for attempt in range(5):
+        for _ in range(5):
             try:
                 r = self.client.chat.completions.create(model=self.model_name, temperature=0, reasoning_format="hidden",
                                                         response_format={"type": "json_object"},
@@ -458,7 +515,7 @@ class GroqJudge:
                 continue
             except Exception as exc:  # noqa: BLE001
                 if re.search(r"per\s*day|spend alert|blocked API access", str(exc), re.I):
-                    raise GroqJudge.QuotaStop(str(exc)[:200])
+                    raise GroqJudge.QuotaStop(str(exc)[:200]) from exc
                 if "429" in str(exc) or "503" in str(exc) or "500" in str(exc):
                     time.sleep(30)
                     continue
@@ -535,6 +592,9 @@ def main() -> None:
     ap.add_argument("--run-dir")
     ap.add_argument("--label", default="vector", choices=["vector", "hybrid"])
     ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--split", choices=["dev", "test"], help="generation: chỉ chạy một phần (thử trên dev)")
+    ap.add_argument("--kind", choices=["detect"], help="generation: chỉ chạy ca phát hiện rủi ro")
+    ap.add_argument("--system-version", help="nhãn phiên bản hệ thống khi đo lại test đã khóa ở run khác (vd v1.1)")
     args = ap.parse_args()
     if args.cmd == "index":
         asyncio.run(cmd_index(args))

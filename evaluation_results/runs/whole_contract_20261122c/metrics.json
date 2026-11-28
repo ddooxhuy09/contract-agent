@@ -1,0 +1,116 @@
+{
+ "protocol": {
+  "created_at": "2026-11-22T22:25:43",
+  "git_head": "f2a47625ded73ea5c5755d4271a7fdaee45b86a3",
+  "n": {
+   "dev": 32,
+   "validation": 48
+  }
+ },
+ "groups": {
+  "dev": {
+   "n_completed": {
+    "baseline": 32,
+    "candidate": 32
+   },
+   "n_judged": {
+    "baseline": 32,
+    "candidate": 32
+   },
+   "baseline": {
+    "correctness": 0.5469,
+    "full": 0.5312,
+    "conclusion_match": 0.5625,
+    "faithfulness": 0.7869,
+    "gold_in_context": 0.1875,
+    "violation_conclusion_match": 0.1875,
+    "compliant_conclusion_match": 0.9375,
+    "tokens_mean": 3513.75,
+    "latency_ms_p50": 2827.1
+   },
+   "candidate": {
+    "correctness": 0.4219,
+    "full": 0.375,
+    "conclusion_match": 0.5625,
+    "faithfulness": 0.289,
+    "gold_in_context": 1.0,
+    "violation_conclusion_match": 1.0,
+    "compliant_conclusion_match": 0.125,
+    "tokens_mean": 14479.5312,
+    "latency_ms_p50": 8371.6
+   },
+   "diff_correctness": {
+    "value": -0.125,
+    "ci95": [
+     -0.5,
+     0.2656
+    ],
+    "improved": 10,
+    "worse": 16,
+    "same": 6
+   },
+   "diff_conclusion_match": {
+    "value": 0.0,
+    "ci95": [
+     -0.4062,
+     0.4375
+    ],
+    "improved": 13,
+    "worse": 13,
+    "same": 6
+   }
+  },
+  "validation": {
+   "n_completed": {
+    "baseline": 48,
+    "candidate": 48
+   },
+   "n_judged": {
+    "baseline": 48,
+    "candidate": 48
+   },
+   "baseline": {
+    "correctness": 0.5312,
+    "full": 0.5208,
+    "conclusion_match": 0.5417,
+    "faithfulness": 0.6669,
+    "gold_in_context": 0.5,
+    "violation_conclusion_match": 0.5417,
+    "compliant_conclusion_match": 0.5417,
+    "tokens_mean": 3760.9792,
+    "latency_ms_p50": 2568.5
+   },
+   "candidate": {
+    "correctness": 0.4896,
+    "full": 0.4792,
+    "conclusion_match": 0.6042,
+    "faithfulness": 0.2233,
+    "gold_in_context": 1.0,
+    "violation_conclusion_match": 1.0,
+    "compliant_conclusion_match": 0.2083,
+    "tokens_mean": 15233.375,
+    "latency_ms_p50": 7935.0
+   },
+   "diff_correctness": {
+    "value": -0.0417,
+    "ci95": [
+     -0.2396,
+     0.1354
+    ],
+    "improved": 11,
+    "worse": 12,
+    "same": 25
+   },
+   "diff_conclusion_match": {
+    "value": 0.0625,
+    "ci95": [
+     -0.1458,
+     0.25
+    ],
+    "improved": 13,
+    "worse": 10,
+    "same": 25
+   }
+  }
+ }
+}

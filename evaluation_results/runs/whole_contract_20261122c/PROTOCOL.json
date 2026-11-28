@@ -1,0 +1,17 @@
+{
+ "doc": "Đo trước/sau: câu hỏi toàn hợp đồng (T3) đọc mọi Điều của hợp đồng đang hỏi thay vì top-k vector,\nkèm Điều BLLĐ theo chủ đề của từng Điều hợp đồng (lượt c; lượt b chỉ đọc mọi Điều, luật vẫn tìm theo câu hỏi).\n\n    python -m evaluation.contract_eval_v1.whole_contract_round prepare   # câu hỏi, gold, protocol (hash), nạp hợp đồng v3\n    python -m evaluation.contract_eval_v1.whole_contract_round qa        # QaPipeline thật, 2 cấu hình xen kẽ, có resume\n    python -m evaluation.contract_eval_v1.whole_contract_round judge     # judge Groq qwen, không thấy tên cấu hình\n    python -m evaluation.contract_eval_v1.whole_contract_round score\n\nProtocol (chốt trước khi chạy, ghi vào PROTOCOL.json):\n- baseline = code hiện tại nhưng tắt định tuyến (`asks_whole_contract` -> False, tức top-k vector như trước);\n  candidate = code hiện tại. Cùng tiến trình, cùng model sinh/judge/kho luật; thứ tự cấu hình đảo theo từng câu.\n- dev: 16 ca gốc injection thuộc dev v1, mỗi ca 2 câu (T3 gốc + một câu diễn đạt khác viết trước khi chạy).\n- validation: 48 ca injection_v3 (3 hợp đồng nền khác), câu T3 gốc; chưa từng dùng cho QA, không dùng để sửa code.\n- Chỉ số chính: kết luận khớp nhãn và correctness (judge 0–2) trên validation. Phụ: Điều gold có trong ngữ cảnh hợp đồng.\n- CI95 chênh lệch theo cặp, bootstrap 1000 lần theo ca gốc, seed 42. Không sửa nhãn, không chạy lại để chọn điểm.\n",
+ "created_at": "2026-11-22T22:25:43",
+ "git_head": "f2a47625ded73ea5c5755d4271a7fdaee45b86a3",
+ "code_sha256": {
+  "app/agents/qa_agent.py": "faf5c7b110d7b6836d0bb7fd195c525102e02fb5656ff6af6e8f279722035b56",
+  "app/agents/qa_evidence.py": "bacb4fd1e729cbc9c6e3615bd851ee444df7ada5dc6cdb5f817f67549879934e",
+  "app/infrastructure/retrieval/query_rewrite.py": "9472cafe9919b0eb298b9c14b04086ea09f04bbafcbbc5347b039decec8d8100",
+  "evaluation/contract_eval_v1/run.py": "01a16edb7d8cdf3f40626bea9b106ecd836b31af34237bd5eb1d6eba1098b340"
+ },
+ "inputs_sha256": "9a97ba975ef166ca6557f4821b7fd2a30c1037ce5660cc8c5db102f2aaac6b21",
+ "gold_sha256": "ae057a8c019cc605aa405d63460e33be7e63e7781998298244794c948c41a6cc",
+ "n": {
+  "dev": 32,
+  "validation": 48
+ }
+}

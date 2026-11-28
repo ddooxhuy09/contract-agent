@@ -1,0 +1,55 @@
+{
+ "n_base_cases": 128,
+ "inter_room": {
+  "fleiss_kappa": 0.982,
+  "unanimous": 126,
+  "pairwise_kappa": {
+   "A-B": 0.973,
+   "A-C": 0.986,
+   "B-C": 0.986
+  }
+ },
+ "panel_vs_gold": {
+  "agree": 124,
+  "rate": 0.9688,
+  "kappa": 0.945,
+  "panel_unclear": 0,
+  "rate_on_decided": 0.9688,
+  "confusion_gold_to_panel": {
+   "compliant->compliant": 49,
+   "n/a->compliant": 1,
+   "n/a->n/a": 10,
+   "n/a->violation": 2,
+   "violation->n/a": 1,
+   "violation->violation": 65
+  }
+ },
+ "gold_article": {
+  "n": 113,
+  "cited_by_majority": 100
+ },
+ "by_source": {
+  "contract_qa": {
+   "n": 8,
+   "agree": 7
+  },
+  "injection": {
+   "n": 62,
+   "agree": 62
+  },
+  "injection_v2": {
+   "n": 31,
+   "agree": 31
+  },
+  "v04": {
+   "n": 27,
+   "agree": 24
+  }
+ },
+ "disagreements": [
+  "MIX-006",
+  "QA-08",
+  "TEMP-003",
+  "TEMP-007"
+ ]
+}

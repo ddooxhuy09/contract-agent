@@ -223,6 +223,15 @@
       0.8902
      ]
     },
+    "qa_contract_clause": {
+     "n": 0,
+     "hit@1": null,
+     "hit@1_ci95": null,
+     "hit@3": null,
+     "hit@3_ci95": null,
+     "hit@5": null,
+     "hit@5_ci95": null
+    },
     "legal_qa_path": {
      "n": 253,
      "recall@1": 0.0685,
@@ -562,6 +571,15 @@
       0.7556,
       0.9556
      ]
+    },
+    "qa_contract_clause": {
+     "n": 0,
+     "hit@1": null,
+     "hit@1_ci95": null,
+     "hit@3": null,
+     "hit@3_ci95": null,
+     "hit@5": null,
+     "hit@5_ci95": null
     },
     "legal_qa_path": {
      "n": 44,
@@ -928,6 +946,15 @@
       0.8902
      ]
     },
+    "qa_contract_clause": {
+     "n": 0,
+     "hit@1": null,
+     "hit@1_ci95": null,
+     "hit@3": null,
+     "hit@3_ci95": null,
+     "hit@5": null,
+     "hit@5_ci95": null
+    },
     "legal_qa_path": {
      "n": 253,
      "recall@1": 0.0211,
@@ -1267,6 +1294,15 @@
       0.7556,
       0.9556
      ]
+    },
+    "qa_contract_clause": {
+     "n": 0,
+     "hit@1": null,
+     "hit@1_ci95": null,
+     "hit@3": null,
+     "hit@3_ci95": null,
+     "hit@5": null,
+     "hit@5_ci95": null
     },
     "legal_qa_path": {
      "n": 44,
@@ -2172,6 +2208,28 @@
    ],
    "recall@10": 0.8363,
    "mrr@10": 0.6816
+  }
+ },
+ "report": "docs/bo_test_hoi_dong/KET_QUA_BO_TEST_V1.md",
+ "test_lock_info": {
+  "at": "2026-11-15T16:15:17",
+  "git": {
+   "commit": "8df7e7a3d3748189685e25588293b091c755249b",
+   "dirty_app": false
+  },
+  "frozen": {
+   "files": {
+    "cases.jsonl": "27f806d2d8598ab1636fa2989a614fcd04a015607a6104c8e8af54e37cfc072e",
+    "gold.jsonl": "8ed07b0929c8439444577cf312414e06092d02f576eab176f6d7aa6790e57ee0",
+    "inputs_no_gold.jsonl": "88d19f296ade78391af9daaf629814a0fe173ffb63034a55a44c5ee63be2325e",
+    "split.json": "49613079799752f018e08ce9bea2d71be67a97b01b7afcc4f323491a0677f74c",
+    "quarantine.jsonl": "fb228d06299471972199b1063852296c2ffe56e067ed27fb624f97017304d560",
+    "verification.jsonl": "3ff160a45dfd6638a9da4c0b6f85b72e8956e2a1396cd059430e88c8279ceb77"
+   },
+   "commit_at_freeze": "8df7e7a3d3748189685e25588293b091c755249b",
+   "frozen_at": "2026-11-15T15:31:23",
+   "n_cases": 378,
+   "n_quarantine": 9
   }
  }
 }

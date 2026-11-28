@@ -1,0 +1,22 @@
+{
+ "git": {
+  "commit": "721c0eb060365ec8d7e9eeb23754bf55c3076ce7",
+  "dirty_app": true
+ },
+ "frozen": {
+  "files": {
+   "cases.jsonl": "27f806d2d8598ab1636fa2989a614fcd04a015607a6104c8e8af54e37cfc072e",
+   "gold.jsonl": "8ed07b0929c8439444577cf312414e06092d02f576eab176f6d7aa6790e57ee0",
+   "inputs_no_gold.jsonl": "88d19f296ade78391af9daaf629814a0fe173ffb63034a55a44c5ee63be2325e",
+   "split.json": "49613079799752f018e08ce9bea2d71be67a97b01b7afcc4f323491a0677f74c",
+   "quarantine.jsonl": "fb228d06299471972199b1063852296c2ffe56e067ed27fb624f97017304d560",
+   "verification.jsonl": "3ff160a45dfd6638a9da4c0b6f85b72e8956e2a1396cd059430e88c8279ceb77"
+  },
+  "commit_at_freeze": "8df7e7a3d3748189685e25588293b091c755249b",
+  "frozen_at": "2026-11-15T15:31:23",
+  "n_cases": 378,
+  "n_quarantine": 9
+ },
+ "mode": "vector",
+ "finished_at": "2026-11-24T00:53:47"
+}
