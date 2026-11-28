@@ -11,6 +11,7 @@ from langchain_core.callbacks import BaseCallbackHandler
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 from app.core.logging import logger
+from app.core.masking import PiiVault, mask_for_log
 from app.core.settings import get_settings
 from app.core.usage import UsageCallback
 
@@ -35,12 +36,13 @@ class RawResponseLog(BaseCallbackHandler):
 
     def on_llm_error(self, error: BaseException, **kwargs) -> None:
         response = getattr(error, "response", None)
-        logger.error(
-            "LLM raw error: type=%s repr=%r status=%s body=%r response_text=%r cause=%r | %s",
-            type(error).__name__, error, getattr(error, "status_code", None), getattr(error, "body", None),
-            getattr(response, "text", None), error.__cause__,
-            "".join(traceback.format_exception(type(error), error, error.__traceback__))[-3000:],
-        )
+        # The provider's error body can echo the prompt back.
+        logger.error("LLM raw error: %s", mask_for_log(
+            f"type={type(error).__name__} repr={error!r} status={getattr(error, 'status_code', None)} "
+            f"body={getattr(error, 'body', None)!r} response_text={getattr(response, 'text', None)!r} cause={error.__cause__!r} | "
+            + "".join(traceback.format_exception(type(error), error, error.__traceback__))[-3000:],
+            limit=5000,
+        ))
 
     def on_llm_end(self, response, **kwargs) -> None:
         try:
@@ -224,18 +226,41 @@ def _retry_delay_seconds(exc: BaseException, default: float = 30.0) -> float | N
     return default
 
 
+def _log_outgoing(text: str) -> None:
+    """Log exactly what leaves for the LLM (already masked)."""
+    logger.info("LLM request:\n%s", text)
+
+
+async def ainvoke_masked(model, messages: list) -> str:
+    """``model.ainvoke(messages).content`` with personal data masked going out and restored coming back."""
+    vault = PiiVault()
+    masked = [
+        m.model_copy(update={"content": vault.mask(m.content)}) if isinstance(m.content, str) else m
+        for m in messages
+    ]
+    _log_outgoing("\n---\n".join(f"[{m.type}] {m.content}" for m in masked))
+    return vault.unmask((await model.ainvoke(masked)).content)
+
+
 def chat_completion(prompt: str, provider: str = DEFAULT_PROVIDER) -> str:
-    """Invoke chat model; on 429 sleep for server-suggested delay then retry (max 2 waits)."""
+    """Invoke chat model; on 429 sleep for server-suggested delay then retry (max 2 waits).
+
+    Personal data is masked before the call and restored in the reply (``app.core.masking``).
+    """
     model = get_chat_model(provider)
+    vault = PiiVault()
+    masked_prompt = vault.mask(prompt)
+    _log_outgoing(masked_prompt)
     last_err: BaseException | None = None
     for attempt in range(3):
         key_used = active_api_key()
         try:
-            response = model.invoke(prompt)
-            return response.content
+            response = model.invoke(masked_prompt)
+            return vault.unmask(response.content)
         except Exception as e:
             last_err = e
-            logger.error("chat_completion failure (attempt %s/3): %r | %s", attempt + 1, e, traceback.format_exc()[-2000:])
+            logger.error("chat_completion failure (attempt %s/3): %s", attempt + 1,
+                         mask_for_log(f"{e!r} | {traceback.format_exc()[-2000:]}", limit=3000))
             if attempt < 2 and rotate_api_key_on_key_failure(e, key_used):
                 model = get_chat_model(provider)
                 continue

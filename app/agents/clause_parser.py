@@ -6,6 +6,8 @@ from pydantic import ValidationError
 
 from app.schemas.contract import ContractAnalysis, Party, Clause
 from app.core.logging import logger
+from app.core.masking import mask_for_log
+from app.core.prompt_guard import fence
 from app.core.prompts import EXTRACTION_PROMPT
 from app.agents.llm_client import chat_completion, DEFAULT_PROVIDER
 from app.agents.json_parsing import parse_json_object
@@ -448,7 +450,7 @@ def _extract_with_llm(text: str, contract_id: str, provider: str) -> dict | None
             f"Contract {contract_id}: LLM gap-fill sees only the first {_LLM_GAPFILL_CHAR_LIMIT} of {len(text)} characters "
             "(regex clause splitting still covers the whole text)"
         )
-    prompt = EXTRACTION_PROMPT.format(contract_text=text[:_LLM_GAPFILL_CHAR_LIMIT])
+    prompt = EXTRACTION_PROMPT.format(contract_text=fence(text[:_LLM_GAPFILL_CHAR_LIMIT]))
     raw = chat_completion(prompt, provider=provider)
     result = parse_json_object(raw)
     if result is None:
@@ -464,7 +466,7 @@ def _fill_gaps_with_llm(analysis: ContractAnalysis, text: str, contract_id: str,
     try:
         llm_result = _extract_with_llm(text, contract_id, provider)
     except Exception as e:
-        logger.error(f"LLM extraction fallback failed for contract {contract_id}: {e}")
+        logger.error(f"LLM extraction fallback failed for contract {contract_id}: {mask_for_log(e)}")
         return analysis
     if not llm_result:
         return analysis
@@ -510,7 +512,7 @@ def _fill_gaps_with_llm(analysis: ContractAnalysis, text: str, contract_id: str,
     except ValidationError as exc:
         # Keep the rule-based analysis: a gap-fill value the schema rejects must not throw
         # away clauses that were extracted from the real text.
-        logger.error(f"Contract {contract_id}: LLM gap-fill rejected by schema, keeping rule-based analysis: {exc}")
+        logger.error(f"Contract {contract_id}: LLM gap-fill rejected by schema, keeping rule-based analysis: {mask_for_log(exc)}")
         return analysis
 
 

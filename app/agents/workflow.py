@@ -9,6 +9,7 @@ from langgraph.types import Command, Send, interrupt
 
 from app.schemas.contract import ContractAnalysis, Clause, RiskItem
 from app.core.logging import logger
+from app.core.masking import mask_for_log
 from app.domain.errors import AnalysisFailedError
 from app.domain.errors import NotFoundError
 from app.agents.clause_parser import parse_contract
@@ -92,7 +93,7 @@ async def _extract_node(state: AnalysisState) -> dict:
         logger.info(f"Extract done: contract_id={state['contract_id']} clause_count={len(analysis.clauses)}")
         return {"analysis": analysis, "attempts": attempts, "_extract_failed": False}
     except Exception as e:
-        logger.error(f"Extract failed: contract_id={state['contract_id']} error={e} (attempt {attempts})")
+        logger.error(f"Extract failed: contract_id={state['contract_id']} error={mask_for_log(e)} (attempt {attempts})")
         return {"analysis": None, "attempts": attempts, "_extract_failed": True}
 
 
@@ -121,20 +122,20 @@ async def _judge_clause_node(state: ClauseState) -> dict:
             if risk:
                 logger.info("Judge result: contract_id=%s clause=%s severity=%s issue=%s",
                     state["contract_id"], clause.clause_number, risk.severity,
-                    (risk.issue or "")[:100])
+                    mask_for_log(risk.issue or "", 100))
             else:
                 logger.info("Judge result: contract_id=%s clause=%s severity=ok (no issue)",
                     state["contract_id"], clause.clause_number)
             return {"risks": [risk] if risk else []}
         except JudgeUnparsable as e:
             # The judge already retried its own output once; do not burn more calls.
-            logger.error(f"Judge output unusable: contract_id={state['contract_id']} clause_number={clause.clause_number} error={e}")
+            logger.error(f"Judge output unusable: contract_id={state['contract_id']} clause_number={clause.clause_number} error={mask_for_log(e)}")
             if hint:
                 return {"risks": []}  # the fixed-rule risk stands, as without verification
             return {"risks": [], "unchecked": [_unchecked(clause, "unparsable")]}
         except Exception as e:
             logger.error(
-                f"Judge failed: contract_id={state['contract_id']} clause_number={clause.clause_number} error={e} (attempt {attempt}/{_MAX_JUDGE_RETRIES + 1})"
+                f"Judge failed: contract_id={state['contract_id']} clause_number={clause.clause_number} error={mask_for_log(e)} (attempt {attempt}/{_MAX_JUDGE_RETRIES + 1})"
             )
     if hint:
         return {"risks": []}  # the fixed-rule risk stands, as without verification

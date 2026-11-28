@@ -11,9 +11,13 @@ from langgraph.graph.message import add_messages
 
 from app.agents.checkpointer import get_checkpointer
 from app.agents.json_parsing import parse_json_object
-from app.agents.llm_client import DEFAULT_PROVIDER, active_api_key, chat_completion, get_chat_model, rotate_api_key_on_key_failure
+from app.agents.llm_client import (
+    DEFAULT_PROVIDER, active_api_key, ainvoke_masked, chat_completion, get_chat_model, rotate_api_key_on_key_failure,
+)
 from app.agents.memory import load_qa_memory, save_qa_memory
 from app.core.logging import logger
+from app.core.masking import mask_for_log
+from app.core.prompt_guard import fence
 from app.core.prompts import (
     QA_HUMAN_TEMPLATE,
     QA_QUERY_REWRITE_PROMPT,
@@ -223,7 +227,7 @@ async def _rewrite_query_node(state: QAState) -> dict:
 
     logger.info(
         "QA self-correct rewrite: contract_id=%s attempt=%s query=%r",
-        state["contract_id"], attempts, rewritten[:80],
+        state["contract_id"], attempts, mask_for_log(rewritten, 80),
     )
     # Drop any stale context so the next retrieve pass fully recomputes it.
     return {
@@ -263,7 +267,7 @@ async def _review_qa_result(result, human_content, chat_model):
         f"BẢN NHÁP:\n{json.dumps(result, ensure_ascii=False)}\nNGỮ CẢNH VÀ CÂU HỎI:\n{human_content}"
     )
     try:
-        raw = (await chat_model.ainvoke([SystemMessage(content=QA_SYSTEM_PROMPT), HumanMessage(content=instruction)])).content
+        raw = await ainvoke_masked(chat_model, [SystemMessage(content=QA_SYSTEM_PROMPT), HumanMessage(content=instruction)])
         reviewed = parse_json_object(raw)
         if reviewed and (reviewed.get("answer") or reviewed.get("clarification_question")):
             return reviewed
@@ -287,9 +291,10 @@ async def _generate_node(state: QAState) -> dict:
     )
 
     human_content = QA_HUMAN_TEMPLATE.format(
-        contract_context=state.get("_contract_context", "Không có dữ liệu hợp đồng liên quan."),
+        contract_context=fence(state.get("_contract_context", "Không có dữ liệu hợp đồng liên quan.")),
         legal_context=state.get("_legal_context", "Không có dữ liệu pháp luật liên quan."),
-        long_term_memory=state.get("_long_term_memory") or "Không có ký ức nào từ các phiên trước.",
+        # Memory holds earlier answers built from the contract: an injection could persist through it.
+        long_term_memory=fence(state.get("_long_term_memory") or "Không có ký ức nào từ các phiên trước."),
         question=question,
     )
     prompt_messages = [SystemMessage(content=QA_SYSTEM_PROMPT), *history, HumanMessage(content=human_content)]
@@ -297,7 +302,7 @@ async def _generate_node(state: QAState) -> dict:
     key_used = active_api_key()
     chat_model = get_chat_model(state.get("provider", DEFAULT_PROVIDER), json_mode=True)
     try:
-        raw = (await chat_model.ainvoke(prompt_messages)).content
+        raw = await ainvoke_masked(chat_model, prompt_messages)
     except Exception as exc:
         logger.error("LLM invoke failed for contract %s, attempt %s: %s", state["contract_id"], attempts, exc)
         # When the key itself is the problem (per-day quota, no access to the model) the

@@ -24,7 +24,7 @@ Tra cứu nhanh "sửa gì ở đâu". Tên symbol lấy từ mã hiện tại; 
 | `application/use_cases/` | `auth.py` (`RegisterUser`, `LoginUser`), `contracts.py` (`UploadContract`, `AnalyzeContract`, `ResumeAnalysisReview`, `ListContracts`, `ChatWithContract`, `GetChatHistory`, `GetChatStates`, `RewindChat`), `legal_ingest.py` (`IngestLegalDocument`) |
 | `domain/` | `entities/`, `ports/repositories.py`, `ports/services.py`, `errors.py` |
 | `schemas/contract.py` | Pydantic: request/response, `ContractAnalysis`, `Clause`, `RiskItem`, `LegalCitation` |
-| `core/` | `settings.py` (`Settings`, `get_settings`), `logging.py` (`logger`), `prompts.py`, `dates.py` (`parse_as_of`) |
+| `core/` | `settings.py` (`Settings`, `get_settings`), `logging.py` (`logger`), `prompts.py`, `dates.py` (`parse_as_of`), `masking.py` (`PiiVault`, `mask_for_log`: che dữ liệu cá nhân trước LLM và trong log), `prompt_guard.py` (`fence`, `looks_like_prompt_injection`) |
 | `document/` | `parser.py` (`parse_document`), `chunker.py` (`chunk_by_clause`) |
 | `vectorstore/retriever.py` | `retrieve_contract`, `retrieve_legal`, `format_legal_context` (cầu nối agents → search) |
 | `agents/` | Xem bảng dưới |
@@ -38,14 +38,14 @@ Tra cứu nhanh "sửa gì ở đâu". Tên symbol lấy từ mã hiện tại; 
 | `qa_agent.py` | Đồ thị hỏi đáp: `answer_question`, `stream_answer_events`, `get_state_history`, `rewind_state`, `get_conversation_history`; `_retrieve_contract_docs` lấy Điều được hỏi và bối cảnh; `_review_qa_result` kiểm chứng bản nháp một lần khi có căn cứ chính xác |
 | `qa_evidence.py` | `topic_articles`, `augment_legal_evidence`: chọn Điều luật theo chủ đề lao động, lấy văn bản thật qua repository, ghép đúng Điều và đặt căn cứ chính xác trước vector; không quyết định nhãn vi phạm |
 | `clause_parser.py` | `parse_contract` (LLM trích xuất điều khoản) |
-| `risk_flagger.py` | `evaluate_clause` (LLM + RAG cho một điều khoản) |
+| `risk_flagger.py` | `evaluate_clause` (LLM + RAG cho một điều khoản; điều khoản chứa câu lệnh nhắm vào AI được báo rủi ro, không gửi LLM) |
 | `labor_red_flags.py` | Pattern xác định cho điều khoản trái luật lao động: `check_labor_red_flags`, `skip_llm_clause_numbers` |
 | `labor_completeness.py` | Nội dung bắt buộc Điều 21 BLLĐ: `check_labor_completeness` |
 | `preamble_citations.py` | Kiểm tra phần "Căn cứ…": `check_preamble_citations` |
 | `legal_citations.py` | Chuẩn hóa/ground trích dẫn: `resolve_legal_citations`, `ground_citations` |
 | `effectivity.py` | `evaluate_document_effectivity`, `citation_status_for_labor` |
 | `labor_code_resolver.py` | Tìm BLLĐ có hiệu lực theo ngày và lấy chunk Điều N, qua `get_legal_docs()` / `get_legal_chunks()` |
-| `llm_client.py` | `get_providers`, `resolve_provider`, `get_chat_model`, `chat_completion` (backoff 429) |
+| `llm_client.py` | `get_providers`, `resolve_provider`, `get_chat_model`, `chat_completion` (backoff 429), `ainvoke_masked`; mọi lời gọi LLM văn bản đi qua `chat_completion` hoặc `ainvoke_masked` để được che PII |
 | `checkpointer.py`, `memory.py` | Checkpoint LangGraph và bộ nhớ hỏi đáp dài hạn (Postgres) |
 | `json_parsing.py` | `parse_json_object` cho đầu ra LLM |
 
@@ -88,4 +88,5 @@ Tra cứu nhanh "sửa gì ở đâu". Tên symbol lấy từ mã hiện tại; 
 | Đổi nạp corpus pháp luật | `infrastructure/legal_corpus/`, `application/use_cases/legal_ingest.py`, `scripts/ingest_*.py` | `test_legal_corpus_parser.py`, `test_legal_ingest_unit.py`, `test_ingest_checkpoint.py`, `test_clause_amendments.py` |
 | Đổi schema DB | `schema.sql` (cần migration thủ công, ngoài phạm vi refactor) | — |
 | Thêm biến môi trường | `core/settings.py`, `.env.example`, README | — |
-| Prompt LLM | `core/prompts.py` (xem `docs/PROMPT_ARCHITECTURE.md`) | — |
+| Prompt LLM | `core/prompts.py` (xem `docs/PROMPT_ARCHITECTURE.md`); dữ liệu người dùng bọc bằng `fence()` | — |
+| Che dữ liệu cá nhân / chống prompt injection | `core/masking.py`, `core/prompt_guard.py`, `agents/llm_client.py` | `test_masking.py`, `test_risk_flagger.py` |

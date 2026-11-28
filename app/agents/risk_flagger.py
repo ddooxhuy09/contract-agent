@@ -11,6 +11,7 @@ from app.agents.legal_citations import (
 )
 from app.agents.llm_client import DEFAULT_PROVIDER, chat_completion
 from app.core.logging import logger
+from app.core.prompt_guard import fence, looks_like_prompt_injection
 from app.core.prompts import CLAUSE_RISK_FINDING_TYPES, CLAUSE_RISK_PROMPT, CLAUSE_RISK_RULE_HINT
 from app.core.settings import get_settings
 from app.infrastructure.retrieval.context import get_contract_chunks, get_graph_rag
@@ -146,6 +147,26 @@ def _no_grounding_risk(clause: Clause, clause_ref: str, clause_text: str) -> Ris
     )
 
 
+def _injection_risk(clause_ref: str, clause_text: str) -> RiskItem:
+    """Clause that addresses the AI: reported as-is, never sent to the judge it tries to steer."""
+    logger.warning("Prompt-injection text detected in %s, skipping LLM judge", clause_ref)
+    return RiskItem(
+        clause_ref=clause_ref,
+        title="Điều khoản chứa câu lệnh nhắm vào AI",
+        issue="Điều khoản có câu văn ra lệnh cho hệ thống AI (vd. bỏ qua hướng dẫn, kết luận không có rủi ro). "
+              "Hệ thống không để AI tự đánh giá điều khoản này.",
+        severity="warning",
+        summary_topics=["Câu lệnh nhắm vào AI", "Cần rà soát thủ công"],
+        reasons=["Văn bản hợp đồng không có lý do để chứa chỉ dẫn cho AI; đây có thể là nội dung cố ý làm sai kết quả rà soát."],
+        impact=["Nếu tin vào kết quả tự động, điều khoản bất lợi có thể bị bỏ sót."],
+        actions=["Đọc kỹ toàn văn điều khoản này", "Hỏi bên soạn thảo vì sao có câu văn này", "Nhờ luật sư rà soát trước khi ký"],
+        legal_basis=None,
+        recommendation="Rà soát thủ công điều khoản này; không dựa vào kết quả tự động.",
+        original_clause=clause_text or None,
+        confidence=0.9,
+    )
+
+
 def _judge(prompt: str, provider: str, clause_number: str) -> dict:
     """Call the LLM and parse its JSON verdict; retry once when the output is unusable.
 
@@ -269,6 +290,8 @@ def evaluate_clause(
     """
     clause_ref = f"Điều {clause.clause_number}"
     clause_text = _resolve_clause_text(clause, contract_id)
+    if looks_like_prompt_injection(f"{clause.title or ''}\n{clause_text}"):
+        return _injection_risk(clause_ref, clause_text)
     summary_for_query = clause.summary or clause_text
     # Fold job/workplace text so sector filters see "AI / công nghệ" vs "dầu khí".
     scope_summary = " ".join(
@@ -282,8 +305,8 @@ def evaluate_clause(
     prompt = CLAUSE_RISK_PROMPT.format(
         clause_number=clause.clause_number,
         clause_title_suffix=f" - {clause.title}" if clause.title else "",
-        clause_text=clause_text[:6000],
-        clause_summary=(clause.summary or "")[:800],
+        clause_text=fence(clause_text[:6000]),
+        clause_summary=fence((clause.summary or "")[:800]),
         legal_context=legal_context,
     )
     if get_settings().judge_finding_types:

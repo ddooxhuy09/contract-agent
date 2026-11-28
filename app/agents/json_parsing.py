@@ -2,6 +2,7 @@ import json
 import re
 
 from app.core.logging import logger
+from app.core.masking import mask_for_log
 
 _COMMON_FIXES = [
     (re.compile(r"}\s*,\s*([}\]])"), r"}\1"),
@@ -33,7 +34,7 @@ def parse_json_object(raw: str) -> dict | None:
         if result is not None:
             return result
 
-    logger.warning("QA JSON parse failed. Raw LLM output (first 500 chars): %s", raw[:500])
+    logger.warning("QA JSON parse failed. Raw LLM output (first 500 chars): %s", mask_for_log(raw))
     return None
 
 

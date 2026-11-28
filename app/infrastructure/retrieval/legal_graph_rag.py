@@ -5,6 +5,7 @@ from datetime import date
 
 from app.core.dates import parse_as_of
 from app.core.logging import logger
+from app.core.masking import mask_for_log
 from app.core.settings import get_settings
 from app.domain.entities.search import RetrievedChunk
 from app.domain.ports.repositories import LegalChunkRepository
@@ -76,7 +77,7 @@ class LegalGraphRag:
             logger.warning(
                 "LegalGraphRag: 0 seeds above threshold=%.2f; retrying without score floor query=%r",
                 settings.similarity_threshold,
-                query[:80],
+                mask_for_log(query, 80),
             )
             seeds = self._search.search(query, k=k_seed, min_score=0.0)
 
@@ -95,12 +96,12 @@ class LegalGraphRag:
                 if hits:
                     logger.info(
                         "LegalGraphRag: seed recovery via narrow query %r hits=%s",
-                        variant[:60], len(hits),
+                        mask_for_log(variant, 60), len(hits),
                     )
                     seeds = hits
                     break
         if not seeds:
-            logger.warning("LegalGraphRag: still 0 seeds after narrow query fallbacks query=%r", query[:80])
+            logger.warning("LegalGraphRag: still 0 seeds after narrow query fallbacks query=%r", mask_for_log(query, 80))
         return seeds
 
     def _filter_seeds_by_sector(
