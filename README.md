@@ -18,6 +18,8 @@ Bản tích hợp ngày 28/11/2026: xem [ghi chú bàn giao cho team](docs/MAIN_
 
 ## Chạy bằng Docker
 
+OCR ảnh chạy local bằng Tesseract với bộ tiếng Việt (`vie`), không gửi ảnh tới LLM. Sau khi cập nhật từ bản OCR Gemini, cần rebuild API bằng `docker compose up -d --build --no-deps api` để cài `pytesseract`, `tesseract-ocr` và `tesseract-ocr-vie`. Chạy Python trực tiếp trên máy cần cài Tesseract cùng dữ liệu `vie` và đưa executable vào PATH.
+
 Cần [Docker Desktop](https://www.docker.com/products/docker-desktop/). Không cần cài Python/Node trên máy.
 
 ```powershell

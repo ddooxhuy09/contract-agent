@@ -2,6 +2,8 @@
 
 ## 2026-11-28: tích hợp main và tách WIP local
 
+- Pull/merge tiếp `c2874bf` từ `origin/feat/pii-masking-prompt-guard`: OCR ảnh chuyển sang Tesseract (`vie`) local, thêm dependency/Docker và test không gửi ảnh tới LLM. Giữ nguyên giao diện đã duyệt và các bản sửa JSON. Cần rebuild API sau cập nhật; không thay đổi dữ liệu Postgres.
+
 - Cập nhật tiếp theo: chủ dự án duyệt giao diện mới; đưa riêng 22 file frontend từ nhánh local lên main. Backend/evaluation dang dở tiếp tục giữ local. Gồm theme/layout, màn hình chính, trình bày rủi ro/chat/điều khoản, thông báo mất kết nối và xử lý token hết hiệu lực.
 
 - Merge nhánh eval v1 và PII/prompt guard; không merge lại nhánh fix đã có trong lịch sử main.

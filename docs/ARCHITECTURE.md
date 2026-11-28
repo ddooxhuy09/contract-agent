@@ -31,7 +31,7 @@ api  ──►  application/use_cases  ──►  domain (entities, ports, error
 
 ### Ngoại lệ phân lớp còn lại (đã xác minh bằng AST, xem `REFACTOR_PLAN.md`)
 - `agents/` → `infrastructure/retrieval/` (8 import: `context`, `query_rewrite`, `scope_match`) và `vectorstore/`: **chấp nhận có chủ đích**. `retrieval/context.py` là chỗ giữ repository/search đã `bind_retrieval` để agents không import vòng; `query_rewrite`, `scope_match` là logic thuần. Agents không còn truy vấn SQL hay import `db.connection`: các câu truy vấn nằm trong `PgLegalDocumentRepository` / `PgLegalChunkRepository`, agents lấy qua `get_legal_docs()` / `get_legal_chunks()` (mặc định là repository Postgres không trạng thái khi chưa bind).
-- `infrastructure/` → `agents/`: chỉ `infrastructure/agents/pipelines.py` (đúng vai trò bọc đồ thị thành `AnalyzePipeline` / `QaPipeline`). `document/parser.py` import `agents.llm_client` (OCR ảnh).
+- `infrastructure/` → `agents/`: `infrastructure/agents/pipelines.py` bọc đồ thị thành `AnalyzePipeline` / `QaPipeline`; adapter `infrastructure/llm/gemini_chat.py` dùng model chung. `document/parser.py` không gọi LLM: OCR ảnh dùng Tesseract (`vie`) local qua `pytesseract`.
 - `application/use_cases/legal_ingest.py` → `infrastructure.legal_corpus.muc_luc_paths`.
 - Không có import vòng ở mức module (kiểm tra bằng script AST trên toàn bộ `app/`, tính cả import trong hàm).
 

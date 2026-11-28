@@ -25,7 +25,7 @@ Tra cứu nhanh "sửa gì ở đâu". Tên symbol lấy từ mã hiện tại; 
 | `domain/` | `entities/`, `ports/repositories.py`, `ports/services.py`, `errors.py` |
 | `schemas/contract.py` | Pydantic: request/response, `ContractAnalysis`, `Clause`, `RiskItem`, `LegalCitation` |
 | `core/` | `settings.py` (`Settings`, `get_settings`), `logging.py` (`logger`), `prompts.py`, `dates.py` (`parse_as_of`), `masking.py` (`PiiVault`, `mask_for_log`: che dữ liệu cá nhân trước LLM và trong log), `prompt_guard.py` (`fence`, `looks_like_prompt_injection`) |
-| `document/` | `parser.py` (`parse_document`), `chunker.py` (`chunk_by_clause`) |
+| `document/` | `parser.py` (`parse_document`, `parse_image`: Tesseract tiếng Việt chạy local, cần executable và dữ liệu `vie`), `chunker.py` (`chunk_by_clause`) |
 | `vectorstore/retriever.py` | `retrieve_contract`, `retrieve_legal`, `format_legal_context` (cầu nối agents → search) |
 | `agents/` | Xem bảng dưới |
 | `infrastructure/` | Adapter; xem bảng dưới |

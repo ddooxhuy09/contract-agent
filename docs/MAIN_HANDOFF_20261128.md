@@ -10,7 +10,7 @@
 
 ## Giới hạn cần biết
 
-- Che PII dựa trên regex, không bảo đảm nhận diện mọi tên/địa chỉ. OCR ảnh vẫn gửi ảnh gốc tới nhà cung cấp LLM; không có che PII trong ảnh.
+- Che PII dựa trên regex, không bảo đảm nhận diện mọi tên/địa chỉ. Cập nhật OCR tiếp theo từ `c2874bf` đã đổi sang Tesseract local, không gửi ảnh gốc tới LLM. Cần rebuild API để có dependency và dữ liệu tiếng Việt; không fallback về OCR bằng LLM khi lỗi.
 - `.env.example` tắt LangSmith tracing mặc định. File `.env` đang có trên máy mỗi thành viên không tự đổi; kiểm tra `LANGCHAIN_TRACING_V2` trước khi dùng dữ liệu thật.
 - Đây là bản tích hợp source. HTTP 200 của dịch vụ đang chạy không chứng minh mọi luồng với DB/LLM thật đạt; bộ test tích hợp ở lượt rà soát trước không hoàn tất.
 
