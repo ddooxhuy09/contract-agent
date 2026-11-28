@@ -12,6 +12,7 @@ add NER if contracts with unlabelled names show up.
 
 from __future__ import annotations
 
+import json
 import re
 
 _UP = "A-ZĐÀÁẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬÈÉẺẼẸÊẾỀỂỄỆÌÍỈĨỊÒÓỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÙÚỦŨỤƯỨỪỬỮỰỲÝỶỸỴ"
@@ -82,6 +83,22 @@ class PiiVault:
     def unmask(self, text: str) -> str:
         if not isinstance(text, str) or not self._value_of:
             return text
+        # JSON strings must keep quotes/backslashes escaped when PII is restored.
+        # Retain the original envelope, including optional Markdown JSON fences.
+        candidate = text.strip()
+        fenced = re.fullmatch(r"```(?:json)?\s*\n?(.*?)\s*```", candidate, re.DOTALL | re.IGNORECASE)
+        try:
+            structured = isinstance(json.loads(fenced.group(1) if fenced else candidate), (dict, list))
+        except json.JSONDecodeError:
+            structured = False
+        if structured:
+            def restore_string(match: re.Match[str]) -> str:
+                value = json.loads(match.group(0))
+                for token, original in self._value_of.items():
+                    value = value.replace(token, original)
+                return json.dumps(value, ensure_ascii=False)
+
+            return re.sub(r'"(?:[^"\\]|\\.)*"', restore_string, text)
         for token, value in self._value_of.items():
             text = text.replace(token, value)
         return text

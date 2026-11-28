@@ -1,5 +1,12 @@
 # Nhật ký thay đổi theo kế hoạch 1 tuần
 
+## 2026-11-28: tích hợp main và tách WIP local
+
+- Merge nhánh eval v1 và PII/prompt guard; không merge lại nhánh fix đã có trong lịch sử main.
+- Lưu các thay đổi chưa hoàn tất ở nhánh local `codex/wip-local-20261128` (`c746f7b`), không push nhánh này.
+- Sửa khôi phục PII trong JSON để dấu ngoặc kép/gạch chéo ngược không phá cấu trúc kết quả; thêm test hồi quy.
+- Nội dung, giới hạn và hướng dẫn team cập nhật: `docs/MAIN_HANDOFF_20261128.md`.
+
 ## 2026-11-18: v4 — kiểm chứng bản nháp theo bằng chứng thật
 
 - V3 tăng retrieval/nguồn nhưng còn ca đảo nghĩa điều cấm, nhầm thiếu chi tiết với vi phạm và viện dẫn lệch phạm vi. Giữ toàn bộ kết quả v3, không sửa rubric hoặc gold để nâng điểm.

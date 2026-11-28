@@ -4,6 +4,8 @@ Stack: FastAPI · Postgres/pgvector (ltree) · Groq (gpt-oss-120b) / Gemini · B
 
 Phạm vi: hợp đồng lao động. Đây không phải tư vấn pháp lý; xem [`docs/PHAM_VI.md`](docs/PHAM_VI.md).
 
+Bản tích hợp ngày 28/11/2026: xem [ghi chú bàn giao cho team](docs/MAIN_HANDOFF_20261128.md) để biết phần đã đưa vào main, phần WIP giữ local và giới hạn che PII.
+
 ## Giới hạn
 
 - Đã chạy full 369 câu QA và 117 hợp đồng (18/11/2026): test QA correctness 76,4%, đúng đủ 68,8%; F1 tại 93 Điều test có nhãn sau toàn workflow là 71,2%, với báo nhầm cao. Xem [báo cáo full và nguyên nhân lỗi](docs/bo_test_hoi_dong/KET_QUA_FULL_QA_WORKFLOW.md). Kết quả tự động trên dữ liệu tổng hợp, không phải xác nhận pháp lý. [Báo cáo v1](docs/bo_test_hoi_dong/KET_QUA_BO_TEST_V1.md) là mốc lịch sử theo cách chấm cũ; F1 0,86 ở đó đo trên Điều đã chỉ sẵn. Chưa có gold đầy đủ mọi rủi ro để công bố F1 toàn hợp đồng.

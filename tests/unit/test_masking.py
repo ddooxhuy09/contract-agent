@@ -1,6 +1,7 @@
 """PII masking before LLM calls and logs (OWASP LLM02 / A09) and the prompt-injection guard (LLM01)."""
 
 import asyncio
+import json
 
 from langchain_core.messages import HumanMessage, SystemMessage
 
@@ -40,6 +41,19 @@ def test_same_value_gets_same_token():
     vault = PiiVault()
     masked = vault.mask("CCCD: 001190012345. Bản sao CCCD số 001190012345.")
     assert masked.count("[CCCD_1]") == 2 and "[CCCD_2]" not in masked
+
+
+def test_unmask_keeps_json_valid_for_quoted_address():
+    original = 'Địa chỉ: Nhà "A"\\B, đường 1, Quận 1, TP HCM'
+    vault = PiiVault()
+    masked = vault.mask(original)
+    reply = json.dumps({"answer": masked, "items": [masked], "ok": True}, ensure_ascii=False)
+    restored = json.loads(vault.unmask(reply))
+    assert restored == {"answer": original, "items": [original], "ok": True}
+    fenced = vault.unmask("```json\n" + reply + "\n```")
+    assert json.loads(fenced.removeprefix("```json\n").removesuffix("\n```")) == restored
+    assert vault.unmask(masked) == original
+    assert vault.unmask('[DIA_CHI_1] là địa chỉ.') == 'Nhà "A"\\B, đường 1 là địa chỉ.'
 
 
 def test_mask_for_log_is_masked_and_cut():
