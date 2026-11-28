@@ -48,6 +48,9 @@ def env(monkeypatch):
 
     monkeypatch.setattr(rf, "get_contract_chunks", lambda: _Repo())
     monkeypatch.setattr(rf, "get_graph_rag", lambda: state.rag)
+    # Retrieval-path tests must not add topic anchors from the developer's real DB.
+    # Evidence augmentation has dedicated tests and is overridden explicitly when needed.
+    monkeypatch.setattr(rf, "augment_legal_evidence", lambda docs, *a, **k: docs)
 
     def fake_retrieve_legal(query, **kwargs):
         state.legal_calls.append((query, kwargs))
