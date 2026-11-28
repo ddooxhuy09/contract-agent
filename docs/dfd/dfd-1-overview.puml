@@ -51,8 +51,6 @@ Users --> P1 : User / không tìm thấy
 ' ---- Upload ----
 P2 --> Uploads : ghi file {contract_id}{ext}
 Uploads --> P2 : đường dẫn
-P2 --> Gemini : ảnh (OCR) nếu PNG/JPG
-Gemini --> P2 : full_text từ ảnh
 P2 --> Contracts : upsert HĐ + replace chunks\n(+ embedding 1024)
 Contracts --> P2 : OK
 

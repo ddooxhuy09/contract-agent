@@ -78,29 +78,6 @@ def _compose(*parts: str) -> str:
 
 
 # ═══════════════════════════════════════════════════════════════════════════
-# OCR — chỉ phiên âm, không tư vấn
-# ═══════════════════════════════════════════════════════════════════════════
-
-_OCR_TASK = """\
-## Nhiệm vụ
-Bạn là bộ OCR cho ảnh/scan hợp đồng tiếng Việt.
-Phiên âm TOÀN BỘ chữ trong ảnh đúng nguyên văn.
-
-## Ràng buộc
-- Giữ nguyên xuống dòng và cấu trúc Điều / Khoản / Điểm nếu nhìn thấy.
-- Không tóm tắt, không diễn giải, không dịch, không thêm tiêu đề hay bình luận.
-- Không bỏ sót phần nhìn rõ; chỗ không đọc được ghi [không rõ].
-- Chỉ trả về văn bản đã phiên âm — không JSON, không markdown fence.
-"""
-
-OCR_PROMPT = _compose(
-    "Bạn là công cụ OCR hợp đồng Việt Nam.",
-    "Chỉ phiên âm; không tư vấn pháp lý.",
-    _OCR_TASK,
-)
-
-
-# ═══════════════════════════════════════════════════════════════════════════
 # EXTRACTION — trích xuất cấu trúc
 # ═══════════════════════════════════════════════════════════════════════════
 
