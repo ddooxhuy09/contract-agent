@@ -11,12 +11,11 @@ rectangle "2.3\nLưu file\nLocalObjectStorage" as Save
 rectangle "2.4\nĐọc nội dung\nparse_document" as Parse
 rectangle "2.4a\nDOCX\npython-docx" as Docx
 rectangle "2.4b\nPDF\npdfplumber" as Pdf
-rectangle "2.4c\nẢnh OCR" as Ocr
+rectangle "2.4c\nẢnh OCR\nTesseract (vie, local)" as Ocr
 rectangle "2.5\nCắt theo Điều\nchunk_by_clause" as Chunk
 rectangle "2.6\nSinh embedding\nHuggingFaceEmbedder\nBAAI/bge-m3 (1024)" as Embed
 rectangle "2.7\nGhi metadata HĐ +\nchunk" as Persist
 
-cloud "Gemini API\n(OCR_PROMPT)" as Gemini
 database "D3.1 data/uploads" as FS
 database "D1.2 uploaded_contracts" as UC
 database "D1.2b contract_chunks\n(+ vector 1024)" as CC
@@ -36,8 +35,6 @@ Docx --> Parse : full_text
 Parse --> Pdf : .pdf
 Pdf --> Parse : full_text
 Parse --> Ocr : .png / .jpg / .jpeg
-Ocr --> Gemini : ảnh base64 + OCR_PROMPT
-Gemini --> Ocr : full_text
 Ocr --> Parse : full_text
 Parse --> Recv : toàn văn / lỗi parse
 

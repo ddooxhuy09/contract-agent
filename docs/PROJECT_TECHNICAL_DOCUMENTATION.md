@@ -278,7 +278,7 @@ User chọn file
 | Bước | File | Function | Input | Processing | Output |
 |------|------|----------|-------|------------|--------|
 | Save file | `local_storage.py` | `save_upload` | bytes | ghi `UPLOAD_DIR` | storage_key |
-| Parse | `document/parser.py` | `parse_document` | path, ext | docx / pdfplumber / Gemini OCR | full_text |
+| Parse | `document/parser.py` | `parse_document` | path, ext | docx / pdfplumber / Tesseract OCR (vie, local — ảnh không gửi LLM) | full_text |
 | Chunk | `document/chunker.py` | `chunk_by_clause` | text, contract_id | cắt theo `Điều N`; overlap 120; max 1800 | `Document[]` |
 | Embed | `hf_embedder.py` | `embed_documents` | texts | BGE-M3 1024 | vectors |
 | Persist | `contract_repository.py` / `contract_chunk_repository.py` | upsert / replace | entities | SQL | rows |
@@ -515,7 +515,6 @@ Cột HĐ quan trọng: `full_text`, `status`, `analysis JSONB`, `risks JSONB`, 
 
 | Export | Dùng cho |
 |--------|----------|
-| `OCR_PROMPT` | Ảnh hợp đồng |
 | `EXTRACTION_PROMPT` | `parse_contract` |
 | `CLAUSE_RISK_PROMPT` | `evaluate_clause` |
 | `QA_SYSTEM_PROMPT` + `QA_HUMAN_TEMPLATE` | `_generate_node` |
@@ -773,7 +772,7 @@ Không liệt kê hết hàm. Chỉ entry / xương sống.
 | Feature | Frontend | Backend | Database | AI/RAG | External |
 |---------|----------|---------|----------|--------|----------|
 | Register/Login | `AuthContext`, `LoginScreen` | `auth.py` use cases, routes | `users` | — | — |
-| Upload + index | `UploadScreen`, `App.handleSubmit` | `UploadContract` | `uploaded_contracts`, `contract_chunks` | BGE-M3; OCR Gemini nếu ảnh | Gemini (ảnh) |
+| Upload + index | `UploadScreen`, `App.handleSubmit` | `UploadContract` | `uploaded_contracts`, `contract_chunks` | BGE-M3; Tesseract OCR (local) nếu ảnh | — |
 | Analyze risks | `App` → `analyzeContract` | `AnalyzeContract`, `workflow.py` | JSONB cache; đọc chunks | Gemini + GraphRAG + regex labor | Gemini, HF |
 | HITL review | — | `/analyze`, `/analyze/resume` | checkpointer | cùng analyze graph | — |
 | List contracts | `ContractListScreen` | `ListContracts` | `uploaded_contracts` | — | — |

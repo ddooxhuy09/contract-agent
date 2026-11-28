@@ -58,7 +58,6 @@ GLOBAL_STYLE
 GLOBAL_CITATION
 GLOBAL_SEVERITY
         ↓ compose
-OCR_PROMPT          (minimal — không full legal global)
 EXTRACTION_PROMPT   (grounding + task)
 CLAUSE_RISK_PROMPT  (full global + task)
 QA_SYSTEM_PROMPT    (grounding + style + citation + task)

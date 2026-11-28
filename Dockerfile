@@ -7,7 +7,7 @@ ENV PIP_DEFAULT_TIMEOUT=300 \
     PIP_RETRIES=10
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends build-essential \
+    && apt-get install -y --no-install-recommends build-essential tesseract-ocr tesseract-ocr-vie \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .

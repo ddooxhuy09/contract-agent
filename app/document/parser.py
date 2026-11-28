@@ -33,25 +33,19 @@ def parse_pdf(file_path: str) -> str:
 
 
 def parse_image(file_path: str) -> str:
-    import base64
-    import os
-    from langchain_core.messages import HumanMessage
-    from app.agents.llm_client import get_chat_model
-    from app.core.prompts import OCR_PROMPT
+    """OCR on this server (Tesseract, Vietnamese): the image itself never goes to the LLM,
+    only the text, which is PII-masked like DOCX/PDF text."""
+    import pytesseract
+    from PIL import Image
 
-    ext = os.path.splitext(file_path)[1].lower().lstrip(".")
-    mime = "jpeg" if ext in ("jpg", "jpeg") else ext
-
-    with open(file_path, "rb") as f:
-        image_b64 = base64.b64encode(f.read()).decode("utf-8")
-
-    message = HumanMessage(content=[
-        {"type": "text", "text": OCR_PROMPT},
-        {"type": "image_url", "image_url": {"url": f"data:image/{mime};base64,{image_b64}"}},
-    ])
-    text = get_chat_model().invoke([message]).content.strip()
+    try:
+        with Image.open(file_path) as img:
+            text = pytesseract.image_to_string(img, lang="vie").strip()
+    except (OSError, pytesseract.TesseractError, pytesseract.TesseractNotFoundError) as e:
+        raise ValueError(f"Failed to read image file: {e}") from e
     if not text:
-        raise ValueError("No text could be extracted from the image")
+        # Never fall back to sending the image to the LLM: that would leak the personal data.
+        raise ValueError("No text could be extracted from the image; please upload a PDF or DOCX")
     return text
 
 
