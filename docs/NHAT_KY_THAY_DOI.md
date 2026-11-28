@@ -2,6 +2,8 @@
 
 ## 2026-11-28: tích hợp main và tách WIP local
 
+- Cập nhật tiếp theo: chủ dự án duyệt giao diện mới; đưa riêng 22 file frontend từ nhánh local lên main. Backend/evaluation dang dở tiếp tục giữ local. Gồm theme/layout, màn hình chính, trình bày rủi ro/chat/điều khoản, thông báo mất kết nối và xử lý token hết hiệu lực.
+
 - Merge nhánh eval v1 và PII/prompt guard; không merge lại nhánh fix đã có trong lịch sử main.
 - Lưu các thay đổi chưa hoàn tất ở nhánh local `codex/wip-local-20261128` (`c746f7b`), không push nhánh này.
 - Sửa khôi phục PII trong JSON để dấu ngoặc kép/gạch chéo ngược không phá cấu trúc kết quả; thêm test hồi quy.

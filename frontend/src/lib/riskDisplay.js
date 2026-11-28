@@ -107,11 +107,10 @@ export function parseRecommendation(recommendation) {
     return { sections: [], draft: null };
   }
 
-  const draftMatch = text.match(/«([^»]+)»/);
+  // Bản sửa đề xuất chỉ nằm ở cuối chuỗi («…»); «…» giữa câu là trích dẫn tên văn bản, không phải bản sửa.
+  const draftMatch = text.match(/«([^»]+)»\s*$/);
   const draft = draftMatch ? draftMatch[1].trim() : null;
-  const withoutDraft = draft
-    ? text.replace(/«[^»]+»/g, "").replace(/\n{2,}/g, "\n").trim()
-    : text;
+  const withoutDraft = draft ? text.slice(0, draftMatch.index).trim() : text;
 
   const lines = withoutDraft
     .split(/\r?\n/)
@@ -294,39 +293,6 @@ export function normalizeRiskView(risk, clauseFallback) {
     revisedClause,
     confidence,
   };
-}
-
-/** Highlight topic keywords inside a reason string (simple mark tags as parts). */
-export function highlightKeywords(text, topics = []) {
-  const raw = String(text || "");
-  if (!topics.length) return [{ t: "text", v: raw }];
-
-  const keys = topics
-    .flatMap((t) => {
-      const base = String(t).trim();
-      if (!base) return [];
-      // also try significant words ≥4 chars
-      const words = base.split(/\s+/).filter((w) => w.length >= 4);
-      return [base, ...words];
-    })
-    .filter(Boolean)
-    .sort((a, b) => b.length - a.length);
-
-  if (!keys.length) return [{ t: "text", v: raw }];
-
-  const escaped = keys.map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
-  const re = new RegExp(`(${escaped.join("|")})`, "gi");
-  const parts = [];
-  let last = 0;
-  let m;
-  while ((m = re.exec(raw)) !== null) {
-    if (m.index > last) parts.push({ t: "text", v: raw.slice(last, m.index) });
-    parts.push({ t: "mark", v: m[1] });
-    last = m.index + m[0].length;
-  }
-  if (last < raw.length) parts.push({ t: "text", v: raw.slice(last) });
-  if (!parts.length) parts.push({ t: "text", v: raw });
-  return parts;
 }
 
 /** Very light token mark: words in revised not in original (case-insensitive). */

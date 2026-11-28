@@ -6,6 +6,7 @@
 - Tích hợp `feat/pii-masking-prompt-guard`: che PII bằng regex trước các lời gọi LLM văn bản của agent, khôi phục giá trị trong câu trả lời; bọc dữ liệu hợp đồng/ký ức trong thẻ dữ liệu và phát hiện câu lệnh nhắm vào AI trước clause judge. Thêm test masking và prompt guard, cùng harness AgentDojo.
 - Sửa lỗi khôi phục PII chứa dấu ngoặc kép hoặc dấu gạch chéo ngược làm hỏng JSON. Giữ JSON escaping, cấu trúc output và Markdown fence; thêm test hồi quy.
 - Không đổi API, auth, schema DB, SSE, checkpointer hoặc retry trong commit sửa JSON.
+- Cập nhật tiếp theo cùng ngày: đưa giao diện mới đã được chủ dự án duyệt lên main, gồm màn hình đăng nhập/upload/danh sách, sidebar, kết quả phân tích, thẻ rủi ro, chat, modal điều khoản và theme. Frontend hiển thị lỗi mất kết nối bằng tiếng Việt và quay lại đăng nhập khi token hết hiệu lực.
 
 ## Giới hạn cần biết
 
@@ -15,7 +16,7 @@
 
 ## Phần giữ local, không push
 
-- Nhánh `codex/wip-local-20261128`, commit `c746f7b`: parser/chunker, scope/citation, căn cứ phần đầu, QA toàn hợp đồng, evaluation v2 và giao diện đang làm.
+- Nhánh `codex/wip-local-20261128`, checkpoint ban đầu `c746f7b`: parser/chunker, scope/citation, căn cứ phần đầu, QA toàn hợp đồng và evaluation v2 vẫn giữ local. Phần giao diện trong checkpoint này đã được duyệt và đưa riêng lên main ở lần cập nhật tiếp theo.
 - QA toàn hợp đồng trong WIP còn cắt ngữ cảnh ở 16.000 ký tự; chưa đưa thay đổi này vào main.
 - File kết quả chưa tracked trong `evaluation_results/` và `tmp/` giữ nguyên trên máy. Stash `codex-pre-merge-20261128` vẫn giữ làm dự phòng trước merge.
 

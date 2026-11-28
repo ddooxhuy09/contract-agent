@@ -25,23 +25,25 @@ export default function ReportActions({ contractId, onReanalyze, disabled }) {
   };
 
   const btn =
-    "inline-flex items-center gap-1 px-2 py-1 rounded-md border border-rule bg-paper-raised text-[0.6875rem] font-medium text-ink hover:bg-quiet-soft/50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed";
+    "inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-rule bg-paper-raised text-[0.8125rem] font-medium text-ink hover:bg-quiet-soft hover:border-quiet/30 hover:text-quiet transition-colors disabled:opacity-40 disabled:cursor-not-allowed";
+  const icon = "material-symbols-outlined !text-[1.125rem]";
 
   return (
-    <div className="ml-auto flex items-center gap-1.5 shrink-0">
-      {error && <span className="text-[0.6875rem] text-stamp hidden sm:inline">{error}</span>}
+    <div className="ml-auto flex items-center gap-2 shrink-0">
+      {error && <span className="text-[0.75rem] text-stamp hidden sm:inline">{error}</span>}
       <button type="button" className={btn} disabled={disabled || downloading} onClick={() => download("md")}
-        title="Báo cáo dễ đọc (Markdown), gồm kết luận và mức sử dụng AI">
-        <span className="material-symbols-outlined !text-[0.875rem]">description</span>
-        {downloading === "md" ? "Đang tải..." : "Báo cáo"}
+        aria-label="Tải báo cáo" title="Báo cáo dễ đọc (Markdown), gồm kết luận và mức sử dụng AI">
+        <span className={icon}>description</span>
+        <span className="hidden sm:inline">{downloading === "md" ? "Đang tải..." : "Báo cáo"}</span>
       </button>
       <button type="button" className={btn} disabled={disabled || downloading} onClick={() => download("json")}
-        title="Dữ liệu đầy đủ (JSON) để lưu hoặc gửi đi đánh giá">
-        <span className="material-symbols-outlined !text-[0.875rem]">data_object</span>
-        {downloading === "json" ? "Đang tải..." : "JSON"}
+        aria-label="Tải JSON" title="Dữ liệu đầy đủ (JSON) để lưu hoặc gửi đi đánh giá">
+        <span className={icon}>data_object</span>
+        <span className="hidden sm:inline">{downloading === "json" ? "Đang tải..." : "JSON"}</span>
       </button>
-      <button type="button" className={btn} disabled={disabled} onClick={reanalyze}>
-        <span className="material-symbols-outlined !text-[0.875rem]">refresh</span>
+      <button type="button" className={btn} disabled={disabled} onClick={reanalyze}
+        aria-label="Phân tích lại" title="Chạy lại AI trên hợp đồng này">
+        <span className={icon}>refresh</span>
         <span className="hidden sm:inline">Phân tích lại</span>
       </button>
     </div>

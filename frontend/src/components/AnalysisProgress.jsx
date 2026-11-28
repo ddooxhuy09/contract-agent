@@ -29,12 +29,12 @@ export default function AnalysisProgress({ phase }) {
     <div
       role="status"
       aria-live="polite"
-      className="absolute inset-0 bg-paper-raised/95 rounded-md flex flex-col items-center justify-center z-20 px-4"
+      className="absolute inset-0 bg-paper-raised/95 rounded-2xl flex flex-col items-center justify-center z-20 px-4"
     >
-      <div className="w-full max-w-[16rem] h-1 bg-rule overflow-hidden rounded-full">
+      <div className="w-full max-w-[18rem] h-1.5 bg-rule overflow-hidden rounded-full">
         <div className="h-full w-1/3 bg-quiet animate-progress-sweep" />
       </div>
-      <ol className="mt-4 space-y-1.5 text-[0.75rem]">
+      <ol className="mt-4 space-y-2 text-[0.875rem]">
         {STEPS.map((step, i) => (
           <li
             key={step.phase}
@@ -42,14 +42,14 @@ export default function AnalysisProgress({ phase }) {
               i < current ? "text-ok" : i === current ? "text-ink font-medium" : "text-ink-faint"
             }`}
           >
-            <span className="material-symbols-outlined !text-[1rem]">
+            <span className="material-symbols-outlined">
               {i < current ? "check_circle" : i === current ? "progress_activity" : "radio_button_unchecked"}
             </span>
             {step.label}
           </li>
         ))}
       </ol>
-      <p className="mt-3 text-[0.6875rem] text-ink-muted text-center">
+      <p className="mt-4 text-[0.8125rem] text-ink-muted text-center">
         Đã chạy {formatElapsed(elapsed)}. Thường mất 30–90 giây, vui lòng giữ trang này mở.
       </p>
     </div>

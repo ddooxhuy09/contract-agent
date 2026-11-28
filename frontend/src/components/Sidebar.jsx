@@ -4,6 +4,24 @@ import { useState } from "react";
  * Unified app shell. Single "Tải hợp đồng mới" CTA.
  * Desktop: collapsible rail. Mobile: drawer + top bar.
  */
+function Brand({ iconOnly = false }) {
+  return (
+    <div className="flex items-center gap-2.5 min-w-0">
+      <span className="w-9 h-9 rounded-xl bg-quiet text-white flex items-center justify-center shrink-0 shadow-sm">
+        <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>
+          balance
+        </span>
+      </span>
+      {!iconOnly && (
+        <div className="min-w-0">
+          <p className="text-[1rem] font-semibold text-ink tracking-tight truncate leading-tight">ContractLens</p>
+          <p className="text-[0.75rem] text-ink-faint leading-tight">Rà soát hợp đồng</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Sidebar({
   activeNav, // "list" | "upload" | "analysis"
   analysisTab, // "report" | "chat"
@@ -75,14 +93,18 @@ export default function Sidebar({
       type="button"
       title={item.label}
       onClick={item.onClick}
-      className={`flex items-center gap-2.5 w-full rounded-md text-[0.8125rem] font-medium transition-colors text-left ${
-        compact ? "justify-center px-1.5 py-2" : "px-2.5 py-2"
+      aria-current={active ? "page" : undefined}
+      className={`relative flex items-center gap-3 w-full rounded-lg text-[0.875rem] font-medium transition-colors text-left ${
+        compact ? "justify-center px-2 py-2.5" : "px-3 py-2.5"
       } ${
-        active ? "bg-quiet-soft text-ink" : "text-ink-muted hover:bg-paper hover:text-ink"
+        active ? "bg-quiet-soft text-quiet" : "text-ink-muted hover:bg-paper hover:text-ink"
       }`}
     >
+      {active && !compact && (
+        <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-quiet" />
+      )}
       <span
-        className="material-symbols-outlined !text-[1.125rem] shrink-0"
+        className="material-symbols-outlined !text-[1.25rem] shrink-0"
         style={active ? { fontVariationSettings: "'FILL' 1" } : undefined}
       >
         {item.icon}
@@ -91,7 +113,7 @@ export default function Sidebar({
         <>
           <span className="flex-1 truncate">{item.label}</span>
           {typeof item.count === "number" && item.count > 0 && (
-            <span className="text-[0.625rem] font-medium tabular-nums text-stamp bg-stamp-soft px-1.5 py-0.5 rounded-sm">
+            <span className="min-w-[1.375rem] text-center text-[0.75rem] font-semibold tabular-nums text-stamp bg-stamp-soft px-1.5 py-0.5 rounded-full">
               {item.count}
             </span>
           )}
@@ -106,26 +128,26 @@ export default function Sidebar({
         <button
           type="button"
           title="Tải hợp đồng mới"
-          className={`w-full bg-ink text-paper-raised py-2 rounded-md text-[0.75rem] font-medium hover:bg-ink/90 transition-colors flex items-center justify-center gap-1.5 ${
+          className={`w-full bg-quiet text-white py-2.5 rounded-lg text-[0.875rem] font-semibold shadow-sm hover:bg-quiet/90 transition-colors flex items-center justify-center gap-2 ${
             uploadActive ? "ring-2 ring-quiet ring-offset-2 ring-offset-paper-raised" : ""
-          } ${compact ? "px-1.5" : "px-2.5"}`}
+          } ${compact ? "px-1.5" : "px-3"}`}
           onClick={goUpload}
         >
-          <span className="material-symbols-outlined !text-[1rem]">add</span>
+          <span className="material-symbols-outlined !text-[1.25rem]">add</span>
           {!compact && "Tải hợp đồng mới"}
         </button>
       </div>
 
       <nav className="flex-1 flex flex-col gap-0.5 overflow-y-auto min-h-0">
         {!compact && (
-          <p className="px-2.5 pt-0.5 pb-1 meta-text uppercase text-ink-faint">Làm việc</p>
+          <p className="px-3 pt-1 pb-1.5 meta-text uppercase text-ink-faint">Làm việc</p>
         )}
         {primaryNav.map((item) => navBtn(item, isPrimaryActive(item.key), compact))}
 
         {analysisNav.length > 0 && (
           <>
             {!compact && (
-              <p className="px-2.5 pt-3 pb-1 meta-text uppercase text-ink-faint">Phân tích</p>
+              <p className="px-3 pt-4 pb-1.5 meta-text uppercase text-ink-faint">Phân tích</p>
             )}
             {compact && <div className="my-1.5 border-t border-rule mx-1.5" />}
             {analysisNav.map((item) => navBtn(item, isAnalysisActive(item.key), compact))}
@@ -136,12 +158,12 @@ export default function Sidebar({
       <button
         type="button"
         title="Đăng xuất"
-        className={`flex items-center gap-2.5 w-full rounded-md text-[0.8125rem] font-medium text-ink-muted hover:text-ink hover:bg-paper transition-colors text-left mt-2 ${
-          compact ? "justify-center px-1.5 py-2" : "px-2.5 py-2"
+        className={`flex items-center gap-3 w-full rounded-lg text-[0.875rem] font-medium text-ink-muted hover:text-stamp hover:bg-stamp-soft/60 transition-colors text-left mt-2 border-t border-rule pt-3 ${
+          compact ? "justify-center px-2 py-2.5" : "px-3 py-2.5"
         }`}
         onClick={onSignOut}
       >
-        <span className="material-symbols-outlined !text-[1.125rem]">logout</span>
+        <span className="material-symbols-outlined !text-[1.25rem]">logout</span>
         {!compact && "Đăng xuất"}
       </button>
     </>
@@ -159,7 +181,7 @@ export default function Sidebar({
         >
           <span className="material-symbols-outlined !text-[1.25rem]">menu</span>
         </button>
-        <p className="text-[0.875rem] font-medium text-ink truncate">ContractLens</p>
+        <p className="text-[1rem] font-semibold text-ink truncate">ContractLens</p>
       </header>
 
       {/* Mobile drawer overlay */}
@@ -177,11 +199,8 @@ export default function Sidebar({
         }`}
         aria-hidden={!mobileOpen}
       >
-        <div className="flex items-center justify-between px-1.5 mb-3">
-          <div>
-            <p className="text-[0.875rem] font-medium text-ink">ContractLens</p>
-            <p className="text-[0.625rem] text-ink-faint">Rà soát hợp đồng</p>
-          </div>
+        <div className="flex items-center justify-between px-1.5 mb-4">
+          <Brand />
           <button
             type="button"
             aria-label="Đóng"
@@ -196,17 +215,12 @@ export default function Sidebar({
 
       {/* Desktop sidebar */}
       <aside
-        className={`hidden md:flex fixed left-0 top-0 h-full bg-paper-raised border-r border-rule flex-col py-3 z-50 transition-[width] duration-200 ease-out ${
-          collapsed ? "w-14 px-1.5" : "w-52 px-2.5"
+        className={`hidden md:flex fixed left-0 top-0 h-full bg-paper-raised border-r border-rule flex-col py-4 z-50 transition-[width] duration-200 ease-out ${
+          collapsed ? "w-16 px-2" : "w-60 px-3"
         }`}
       >
-        <div className={`flex items-center mb-3 ${collapsed ? "justify-center" : "justify-between px-0.5"}`}>
-          {!collapsed && (
-            <div className="min-w-0 px-1.5">
-              <p className="text-[0.875rem] font-medium text-ink tracking-tight truncate">ContractLens</p>
-              <p className="text-[0.625rem] text-ink-faint">Rà soát hợp đồng</p>
-            </div>
-          )}
+        <div className={`flex items-center mb-5 ${collapsed ? "flex-col gap-3" : "justify-between px-0.5"}`}>
+          <Brand iconOnly={collapsed} />
           <button
             type="button"
             aria-label={collapsed ? "Mở rộng menu" : "Thu gọn menu"}

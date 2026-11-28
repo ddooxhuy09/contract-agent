@@ -31,8 +31,11 @@ export default function LoginScreen() {
   return (
     <div className="min-h-screen bg-paper text-ink flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-sm animate-fade-in">
-        <div className="mb-6">
-          <p className="text-[1.125rem] font-medium text-ink tracking-tight">ContractLens</p>
+        <div className="mb-6 text-center">
+          <span className="mx-auto w-14 h-14 rounded-2xl bg-quiet text-white flex items-center justify-center shadow-sm mb-3">
+            <span className="material-symbols-outlined !text-[1.75rem]" style={{ fontVariationSettings: "'FILL' 1" }}>balance</span>
+          </span>
+          <p className="text-[1.5rem] font-semibold text-ink tracking-tight">ContractLens</p>
           <p className="ui-text text-ink-muted mt-1">
             {mode === "signin" ? "Đăng nhập để rà soát hợp đồng" : "Tạo tài khoản mới"}
           </p>
@@ -40,10 +43,10 @@ export default function LoginScreen() {
 
         <form
           onSubmit={handleSubmit}
-          className="bg-paper-raised border border-rule rounded-md p-4 shadow-sm flex flex-col gap-3"
+          className="card p-5 sm:p-6 flex flex-col gap-4"
         >
           <div>
-            <label className="block text-[0.75rem] font-medium text-ink-muted mb-1" htmlFor="email">
+            <label className="block text-[0.8125rem] font-medium text-ink mb-1.5" htmlFor="email">
               Email
             </label>
             <input
@@ -52,12 +55,12 @@ export default function LoginScreen() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 rounded-md border border-rule bg-paper text-ink ui-text focus:outline-none focus:border-quiet"
+              className="w-full px-3.5 py-2.5 rounded-lg border border-rule bg-paper text-ink text-[0.9375rem] focus:outline-none focus:border-quiet focus:bg-paper-raised"
               placeholder="ban@congty.com"
             />
           </div>
           <div>
-            <label className="block text-[0.75rem] font-medium text-ink-muted mb-1" htmlFor="password">
+            <label className="block text-[0.8125rem] font-medium text-ink mb-1.5" htmlFor="password">
               Mật khẩu
             </label>
             <input
@@ -67,24 +70,24 @@ export default function LoginScreen() {
               minLength={mode === "signup" ? 8 : undefined}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 rounded-md border border-rule bg-paper text-ink ui-text focus:outline-none focus:border-quiet"
+              className="w-full px-3.5 py-2.5 rounded-lg border border-rule bg-paper text-ink text-[0.9375rem] focus:outline-none focus:border-quiet focus:bg-paper-raised"
               placeholder="••••••••"
             />
           </div>
 
-          {error && <p className="text-stamp text-[0.75rem] font-medium">{error}</p>}
-          {info && <p className="text-ok text-[0.75rem] font-medium">{info}</p>}
+          {error && <p role="alert" className="px-3 py-2 rounded-lg bg-stamp-soft text-stamp text-[0.8125rem] font-medium">{error}</p>}
+          {info && <p className="px-3 py-2 rounded-lg bg-ok-soft text-ok text-[0.8125rem] font-medium">{info}</p>}
 
           <button
             type="submit"
             disabled={busy}
-            className="mt-1 px-4 py-2 bg-ink text-paper-raised text-[0.75rem] font-medium rounded-md hover:bg-ink/90 transition-colors disabled:opacity-50"
+            className="mt-1 px-4 py-2.5 bg-quiet text-white text-[0.9375rem] font-semibold rounded-lg shadow-sm hover:bg-quiet/90 transition-colors disabled:opacity-50"
           >
             {busy ? "Đang xử lý..." : mode === "signin" ? "Đăng nhập" : "Đăng ký"}
           </button>
         </form>
 
-        <p className="mt-3 ui-text text-ink-muted">
+        <p className="mt-4 ui-text text-ink-muted text-center">
           {mode === "signin" ? "Chưa có tài khoản?" : "Đã có tài khoản?"}{" "}
           <button
             type="button"

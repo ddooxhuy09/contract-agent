@@ -1,6 +1,18 @@
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 const STORAGE_KEY = "contractlens_auth";
 
+/** fetch() that reports an unreachable server in Vietnamese instead of the raw "Failed to fetch". */
+async function apiFetch(url, init) {
+  try {
+    return await fetch(url, init);
+  } catch (err) {
+    if (err instanceof TypeError) {
+      throw new Error("Không kết nối được máy chủ. Vui lòng kiểm tra kết nối hoặc thử lại sau ít phút.", { cause: err });
+    }
+    throw err;
+  }
+}
+
 async function authHeaders() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -14,6 +26,15 @@ async function authHeaders() {
 
 async function handleResponse(res) {
   if (!res.ok) {
+    if (res.status === 401) {
+      // Stale/invalid token: drop it and reload so App falls back to the login screen.
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch {
+        // ignore
+      }
+      window.location.reload();
+    }
     let detail = res.statusText;
     try {
       const data = await res.json();
@@ -29,7 +50,7 @@ async function handleResponse(res) {
 export async function uploadContract(file) {
   const formData = new FormData();
   formData.append("file", file);
-  const res = await fetch(`${API_BASE}/api/v1/upload`, {
+  const res = await apiFetch(`${API_BASE}/api/v1/upload`, {
     method: "POST",
     headers: await authHeaders(),
     body: formData,
@@ -38,7 +59,7 @@ export async function uploadContract(file) {
 }
 
 export async function analyzeContract(contractId, provider, force = false) {
-  const res = await fetch(`${API_BASE}/api/v1/analyze`, {
+  const res = await apiFetch(`${API_BASE}/api/v1/analyze`, {
     method: "POST",
     headers: { "Content-Type": "application/json", ...(await authHeaders()) },
     body: JSON.stringify({ contract_id: contractId, provider, force }),
@@ -47,7 +68,7 @@ export async function analyzeContract(contractId, provider, force = false) {
 }
 
 export async function listContracts() {
-  const res = await fetch(`${API_BASE}/api/v1/contracts`, {
+  const res = await apiFetch(`${API_BASE}/api/v1/contracts`, {
     headers: await authHeaders(),
   });
   return handleResponse(res);
@@ -55,7 +76,7 @@ export async function listContracts() {
 
 /** Download the report of an analysed contract ("json" or "md") as a file. */
 export async function downloadReport(contractId, format = "json") {
-  const res = await fetch(`${API_BASE}/api/v1/contracts/${contractId}/report?format=${format}`, {
+  const res = await apiFetch(`${API_BASE}/api/v1/contracts/${contractId}/report?format=${format}`, {
     headers: await authHeaders(),
   });
   if (!res.ok) await handleResponse(res); // throws with the server's message
@@ -70,12 +91,12 @@ export async function downloadReport(contractId, format = "json") {
 }
 
 export async function fetchModels() {
-  const res = await fetch(`${API_BASE}/api/v1/models`);
+  const res = await apiFetch(`${API_BASE}/api/v1/models`);
   return handleResponse(res);
 }
 
 export async function chatWithContract(contractId, question, provider) {
-  const res = await fetch(`${API_BASE}/api/v1/chat`, {
+  const res = await apiFetch(`${API_BASE}/api/v1/chat`, {
     method: "POST",
     headers: { "Content-Type": "application/json", ...(await authHeaders()) },
     body: JSON.stringify({ contract_id: contractId, question, provider }),
@@ -84,7 +105,7 @@ export async function chatWithContract(contractId, question, provider) {
 }
 
 export async function streamChat(contractId, question, provider, onEvent) {
-  const res = await fetch(`${API_BASE}/api/v1/chat/stream`, {
+  const res = await apiFetch(`${API_BASE}/api/v1/chat/stream`, {
     method: "POST",
     headers: { "Content-Type": "application/json", ...(await authHeaders()) },
     body: JSON.stringify({ contract_id: contractId, question, provider }),
@@ -124,7 +145,7 @@ export async function streamChat(contractId, question, provider, onEvent) {
 }
 
 export async function fetchChatHistory(contractId) {
-  const res = await fetch(`${API_BASE}/api/v1/chat/${contractId}/history`, {
+  const res = await apiFetch(`${API_BASE}/api/v1/chat/${contractId}/history`, {
     headers: await authHeaders(),
   });
   return handleResponse(res);

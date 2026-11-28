@@ -22,7 +22,7 @@ function SourceClauseBadges({ clauses }) {
       {clauses.map((c) => (
         <span
           key={c}
-          className="inline-flex items-center gap-0.5 bg-quiet-soft text-quiet px-1.5 py-0.5 rounded-sm text-[0.625rem] font-medium"
+          className="inline-flex items-center gap-1 bg-quiet-soft text-quiet px-2 py-0.5 rounded-full text-[0.75rem] font-medium"
         >
           <span className="material-symbols-outlined !text-[0.75rem]">bookmark</span>
           Điều {c}
@@ -38,7 +38,7 @@ function ChatBubble({ message }) {
   if (isUser) {
     return (
       <div className="flex justify-end">
-        <div className="max-w-[85%] sm:max-w-[75%] bg-ink text-paper-raised px-3 py-2 rounded-md rounded-tr-sm ui-text">
+        <div className="max-w-[85%] sm:max-w-[75%] bg-quiet text-white px-4 py-2.5 rounded-2xl rounded-tr-sm text-[0.9375rem] shadow-sm">
           {message.text}
         </div>
       </div>
@@ -50,14 +50,14 @@ function ChatBubble({ message }) {
   return (
     <div className="flex justify-start">
       <div
-        className={`max-w-[85%] sm:max-w-[75%] px-3 py-2 rounded-md rounded-tl-sm ui-text ${
+        className={`max-w-[85%] sm:max-w-[75%] px-4 py-2.5 rounded-2xl rounded-tl-sm text-[0.9375rem] ${
           isClarification
             ? "bg-caution-soft text-ink border border-caution/30"
-            : "bg-paper text-ink border border-rule"
+            : "bg-paper-raised text-ink border border-rule shadow-sm"
         }`}
       >
         {isClarification && (
-          <div className="flex items-center gap-1 mb-1 text-[0.625rem] font-medium uppercase tracking-wide text-caution">
+          <div className="flex items-center gap-1 mb-1 text-[0.75rem] font-semibold uppercase tracking-wide text-caution">
             <span className="material-symbols-outlined !text-[0.875rem]">help</span>
             Cần làm rõ thêm
           </div>
@@ -156,20 +156,20 @@ export default function ChatTab({ contractId, provider }) {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-7.5rem)] md:h-[calc(100vh-5.5rem)] max-h-[900px] bg-paper-raised border border-rule rounded-md overflow-hidden shadow-sm animate-fade-in">
-      <div className="px-3.5 py-2.5 border-b border-rule">
+    <div className="flex flex-col h-[calc(100vh-8.5rem)] md:h-[calc(100vh-8rem)] max-h-[900px] card overflow-hidden animate-fade-in">
+      <div className="px-4 sm:px-5 py-3.5 border-b border-rule">
         <h3 className="section-title">Hỏi đáp về hợp đồng</h3>
-        <p className="text-[0.75rem] text-ink-muted mt-0.5">
+        <p className="text-[0.8125rem] text-ink-muted mt-0.5">
           Câu trả lời trích dẫn nguồn điều khoản / luật.
         </p>
       </div>
 
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-3.5 py-4 space-y-3">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto bg-paper/60 px-4 sm:px-5 py-4 space-y-3">
         {loadingHistory ? (
           <p className="text-ink-muted text-center ui-text">Đang tải lịch sử hỏi đáp...</p>
         ) : messages.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center gap-1.5 px-4">
-            <span className="material-symbols-outlined text-ink-faint !text-[1.5rem]">forum</span>
+            <span className="w-12 h-12 rounded-2xl bg-quiet-soft text-quiet flex items-center justify-center"><span className="material-symbols-outlined !text-[1.5rem]">forum</span></span>
             <p className="text-ink-muted max-w-sm ui-text">
               Hỏi về hợp đồng hoặc luật liên quan — câu trả lời sẽ trích dẫn nguồn.
             </p>
@@ -180,21 +180,21 @@ export default function ChatTab({ contractId, provider }) {
 
         {sending && (
           <div className="flex justify-start">
-            <div className="bg-paper border border-rule rounded-md px-3 py-2 flex items-center gap-2 ui-text text-ink-muted">
-              <span className="w-1 h-1 rounded-full bg-ink animate-pulse" />
-              <span className="w-1 h-1 rounded-full bg-ink animate-pulse [animation-delay:150ms]" />
-              <span className="w-1 h-1 rounded-full bg-ink animate-pulse [animation-delay:300ms]" />
-              {status && <span className="text-[0.75rem]">{status}</span>}
+            <div className="bg-paper-raised border border-rule rounded-2xl rounded-tl-sm px-4 py-2.5 flex items-center gap-2 ui-text text-ink-muted">
+              <span className="w-1.5 h-1.5 rounded-full bg-quiet animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-quiet animate-pulse [animation-delay:150ms]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-quiet animate-pulse [animation-delay:300ms]" />
+              {status && <span className="text-[0.8125rem]">{status}</span>}
             </div>
           </div>
         )}
       </div>
 
-      {error && <p className="px-3.5 text-stamp text-[0.75rem] font-medium pb-1.5">{error}</p>}
+      {error && <p className="px-4 sm:px-5 text-stamp text-[0.8125rem] font-medium pb-2">{error}</p>}
 
-      <div className="border-t border-rule p-2.5 sm:p-3 flex items-end gap-2">
+      <div className="border-t border-rule p-3 sm:p-4 flex items-end gap-2">
         <textarea
-          className="flex-1 resize-none rounded-md border border-rule bg-paper px-3 py-2 ui-text text-ink focus:outline-none focus:border-quiet max-h-28"
+          className="flex-1 resize-none rounded-xl border border-rule bg-paper px-3.5 py-2.5 text-[0.9375rem] text-ink focus:outline-none focus:border-quiet focus:bg-paper-raised max-h-32"
           rows={1}
           placeholder="Nhập câu hỏi..."
           value={input}
@@ -204,12 +204,12 @@ export default function ChatTab({ contractId, provider }) {
         />
         <button
           type="button"
-          className="shrink-0 w-9 h-9 rounded-md bg-ink text-paper-raised flex items-center justify-center hover:bg-ink/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          className="shrink-0 w-11 h-11 rounded-xl bg-quiet text-white shadow-sm flex items-center justify-center hover:bg-quiet/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           onClick={handleSend}
           disabled={sending || !input.trim()}
           aria-label="Gửi"
         >
-          <span className="material-symbols-outlined !text-[1.125rem]">send</span>
+          <span className="material-symbols-outlined">send</span>
         </button>
       </div>
     </div>

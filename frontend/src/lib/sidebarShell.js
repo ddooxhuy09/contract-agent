@@ -29,6 +29,6 @@ export function useSidebarCollapsed(defaultCollapsed = false) {
 /** Main content offset for shell (desktop sidebar + mobile top bar) */
 export function shellMainClass(collapsed) {
   return `flex-1 min-h-screen pt-11 md:pt-0 pb-3 md:pb-0 ${
-    collapsed ? "md:ml-14" : "md:ml-52"
+    collapsed ? "md:ml-16" : "md:ml-60"
   }`;
 }

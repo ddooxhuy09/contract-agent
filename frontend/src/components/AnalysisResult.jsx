@@ -26,6 +26,7 @@ export default function AnalysisResult({
   mainClassName,
 }) {
   const [openKey, setOpenKey] = useState(null);
+  const [filter, setFilter] = useState("all");
 
   const actionable = useMemo(
     () =>
@@ -121,44 +122,54 @@ export default function AnalysisResult({
 
   const openIssue = (key) => {
     onTabChange?.("report");
+    setFilter("all");
     setOpenKey(key);
+  };
+
+  const showFiltered = (severity) => {
+    setFilter(severity);
+    setOpenKey(null);
+    document.getElementById("issues")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (
     <main className={mainClassName}>
-      <header className="sticky top-11 md:top-0 z-30 bg-paper/95 backdrop-blur-sm border-b border-rule">
-        <div className="max-w-content mx-auto w-full page-pad !py-0 h-11 md:h-12 flex items-center gap-2">
+      <header className="sticky top-11 md:top-0 z-30 bg-paper-raised/95 backdrop-blur-sm border-b border-rule">
+        <div className="max-w-content mx-auto w-full page-pad !py-0 h-14 flex items-center gap-2.5">
           <button
             type="button"
             onClick={onGoList}
             aria-label="Quay lại danh sách hợp đồng"
-            className="inline-flex items-center gap-0.5 text-[0.6875rem] font-medium text-ink-muted hover:text-ink transition-colors shrink-0"
+            className="inline-flex items-center gap-1 text-[0.875rem] font-medium text-ink-muted hover:text-quiet transition-colors shrink-0"
           >
-            <span className="material-symbols-outlined !text-[1rem]">arrow_back</span>
+            <span className="material-symbols-outlined">arrow_back</span>
             <span className="hidden sm:inline">Hợp đồng</span>
           </button>
-          <span className="text-ink-faint hidden sm:inline shrink-0 text-[0.6875rem]">/</span>
-          <span className="text-[0.8125rem] font-medium text-ink truncate min-w-0">{filename}</span>
+          <span className="text-rule-strong hidden sm:inline shrink-0">/</span>
+          <span className="text-[1rem] font-semibold text-ink truncate min-w-0" title={filename}>
+            {filename}
+          </span>
           <ReportActions contractId={contractId} onReanalyze={onReanalyze} disabled={Boolean(busyText)} />
         </div>
         {busyText && (
-          <p role="status" className="px-3 py-1.5 text-[0.75rem] font-medium text-ink bg-quiet-soft/60 border-t border-rule flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-quiet animate-pulse" />
+          <p role="status" className="px-4 md:px-6 lg:px-8 py-2 text-[0.8125rem] font-medium text-quiet bg-quiet-soft border-t border-rule flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-quiet animate-pulse" />
             {busyText}
           </p>
         )}
         {error && (
-          <p role="alert" className="px-3 py-1.5 text-[0.75rem] font-medium text-stamp bg-stamp-soft/50 border-t border-rule">
+          <p role="alert" className="px-4 md:px-6 lg:px-8 py-2 text-[0.8125rem] font-medium text-stamp bg-stamp-soft border-t border-rule">
             {error}
           </p>
         )}
-        {activeTab === "report" && <AiDisclaimer flush />}
       </header>
 
       <div className="page-pad max-w-content mx-auto w-full">
         {activeTab === "report" && (
           <>
+            <AiDisclaimer className="mb-4" />
             <ExecutiveSummary
+              onFilter={showFiltered}
               criticalCount={criticalCount}
               warningCount={warningCount}
               okClauseCount={okClauseCount}
@@ -167,13 +178,15 @@ export default function AnalysisResult({
               topIssues={topIssues}
               onOpenIssue={openIssue}
             />
-            <ContractProfile analysis={analysis} defaultOpen />
             <IssueList
+              filter={filter}
+              onFilterChange={setFilter}
               risks={listedRisks}
               openKey={openKey}
               onOpenKeyChange={setOpenKey}
               clausesByNumber={clausesByNumber}
             />
+            <ContractProfile analysis={analysis} defaultOpen={false} />
             <ClauseIndex
               clauses={analysis.clauses || []}
               risksByClause={risksByClause}

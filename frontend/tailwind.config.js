@@ -5,9 +5,9 @@ export default {
     extend: {
       colors: {
         ink: "#161B26",
-        "ink-muted": "#5C6578",
-        "ink-faint": "#8B93A7",
-        paper: "#F4F5F7",
+        "ink-muted": "#4A5367",
+        "ink-faint": "#6B7489",
+        paper: "#F4F6F9",
         "paper-raised": "#FFFFFF",
         rule: "#E2E5EB",
         "rule-strong": "#C5CAD6",
@@ -15,8 +15,8 @@ export default {
         "stamp-soft": "#F8E8EA",
         caution: "#9A6B12",
         "caution-soft": "#F5EEDF",
-        quiet: "#3D526B",
-        "quiet-soft": "#E8EEF5",
+        quiet: "#2F5597",
+        "quiet-soft": "#E8F0FB",
         ok: "#1F6B4A",
         "ok-soft": "#E4F0EA",
 
@@ -127,6 +127,7 @@ export default {
       boxShadow: {
         sm: "0 1px 2px rgba(22, 27, 38, 0.04)",
         card: "0 1px 3px rgba(22, 27, 38, 0.06), 0 1px 2px rgba(22, 27, 38, 0.04)",
+        soft: "0 1px 2px rgba(22, 27, 38, 0.05), 0 4px 14px -6px rgba(22, 27, 38, 0.10)",
         lift: "0 8px 24px -12px rgba(22, 27, 38, 0.16)",
         dossier: "0 1px 3px rgba(22, 27, 38, 0.06)",
       },
