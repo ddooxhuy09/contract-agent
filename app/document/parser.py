@@ -40,6 +40,11 @@ def parse_image(file_path: str) -> str:
 
     try:
         with Image.open(file_path) as img:
+            img = img.convert("L")
+            # Tesseract misreads text under ~20px tall (screenshots, phone photos of a page): upscale small images.
+            scale = min(4, max(1, round(2000 / img.width)))
+            if scale > 1:
+                img = img.resize((img.width * scale, img.height * scale), Image.LANCZOS)
             text = pytesseract.image_to_string(img, lang="vie").strip()
     except (OSError, pytesseract.TesseractError, pytesseract.TesseractNotFoundError) as e:
         raise ValueError(f"Failed to read image file: {e}") from e
